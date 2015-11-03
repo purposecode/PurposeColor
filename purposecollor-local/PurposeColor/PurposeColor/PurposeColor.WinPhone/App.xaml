@@ -7,8 +7,7 @@
 
     <!--Application Resources-->
     <Application.Resources>
-        <local:LocalizedStrings xmlns:local="clr-namespace:PurposeColor.WinPhone" x:Key="LocalizedStrings"/>
-
+       
         <Style x:Key="ThumbStyle1" TargetType="Thumb">
             <Setter Property="Template">
                 <Setter.Value>

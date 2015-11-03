@@ -5,6 +5,7 @@ using PurposeColor.screens;
 using PushNotification.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
@@ -13,8 +14,15 @@ namespace PurposeColor
 {
     public class App : Application
     {
-        public static bool loggedin { get; set; }
-        public static INavigation Navigator{get; set;}
+        public static bool IsLoggedIn { get; set; }
+        public static INavigation Navigator { get; set; }
+        public static bool IsGoogleLogin { get; set; }
+        public static bool IsFacebookLogin { get; set; }
+        static string token;
+        public static string Token
+        {
+            get { return token; }
+        }
         public App()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -24,8 +32,8 @@ namespace PurposeColor
 
         protected override void OnStart()
         {
-            if( Device.OS == TargetPlatform.Android || Device.OS == TargetPlatform.iOS )
-            CrossPushNotification.Current.Register();
+            if (Device.OS == TargetPlatform.Android || Device.OS == TargetPlatform.iOS)
+                CrossPushNotification.Current.Register();
         }
 
         protected override void OnSleep()
@@ -38,14 +46,37 @@ namespace PurposeColor
             // Handle when your app resumes
         }
 
-        public static void NavigateToChangePassword( User userInfo )
+        public static void NavigateToChangePassword(User userInfo)
         {
-
             Device.BeginInvokeOnMainThread(() =>
             {
                 Navigator.PushAsync(new ChangePassword(userInfo));
             });
-           
+        }
+
+        public static void SaveToken(string tkn)
+        {
+            token = tkn;
+        }
+
+        public static Action SuccessfulLoginAction
+        {
+            get
+            {
+                NavigationPage navPage = new NavigationPage(new FeelingNowPage());
+                return new Action(() =>
+                {
+                    try
+                    {
+                        Navigator.PushModalAsync(navPage);
+                        //Navigator.PushAsync(new FeelingNowPage());
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine("SuccessfulLoginAction : " + ex.Message);
+                    }
+                });
+            }
         }
     }
 
@@ -60,7 +91,6 @@ namespace PurposeColor
             Master = page;
             Detail = new NavigationPage(new LogInPage());
             this.Title = "test";
-
         }
     }
 
@@ -70,22 +100,19 @@ namespace PurposeColor
         {
             Icon = "icon.png";
             Title = "Menu";
-          //  BackgroundColor = Color.FromHex("444444");
+            //  BackgroundColor = Color.FromHex("444444");
             BackgroundColor = Color.Red;
             Content = new Label
             {
                 Text = "master"
             };
-
-
         }
     }
-
 
     public class DetailsPage : ContentPage
     {
         MyMasterDetailPage masterPage;
-        public DetailsPage( MyMasterDetailPage master )
+        public DetailsPage(MyMasterDetailPage master)
         {
             masterPage = master;
 
@@ -95,11 +122,10 @@ namespace PurposeColor
             int titlebarWidth = (int)spec.ScreenWidth;
 
             CustomLayout masteLlayout = new CustomLayout();
-            masteLlayout.WidthRequest = (int) spec.ScreenWidth;
+            masteLlayout.WidthRequest = (int)spec.ScreenWidth;
             masteLlayout.HeightRequest = (int)spec.ScreenHeight;
 
             CustomTitleBar titleBar = new CustomTitleBar();
-
 
             StackLayout layout = new StackLayout();
             layout.WidthRequest = (int)spec.ScreenWidth; ;

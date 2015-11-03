@@ -50,7 +50,7 @@ namespace googleforms.WinPhone
             SetProgressIndicator(true);
 
 
-            if (!PurposeColor.App.loggedin)
+            if (!PurposeColor.App.IsLoggedIn)
             {
                 OAuthAuthorization authorization = new OAuthAuthorization(
                 "https://accounts.google.com/o/oauth2/auth",

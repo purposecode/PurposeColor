@@ -8,7 +8,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 
-namespace OAuth_Demo
+namespace PurposeColor.WinPhone
 {
     public partial class LoginPage : PhoneApplicationPage
     {
@@ -43,7 +43,7 @@ namespace OAuth_Demo
             {
                 string authorizationCode = title.Substring(title.IndexOf('=') + 1);
                 PhoneApplicationService.Current.State["OAuth_Demo.AuthorizationCode"] = authorizationCode;
-                PurposeColor.App.loggedin = true;
+                PurposeColor.App.IsLoggedIn = true;
                 //MessageBox.Show(authorizationCode);
                 NavigationService.GoBack();
             }

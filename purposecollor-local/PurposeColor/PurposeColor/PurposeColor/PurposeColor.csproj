@@ -55,6 +55,7 @@
     <Compile Include="screens\ChangePassword.cs" />
     <Compile Include="screens\GraphPage.cs" />
     <Compile Include="screens\LogInPage.cs" />
+    <Compile Include="screens\LoginWebViewHolder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">

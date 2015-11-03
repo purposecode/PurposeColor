@@ -3,6 +3,7 @@ using CustomControls;
 using PurposeColor.CustomControls;
 using PurposeColor.interfaces;
 using PurposeColor.Model;
+using SolTech.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +55,12 @@ namespace PurposeColor.screens
                 BorderWidth = 2
             };
 
+
+            ImageButton imgsignInButton = new ImageButton
+            {
+                Source = "//Assets//circle.png"
+            };
+
             Button googleSignInButton = new Button
             {
                 Text = "Sign In With Google",
@@ -73,6 +80,9 @@ namespace PurposeColor.screens
             googleSignInButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 
 
+            imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
+            imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
+
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
             masterLayout.AddChildToLayout(passwordEntry, 10, 35);
             masterLayout.AddChildToLayout(signInButton, 30, 50);
@@ -88,8 +98,10 @@ namespace PurposeColor.screens
 
         void OnSignInButtonClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync( new GraphPage() );
+            //Navigation.PushAsync( new GraphPage() );
+           // Navigation.PushAsync(new CustomListView());
           //Navigation.PushAsync( new TestScreen() );
+            Navigation.PushAsync( new FeelingNowPage() );
         }
 
         void OnGoogleSignInButtonClicked(object sender, EventArgs e)

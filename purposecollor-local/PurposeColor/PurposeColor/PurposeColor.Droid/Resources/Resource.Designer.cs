@@ -63,6 +63,8 @@ namespace PurposeColor.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
+			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::PurposeColor.Droid.Resource.String.ApplicationName;
+			global::Xamarin.Forms.Platform.Resource.String.Hello = global::PurposeColor.Droid.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -374,6 +376,12 @@ namespace PurposeColor.Droid
 		public partial class String
 		{
 			
+			// aapt resource value: 0x7f040023
+			public const int ApplicationName = 2130968611;
+			
+			// aapt resource value: 0x7f040022
+			public const int Hello = 2130968610;
+			
 			// aapt resource value: 0x7f040001
 			public const int auth_google_play_services_client_facebook_display_name = 2130968577;
 			
@@ -476,8 +484,8 @@ namespace PurposeColor.Droid
 			// aapt resource value: 0x7f04001d
 			public const int common_signin_button_text_long = 2130968605;
 			
-			// aapt resource value: 0x7f040022
-			public const int library_name = 2130968610;
+			// aapt resource value: 0x7f040024
+			public const int library_name = 2130968612;
 			
 			static String()
 			{

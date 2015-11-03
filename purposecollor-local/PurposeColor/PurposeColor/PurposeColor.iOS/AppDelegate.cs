@@ -4,6 +4,8 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using PushNotification.Plugin;
+using PushNotifictionListener;
 
 namespace PurposeColor.iOS
 {
@@ -25,7 +27,45 @@ namespace PurposeColor.iOS
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
 
+            CrossPushNotification.Initialize<CrossPushNotificationListener>();
             return base.FinishedLaunching(app, options);
+        }
+
+        public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+        {
+            if (CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnErrorReceived(error);
+            }
+        }
+
+        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        {
+            if (CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnRegisteredSuccess(deviceToken);
+            }
+        }
+
+        public override void DidRegisterUserNotificationSettings(UIApplication application, UIUserNotificationSettings notificationSettings)
+        {
+            application.RegisterForRemoteNotifications();
+        }
+
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        {
+            if (CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+            }
+        }
+
+        public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+        {
+            if (CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+            }
         }
     }
 }

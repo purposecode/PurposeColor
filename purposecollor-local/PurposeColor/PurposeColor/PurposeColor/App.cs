@@ -19,14 +19,17 @@ namespace PurposeColor
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }
         static string token;
+        public static PurposeMasterDetailPage masterPage;
         public static string Token
         {
             get { return token; }
         }
+ 
         public App()
         {
             NavigationPage.SetHasNavigationBar(this, false);
-            MyMasterDetailPage masterPage = new MyMasterDetailPage();
+            MenuPage menuPage = new MenuPage();
+            masterPage = new PurposeMasterDetailPage();
             MainPage = masterPage;
         }
 

@@ -32,12 +32,18 @@ namespace PurposeColor.screens
             Label name = new Label();
             name.SetBinding( Label.TextProperty, "Name" );
             name.TextColor = Color.Black;
-            name.FontSize = 18;
+			name.FontSize = Device.OnPlatform( 15, 18, 18 );
+
+			StackLayout divider = new StackLayout();
+			divider.WidthRequest = deviceSpec.ScreenWidth;
+			divider.HeightRequest = 1;
+			divider.BackgroundColor = Color.Navy;
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform( 30, 30, 10 ) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }
 
@@ -63,8 +69,7 @@ namespace PurposeColor.screens
             ListView listView = new ListView();
             listView.ItemsSource = menuItems;
             listView.ItemTemplate = new DataTemplate(typeof(CustomMenuItemCell));
-            /*listView.SeparatorVisibility = SeparatorVisibility.Default;
-            listView.SeparatorColor = Color.Blue;*/
+			listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.ItemSelected += OnListViewItemSelected;
           
             Icon = "icon.png";

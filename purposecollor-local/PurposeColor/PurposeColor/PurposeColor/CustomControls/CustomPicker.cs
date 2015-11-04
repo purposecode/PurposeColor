@@ -33,16 +33,16 @@ namespace PurposeColor.CustomControls
             name.TextColor = Color.Black;
             name.FontSize = 18;
 
-           /* StackLayout divider = new StackLayout();
+            StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
-            divider.HeightRequest = 2;
-            divider.BackgroundColor = Color.Navy;*/
+            divider.HeightRequest = 1;
+            divider.BackgroundColor = Color.Navy;
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            //masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform( 20,20,5 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform( 20,20,5 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }
 
@@ -83,6 +83,7 @@ namespace PurposeColor.CustomControls
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
             listView.HeightRequest = deviceSpec.ScreenHeight * 42 / 100;
+			listView.SeparatorVisibility = SeparatorVisibility.None;
             listContainer.Children.Add( listView );
 
             this.WidthRequest = deviceSpec.ScreenWidth;

@@ -113,20 +113,7 @@ namespace PurposeColor
             this.Title = "test";
         }
     }
-
-    public class MyMasterDetailPage : MasterDetailPage
-    {
-        public MyMasterDetailPage()
-        {
-            App.Navigator = Navigation;
-            NavigationPage.SetHasNavigationBar(this, false);
-            MasterPage page = new MasterPage();
-            Master = page;
-            Detail = new NavigationPage(new LogInPage());
-            this.Title = "test";
-        }
-    }
-
+    
     public class MasterPage : ContentPage
     {
         public MasterPage()

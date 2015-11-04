@@ -8,7 +8,7 @@ using Xamarin.Forms;
 
 namespace CustomControls
 {
-    class CustomLayout : AbsoluteLayout
+    public class CustomLayout : AbsoluteLayout
     {
         double screenHeight;
         double screenWidth;

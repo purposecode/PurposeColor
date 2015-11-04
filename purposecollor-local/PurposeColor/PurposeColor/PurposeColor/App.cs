@@ -19,6 +19,7 @@ namespace PurposeColor
         public static INavigation Navigator { get; set; }
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }
+        public static PurposeMasterDetailPage masterPage;
         static string token;
         static ApplicationSettings applicationSettings;
         public static ApplicationSettings Settings
@@ -37,8 +38,8 @@ namespace PurposeColor
         public App()
         {
             NavigationPage.SetHasNavigationBar(this, false);
-            MyMasterDetailPage masterPage = new MyMasterDetailPage();
-
+            MenuPage menuPage = new MenuPage();
+            masterPage = new PurposeMasterDetailPage();
             MainPage = masterPage;
         }
 
@@ -99,6 +100,19 @@ namespace PurposeColor
         }
     }
 
+
+    public class MyMasterDetailPage : MasterDetailPage
+    {
+        public MyMasterDetailPage()
+        {
+            App.Navigator = Navigation;
+            NavigationPage.SetHasNavigationBar(this, false);
+            MasterPage page = new MasterPage();
+            Master = page;
+            Detail = new NavigationPage(new LogInPage());
+            this.Title = "test";
+        }
+    }
 
     public class MyMasterDetailPage : MasterDetailPage
     {

@@ -129,17 +129,22 @@ namespace PurposeColor.screens
                 if (nu2 == null)
                 {
                     isSaveSuccess = AppSettings.SaveUser(user);
+
+                }
+                else if (nu2.Password == passwordEntry.Text) // for testing only - else part == login failed.
+                {
+                    DisplayAlert("Login", "User login successfull", "OK");
                 }
                 
                 if (isSaveSuccess)
                 {
+                    DisplayAlert("Registeration", "New user registered successfully", "OK");
                     User nu = AppSettings.GetUserWithUserName(user.UserName);
-                    int n = user.ID;
                 }
             }
             catch (Exception ex)
             {
-              //  Debug.WrightLine(ex.Message);
+                var msg = ex.Message;
             }
 
             Navigation.PushAsync( new FeelingNowPage() );

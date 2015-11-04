@@ -35,9 +35,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Constants\Constants.cs" />
     <Compile Include="CustomControls\CustomEntry.cs" />
     <Compile Include="CustomControls\CustomImageButton.cs" />
     <Compile Include="CustomControls\CustomLayout.cs" />
+    <Compile Include="CustomControls\CustomPicker.cs" />
     <Compile Include="CustomControls\CustomSlider.cs" />
     <Compile Include="CustomControls\CustomTitleBar.cs" />
     <Compile Include="CustomControls\RoundedButton.cs" />
@@ -59,6 +61,8 @@
     <Compile Include="screens\GraphPage.cs" />
     <Compile Include="screens\LogInPage.cs" />
     <Compile Include="screens\LoginWebViewHolder.cs" />
+    <Compile Include="screens\MenuPage.cs" />
+    <Compile Include="screens\PurposeMasterDetailPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">

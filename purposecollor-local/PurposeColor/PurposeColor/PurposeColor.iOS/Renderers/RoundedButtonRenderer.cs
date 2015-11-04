@@ -19,11 +19,15 @@ namespace PurposeColor.iOS.Renderers
             {
                 var button = (RoundedButton)e.NewElement;
 
-                button.SizeChanged += (s, args) =>
-                {
-                    var radius = Math.Min(button.Width, button.Height) / 2.0;
-                    button.BorderRadius = (int)(radius);
-                };
+				if (button != null)
+				{
+					button.SizeChanged += (s, args) =>
+					{
+						var radius = Math.Min(button.Width, button.Height) / 2.0;
+						button.BorderRadius = (int)(radius);
+					};
+				}
+
             }
         }
     }

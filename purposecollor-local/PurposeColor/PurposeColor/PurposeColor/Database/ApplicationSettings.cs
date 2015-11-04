@@ -19,9 +19,10 @@ namespace PurposeColor.Database
             try
             {
                 Connection = DependencyService.Get<IDBConnection>().GetConnection();
-                
-                var users = (from t in Connection.Table<User>() select t).ToList();
-                if (users == null || users.Count < 1)
+
+                var userTableInfo = Connection.GetTableInfo("User");
+
+                if (userTableInfo == null || userTableInfo.Count < 1)
                 {
                     Connection.CreateTable<User>();
                 }
@@ -29,6 +30,9 @@ namespace PurposeColor.Database
             }
             catch (Exception ex)
             {
+               // Connection.CreateTable<User>();
+
+
                 Debug.WriteLine("AplicationSettings :: " + ex.Message);
             }
         }

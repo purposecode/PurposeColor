@@ -17,7 +17,7 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
             UISlider control = (UISlider)Control;
-            control.SetThumbImage(new UIImage("Icon.png"), UIControlState.Normal);
+            control.SetThumbImage(new UIImage("Icon-76.png"), UIControlState.Normal);
         }
     }
 }

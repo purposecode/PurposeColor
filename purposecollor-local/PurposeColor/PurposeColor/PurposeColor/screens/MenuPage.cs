@@ -63,8 +63,8 @@ namespace PurposeColor.screens
             ListView listView = new ListView();
             listView.ItemsSource = menuItems;
             listView.ItemTemplate = new DataTemplate(typeof(CustomMenuItemCell));
-            listView.SeparatorVisibility = SeparatorVisibility.Default;
-            listView.SeparatorColor = Color.Blue;
+            /*listView.SeparatorVisibility = SeparatorVisibility.Default;
+            listView.SeparatorColor = Color.Blue;*/
             listView.ItemSelected += OnListViewItemSelected;
           
             Icon = "icon.png";

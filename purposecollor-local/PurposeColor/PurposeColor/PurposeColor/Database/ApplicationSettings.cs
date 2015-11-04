@@ -30,9 +30,6 @@ namespace PurposeColor.Database
             }
             catch (Exception ex)
             {
-               // Connection.CreateTable<User>();
-
-
                 Debug.WriteLine("AplicationSettings :: " + ex.Message);
             }
         }

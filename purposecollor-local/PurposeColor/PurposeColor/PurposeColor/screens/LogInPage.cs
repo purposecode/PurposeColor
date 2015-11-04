@@ -124,22 +124,27 @@ namespace PurposeColor.screens
 
             try
             {
-                User nu2 = AppSettings.GetUserWithUserName(user.UserName);
+                User newUser = AppSettings.GetUserWithUserName(user.UserName);
                 bool isSaveSuccess = false;
-                if (nu2 == null)
+                if (newUser == null)
                 {
                     isSaveSuccess = AppSettings.SaveUser(user);
+                }
 
-                }
-                else if (nu2.Password == passwordEntry.Text) // for testing only - else part == login failed.
+                if (newUser != null) // for testing only 
                 {
-                    DisplayAlert("Login", "User login successfull", "OK");
+                    if (newUser.Password == passwordEntry.Text) 
+                    {
+                        DisplayAlert("Login", "User login successfull", "OK");
+                    }
+                    else if (newUser.Password != passwordEntry.Text) 
+                    {
+                        DisplayAlert("Login", "Username password do not match, please verify", "OK");
+                    }
                 }
-                
-                if (isSaveSuccess)
+                else if (isSaveSuccess)
                 {
                     DisplayAlert("Registeration", "New user registered successfully", "OK");
-                    User nu = AppSettings.GetUserWithUserName(user.UserName);
                 }
             }
             catch (Exception ex)

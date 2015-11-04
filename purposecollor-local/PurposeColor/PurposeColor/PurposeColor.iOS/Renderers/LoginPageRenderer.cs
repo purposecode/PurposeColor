@@ -8,9 +8,10 @@ using Xamarin.Auth;
 using UIKit;
 using MonoTouch;
 using MonoTouch.Dialog;
+using PurposeColor.screens;
 
 
-[assembly: ExportRenderer(typeof(LoginGooglePage), typeof(LoginPageRenderer))]
+[assembly: ExportRenderer(typeof(LoginWebViewHolder), typeof(LoginPageRenderer))]
 namespace PurposeColor.iOS
 {
     public class LoginPageRenderer : PageRenderer
@@ -55,42 +56,40 @@ namespace PurposeColor.iOS
 
             if (App.IsFacebookLogin && !App.IsLoggedIn)
             {
-                var auth = new OAuth2Authenticator(
-                clientId: "1218463084847397",
-                scope: "",
-                authorizeUrl: new Uri("https://m.facebook.com/dialog/oauth/"),
-                redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html"));
+				
+				try {
+					var auth = new OAuth2Authenticator (
+						           clientId: "1218463084847397", // new : 1218463084847397    // your OAuth2 client id
+						           scope: "", // the scopes for the particular API you're accessing, delimited by "+" symbols
+						           authorizeUrl: new Uri ("https://m.facebook.com/dialog/oauth/"),//new Uri(""), // the auth URL for the service
+						           redirectUrl: new Uri ("http://www.facebook.com/connect/login_success.html")); // the redirect URL for the service
+					
+					auth.Completed += (sender, eventArgs) => {
+						if (eventArgs.IsAuthenticated) {
+							App.SuccessfulLoginAction.Invoke ();
+							App.SaveToken (eventArgs.Account.Properties ["access_token"]);
+					
+							var request = new OAuth2Request ("GET", new Uri ("https://graph.facebook.com/me"), null, eventArgs.Account);
+							request.GetResponseAsync ().ContinueWith (t => {
+								if (t.IsFaulted)
+									Console.WriteLine ("Error: " + t.Exception.InnerException.Message);
+								else {
+									string json = t.Result.GetResponseText ();
+									Console.WriteLine (json);
+								}
+							});
+						}
+					};
 
-                auth.Completed += (sender, eventArgs) =>
-                {
-                    if (eventArgs.IsAuthenticated)
-                    {
-                        App.SuccessfulLoginAction.Invoke();
-                        App.SaveToken(eventArgs.Account.Properties["access_token"]);
+					dialog.PresentViewController (auth.GetUI (), true, null);
+				}
+				catch (Exception ex) 
+				{
+					Console.WriteLine ("ViewDidAppear :: " + ex.Message);
+				}
 
-                        AccountStore.Create().Save(eventArgs.Account, "Facebook");
 
-                        var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me"), null, eventArgs.Account);
-                        request.GetResponseAsync().ContinueWith(t =>
-                        {
-                            if (t.IsFaulted)
-                                Console.WriteLine("Error: " + t.Exception.InnerException.Message);
-                            else
-                            {
-                                string json = t.Result.GetResponseText();
-                                Console.WriteLine(json);
-                            }
-                        });
-                    }
-                    else
-                    {
-                        // The user cancelled
-                    }
-                };
-
-                PresentViewController(auth.GetUI(), true, null);
             }
         }
     }
 }
-

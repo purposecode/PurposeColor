@@ -1,5 +1,6 @@
 ﻿using CustomControls;
 using PurposeColor.CustomControls;
+using PurposeColor.Database;
 using PurposeColor.Model;
 using PurposeColor.screens;
 using PushNotification.Plugin;
@@ -19,21 +20,39 @@ namespace PurposeColor
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }
         static string token;
+        static ApplicationSettings applicationSettings;
+        public static ApplicationSettings Settings
+        {
+            get
+            {
+                return applicationSettings;
+            }
+        }
+
         public static string Token
         {
             get { return token; }
         }
+
         public App()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             MyMasterDetailPage masterPage = new MyMasterDetailPage();
+
             MainPage = masterPage;
         }
 
         protected override void OnStart()
         {
             if (Device.OS == TargetPlatform.Android || Device.OS == TargetPlatform.iOS)
+            {
                 CrossPushNotification.Current.Register();
+            }
+
+            if (applicationSettings == null)
+            {
+                applicationSettings = new ApplicationSettings();
+            }
         }
 
         protected override void OnSleep()

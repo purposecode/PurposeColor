@@ -63,6 +63,8 @@ namespace PurposeColor.Droid
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahText = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahText;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextColor = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahTextColor;
 			global::AndroidHUD.Resource.Styleable.ProgressWheel_ahTextSize = global::PurposeColor.Droid.Resource.Styleable.ProgressWheel_ahTextSize;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::PurposeColor.Droid.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::PurposeColor.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Resource.String.ApplicationName = global::PurposeColor.Droid.Resource.String.ApplicationName;
 			global::Xamarin.Forms.Platform.Resource.String.Hello = global::PurposeColor.Droid.Resource.String.Hello;
 		}

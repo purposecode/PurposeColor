@@ -1,11 +1,13 @@
 ﻿using Cross;
 using CustomControls;
 using PurposeColor.CustomControls;
+using PurposeColor.Database;
 using PurposeColor.interfaces;
 using PurposeColor.Model;
 using SolTech.Forms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -17,10 +19,14 @@ namespace PurposeColor.screens
     {
         public Color TextColors { get; set; }
         ActivityIndicator indicator;
+        CustomEntry userNameEntry;
+        CustomEntry passwordEntry;
+
         public LogInPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
+            
             masterLayout.BackgroundColor = Color.Gray;
 
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
@@ -37,12 +43,12 @@ namespace PurposeColor.screens
                  TextColor = TextColors
              };*/
 
-            CustomEntry userNameEntry = new CustomEntry
+            userNameEntry = new CustomEntry
             {
                 Placeholder = "User name"
             };
 
-            CustomEntry passwordEntry = new CustomEntry
+            passwordEntry = new CustomEntry
             {
                 Placeholder = "Password"
             };
@@ -109,6 +115,33 @@ namespace PurposeColor.screens
             //Navigation.PushAsync( new GraphPage() );
            // Navigation.PushAsync(new CustomListView());
           //Navigation.PushAsync( new TestScreen() );
+
+
+            ApplicationSettings AppSettings = App.Settings;
+            User user = new User();
+            user.UserName = userNameEntry.Text;
+            user.Password = passwordEntry.Text;
+
+            try
+            {
+                User nu2 = AppSettings.GetUserWithUserName(user.UserName);
+                bool isSaveSuccess = false;
+                if (nu2 == null)
+                {
+                    isSaveSuccess = AppSettings.SaveUser(user);
+                }
+                
+                if (isSaveSuccess)
+                {
+                    User nu = AppSettings.GetUserWithUserName(user.UserName);
+                    int n = user.ID;
+                }
+            }
+            catch (Exception ex)
+            {
+              //  Debug.WrightLine(ex.Message);
+            }
+
             Navigation.PushAsync( new FeelingNowPage() );
         }
 

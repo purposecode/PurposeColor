@@ -31,7 +31,8 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
-           
+
+            CustomTitleBar titleBar = new CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             canvas = new StackLayout();
             canvas.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
@@ -98,12 +99,13 @@ namespace PurposeColor.screens
             };
             submit.Clicked += OnSubmitClicked;
 
-            masterLayout.AddChildToLayout(XEntry, 5, 5);
-            masterLayout.AddChildToLayout(YEntry, 25, 5);
+            masterLayout.AddChildToLayout(titleBar, 0, 0);
+            masterLayout.AddChildToLayout(XEntry, 5, 15);
+            masterLayout.AddChildToLayout(YEntry, 25,15);
             masterLayout.AddChildToLayout(submit, 55, 5);
             CreateGraphFromPoints(pointList);
            // masterLayout.Children.Add(button, new Point(100, 150));
-            masterLayout.BackgroundColor = Color.Black;
+            masterLayout.BackgroundColor = Color.White;
             Content = masterLayout;
         }
 

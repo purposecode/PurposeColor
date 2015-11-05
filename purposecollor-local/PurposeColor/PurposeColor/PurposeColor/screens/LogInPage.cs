@@ -31,6 +31,10 @@ namespace PurposeColor.screens
 
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
+            CustomTitleBar titleBar = new CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
+            titleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
+
+
             /* Label userNameLabel = new Label
              {
                  Text = "User name",
@@ -97,6 +101,7 @@ namespace PurposeColor.screens
             imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
             imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
 
+            masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
             masterLayout.AddChildToLayout(passwordEntry, 10, 35);
             masterLayout.AddChildToLayout(signInButton, 30, 50);
@@ -109,6 +114,13 @@ namespace PurposeColor.screens
 
             Content = masterLayout;
         }
+
+
+        void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            App.masterPage.IsPresented = !App.masterPage.IsPresented;
+        }
+
 
         void OnSignInButtonClicked(object sender, EventArgs e)
 		{

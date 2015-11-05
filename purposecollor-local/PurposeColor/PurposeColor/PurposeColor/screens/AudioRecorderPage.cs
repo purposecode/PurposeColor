@@ -44,7 +44,7 @@ namespace PurposeColor
 			};
 			PlaybackBtn.Clicked +=	PlaybackBtn_Clicked;
 			masterLayout.AddChildToLayout(PlaybackBtn, 0, 60);
-
+            masterLayout.AddChildToLayout(titleBar, 0, 0);
 
 
 			Content = masterLayout;

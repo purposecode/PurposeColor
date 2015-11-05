@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using PurposeColor;
+using PurposeColor.CustomControls;
 
 namespace PurposeColor.screens
 {
@@ -24,8 +25,9 @@ namespace PurposeColor.screens
     {
         public CustomMenuItemCell()
         {
+            
             CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.Gray;
+            masterLayout.BackgroundColor = Color.White;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             masterLayout.BackgroundColor = Color.White;
@@ -53,10 +55,13 @@ namespace PurposeColor.screens
     {
         public MenuPage()
         {
+            this.BackgroundColor = Color.White;
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.White;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+
+            CustomTitleBar titleBar = new CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             List<MenuItems> menuItems = new List<MenuItems>();
             menuItems.Add( new MenuItems{  Name = Constants.EMOTIONAL_AWARENESS});
@@ -77,6 +82,7 @@ namespace PurposeColor.screens
             Title = "Menu";
 
             masterLayout.BackgroundColor = Color.White;
+            masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout( listView,0, 15);
             Content = masterLayout;
         }

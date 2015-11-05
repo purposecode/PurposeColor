@@ -23,6 +23,7 @@ namespace PurposeColor.screens
 
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
+            CustomTitleBar titleBar = new CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             CustomEntry paswordEntry = new CustomEntry
             {
@@ -48,7 +49,7 @@ namespace PurposeColor.screens
             confirmPaswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
             submitButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 
-
+            masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(paswordEntry, 10, 30);
             masterLayout.AddChildToLayout(confirmPaswordEntry, 10, 45);
             masterLayout.AddChildToLayout(submitButton, 30, 60);

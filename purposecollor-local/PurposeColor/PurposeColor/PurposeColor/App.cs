@@ -145,14 +145,12 @@ namespace PurposeColor
             masteLlayout.WidthRequest = (int)spec.ScreenWidth;
             masteLlayout.HeightRequest = (int)spec.ScreenHeight;
 
-            CustomTitleBar titleBar = new CustomTitleBar();
+    //        CustomTitleBar titleBar = new CustomTitleBar();
 
             StackLayout layout = new StackLayout();
             layout.WidthRequest = (int)spec.ScreenWidth; ;
             layout.HeightRequest = (int)spec.ScreenHeight * 90 / 100;
-            titleBar.backButton.Clicked += backButton_Clicked;
-
-            masteLlayout.AddChildToLayout(titleBar, 0, 0);
+        
             masteLlayout.AddChildToLayout(layout, 0, 10);
 
             NavigationPage.SetHasNavigationBar(this, false);

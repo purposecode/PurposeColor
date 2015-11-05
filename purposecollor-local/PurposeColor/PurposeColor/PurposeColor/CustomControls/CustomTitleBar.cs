@@ -1,4 +1,5 @@
 ﻿using CustomControls;
+using SolTech.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,38 +11,51 @@ namespace PurposeColor.CustomControls
 {
     class CustomTitleBar: ContentView
     {
-        public Color TitleBarBackGroudColor { get; set; }
-        public Color Title { get; set; }
+       /* public Color TitleBarBackGroudColor { get; set; }
+        public string Title { get; set; }
         public Color TitleColor { get; set; }
-        public Color BackButtonTitle { get; set; }
-        public Button backButton;
+        public Color BackButtonTitle { get; set; }*/
+        CustomLayout masterLayout;
+        public TapGestureRecognizer imageAreaTapGestureRecognizer;
+        Label title;
 
-        public CustomTitleBar()
+        public CustomTitleBar( Color backGroundColor, string titleValue, Color titleColor, string backButtonTitle )
         {
             Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
             int titlebarHeight = (int)spec.ScreenHeight * 10 / 100;
             int titlebarWidth = (int)spec.ScreenWidth;
+            this.BackgroundColor = backGroundColor;
 
-            CustomLayout masterLayout = new CustomLayout();
+            masterLayout = new CustomLayout();
             masterLayout.HeightRequest = titlebarHeight;
             masterLayout.WidthRequest = titlebarWidth;
-            masterLayout.BackgroundColor = Color.Gray;
+            masterLayout.BackgroundColor = backGroundColor;
 
-            backButton = new Button();
-            backButton.Text = "<";
-            backButton.TextColor = Color.Black;
-            backButton.FontSize = 25;
-            backButton.BackgroundColor = Color.Transparent;
+            ImageButton menuButton = new ImageButton();
+            menuButton.Source = Device.OnPlatform("menu.png", "menu.png", "//Assets//menu.png");
+            menuButton.HeightRequest = 50;
+            menuButton.WidthRequest = 50;
 
 
-            Label title = new Label();
-            title.Text = "Screen Title";
-            title.FontSize = 22;
+            imageAreaTapGestureRecognizer = new TapGestureRecognizer();
+            menuButton.GestureRecognizers.Add(imageAreaTapGestureRecognizer);
+
+
+            title = new Label();
+            title.Text = titleValue;
+            title.FontSize = 15;
             title.TextColor = Color.Black;
 
+            Image logo = new Image();
+            logo.Source = Device.OnPlatform("logo.png", "logo.png", "//Assets//logo.png");
+            logo.WidthRequest = spec.ScreenWidth;
+            logo.HeightRequest = titlebarHeight;
 
-            masterLayout.AddChildToLayout( backButton, 2, 10,(int) masterLayout.WidthRequest, (int)masterLayout.HeightRequest );
-            masterLayout.AddChildToLayout(title, 25, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+
+
+
+            masterLayout.AddChildToLayout(logo, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest); 
+            masterLayout.AddChildToLayout(menuButton, 2, 10, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
             Content = masterLayout;
 

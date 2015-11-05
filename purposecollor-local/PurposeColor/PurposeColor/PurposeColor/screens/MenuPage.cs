@@ -55,7 +55,7 @@ namespace PurposeColor.screens
         {
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.Gray;
+            masterLayout.BackgroundColor = Color.White;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             List<MenuItems> menuItems = new List<MenuItems>();

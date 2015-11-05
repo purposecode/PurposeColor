@@ -29,16 +29,12 @@ namespace PurposeColor
 
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.Gray;
-
+            masterLayout.BackgroundColor = Color.White;
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
 
-            CustomTitleBar titleBar = new CustomTitleBar();
-            titleBar.TitleBarBackGroudColor = Color.Blue;
-            titleBar.TitleColor = Color.Red;
-            titleBar.backButton.Clicked += backButton_Clicked;
-
+            CustomTitleBar titleBar = new CustomTitleBar( Color.FromRgb(8,137,216), "Purpose Color", Color.Black, "back" );
+            titleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
             slider = new CustomSlider
             {
@@ -94,6 +90,11 @@ namespace PurposeColor
 
             Content = masterLayout;
 
+        }
+
+        void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
 
         void backButton_Clicked(object sender, System.EventArgs e)

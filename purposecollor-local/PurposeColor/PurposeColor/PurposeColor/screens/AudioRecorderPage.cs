@@ -17,10 +17,10 @@ namespace PurposeColor
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.Gray;
 
-			PurposeColor.CustomControls.CustomTitleBar titleBar = new PurposeColor.CustomControls.CustomTitleBar();
-			titleBar.TitleBarBackGroudColor = Color.Blue;
+			PurposeColor.CustomControls.CustomTitleBar titleBar = new PurposeColor.CustomControls.CustomTitleBar( Color.Blue, "", Color.Red, "" );
+			/*titleBar.TitleBarBackGroudColor = Color.Blue;
 			titleBar.TitleColor = Color.Red;
-			titleBar.backButton.Clicked += backButton_Clicked;
+			titleBar.backButton.Clicked += backButton_Clicked;*/
 			masterLayout.AddChildToLayout(titleBar, 0, 0);
 
 			Button recordBtn = new Button 

@@ -17,10 +17,7 @@ namespace PurposeColor
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.Gray;
 
-			PurposeColor.CustomControls.CustomTitleBar titleBar = new PurposeColor.CustomControls.CustomTitleBar( Color.Blue, "", Color.Red, "" );
-			/*titleBar.TitleBarBackGroudColor = Color.Blue;
-			titleBar.TitleColor = Color.Red;
-			titleBar.backButton.Clicked += backButton_Clicked;*/
+			PurposeColor.CustomControls.CustomTitleBar titleBar = new PurposeColor.CustomControls.CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 			masterLayout.AddChildToLayout(titleBar, 0, 0);
 
 			Button recordBtn = new Button 

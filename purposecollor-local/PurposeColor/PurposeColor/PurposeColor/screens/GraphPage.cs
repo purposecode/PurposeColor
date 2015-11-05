@@ -102,7 +102,7 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(XEntry, 5, 15);
             masterLayout.AddChildToLayout(YEntry, 25,15);
-            masterLayout.AddChildToLayout(submit, 55, 5);
+            masterLayout.AddChildToLayout(submit, 55, 15);
             CreateGraphFromPoints(pointList);
            // masterLayout.Children.Add(button, new Point(100, 150));
             masterLayout.BackgroundColor = Color.White;

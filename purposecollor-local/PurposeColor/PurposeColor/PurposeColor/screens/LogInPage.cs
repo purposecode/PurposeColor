@@ -111,49 +111,47 @@ namespace PurposeColor.screens
         }
 
         void OnSignInButtonClicked(object sender, EventArgs e)
-        {
-            //Navigation.PushAsync( new GraphPage() );
-           // Navigation.PushAsync(new CustomListView());
-          //Navigation.PushAsync( new TestScreen() );
+		{
+			//Navigation.PushAsync( new GraphPage() );
+			// Navigation.PushAsync(new CustomListView());
+			//Navigation.PushAsync( new TestScreen() );
 
 
-            ApplicationSettings AppSettings = App.Settings;
-            User user = new User();
-            user.UserName = userNameEntry.Text;
-            user.Password = passwordEntry.Text;
+			#region FOR DB testing
+			if (!String.IsNullOrEmpty (userNameEntry.Text)) 
+			{
+				ApplicationSettings AppSettings = App.Settings;
+				User user = new User ();
+				user.UserName = userNameEntry.Text;
+				user.Password = passwordEntry.Text;
+			         	
+				try {
+					User newUser = AppSettings.GetUserWithUserName (user.UserName);
+					bool isSaveSuccess = false;
+					if (newUser == null) {
+						isSaveSuccess = AppSettings.SaveUser (user);
+					}
+			         	
+					if (newUser != null) { // for testing only 
+						if (newUser.Password == passwordEntry.Text) {
+							DisplayAlert ("Login", "User login successfull", "OK");
+						} else if (newUser.Password != passwordEntry.Text) {
+							DisplayAlert ("Login", "Username password do not match, please verify", "OK");
+						}
+					} else if (isSaveSuccess) {
+						DisplayAlert ("Registeration", "New user registered successfully", "OK");
+					}
+				} catch (Exception ex) {
+					var msg = ex.Message;
+					if (true) {
+					
+					}
+				}
+			}
+			#endregion
 
-            try
-            {
-                User newUser = AppSettings.GetUserWithUserName(user.UserName);
-                bool isSaveSuccess = false;
-                if (newUser == null)
-                {
-                    isSaveSuccess = AppSettings.SaveUser(user);
-                }
-
-                if (newUser != null) // for testing only 
-                {
-                    if (newUser.Password == passwordEntry.Text) 
-                    {
-                        DisplayAlert("Login", "User login successfull", "OK");
-                    }
-                    else if (newUser.Password != passwordEntry.Text) 
-                    {
-                        DisplayAlert("Login", "Username password do not match, please verify", "OK");
-                    }
-                }
-                else if (isSaveSuccess)
-                {
-                    DisplayAlert("Registeration", "New user registered successfully", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                var msg = ex.Message;
-            }
-
-            Navigation.PushAsync( new FeelingNowPage() );
-        }
+			Navigation.PushAsync (new FeelingNowPage ());
+		}
 
         void OnGoogleSignInButtonClicked(object sender, EventArgs e)
         {

@@ -65,6 +65,7 @@ namespace PurposeColor.screens
             menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE });
             menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS });
             menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS });
+			menuItems.Add(new MenuItems { Name = Constants.AUDIO_RECORDING });
 
             ListView listView = new ListView();
             listView.ItemsSource = menuItems;
@@ -110,9 +111,10 @@ namespace PurposeColor.screens
             {
 
             }
-            else
+			else if(Constants.AUDIO_RECORDING == selItem.Name)
             {
-
+				App.masterPage.IsPresented = false;
+				App.masterPage.Detail = new NavigationPage(new AudioRecorderPage());
             }
         }
     }

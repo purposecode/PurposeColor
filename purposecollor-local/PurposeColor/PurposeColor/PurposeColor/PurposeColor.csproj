@@ -63,6 +63,8 @@
     <Compile Include="screens\LoginWebViewHolder.cs" />
     <Compile Include="screens\MenuPage.cs" />
     <Compile Include="screens\PurposeMasterDetailPage.cs" />
+    <Compile Include="interfaces\IAudioRecorder.cs" />
+    <Compile Include="screens\AudioRecorderPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">

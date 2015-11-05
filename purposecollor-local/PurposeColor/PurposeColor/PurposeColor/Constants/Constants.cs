@@ -15,6 +15,10 @@ namespace PurposeColor
         public const string COMMUNITY_GEMS = "COMMUNITY GEMs";
         public const string APPLICATION_SETTTINGS = "APPLICATION SETTTINGS";
 
+		//-------------- for testing ----
+		public const string AUDIO_RECORDING = "Audio recording";
+		//-------------- for testing ----
+
         public const string HOW_YOU_ARE_FEELING = "Do you like how you are feeling now ?";
 
         public const int PICKER_ANIMATION_OFFSET = 40;

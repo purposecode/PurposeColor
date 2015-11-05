@@ -104,6 +104,7 @@
     <Compile Include="Renderers\CustomSliderRenderer.cs" />
     <Compile Include="Renderers\LoginPageRenderer.cs" />
     <Compile Include="Dependency\GoogleAuthenticator.cs" />
+    <Compile Include="Dependency\AudioRecorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

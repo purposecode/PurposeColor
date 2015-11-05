@@ -42,7 +42,7 @@ namespace PurposeColor.screens
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform( 30, 30, 10 ) / 100;
 
-            masterLayout.AddChildToLayout(name, (float)5, (float)5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform( 5,5,50 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }

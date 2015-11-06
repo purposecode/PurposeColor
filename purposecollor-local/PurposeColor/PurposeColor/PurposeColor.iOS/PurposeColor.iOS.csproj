@@ -91,6 +91,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Dependency\DBConnection.cs" />
+    <Compile Include="Dependency\IOSReminderImpl.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\RoundedButtonRenderer.cs" />

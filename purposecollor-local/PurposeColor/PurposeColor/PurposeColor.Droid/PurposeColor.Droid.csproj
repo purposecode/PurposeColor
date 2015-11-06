@@ -113,6 +113,7 @@
     <Compile Include="Dependency\ProgressbarImpl.cs" />
     <Compile Include="DeviceServices\SMSService.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Dependency\AndroidReminderImpl.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomImageButtonRenderer.cs" />
     <Compile Include="Renderers\CustomSliderRenderer.cs" />

@@ -128,6 +128,9 @@ namespace PurposeColor.screens
 			// Navigation.PushAsync(new CustomListView());
 			//Navigation.PushAsync( new TestScreen() );
 
+            IReminderService reminder = DependencyService.Get<IReminderService>();
+            reminder.Remind(DateTime.Now, "", "");
+
 
 			#region FOR DB testing
 			if (!String.IsNullOrEmpty (userNameEntry.Text)) 

@@ -45,6 +45,7 @@
     <Compile Include="CustomControls\RoundedButton.cs" />
     <Compile Include="Database\ApplicationSettings.cs" />
     <Compile Include="interfaces\IDBConnection.cs" />
+    <Compile Include="interfaces\IReminder.cs" />
     <Compile Include="Model\GEMCategory.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\CameraPage.cs" />

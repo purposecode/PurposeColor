@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PurposeColor
 {
@@ -22,6 +23,8 @@ namespace PurposeColor
         public const string HOW_YOU_ARE_FEELING = "Do you like how you are feeling now ?";
 
         public const int PICKER_ANIMATION_OFFSET = 40;
+
+		public static Color MENU_BG_COLOR = Color.FromRgb( 36, 189, 229 ); 
 
     }
 

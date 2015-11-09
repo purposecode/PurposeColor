@@ -24,25 +24,25 @@ namespace PurposeColor.CustomControls
         public CustomListViewCellItem()
         {
             CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.White;
+			masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
-            masterLayout.BackgroundColor = Color.White;
+			masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
-            name.TextColor = Color.Black;
+            name.TextColor = Color.White;
             name.FontSize = 18;
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
             divider.HeightRequest = 1;
-            divider.BackgroundColor = Color.Navy;
+			divider.BackgroundColor = Color.White;
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform( 20,20,5 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+           masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform( 20,20,5 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }
 
@@ -56,11 +56,11 @@ namespace PurposeColor.CustomControls
         {
             pageContainedLayout = containerLayout;
             CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.Transparent;
+			masterLayout.BackgroundColor = Color.Transparent;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             StackLayout layout = new StackLayout();
-            layout.BackgroundColor = Color.White;
+			layout.BackgroundColor = Color.Transparent;
             layout.Opacity = .1;
             layout.WidthRequest = deviceSpec.ScreenWidth;
             layout.HeightRequest = deviceSpec.ScreenHeight * 60 / 100;
@@ -90,8 +90,8 @@ namespace PurposeColor.CustomControls
             this.HeightRequest = deviceSpec.ScreenHeight;
 
             masterLayout.AddChildToLayout(layout, 0, 0);
-            masterLayout.AddChildToLayout(listView, 0, 55 );
-            this.BackgroundColor = Color.Transparent;
+            masterLayout.AddChildToLayout(listView, 0, 60 );
+			this.BackgroundColor = Color.Transparent;
 
 
             Content = masterLayout;

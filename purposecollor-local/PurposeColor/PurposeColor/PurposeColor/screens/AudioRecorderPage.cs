@@ -54,6 +54,10 @@ namespace PurposeColor
 
 		void RecordBtn_Clicked (object sender, EventArgs e)
 		{
+            if (audioRecorder == null)
+            {
+                audioRecorder = DependencyService.Get<IAudioRecorder>();
+            }
 			bool isAudioRecording = audioRecorder.RecordAudio ();
 			if (isAudioRecording == false) {
 				DisplayAlert ("Audio recording", "Sorry the audio recording service is not available now, please try again later", "OK");

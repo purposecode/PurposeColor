@@ -63,12 +63,12 @@ namespace PurposeColor.Droid.Dependency
                 }
                 */
 
-            
-            Directory.CreateDirectory(directoryname);
-            fileName = string.Format("Audio{0}.3gpp", DateTime.Now.ToString("yyyyMMddHHmmss"));
-            path = Path.Combine(directoryname, fileName);
             try
             {
+                Directory.CreateDirectory(directoryname);
+                fileName = string.Format("Audio{0}.3gpp", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                path = Path.Combine(directoryname, fileName);
+
                 _recorder = new MediaRecorder();
                 _recorder.Reset();
                 _recorder.SetAudioSource(AudioSource.Mic);

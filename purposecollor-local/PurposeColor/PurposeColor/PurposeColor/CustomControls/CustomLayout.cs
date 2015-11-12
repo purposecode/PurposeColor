@@ -23,7 +23,8 @@ namespace CustomControls
             double xVal = screenWidth * xPercent / 100;
             double yVal = screenHeight * yPercent / 100;
 
-            Point pos = new Point( xVal, yVal);
+			yVal = Device.OnPlatform (yVal + 20, yVal, yVal);
+			Point pos = new Point( xVal, yVal);
             Children.Add(view, pos);
         }
 

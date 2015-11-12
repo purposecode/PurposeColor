@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using Microsoft.Phone.Notification;
 using System.Text;
+using ImageCircle.Forms.Plugin.WindowsPhone;
 
 namespace PurposeColor.WinPhone
 {
@@ -26,6 +27,7 @@ namespace PurposeColor.WinPhone
 
             global::Xamarin.Forms.Forms.Init();
 
+            ImageCircleRenderer.Init();
             // Try to find the push channel.
             pushChannel = HttpNotificationChannel.Find(channelName);
 

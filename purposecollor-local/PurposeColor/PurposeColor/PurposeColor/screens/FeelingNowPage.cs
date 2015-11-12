@@ -33,7 +33,7 @@ namespace PurposeColor
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
 
-            CustomTitleBar titleBar = new CustomTitleBar( Color.FromRgb(8,137,216), "Purpose Color", Color.Black, "back" );
+            PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
             titleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
             slider = new CustomSlider

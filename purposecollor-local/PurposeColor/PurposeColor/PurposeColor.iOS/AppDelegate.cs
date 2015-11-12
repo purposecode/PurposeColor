@@ -6,6 +6,7 @@ using Foundation;
 using UIKit;
 using PushNotification.Plugin;
 using PushNotifictionListener;
+using ImageCircle.Forms.Plugin.iOS;
 
 namespace PurposeColor.iOS
 {
@@ -25,6 +26,7 @@ namespace PurposeColor.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            ImageCircleRenderer.Init();
             LoadApplication(new App());
 
             CrossPushNotification.Initialize<CrossPushNotificationListener>();

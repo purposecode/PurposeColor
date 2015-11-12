@@ -27,12 +27,13 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
             
-            masterLayout.BackgroundColor = Color.Gray;
+            masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
 
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
+            mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
-            CustomTitleBar titleBar = new CustomTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
-            titleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
+            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness" );
 
 
             /* Label userNameLabel = new Label
@@ -101,7 +102,9 @@ namespace PurposeColor.screens
             imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
             imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
 
-            masterLayout.AddChildToLayout(titleBar, 0, 0);
+            
+            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+            masterLayout.AddChildToLayout(subTitleBar, 0, 10);
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
             masterLayout.AddChildToLayout(passwordEntry, 10, 35);
             masterLayout.AddChildToLayout(signInButton, 30, 50);

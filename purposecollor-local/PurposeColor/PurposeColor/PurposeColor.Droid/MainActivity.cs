@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Android.Content;
 using PushNotification.Plugin;
 using PushNotifictionListener;
+using ImageCircle.Forms.Plugin.Droid;
 
 
 namespace PurposeColor.Droid
@@ -25,6 +26,7 @@ namespace PurposeColor.Droid
             Xamarin.Forms.Forms.SetTitleBarVisibility(AndroidTitleBarVisibility.Never);
             curentActivity = this;
             CrossPushNotification.Initialize<CrossPushNotificationListener>("469628380816");
+            ImageCircleRenderer.Init();
             LoadApplication(new App());
         }
 

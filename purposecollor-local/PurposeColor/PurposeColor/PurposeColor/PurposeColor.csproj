@@ -52,6 +52,7 @@
     <Compile Include="interfaces\IReminder.cs" />
     <Compile Include="Model\GEMCategory.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
+    <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\GemDetailedView.xaml.cs">
       <DependentUpon>GemDetailedView.xaml</DependentUpon>
     </Compile>

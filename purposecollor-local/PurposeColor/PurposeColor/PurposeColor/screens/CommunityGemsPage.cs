@@ -10,15 +10,35 @@ using Xamarin.Forms;
 
 namespace PurposeColor.screens
 {
-   
-
-    public class CommunityGemsCell : ViewCell
+    public class Gems
     {
-        public CommunityGemsCell()
+        public string ProfilePhoto{ get; set; }
+        public string Name { get; set; }
+        public string DateInfo { get; set; }
+        public string GemInfo { get; set; }
+        public string TruncatedGemInfo { get; set; }
+        public string GemImage { get; set; }
+        public string ArrowImage { get; set; }
+        public bool IsSeeMoreVisible
+        {
+            get
+            {
+                if( GemInfo.Length > 100 )
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
+
+    public class GemsCell : ViewCell
+    {
+        public GemsCell()
         {
 
-            CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
+            CustomLayout absTopLayout = new CustomLayout();
+            absTopLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             Image profileImage = new Image();
@@ -37,7 +57,7 @@ namespace PurposeColor.screens
 
             Label gemInfo = new Label();
             gemInfo.TextColor = Color.Black;
-            gemInfo.SetBinding(Label.TextProperty, "TruncatedGemInfo");
+            gemInfo.SetBinding(Label.TextProperty, "GemInfo");
             gemInfo.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 
 
@@ -47,7 +67,7 @@ namespace PurposeColor.screens
             gemImage.SetBinding( Image.SourceProperty, "GemImage" );
             gemImage.Aspect = Aspect.Fill;
 
-            Button seeMore = new Button();
+           /* Button seeMore = new Button();
             seeMore.Text = "see more";
             seeMore.FontSize = Device.OnPlatform(12, 12, 18);
             seeMore.TextColor = Color.Blue;
@@ -64,32 +84,39 @@ namespace PurposeColor.screens
                 {
                     App.Navigator.PushModalAsync( new GemsDetailedView( selGem.GemInfo, selGem.GemImage ) );
                 }
-            };
+            };*/
 
 
 
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * 50 / 100;
-            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
+            StackLayout masterStakLayout = new StackLayout();
+            masterStakLayout.Orientation = StackOrientation.Vertical;
 
 
-            masterLayout.AddChildToLayout(profileImage, 5, 5);
-            masterLayout.AddChildToLayout(profileName, 23, 5);
-            masterLayout.AddChildToLayout( dateInfo, 23, 8 );
-            masterLayout.AddChildToLayout(gemInfo, 5, 16);
-            masterLayout.AddChildToLayout( seeMore, 2, Device.OnPlatform( 20, 20 , 22 ) );
-            masterLayout.AddChildToLayout( gemImage, 5, 28 );
+            StackLayout gemInfoImageLayout = new StackLayout();
+            absTopLayout.WidthRequest = deviceSpec.ScreenWidth;
 
-            this.View = masterLayout;
+
+            absTopLayout.AddChildToLayout(profileImage, 5, 5);
+            absTopLayout.AddChildToLayout(profileName, 23, 5);
+            absTopLayout.AddChildToLayout( dateInfo, 23, 8 );
+
+            gemInfoImageLayout.Children.Add( gemInfo );
+            gemInfoImageLayout.Children.Add( gemImage );
+
+
+            masterStakLayout.Children.Add( absTopLayout );
+            masterStakLayout.Children.Add( gemInfoImageLayout );
+            this.View = masterStakLayout;
 
         }
 
 
     }
 
-    public class GemsPage : BasePage, IDisposable
+    public class CommunityGemsPage : BasePage, IDisposable
     {
         public static List<Gems> gemsSource = new List<Gems>();
-        public GemsPage()
+        public CommunityGemsPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
@@ -107,13 +134,6 @@ namespace PurposeColor.screens
             gemItems.ProfilePhoto = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg"); 
             gemItems.GemInfo = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali. Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass..Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass.Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass..Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass.Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass..Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass..Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass.Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass.Manali is a high-altitude Himalayan resort town in India’s northern Himachal Pradesh state. It has a reputation as a backpacking center and honeymoon destination. Set on the Beas River, it’s a gateway for skiing in the Solang Valley and trekking in Parvati Valley. It's also a jumping-off point for paragliding, rafting and mountaineering in the Pir Panjal mountains, home to 4,000m-high Rohtang Pass.";
 
-            if (gemItems.GemInfo.Length > 100)
-            {
-                gemItems.TruncatedGemInfo = gemItems.GemInfo.Substring(0, 100);
-                gemItems.TruncatedGemInfo = gemItems.TruncatedGemInfo + "........";
-            }
-  
-
 
             Gems gemItem2 = new Gems();
             gemItem2.ArrowImage = "";
@@ -123,15 +143,6 @@ namespace PurposeColor.screens
             gemItem2.ProfilePhoto = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg"); 
             gemItem2.GemInfo = "This is just a dummy page to check how ";
 
-            if (gemItem2.GemInfo.Length > 100)
-            {
-                gemItem2.TruncatedGemInfo = gemItem2.GemInfo.Substring(0, 100);
-                gemItem2.TruncatedGemInfo = gemItem2.TruncatedGemInfo + "........";
-            }
-            else
-            {
-                gemItem2.TruncatedGemInfo = gemItem2.GemInfo;
-            }
 
 
             Gems gemItem3 = new Gems();
@@ -142,35 +153,20 @@ namespace PurposeColor.screens
             gemItem3.ProfilePhoto = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg"); 
             gemItem3.GemInfo = "This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how ";
 
-            if (gemItem3.GemInfo.Length > 100)
-            {
-                gemItem3.TruncatedGemInfo = gemItem3.GemInfo.Substring(0, 100);
-                gemItem3.TruncatedGemInfo = gemItem3.TruncatedGemInfo + "........";
-            }
-            else
-            {
-                gemItem3.TruncatedGemInfo = gemItem3.GemInfo;
-            }
-
 
             gemsSource.Add(gemItems);
             gemsSource.Add(gemItem2);
             gemsSource.Add(gemItem3);
-          /*  gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });
-            gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });
-            gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });
-            gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });
-            gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });
-            gemsSource.Add(new Gems { ArrowImage = "", DateInfo = "2015 Janury 30", GemImage = "manali.jpg", Name = "Lance Clusner", ProfilePhoto = "avatar.jpg", Title = "This is just a dummy page to check how it displays in mobile devices. below picture is taken from manali" });*/
+            gemsSource.Add(gemItems);
+      
 
             ListView gemsList = new ListView();
-            gemsList.ItemTemplate = new DataTemplate(typeof(CommunityGemsCell));
+            gemsList.ItemTemplate = new DataTemplate(typeof(GemsCell));
             gemsList.SeparatorVisibility = SeparatorVisibility.None;
             gemsList.BackgroundColor = Color.FromRgb(230, 255, 254);
             gemsList.ItemsSource = gemsSource;
-            gemsList.RowHeight = (int)deviceSpec.ScreenHeight * 50 / 100;
             gemsList.HeightRequest = deviceSpec.ScreenHeight * 75 / 100;
-         //   gemsList.HasUnevenRows = true;
+            gemsList.HasUnevenRows = true;
 
             masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, 10);

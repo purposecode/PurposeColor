@@ -205,6 +205,7 @@
     <BundleResource Include="Resources\top_bg.png" />
     <BundleResource Include="Resources\top_seperate.png" />
     <BundleResource Include="Resources\txtbox_bg.png" />
+    <BundleResource Include="Resources\manali.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PurposeColor.screens.GemsDetailedView">
+ 
+  <ScrollView>
+<Grid BackgroundColor ="White">
+  <Grid.RowDefinitions>
+    <RowDefinition Height="*" />
+    <RowDefinition Height="*" />
+  </Grid.RowDefinitions>
+  <Label Grid.Row="0" x:Name ="gemsInfoLabel" TextColor="Black" HorizontalOptions="Start" VerticalOptions="Start"></Label>
+  <Image Grid.Row="1" x:Name="gemsImage" Aspect="Fill" WidthRequest="300"></Image>
+</Grid>
+    </ScrollView>
+
+</ContentPage>

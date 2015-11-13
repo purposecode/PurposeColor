@@ -183,6 +183,7 @@
     <AndroidResource Include="Resources\drawable\goals.png" />
     <AndroidResource Include="Resources\drawable\Intel.png" />
     <AndroidResource Include="Resources\drawable\settings.png" />
+    <AndroidResource Include="Resources\drawable\manali.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -34,11 +34,11 @@ namespace PurposeColor.screens
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.White;
-            name.FontSize = Device.OnPlatform(15, 13, 18);
+            name.FontSize = Device.OnPlatform(12, 13, 18);
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
-            divider.HeightRequest = 1;
+            divider.HeightRequest = .75;
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
             Image sideImage = new Image();
@@ -50,8 +50,8 @@ namespace PurposeColor.screens
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
 
-            masterLayout.AddChildToLayout(sideImage, (float)2, (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(name, (float)15, (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			masterLayout.AddChildToLayout(name, (float)Device.OnPlatform( 15, 15 , 15 ), (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }

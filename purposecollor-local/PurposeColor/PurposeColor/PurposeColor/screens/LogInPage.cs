@@ -104,7 +104,7 @@ namespace PurposeColor.screens
 
             
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(subTitleBar, 0, 10);
+			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform( 9, 10, 10 ));
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
             masterLayout.AddChildToLayout(passwordEntry, 10, 35);
             masterLayout.AddChildToLayout(signInButton, 30, 50);

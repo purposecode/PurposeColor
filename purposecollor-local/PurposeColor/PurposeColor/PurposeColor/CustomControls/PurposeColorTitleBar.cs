@@ -59,7 +59,7 @@ namespace PurposeColor.CustomControls
             };
 
             userImg.WidthRequest = spec.ScreenWidth * 10 / 100;
-            userImg.HeightRequest = spec.ScreenHeight * 8 / 100;
+			userImg.HeightRequest = spec.ScreenHeight * Device.OnPlatform( 6,8,8 ) / 100;
 
 
             masterLayout.AddChildToLayout(logo, 5, 5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest); 
@@ -67,7 +67,7 @@ namespace PurposeColor.CustomControls
 
             if (imageRequired)
             {
-                masterLayout.AddChildToLayout(userImg, 80, Device.OnPlatform( 15, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(userImg, 80, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             Content = masterLayout;

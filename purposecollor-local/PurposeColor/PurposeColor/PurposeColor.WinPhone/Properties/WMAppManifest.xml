@@ -18,6 +18,9 @@
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" />
+      <ExtendedTask Name="BackgroundTask">
+        <BackgroundServiceAgent Specifier="AudioPlayerAgent" Name="PurposeColor.CustomBgAudioPlayer" Source="PurposeColor.CustomBgAudioPlayer" Type="PurposeColor.CustomBgAudioPlayer.AudioPlayer" />
+      </ExtendedTask>
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="PhoneApp1Token" TaskName="_default">

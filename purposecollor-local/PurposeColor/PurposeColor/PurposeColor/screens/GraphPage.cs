@@ -170,6 +170,10 @@ namespace PurposeColor.screens
         {
             RoundedButton button = sender as RoundedButton;
             DisplayAlert("Alert", button.ClassId, "OK");
+
+            App.masterPage.IsPresented = false;
+            App.masterPage.Detail = new NavigationPage(new PieGraphPage());
+
         }
 
         public void Dispose()

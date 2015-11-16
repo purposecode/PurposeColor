@@ -101,6 +101,7 @@
     <Compile Include="Dependency\DeviceSpec.cs" />
     <Compile Include="Dependency\ProgressBarImpl.cs" />
     <Compile Include="Dependency\WinReminderImpl.cs" />
+    <Compile Include="Dependency\WinResize.cs" />
     <Compile Include="GoogleScopes.cs" />
     <Compile Include="HttpWebRequestExtensions.cs" />
     <Compile Include="InterfaceImpl\AutheticateImpl.cs" />

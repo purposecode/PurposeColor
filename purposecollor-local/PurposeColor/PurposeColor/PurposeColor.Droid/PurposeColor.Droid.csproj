@@ -131,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dependency\AndroidResize.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
     <Compile Include="Dependency\DeviceCommunications.cs" />

@@ -51,6 +51,7 @@
     <Compile Include="interfaces\IDBConnection.cs" />
     <Compile Include="CustomControls\ImageButton.cs" />
     <Compile Include="interfaces\IReminder.cs" />
+    <Compile Include="interfaces\IResize.cs" />
     <Compile Include="Model\GEMCategory.cs" />
     <Compile Include="Model\CustomeGraphModel.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />

@@ -15,7 +15,7 @@ using PurposeColor.screens;
 namespace PurposeColor
 {
 
-    public class FeelingNowPage : ContentPage, IDisposable
+    public class FeelingsSecondPage : ContentPage, IDisposable
     {
         CustomSlider slider;
         CustomPicker ePicker;
@@ -24,19 +24,21 @@ namespace PurposeColor
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
 
-        public FeelingNowPage()
+        public FeelingsSecondPage()
         {
 
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
+            masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             deviceSpec = DependencyService.Get<IDeviceSpec>();
+            this.Appearing += FeelingsSecondPage_Appearing;
 
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+            mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
-            subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
+
 
 
             slider = new CustomSlider
@@ -47,23 +49,31 @@ namespace PurposeColor
             };
 
 
-            Label howYouAreFeeling = new Label();
-            howYouAreFeeling.Text = Constants.HOW_YOU_ARE_FEELING;
-            howYouAreFeeling.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            howYouAreFeeling.TextColor = Color.FromRgb(40, 47, 50);
-            howYouAreFeeling.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
-            howYouAreFeeling.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            Label firstLine = new Label();
+            firstLine.Text = "Does being";
+            firstLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            firstLine.TextColor = Color.FromRgb(40, 47, 50);
+            firstLine.FontSize = Device.OnPlatform(20, 22, 30);
+            firstLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
+            firstLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
 
 
-            Label howYouAreFeeling2 = new Label();
-            howYouAreFeeling2.Text = "feeling now ?";
-            howYouAreFeeling2.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            howYouAreFeeling2.TextColor = Color.FromRgb( 40, 47, 50 );
-            howYouAreFeeling2.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling2.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
-            howYouAreFeeling2.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            Label secondLine = new Label();
+            secondLine.Text = "Happy";
+            secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            secondLine.TextColor = Color.FromRgb(40, 47, 50);
+            secondLine.FontSize = Device.OnPlatform(20, 22, 30);
+            secondLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
+            secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
 
+
+           /* Label secondLine = new Label();
+            secondLine.Text = "Happy";
+            secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            secondLine.TextColor = Color.FromRgb(40, 47, 50);
+            secondLine.FontSize = Device.OnPlatform(20, 22, 30);
+            secondLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
+            secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;*/
 
 
 
@@ -100,29 +110,15 @@ namespace PurposeColor
             about.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
             about.HorizontalOptions = LayoutOptions.Center;
 
-            Image sliderDivider1 = new Image();
-            sliderDivider1.Source = "drag_sepeate.png";
 
-
-            Image sliderDivider2 = new Image();
-            sliderDivider2.Source = "drag_sepeate.png";
-
-
-            Image sliderDivider3 = new Image();
-            sliderDivider3.Source = "drag_sepeate.png";
 
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(howYouAreFeeling, 15, 22);
-            masterLayout.AddChildToLayout(howYouAreFeeling2, 28, 27);
+            masterLayout.AddChildToLayout(firstLine, 15, 22);
+            masterLayout.AddChildToLayout(secondLine, 28, 27);
             masterLayout.AddChildToLayout(slider, 5, 35);
-
-            masterLayout.AddChildToLayout(sliderDivider1, 29, 37);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 37);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 37);
-
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
             masterLayout.AddChildToLayout(about, 5, 65);
             masterLayout.AddChildToLayout(eventPickerButton, 5, 70);
@@ -131,9 +127,13 @@ namespace PurposeColor
 
         }
 
-        void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync( new FeelingsSecondPage() );
+            base.OnAppearing();
+           // this.Animate("", (s) => Layout(new Rectangle(((1 - s) * Width), Y, Width, Height)), 0, 600, Easing.SpringIn, null, null);
+          //  this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); //slide down
+
+           // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); // slide up
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -143,14 +143,14 @@ namespace PurposeColor
 
         void backButton_Clicked(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync( new GraphPage() );
+            Navigation.PushAsync(new GraphPage());
         }
 
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker( masterLayout, GetEmotionsList(), 70 ,"", false);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetEmotionsList(), 70, "", false);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -158,8 +158,8 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(ePicker, 0, 0);
 
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
-           // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
-           // ePicker.FadeTo(1, 750, Easing.Linear); 
+            // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
+            // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
 
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
@@ -173,7 +173,7 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(ePicker, 0, 0);
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
-           // ePicker.FadeTo(1, 750, Easing.Linear); 
+            // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
 
 
@@ -217,11 +217,11 @@ namespace PurposeColor
 
         void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-           CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-           emotionalPickerButton.Text = item.Name;
-           emotionalPickerButton.TextColor = Color.Black;
-           View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-           masterLayout.Children.Remove( pickView );
+            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+            emotionalPickerButton.Text = item.Name;
+            emotionalPickerButton.TextColor = Color.Black;
+            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+            masterLayout.Children.Remove(pickView);
         }
 
         void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -237,20 +237,20 @@ namespace PurposeColor
         {
         }
 
-        async  void FeelingNowPage_Appearing(object sender, System.EventArgs e)
+        async void FeelingNowPage_Appearing(object sender, System.EventArgs e)
         {
-           /* int val = 2;
-            for( int index = 0; index < 200; index++ )
+            /* int val = 2;
+             for( int index = 0; index < 200; index++ )
 
-            {
-                await Task.Delay(2);
+             {
+                 await Task.Delay(2);
 
-                if( slider.Value > 90 )
-                {
-                    val = -2;
-                }
-                slider.Value += val;
-            }*/
+                 if( slider.Value > 90 )
+                 {
+                     val = -2;
+                 }
+                 slider.Value += val;
+             }*/
         }
 
         public void Dispose()

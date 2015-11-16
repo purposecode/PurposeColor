@@ -56,6 +56,7 @@
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />
+    <Compile Include="screens\FeelingsSecondPage.cs" />
     <Compile Include="screens\GemDetailedView.xaml.cs">
       <DependentUpon>GemDetailedView.xaml</DependentUpon>
     </Compile>

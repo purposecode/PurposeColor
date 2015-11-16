@@ -27,7 +27,7 @@ namespace PurposeColor.Droid.Renderers
             control = (SeekBar)Control;
 
 
-            control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
+            //control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
             formsSlider = (CustomSlider)this.Element;
             formsSlider.ValueChanged += formsSlider_ValueChanged;
             formsSlider.Value = 1;

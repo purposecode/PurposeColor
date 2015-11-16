@@ -96,6 +96,7 @@
     <Compile Include="Dependency\IOSReminderImpl.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\IOSImageButtonRenderer.cs" />
     <Compile Include="Renderers\OxyPlotViewRenderer.cs" />
     <Compile Include="Renderers\RoundedButtonRenderer.cs" />
     <None Include="app.config" />

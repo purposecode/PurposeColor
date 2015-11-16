@@ -20,11 +20,15 @@ namespace PurposeColor
 		public const string AUDIO_RECORDING = "Audio recording";
 		//-------------- for testing ----
 
-        public const string HOW_YOU_ARE_FEELING = "Do you like how you are feeling now ?";
+        public const string HOW_YOU_ARE_FEELING = "Do you like how you are";
 
         public const int PICKER_ANIMATION_OFFSET = 40;
 
-		public static Color MENU_BG_COLOR = Color.FromRgb( 36, 189, 229 ); 
+        public static Color MENU_BG_COLOR = Color.FromRgb(36, 189, 229);
+
+        public static Color SUB_TITLE_BG_COLOR = Color.FromRgb(231, 234, 238);
+
+        public static Color LIST_BG_COLOR = Color.FromRgb(244, 244, 244);
 
     }
 

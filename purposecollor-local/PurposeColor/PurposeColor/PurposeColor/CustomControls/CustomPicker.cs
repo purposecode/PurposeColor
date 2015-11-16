@@ -2,6 +2,7 @@
 
 using Cross;
 using CustomControls;
+using PurposeColor.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,12 +32,13 @@ namespace PurposeColor.CustomControls
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
+            name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             name.FontSize = 18;
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth * 60 * 100;
             divider.HeightRequest = 1;
-            divider.BackgroundColor = Color.FromRgb(190, 190, 190);
+            divider.BackgroundColor = Color.FromRgb(220, 220, 220);
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
@@ -53,7 +55,7 @@ namespace PurposeColor.CustomControls
     {
         public ListView listView;
         CustomLayout pageContainedLayout;
-        public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY)
+        public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired = true)
         {
             pageContainedLayout = containerLayout;
             CustomLayout masterLayout = new CustomLayout();
@@ -86,6 +88,19 @@ namespace PurposeColor.CustomControls
             listHeader.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
             listHeader.BackgroundColor = Color.FromRgb( 30, 126, 210 );
 
+            Label listTitle = new Label();
+            listTitle.Text = title;
+            listTitle.TextColor = Color.White;
+            listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            listTitle.FontSize = 17;
+
+
+            CustomImageButton addButton = new CustomImageButton();
+            addButton.ImageName = "icn_plus.png";
+            addButton.BackgroundColor = Color.Transparent;
+            addButton.WidthRequest = 15;
+            addButton.HeightRequest = 15;
+
             listView = new ListView();
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
@@ -103,7 +118,12 @@ namespace PurposeColor.CustomControls
             this.HeightRequest = deviceSpec.ScreenHeight;
 
             masterLayout.AddChildToLayout(layout, 0, 0);
-            masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
+            if (titelBarRequired)
+            {
+                masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
+                masterLayout.AddChildToLayout(listTitle, 5, (100 - topY - 1) - 7 );
+                masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6); 
+            }
             masterLayout.AddChildToLayout(listContainer, 2, 100 - topY - 1);
             this.BackgroundColor = Color.Transparent;
 

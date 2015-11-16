@@ -28,7 +28,7 @@ namespace PurposeColor
 
         public static Color SUB_TITLE_BG_COLOR = Color.FromRgb(231, 234, 238);
 
-        public static Color LIST_BG_COLOR = Color.FromRgb(244, 244, 244);
+        public static Color LIST_BG_COLOR = Color.FromRgb(230, 230, 230);
 
         public const string HELVERTICA_NEUE_LT_STD = "Helvetica Neue LT Std";
 

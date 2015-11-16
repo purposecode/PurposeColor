@@ -33,6 +33,7 @@ namespace PurposeColor.interfaces
             {
                 androidButton = (global::Android.Widget.Button)Control;
                 formsElement = (CustomImageButton)this.Element;
+                androidButton.SetPadding(20, 20, 20, 20);
                 androidButton.SetAllCaps(false);
                 if (formsElement.ImageName != null)
                     androidButton.SetBackgroundDrawable(Context.Resources.GetDrawable(formsElement.ImageName));

@@ -132,7 +132,7 @@ namespace PurposeColor
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker( masterLayout, GetEmotionsList(), 50 );
+            CustomPicker ePicker = new CustomPicker( masterLayout, GetEmotionsList(), 70 ,"", false);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -147,7 +147,7 @@ namespace PurposeColor
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker( masterLayout, GetEventsList(), 79 );
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetEventsList(), 50, "Add Events Situation or Thoughts", true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -162,22 +162,25 @@ namespace PurposeColor
         private List<CustomListViewItem> GetEmotionsList()
         {
             List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Happy" });
-            listSource.Add(new CustomListViewItem { Name = "Sad" });
+            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
             listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "extreme happy" });
-            listSource.Add(new CustomListViewItem { Name = "polite" });
-            listSource.Add(new CustomListViewItem { Name = "grtitude" });
-            listSource.Add(new CustomListViewItem { Name = "Relaxed" });
-            listSource.Add(new CustomListViewItem { Name = "hungry" });
-            listSource.Add(new CustomListViewItem { Name = "Happy" });
-            listSource.Add(new CustomListViewItem { Name = "Sad" });
+            listSource.Add(new CustomListViewItem { Name = "Determined" });
+            listSource.Add(new CustomListViewItem { Name = "Bored" });
             listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "extreme happy" });
-            listSource.Add(new CustomListViewItem { Name = "polite" });
-            listSource.Add(new CustomListViewItem { Name = "grtitude" });
-            listSource.Add(new CustomListViewItem { Name = "Relaxed" });
-            listSource.Add(new CustomListViewItem { Name = "hungry" });
+            listSource.Add(new CustomListViewItem { Name = "Tired" });
+            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
+            listSource.Add(new CustomListViewItem { Name = "Determined" });
+            listSource.Add(new CustomListViewItem { Name = "Bored" });
+            listSource.Add(new CustomListViewItem { Name = "Frustated" });
+            listSource.Add(new CustomListViewItem { Name = "Tired" });
+            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
+            listSource.Add(new CustomListViewItem { Name = "Determined" });
+            listSource.Add(new CustomListViewItem { Name = "Tired" });
+            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
+            listSource.Add(new CustomListViewItem { Name = "Determined" });
+            listSource.Add(new CustomListViewItem { Name = "Bored" });
+            listSource.Add(new CustomListViewItem { Name = "Frustated" });
+
             return listSource;
         }
 

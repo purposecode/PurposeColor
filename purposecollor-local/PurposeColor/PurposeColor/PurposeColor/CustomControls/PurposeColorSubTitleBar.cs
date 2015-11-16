@@ -48,6 +48,7 @@ namespace PurposeColor.CustomControls
 
             NextButton = new Button();
             NextButton.Text = "Next";
+            NextButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             NextButton.FontSize = Device.OnPlatform( 12,12,18 );
             NextButton.TextColor = Color.White;
             NextButton.BackgroundColor = Color.Transparent;
@@ -59,8 +60,9 @@ namespace PurposeColor.CustomControls
 
             title = new Label();
             title.Text = titleValue;
-            title.FontSize = Device.OnPlatform( 17, 17, 22 );
-            title.TextColor = Color.White;
+            title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            title.FontSize = Device.OnPlatform( 17, 20, 22 );
+            title.TextColor = Color.Black;
 
             Image logo = new Image();
             logo.Source = Device.OnPlatform("logo.png", "logo.png", "//Assets//logo.png");
@@ -70,7 +72,7 @@ namespace PurposeColor.CustomControls
             logo.HeightRequest = spec.ScreenHeight * 8 / 100;
 
 
-            masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+           // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, 20, 22, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(imgDivider, 75, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 

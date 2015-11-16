@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using System;
 using PurposeColor.interfaces;
+using Android.Graphics;
 
 
 [assembly: ExportRenderer(typeof(CustomImageButton), typeof(AndImageButtonRenderer))]
@@ -36,21 +37,22 @@ namespace PurposeColor.interfaces
                 if (formsElement.ImageName != null)
                     androidButton.SetBackgroundDrawable(Context.Resources.GetDrawable(formsElement.ImageName));
 
+
                 if (formsElement.TextOrientation != null)
                 {
-                    /*if (Convert.ToString(formsElement.TextOrientation) == CustomLocalization.GetString(LEFT_TEXT,string.Empty))
+                    if (Convert.ToString(formsElement.TextOrientation) == "Left")
                     {
 
-                        nativeButton.Gravity = Android.Views.GravityFlags.Left;
+                        androidButton.Gravity = Android.Views.GravityFlags.Left;
                     }
-                    else if (Convert.ToString(formsElement.TextOrientation) == CustomLocalization.GetString(RIGHT_TEXT,string.Empty))
+                    else if (Convert.ToString(formsElement.TextOrientation) == "Right")
                     {
-                        nativeButton.Gravity = Android.Views.GravityFlags.Right;
+                        androidButton.Gravity = Android.Views.GravityFlags.Right;
                     }
                     else
                     {
-                        nativeButton.Gravity = Android.Views.GravityFlags.Center;
-                    }*/
+                        androidButton.Gravity = Android.Views.GravityFlags.Center;
+                    }
                 }
             }
         }

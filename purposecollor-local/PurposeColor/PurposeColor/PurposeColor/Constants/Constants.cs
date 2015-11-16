@@ -30,6 +30,8 @@ namespace PurposeColor
 
         public static Color LIST_BG_COLOR = Color.FromRgb(244, 244, 244);
 
+        public const string HELVERTICA_NEUE_LT_STD = "Helvetica Neue LT Std";
+
     }
 
 }

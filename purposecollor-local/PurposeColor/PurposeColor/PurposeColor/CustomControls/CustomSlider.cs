@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace PurposeColor.CustomControls
 {
-    public class CustomSlider : Slider
+    public class CustomSlider : XLabs.Forms.Controls.ExtendedSlider
     {
 
     }

@@ -19,12 +19,34 @@ namespace PurposeColor.Droid.Renderers
 {
     class CustomSliderRenderer : SliderRenderer
     {
+        CustomSlider formsSlider;
+        SeekBar control;
         protected override void OnElementChanged(ElementChangedEventArgs<Slider> e)
         {
             base.OnElementChanged(e);
-            SeekBar control = (SeekBar)Control;
-            Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.icon);
-            control.SetThumb(drawable);
+            control = (SeekBar)Control;
+
+
+            control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
+            formsSlider = (CustomSlider)this.Element;
+            formsSlider.ValueChanged += formsSlider_ValueChanged;
+            formsSlider.Value = 1;
+
+        }
+
+        void formsSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+
+            if (formsSlider.Value > 0)
+            {
+                Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn);
+                control.SetThumb(drawable);
+            }
+            else
+            {
+                Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn_no);
+                control.SetThumb(drawable);
+            }
         }
     }
 }

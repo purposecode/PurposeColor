@@ -147,7 +147,7 @@ namespace PurposeColor.CustomControls
 
         void OnAddButtonClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync( new AddEventsSituationsOrThoughts("Emotinal Awareness") );
+            Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
         }
 
 

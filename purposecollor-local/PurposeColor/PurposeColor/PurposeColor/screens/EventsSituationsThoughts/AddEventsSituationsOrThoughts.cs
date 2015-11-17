@@ -6,16 +6,40 @@ using XLabs.Forms.Controls;
 
 namespace PurposeColor.screens
 {
-    public class AddEventsSituationsOrThoughts : ContentPage
+    public class AddEventsSituationsOrThoughts : ContentPage, System.IDisposable
     {
+        #region MEMBERS
+
+        CustomLayout masterLayout;
+        StackLayout TopTitleBar;
+        PurposeColorSubTitleBar subTitleBar;
+        Editor textInput;
+        StackLayout textInputContainer;
+        StackLayout audioInputStack;
+        Image cameraInput;
+        Image audioInput;
+        StackLayout cameraInputStack;
+        Image galleryInput;
+        StackLayout galleryInputStack;
+        Image locationInput;
+        StackLayout locationInputStack;
+        Image contactInput;
+        StackLayout contactInputStack;
+        StackLayout iconContainer;
+        StackLayout textinputAndIconsHolder;
+        TapGestureRecognizer CameraTapRecognizer;
+        
+        #endregion
+                
         public AddEventsSituationsOrThoughts(string title)
         {
             NavigationPage.SetHasNavigationBar(this, false);
-            CustomLayout masterLayout = new CustomLayout();
+            masterLayout = new CustomLayout();
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
 
-            StackLayout TopTitleBar = new StackLayout
+            #region TITLE BARS
+            TopTitleBar = new StackLayout
             {
                 BackgroundColor = Constants.BLUE_BG_COLOR,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -26,18 +50,29 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(TopTitleBar, 0, 0);
 
-            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, title,true,true);
-            masterLayout.AddChildToLayout(subTitleBar, 0, 1);
+            string pageTitle = string.Empty;
+            if (title.Length > 20)
+            {
+                pageTitle = title.Substring(0, 20);
+                pageTitle += "...";
+            }
 
-            
-            Editor textInput = new Editor
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, pageTitle, true, true);
+            masterLayout.AddChildToLayout(subTitleBar, 0, 1);
+            subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
+            subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
+            #endregion
+
+            #region TEXT INPUT CONTROL
+
+            textInput = new Editor
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 HeightRequest = 200,
                 Text = title
             };
-            StackLayout textInputContainer = new StackLayout
+            textInputContainer = new StackLayout
             {
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Padding = 2,
@@ -49,16 +84,17 @@ namespace PurposeColor.screens
             textInput.WidthRequest = textInputWidth;
 
             int textInputX = (devWidth - textInputWidth) / 2;
-            masterLayout.AddChildToLayout(textInputContainer, 10, 10);
+
+            #endregion
 
             #region ICONS
 
-            Image audioInput = new Image()
+            audioInput = new Image()
             {
                 Source = Device.OnPlatform("ic_music.png", "ic_music.png", "//Assets//ic_music.png"),
                 Aspect = Aspect.AspectFit
             };
-            StackLayout audioInputStack = new StackLayout
+            audioInputStack = new StackLayout
             {
                 Padding = 10,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
@@ -66,12 +102,12 @@ namespace PurposeColor.screens
                 Children = { audioInput, new Label { Text = "Audio", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
 
-            Image cameraInput = new Image()
+            cameraInput = new Image()
             {
                 Source = Device.OnPlatform("icn_camera.png", "icn_camera.png", "//Assets//icn_camera.png"),
                 Aspect = Aspect.AspectFit
             };
-            StackLayout cameraInputStack = new StackLayout
+            cameraInputStack = new StackLayout
             {
                 Padding = 10,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
@@ -79,59 +115,134 @@ namespace PurposeColor.screens
                 Children = { cameraInput, new Label { Text = "Camera", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
 
-            Image galleryInput = new Image()
+            CameraTapRecognizer = new TapGestureRecognizer();
+            cameraInputStack.GestureRecognizers.Add(CameraTapRecognizer);
+            CameraTapRecognizer.Tapped += (s, e) =>
+                {
+                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    {
+                        
+                    }
+
+                };
+
+            TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
+            emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
+            {
+               //to do..
+
+            };
+            cameraInputStack.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
+
+
+            galleryInput = new Image()
             {
                 Source = Device.OnPlatform("icn_gallery.png", "icn_gallery.png", "//Assets//icn_gallery.png"),
                 Aspect = Aspect.AspectFit
             };
-            StackLayout galleryInputStack = new StackLayout
+            galleryInputStack = new StackLayout
             {
                 Padding = 10,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Spacing = 0,
                 Children = { galleryInput, new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
-            Image locationInput = new Image()
+            locationInput = new Image()
             {
                 Source = Device.OnPlatform("icn_location.png", "icn_location.png", "//Assets//icn_location.png"),
                 Aspect = Aspect.AspectFit
             };
-            StackLayout locationInputStack = new StackLayout
+            locationInputStack = new StackLayout
             {
                 Padding = 10,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Spacing = 0,
                 Children = { locationInput, new Label { Text = "Location", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
-
-            Image contactInput = new Image()
+            
+            contactInput = new Image()
             {
                 Source = Device.OnPlatform("icn_contact.png", "icn_contact.png", "//Assets//icn_contact.png"),
                 Aspect = Aspect.AspectFit
             };
-            StackLayout contactInputStack = new StackLayout
+            
+            contactInputStack = new StackLayout
             {
                 Padding = 10,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Spacing = 0,
                 Children = { contactInput, new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
-            
+
             #endregion
 
-            StackLayout iconContainer = new StackLayout
+            #region CONTAINERS
+
+            iconContainer = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                WidthRequest = (int)(devWidth * .8) + 4,
+                WidthRequest = (int)(devWidth * .8) + 4, /// 4 pxl padding added to text input.
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };
+            
+            textinputAndIconsHolder = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                Spacing = 0,
+                Padding = 0,
+                Children = { textInputContainer, iconContainer }
+            };
 
             int iconY = (int)textInput.Y + (int)textInput.Height + 5;
-            masterLayout.AddChildToLayout(iconContainer, 10, 44);
+            masterLayout.AddChildToLayout(textinputAndIconsHolder, 10, 10);
+            
+            #endregion
+
             Content = masterLayout;
+        }
+
+        void CameraTapRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            //throw new System.NotImplementedException();
+        }
+
+        void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            string input = (sender as Editor).Text;
+            // to do.. according to the page title, save to the corresponding local db
+
+            Navigation.PopAsync();
+        }
+
+        void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        {
+            Navigation.PopAsync();
+        }
+
+        public void Dispose()
+        {
+            subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
+            subTitleBar.NextButtonTapRecognizer.Tapped -= NextButtonTapRecognizer_Tapped;
+            this.masterLayout = null;
+            this.TopTitleBar = null;
+            this.subTitleBar = null;
+            this.textInput = null;
+            this.textInputContainer = null;
+            this.audioInputStack = null;
+            this.cameraInput = null;
+            this.audioInput = null;
+            this.cameraInputStack = null;
+            this.galleryInput = null;
+            this.galleryInputStack = null;
+            this.locationInput = null;
+            this.locationInputStack = null;
+            this.contactInput = null;
+            this.contactInputStack = null;
+            this.iconContainer = null;
+            this.textinputAndIconsHolder = null;
         }
     }
 }

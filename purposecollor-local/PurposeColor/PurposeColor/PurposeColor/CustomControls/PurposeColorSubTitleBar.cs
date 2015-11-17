@@ -47,8 +47,6 @@ namespace PurposeColor.CustomControls
             imgDivider.Source = Device.OnPlatform("top_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
            // imgDivider.HeightRequest = spec.ScreenHeight * 4 / 100;
 
-
-
             title = new Label();
             title.Text = titleValue;
             title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -62,11 +60,10 @@ namespace PurposeColor.CustomControls
            // logo.WidthRequest = spec.ScreenWidth * 70 / 100;
            // logo.HeightRequest = spec.ScreenHeight * 8 / 100;
 
-
             Image nextImage = new Image();
             nextImage.Source = Device.OnPlatform("logo.png", "icon_tick.png", "//Assets//logo.png");
             NextButtonTapRecognizer = new TapGestureRecognizer();
-            
+            nextImage.GestureRecognizers.Add(NextButtonTapRecognizer);
            // nextImage.Aspect = Aspect.Fill;
            // nextImage.WidthRequest = spec.ScreenWidth * 8 / 100;
            // nextImage.HeightRequest = spec.ScreenHeight * 4 / 100;

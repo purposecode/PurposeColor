@@ -32,6 +32,8 @@ namespace PurposeColor.screens
         string pageTitle;
         bool isAudioRecording = false;
         PurposeColor.interfaces.IAudioRecorder audioRecorder;
+        string folder;
+        string path;
 
         #endregion
 
@@ -138,29 +140,14 @@ namespace PurposeColor.screens
 
             CameraTapRecognizer = new TapGestureRecognizer();
             cameraInputStack.GestureRecognizers.Add(CameraTapRecognizer);
-            /*CameraTapRecognizer.Tapped += async (s, e) =>
-                {
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-                    {
-                        DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
-                        return;
-                    }
 
-                    var file = await CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
-                    {
-
-                        Directory = "Sample",
-                        Name = "test.jpg"
-                    });
-
-                };
-    */
             CameraTapRecognizer.Tapped += async (s, e) =>
             {
                 try
                 {
                     if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                     {
+
                         string fileName = string.Format("Image{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
 
                         var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions

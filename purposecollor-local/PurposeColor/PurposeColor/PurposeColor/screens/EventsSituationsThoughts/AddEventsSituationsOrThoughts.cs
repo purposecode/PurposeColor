@@ -1,5 +1,6 @@
 ﻿using Cross;
 using CustomControls;
+using Media.Plugin;
 using PurposeColor.CustomControls;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
@@ -119,12 +120,20 @@ namespace PurposeColor.screens
 
             CameraTapRecognizer = new TapGestureRecognizer();
             cameraInputStack.GestureRecognizers.Add(CameraTapRecognizer);
-            CameraTapRecognizer.Tapped += (s, e) =>
+            CameraTapRecognizer.Tapped += async (s, e) =>
                 {
-                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
                     {
-                        
+                        DisplayAlert("No Camera", ":( No camera avaialble.", "OK");
+                        return;
                     }
+
+                    var file = await CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                    {
+
+                        /*Directory = "Sample",
+                        Name = "test.jpg"*/
+                    });
 
                 };
 
@@ -149,6 +158,25 @@ namespace PurposeColor.screens
                 Spacing = 0,
                 Children = { galleryInput, new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
+
+
+            TapGestureRecognizer galleryInputStackTapRecognizer = new TapGestureRecognizer();
+            galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
+            galleryInputStackTapRecognizer.Tapped += async (s, e) =>
+            {
+                if (!CrossMedia.Current.IsPickPhotoSupported)
+                {
+                    DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
+                    return;
+                }
+                var file = await CrossMedia.Current.PickPhotoAsync();
+
+
+                if (file == null)
+                    return;
+
+            };
+
             locationInput = new Image()
             {
                 Source = Device.OnPlatform("icn_location.png", "icn_location.png", "//Assets//icn_location.png"),

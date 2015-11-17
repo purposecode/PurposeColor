@@ -30,13 +30,16 @@ namespace PurposeColor.screens
         StackLayout textinputAndIconsHolder;
         TapGestureRecognizer CameraTapRecognizer;
         string pageTitle;
-        
+        bool isAudioRecording = false;
+        PurposeColor.interfaces.IAudioRecorder audioRecorder;
+
         #endregion
-                
+
         public AddEventsSituationsOrThoughts(string title)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
+            audioRecorder = DependencyService.Get<PurposeColor.interfaces.IAudioRecorder>();
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             pageTitle = title;
@@ -73,8 +76,23 @@ namespace PurposeColor.screens
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 HeightRequest = 200,
-                Text = title
+                Text = "Add"
             };
+
+            string input = pageTitle;
+            if (input == Constants.ADD_ACTIONS)
+            {
+                textInput.Text = "Add supporting actions";
+            }
+            else if (input == Constants.ADD_EVENTS)
+            {
+                textInput.Text = "Add Events";
+            }
+            else if (input == Constants.ADD_GOALS)
+            {
+                textInput.Text = "Add Goals";
+            }
+
             textInputContainer = new StackLayout
             {
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
@@ -120,7 +138,7 @@ namespace PurposeColor.screens
 
             CameraTapRecognizer = new TapGestureRecognizer();
             cameraInputStack.GestureRecognizers.Add(CameraTapRecognizer);
-            CameraTapRecognizer.Tapped += async (s, e) =>
+            /*CameraTapRecognizer.Tapped += async (s, e) =>
                 {
                     if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
                     {
@@ -131,20 +149,70 @@ namespace PurposeColor.screens
                     var file = await CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
                     {
 
-                        /*Directory = "Sample",
-                        Name = "test.jpg"*/
+                        Directory = "Sample",
+                        Name = "test.jpg"
                     });
 
                 };
-
-            TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
-            emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
+    */
+            CameraTapRecognizer.Tapped += async (s, e) =>
             {
-               //to do..
+                try
+                {
+                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    {
+                        string fileName = string.Format("Image{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
 
+                        var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                        {
+
+                            Directory = "Purposecolor",
+                            Name = fileName
+                        });
+
+                        if (file == null)
+                        {
+                            DisplayAlert("Alert", "Image could not be saved, please try again later", "ok");
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    DisplayAlert("Alert", ex.Message + " Please try again later", "ok");
+                }
             };
-            cameraInputStack.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
+            TapGestureRecognizer audioTapGestureRecognizer = new TapGestureRecognizer();
+
+            audioTapGestureRecognizer.Tapped += (s, e) =>
+            {
+                try
+                {
+                    if (!isAudioRecording)
+                    {
+                        isAudioRecording = true;
+                        if (!audioRecorder.RecordAudio())
+                        {
+                            DisplayAlert("Alert", "Audio cannot be recorded, please try again later", "ok");
+                        }
+                        else
+                        {
+                            DisplayAlert("Alert", "Audio recording started", "ok");
+                        }
+                    }
+                    else
+                    {
+                        isAudioRecording = false;
+                        audioRecorder.StopRecording();
+                        DisplayAlert("Alert", "Audio saved", "ok");
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    DisplayAlert("Alert", ex.Message + " Please try again later", "ok");
+                }
+            };
+            audioInputStack.GestureRecognizers.Add(audioTapGestureRecognizer);
 
             galleryInput = new Image()
             {
@@ -174,7 +242,6 @@ namespace PurposeColor.screens
 
                 if (file == null)
                     return;
-
             };
 
             locationInput = new Image()
@@ -189,13 +256,13 @@ namespace PurposeColor.screens
                 Spacing = 0,
                 Children = { locationInput, new Label { Text = "Location", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
-            
+
             contactInput = new Image()
             {
                 Source = Device.OnPlatform("icn_contact.png", "icn_contact.png", "//Assets//icn_contact.png"),
                 Aspect = Aspect.AspectFit
             };
-            
+
             contactInputStack = new StackLayout
             {
                 Padding = 10,
@@ -217,7 +284,7 @@ namespace PurposeColor.screens
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };
-            
+
             textinputAndIconsHolder = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
@@ -228,7 +295,7 @@ namespace PurposeColor.screens
 
             int iconY = (int)textInput.Y + (int)textInput.Height + 5;
             masterLayout.AddChildToLayout(textinputAndIconsHolder, 10, 10);
-            
+
             #endregion
 
             Content = masterLayout;
@@ -243,11 +310,11 @@ namespace PurposeColor.screens
         {
             string input = pageTitle;
             CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
-            if( input == Constants.ADD_ACTIONS )
+            if (input == Constants.ADD_ACTIONS)
             {
                 App.actionsListSource.Add(item);
             }
-            else if( input == Constants.ADD_EVENTS )
+            else if (input == Constants.ADD_EVENTS)
             {
                 App.eventsListSource.Add(item);
             }
@@ -285,6 +352,7 @@ namespace PurposeColor.screens
             this.contactInputStack = null;
             this.iconContainer = null;
             this.textinputAndIconsHolder = null;
+            this.audioRecorder = null;
         }
     }
 }

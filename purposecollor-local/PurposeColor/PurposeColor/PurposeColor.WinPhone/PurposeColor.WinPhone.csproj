@@ -112,6 +112,7 @@
     </Compile>
     <Compile Include="OAuthAuthorization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomSliderRederer.cs" />
     <Compile Include="Renderers\LoginPageRenderer.cs" />
     <Compile Include="Renderers\OxyPlotViewRenderer.cs" />

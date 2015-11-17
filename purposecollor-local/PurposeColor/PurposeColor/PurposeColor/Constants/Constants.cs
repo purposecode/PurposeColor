@@ -32,6 +32,16 @@ namespace PurposeColor
 
         public const string HELVERTICA_NEUE_LT_STD = "Helvetica Neue LT Std";
 
+        public static Color BLUE_BG_COLOR = Color.FromRgb(8, 135, 224);
+
+        public static Color TEXT_COLOR_GRAY = Color.FromHex("#949494");
+
+        public static Color STACK_BG_COLOR_GRAY = Color.FromHex("#d6d6c2");
+        
+        public static Color PAGE_BG_COLOR_LIGHT_GRAY = Color.FromHex("#f4f4f4");
+        
+        
+
     }
 
 }

@@ -16,3 +16,6 @@ purposecollor-local/PurposeColor/packages
 purposecollor-local/.DS_Store
 *.xml
 
+purposecollor-local/PurposeColor/PurposeColor.v12.suo
+purposecollor-local/PurposeColor/PurposeColor/PurposeColor.Droid/PurposeColor.Droid.csproj.user
+purposecollor-local/PurposeColor/PurposeColor/PurposeColor.Droid/Resources/Resource.Designer.cs

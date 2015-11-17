@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="Constants\Constants.cs" />
+    <Compile Include="CustomControls\AddContentSubTitlebar.cs" />
     <Compile Include="CustomControls\CustomEntry.cs" />
     <Compile Include="CustomControls\CustomLayout.cs" />
     <Compile Include="CustomControls\CustomPicker.cs" />

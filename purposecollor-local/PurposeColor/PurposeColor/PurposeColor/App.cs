@@ -23,6 +23,10 @@ namespace PurposeColor
         public static PurposeMasterDetailPage masterPage;
         static string token;
         static ApplicationSettings applicationSettings;
+        public static List<CustomListViewItem> goalsListSource;
+        public static List<CustomListViewItem> actionsListSource;
+        public static List<CustomListViewItem> eventsListSource;
+        public static List<CustomListViewItem> emotionsListSource;
         public static ApplicationSettings Settings
         {
             get
@@ -78,6 +82,62 @@ namespace PurposeColor
         public static void SaveToken(string tkn)
         {
             token = tkn;
+        }
+
+
+        public static List<CustomListViewItem> GetEmotionsList()
+        {
+            emotionsListSource = new List<CustomListViewItem>();
+            emotionsListSource.Add(new CustomListViewItem { Name = "Fantastic" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Frustated" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Determined" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Bored" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Happy" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Tired" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Pissed off" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Motivated" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Cool" });
+
+            return emotionsListSource;
+        }
+
+
+
+        public static List<CustomListViewItem> GetEventsList()
+        {
+            eventsListSource = new List<CustomListViewItem>();
+            eventsListSource.Add(new CustomListViewItem { Name = "Lost Job" });
+            eventsListSource.Add(new CustomListViewItem { Name = "married" });
+            eventsListSource.Add(new CustomListViewItem { Name = "divorsed" });
+            eventsListSource.Add(new CustomListViewItem { Name = "got promotion" });
+            eventsListSource.Add(new CustomListViewItem { Name = "got a trip" });
+            eventsListSource.Add(new CustomListViewItem { Name = "bought a car" });
+            return eventsListSource;
+        }
+
+
+        public static  List<CustomListViewItem> GetActionsList()
+        {
+            actionsListSource = new List<CustomListViewItem>();
+            actionsListSource.Add(new CustomListViewItem { Name = "Save money" });
+            actionsListSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
+            actionsListSource.Add(new CustomListViewItem { Name = "Make reservation" });
+
+
+            return actionsListSource;
+        }
+
+
+        public static List<CustomListViewItem> GetGoalsList()
+        {
+            goalsListSource = new List<CustomListViewItem>();
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 1" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 2" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 3" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 4" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 5" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Goal 6" });
+            return goalsListSource;
         }
 
         public static Action SuccessfulLoginAction

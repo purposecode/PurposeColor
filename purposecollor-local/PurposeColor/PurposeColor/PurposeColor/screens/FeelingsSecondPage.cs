@@ -37,7 +37,7 @@ namespace PurposeColor
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
-
+            subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
 
 
             Label firstLine = new Label();
@@ -45,17 +45,22 @@ namespace PurposeColor
             firstLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             firstLine.TextColor = Color.FromRgb(40, 47, 50);
             firstLine.FontSize = Device.OnPlatform(20, 22, 30);
-            firstLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
             firstLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            firstLine.HorizontalOptions = LayoutOptions.Center;
+            firstLine.WidthRequest = deviceSpec.ScreenWidth;
+            firstLine.XAlign = TextAlignment.Center;
 
 
             Label secondLine = new Label();
-            secondLine.Text = "Happy";
+            secondLine.Text = App.SelectedEmotion;
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             secondLine.TextColor = Color.FromRgb(40, 47, 50);
             secondLine.FontSize = Device.OnPlatform(20, 22, 30);
-            secondLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
             secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            secondLine.HorizontalOptions = LayoutOptions.Center;
+            secondLine.WidthRequest = deviceSpec.ScreenWidth;
+            secondLine.XAlign = TextAlignment.Center;
+            
 
 
             Label thirdLine = new Label();
@@ -64,6 +69,9 @@ namespace PurposeColor
             thirdLine.TextColor = Color.FromRgb(40, 47, 50);
             thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
             thirdLine.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
+            thirdLine.HorizontalOptions = LayoutOptions.Center;
+            thirdLine.WidthRequest = deviceSpec.ScreenWidth;
+            thirdLine.XAlign = TextAlignment.Center;
 
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
@@ -90,18 +98,31 @@ namespace PurposeColor
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 
+            CustomSlider slider = new CustomSlider
+            {
+                Minimum = -2,
+                Maximum = 2,
+                WidthRequest = deviceSpec.ScreenWidth * 90 / 100
+            };
+
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(firstLine, 30, 22);
-            masterLayout.AddChildToLayout(secondLine, 37, 27);
-            masterLayout.AddChildToLayout(thirdLine, 5, 32);
-            masterLayout.AddChildToLayout(actionPickerButton, 5, 50);
-            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 70);
+            masterLayout.AddChildToLayout(firstLine, 0, 22);
+            masterLayout.AddChildToLayout(secondLine, 0, 27);
+            masterLayout.AddChildToLayout(thirdLine, 0, 32);
+            masterLayout.AddChildToLayout(slider, 5, 40);
+            masterLayout.AddChildToLayout(actionPickerButton, 5, 55);
+            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 75);
 
             Content = masterLayout;
 
+        }
+
+        void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        {
+            Navigation.PopAsync();
         }
 
         void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)

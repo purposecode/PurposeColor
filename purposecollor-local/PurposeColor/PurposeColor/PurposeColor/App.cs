@@ -16,6 +16,7 @@ namespace PurposeColor
     public class App : Application
     {
         public static bool IsLoggedIn { get; set; }
+        public static string SelectedEmotion { get; set; }
         public static INavigation Navigator { get; set; }
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }

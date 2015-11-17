@@ -23,6 +23,7 @@ namespace PurposeColor
         IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
+        Label about;
 
         public FeelingNowPage()
         {
@@ -37,6 +38,7 @@ namespace PurposeColor
 
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
+            subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
 
 
             slider = new CustomSlider
@@ -79,6 +81,7 @@ namespace PurposeColor
             emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
+            eventPickerButton.IsVisible = false;
             eventPickerButton.ImageName = "select_box_whitebg.png";
             eventPickerButton.Text = "Events, Situation & Thoughts";
             eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -91,7 +94,8 @@ namespace PurposeColor
 
 
 
-            Label about = new Label();
+            about = new Label();
+            about.IsVisible = false;
             about.Text = "About";
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             about.TextColor = Color.Gray;
@@ -145,9 +149,30 @@ namespace PurposeColor
             return base.OnBackButtonPressed();
         }
 
+        void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        {
+            Navigation.PopAsync();
+        }
+
         void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync( new FeelingsSecondPage() );
+            if(  emotionalPickerButton.Text == "Select Emotion")
+            {
+                DisplayAlert("Purpose Color", "Emotion not selected.", "cancel");
+            }
+            else if (eventPickerButton.Text == "Events, Situation & Thoughts")
+            {
+                DisplayAlert("Purpose Color", "Event not selected.", "cancel");
+            }
+            else if( slider.Value == 0 )
+            {
+                DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
+            }
+            else
+            {
+                Navigation.PushAsync(new FeelingsSecondPage());
+            }
+            
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -233,10 +258,14 @@ namespace PurposeColor
         {
            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
            emotionalPickerButton.Text = item.Name;
+           App.SelectedEmotion = item.Name;
            emotionalPickerButton.TextColor = Color.Black;
            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
            masterLayout.Children.Remove( pickView );
            pickView = null;
+           eventPickerButton.IsVisible = true;
+           about.IsVisible = true;
+     
         }
 
         void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)

@@ -164,7 +164,7 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetActionsList(), 50, "Add Supporting Actions", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 50, "Add Supporting Actions", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -179,7 +179,7 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetGoalsList(), 50, "Add Goals And Dreams", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 50, "Add Goals And Dreams", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -190,30 +190,6 @@ namespace PurposeColor
             // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
 
-
-        private List<CustomListViewItem> GetActionsList()
-        {
-            List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Save money" });
-            listSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
-            listSource.Add(new CustomListViewItem { Name = "Make reservation" });
-
-
-            return listSource;
-        }
-
-
-        private List<CustomListViewItem> GetGoalsList()
-        {
-            List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Goal 1" });
-            listSource.Add(new CustomListViewItem { Name = "Goal 2" });
-            listSource.Add(new CustomListViewItem { Name = "Goal 3" });
-            listSource.Add(new CustomListViewItem { Name = "Goal 4" });
-            listSource.Add(new CustomListViewItem { Name = "Goal 5" });
-            listSource.Add(new CustomListViewItem { Name = "Goal 6" });
-            return listSource;
-        }
 
 
         protected override bool OnBackButtonPressed()

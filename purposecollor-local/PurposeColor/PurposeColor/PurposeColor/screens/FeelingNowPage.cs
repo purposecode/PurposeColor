@@ -188,7 +188,7 @@ namespace PurposeColor
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetEmotionsList(), 65, "Select Emotions", true, false);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -203,7 +203,7 @@ namespace PurposeColor
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetEventsList(), 50, "Add Events Situation or Thoughts", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 50, "Add Events Situation or Thoughts", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -215,43 +215,7 @@ namespace PurposeColor
         }
 
 
-        private List<CustomListViewItem> GetEmotionsList()
-        {
-            List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-
-            return listSource;
-        }
-
-
-        private List<CustomListViewItem> GetEventsList()
-        {
-            List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Lost Job" });
-            listSource.Add(new CustomListViewItem { Name = "married" });
-            listSource.Add(new CustomListViewItem { Name = "divorsed" });
-            listSource.Add(new CustomListViewItem { Name = "got promotion" });
-            listSource.Add(new CustomListViewItem { Name = "got a trip" });
-            listSource.Add(new CustomListViewItem { Name = "bought a car" });
-            return listSource;
-        }
+       
 
         void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {

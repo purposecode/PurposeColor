@@ -35,7 +35,7 @@ namespace PurposeColor
 
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
+         //   mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;

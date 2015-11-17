@@ -118,6 +118,9 @@ namespace PurposeColor
             Image sliderDivider3 = new Image();
             sliderDivider3.Source = "drag_sepeate.png";
 
+            Image sliderBG = new Image();
+            sliderBG.Source = "drag_bg.png";
+
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
@@ -125,7 +128,8 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(firstLine, 0, 22);
             masterLayout.AddChildToLayout(secondLine, 0, 27);
             masterLayout.AddChildToLayout(thirdLine, 0, 32);
-            masterLayout.AddChildToLayout(slider, 5, 40);
+            masterLayout.AddChildToLayout(sliderBG, 7, 45);
+            masterLayout.AddChildToLayout(slider, 5, 39);
             masterLayout.AddChildToLayout(sliderDivider1, 30, 45);
             masterLayout.AddChildToLayout(sliderDivider2, 50, 45);
             masterLayout.AddChildToLayout(sliderDivider3, 70, 45);

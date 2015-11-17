@@ -26,7 +26,7 @@ namespace PurposeColor.Droid.Renderers
             base.OnElementChanged(e);
             control = (SeekBar)Control;
 
-
+            //control.ScaleY = 3;
             //control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
             formsSlider = (CustomSlider)this.Element;
             formsSlider.ValueChanged += formsSlider_ValueChanged;
@@ -36,9 +36,8 @@ namespace PurposeColor.Droid.Renderers
 
         void formsSlider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn);
-            control.SetThumb(drawable);
-/*
+  
+
             if (formsSlider.Value > 0)
             {
                 Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn);
@@ -48,7 +47,7 @@ namespace PurposeColor.Droid.Renderers
             {
                 Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn_no);
                 control.SetThumb(drawable);
-            }*/
+            }
         }
     }
 }

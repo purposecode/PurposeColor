@@ -69,7 +69,7 @@ namespace PurposeColor.CustomControls
            // nextImage.HeightRequest = spec.ScreenHeight * 4 / 100;
 
            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(title, 20, 22, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(title, 20, 20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(imgDivider, 83, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
 
@@ -86,7 +86,7 @@ namespace PurposeColor.CustomControls
 
             if (backButtonVisible)
             {
-                masterLayout.AddChildToLayout(backArrow, 3, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(backArrow, 5, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             Content = masterLayout;

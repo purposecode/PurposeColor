@@ -115,13 +115,17 @@ namespace PurposeColor
             Image sliderDivider3 = new Image();
             sliderDivider3.Source = "drag_sepeate.png";
 
+            Image sliderBG = new Image();
+            sliderBG.Source = "drag_bg.png";
+
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(howYouAreFeeling, 15, 22);
             masterLayout.AddChildToLayout(howYouAreFeeling2, 28, 27);
-            masterLayout.AddChildToLayout(slider, 5, 35);
+            masterLayout.AddChildToLayout(sliderBG, 7, 40);
+            masterLayout.AddChildToLayout(slider, 5, 34);
 
             masterLayout.AddChildToLayout(sliderDivider1, 30, 40);
             masterLayout.AddChildToLayout(sliderDivider2, 50, 40);

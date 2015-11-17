@@ -3,6 +3,7 @@
 using Cross;
 using CustomControls;
 using PurposeColor.interfaces;
+using PurposeColor.screens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,9 +98,18 @@ namespace PurposeColor.CustomControls
 
             CustomImageButton addButton = new CustomImageButton();
             addButton.ImageName = "icn_plus.png";
-            addButton.BackgroundColor = Color.Transparent;
             addButton.WidthRequest = 15;
             addButton.HeightRequest = 15;
+
+
+            StackLayout addButtonLayout = new StackLayout();
+            addButtonLayout.HeightRequest = 50;
+            addButtonLayout.WidthRequest = 50;
+            addButtonLayout.BackgroundColor = Color.Transparent;
+
+            TapGestureRecognizer addButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
+            addButtonLayoutTapGestureRecognizer.Tapped += OnAddButtonClicked;
+            addButtonLayout.GestureRecognizers.Add(addButtonLayoutTapGestureRecognizer);
 
             listView = new ListView();
             listView.ItemsSource = itemSource;
@@ -122,13 +132,19 @@ namespace PurposeColor.CustomControls
             {
                 masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
                 masterLayout.AddChildToLayout(listTitle, 5, (100 - topY - 1) - 7 );
-                masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6); 
+                masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
+                masterLayout.AddChildToLayout(addButtonLayout, 80, (100 - topY - 1) - 9); 
             }
             masterLayout.AddChildToLayout(listContainer, 2, 100 - topY - 1);
             this.BackgroundColor = Color.Transparent;
 
 
             Content = masterLayout;
+        }
+
+        void OnAddButtonClicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync( new AddEventsSituationsOrThoughts() );
         }
 
 

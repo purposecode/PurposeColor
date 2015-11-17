@@ -131,6 +131,20 @@ namespace PurposeColor
 
         }
 
+
+        protected override bool OnBackButtonPressed()
+        {
+            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+            if( pickView != null )
+            {
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
+        }
+
         void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
             Navigation.PushAsync( new FeelingsSecondPage() );
@@ -222,6 +236,7 @@ namespace PurposeColor
            emotionalPickerButton.TextColor = Color.Black;
            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
            masterLayout.Children.Remove( pickView );
+           pickView = null;
         }
 
         void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -231,6 +246,7 @@ namespace PurposeColor
             eventPickerButton.TextColor = Color.Black;
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
+            pickView = null;
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)

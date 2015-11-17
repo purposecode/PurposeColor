@@ -17,12 +17,11 @@ namespace PurposeColor
 
     public class FeelingsSecondPage : ContentPage, IDisposable
     {
-        CustomSlider slider;
         CustomPicker ePicker;
         CustomLayout masterLayout;
         IDeviceSpec deviceSpec;
-        PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
-        PurposeColor.interfaces.CustomImageButton eventPickerButton;
+        PurposeColor.interfaces.CustomImageButton actionPickerButton;
+        PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton;
 
         public FeelingsSecondPage()
         {
@@ -39,14 +38,6 @@ namespace PurposeColor
 
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
 
-
-
-            slider = new CustomSlider
-            {
-                Minimum = -2,
-                Maximum = 2,
-                WidthRequest = deviceSpec.ScreenWidth * 90 / 100
-            };
 
 
             Label firstLine = new Label();
@@ -67,61 +58,47 @@ namespace PurposeColor
             secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
 
 
-           /* Label secondLine = new Label();
-            secondLine.Text = "Happy";
-            secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            secondLine.TextColor = Color.FromRgb(40, 47, 50);
-            secondLine.FontSize = Device.OnPlatform(20, 22, 30);
-            secondLine.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
-            secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;*/
+            Label thirdLine = new Label();
+            thirdLine.Text = "support your goals and dreams?";
+            thirdLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            thirdLine.TextColor = Color.FromRgb(40, 47, 50);
+            thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
+            thirdLine.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
 
 
-
-            emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            emotionalPickerButton.ImageName = "select_box_whitebg.png";
-            emotionalPickerButton.Text = "Select Emotion";
-            emotionalPickerButton.FontSize = 18;
-            emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            emotionalPickerButton.TextColor = Color.Gray;
-            emotionalPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            emotionalPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
-            emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
-
-            eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            eventPickerButton.ImageName = "select_box_whitebg.png";
-            eventPickerButton.Text = "Events, Situation & Thoughts";
-            eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            eventPickerButton.FontSize = 18;
-            eventPickerButton.TextColor = Color.Gray;
-            eventPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            eventPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
-            eventPickerButton.Clicked += OnEventPickerButtonClicked;
+            goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
+            goalsAndDreamsPickerButton.ImageName = "select_box_whitebg.png";
+            goalsAndDreamsPickerButton.Text = "Goals & Dreams";
+            goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
+            goalsAndDreamsPickerButton.FontSize = 18;
+            goalsAndDreamsPickerButton.TextColor = Color.Gray;
+            goalsAndDreamsPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            goalsAndDreamsPickerButton.Clicked += OnGoalsPickerButtonClicked;
 
 
-
-            Label about = new Label();
-            about.Text = "About";
-            about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            about.TextColor = Color.Gray;
-            about.FontSize = Device.OnPlatform(20, 16, 30);
-            about.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
-            about.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
-            about.HorizontalOptions = LayoutOptions.Center;
-
+            actionPickerButton = new PurposeColor.interfaces.CustomImageButton();
+            actionPickerButton.ImageName = "select_box_whitebg.png";
+            actionPickerButton.Text = "Supporting Action";
+            actionPickerButton.FontSize = 18;
+            actionPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
+            actionPickerButton.TextColor = Color.Gray;
+            actionPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(firstLine, 15, 22);
-            masterLayout.AddChildToLayout(secondLine, 28, 27);
-            masterLayout.AddChildToLayout(slider, 5, 35);
-            masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
-            masterLayout.AddChildToLayout(about, 5, 65);
-            masterLayout.AddChildToLayout(eventPickerButton, 5, 70);
+            masterLayout.AddChildToLayout(firstLine, 30, 22);
+            masterLayout.AddChildToLayout(secondLine, 37, 27);
+            masterLayout.AddChildToLayout(thirdLine, 5, 32);
+            masterLayout.AddChildToLayout(actionPickerButton, 5, 50);
+            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 70);
 
             Content = masterLayout;
 
@@ -147,14 +124,14 @@ namespace PurposeColor
         }
 
 
-        void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
+        void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetEmotionsList(), 70, "", false);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetActionsList(), 50, "Add Supporting Actions", true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
-            ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+            ePicker.listView.ItemSelected += OnActionPickerItemSelected;
             masterLayout.AddChildToLayout(ePicker, 0, 0);
 
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
@@ -162,14 +139,14 @@ namespace PurposeColor
             // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
 
-        void OnEventPickerButtonClicked(object sender, System.EventArgs e)
+        void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetEventsList(), 50, "Add Events Situation or Thoughts", true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetGoalsList(), 50, "Add Goals And Dreams", true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
-            ePicker.listView.ItemSelected += OnEventPickerItemSelected;
+            ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
             masterLayout.AddChildToLayout(ePicker, 0, 0);
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
@@ -177,60 +154,62 @@ namespace PurposeColor
         }
 
 
-        private List<CustomListViewItem> GetEmotionsList()
+        private List<CustomListViewItem> GetActionsList()
         {
             List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Tired" });
-            listSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            listSource.Add(new CustomListViewItem { Name = "Determined" });
-            listSource.Add(new CustomListViewItem { Name = "Bored" });
-            listSource.Add(new CustomListViewItem { Name = "Frustated" });
+            listSource.Add(new CustomListViewItem { Name = "Save money" });
+            listSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
+            listSource.Add(new CustomListViewItem { Name = "Make reservation" });
+
 
             return listSource;
         }
 
 
-        private List<CustomListViewItem> GetEventsList()
+        private List<CustomListViewItem> GetGoalsList()
         {
             List<CustomListViewItem> listSource = new List<CustomListViewItem>();
-            listSource.Add(new CustomListViewItem { Name = "Lost Job" });
-            listSource.Add(new CustomListViewItem { Name = "married" });
-            listSource.Add(new CustomListViewItem { Name = "divorsed" });
-            listSource.Add(new CustomListViewItem { Name = "got promotion" });
-            listSource.Add(new CustomListViewItem { Name = "got a trip" });
-            listSource.Add(new CustomListViewItem { Name = "bought a car" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 1" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 2" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 3" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 4" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 5" });
+            listSource.Add(new CustomListViewItem { Name = "Goal 6" });
             return listSource;
         }
 
-        void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+
+        protected override bool OnBackButtonPressed()
         {
-            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            emotionalPickerButton.Text = item.Name;
-            emotionalPickerButton.TextColor = Color.Black;
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
+            if (pickView != null)
+            {
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
         }
 
-        void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        void OnActionPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            eventPickerButton.Text = item.Name;
-            eventPickerButton.TextColor = Color.Black;
+            actionPickerButton.Text = item.Name;
+            actionPickerButton.TextColor = Color.Black;
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
+            pickView = null;
+        }
+
+        void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+            goalsAndDreamsPickerButton.Text = item.Name;
+            goalsAndDreamsPickerButton.TextColor = Color.Black;
+            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+            masterLayout.Children.Remove(pickView);
+            pickView = null;
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -255,12 +234,11 @@ namespace PurposeColor
 
         public void Dispose()
         {
-            slider = null;
             ePicker = null;
             masterLayout = null;
             deviceSpec = null;
-            emotionalPickerButton = null;
-            eventPickerButton = null;
+            actionPickerButton = null;
+            goalsAndDreamsPickerButton = null;
         }
     }
 }

@@ -310,7 +310,6 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\menu_icn.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\text_box.png" />
     <AndroidResource Include="Resources\drawable\smile.png" />
-    <AndroidResource Include="Resources\drawable\smileicon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

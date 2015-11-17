@@ -29,6 +29,7 @@ namespace PurposeColor.screens
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, title,true,true);
             masterLayout.AddChildToLayout(subTitleBar, 0, 1);
 
+            
             Editor textInput = new Editor
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -36,13 +37,19 @@ namespace PurposeColor.screens
                 HeightRequest = 200,
                 Text = title
             };
+            StackLayout textInputContainer = new StackLayout
+            {
+                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                Padding = 2,
+                Children = { textInput }
+            };
 
             int devWidth = (int)deviceSpec.ScreenWidth;
             int textInputWidth = (int)(devWidth * .8); // 80% of screen
             textInput.WidthRequest = textInputWidth;
 
             int textInputX = (devWidth - textInputWidth) / 2;
-            masterLayout.AddChildToLayout(textInput, 10, 10);
+            masterLayout.AddChildToLayout(textInputContainer, 10, 10);
 
             #region ICONS
 
@@ -117,7 +124,7 @@ namespace PurposeColor.screens
                 Orientation = StackOrientation.Horizontal,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                WidthRequest = textInput.Width,
+                WidthRequest = (int)(devWidth * .8) + 4,
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };

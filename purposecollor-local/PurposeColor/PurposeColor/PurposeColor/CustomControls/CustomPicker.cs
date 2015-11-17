@@ -56,12 +56,15 @@ namespace PurposeColor.CustomControls
     {
         public ListView listView;
         CustomLayout pageContainedLayout;
+        string pageTitle;
         public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
         {
             pageContainedLayout = containerLayout;
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+
+            pageTitle = title;
 
             StackLayout layout = new StackLayout();
             layout.BackgroundColor = Color.Black;

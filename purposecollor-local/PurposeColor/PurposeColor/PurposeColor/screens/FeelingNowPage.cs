@@ -203,7 +203,7 @@ namespace PurposeColor
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 50, "Add Events Situation or Thoughts", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 50, Constants.ADD_EVENTS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

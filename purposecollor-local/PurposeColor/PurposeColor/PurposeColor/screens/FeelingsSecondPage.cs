@@ -164,7 +164,7 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 50, "Add Supporting Actions", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 50, Constants.ADD_ACTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -179,7 +179,7 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 50, "Add Goals And Dreams", true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 50, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

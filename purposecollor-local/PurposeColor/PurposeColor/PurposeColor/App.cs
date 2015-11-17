@@ -87,6 +87,9 @@ namespace PurposeColor
 
         public static List<CustomListViewItem> GetEmotionsList()
         {
+            if (emotionsListSource != null && emotionsListSource.Count > 0)
+                return emotionsListSource;
+
             emotionsListSource = new List<CustomListViewItem>();
             emotionsListSource.Add(new CustomListViewItem { Name = "Fantastic" });
             emotionsListSource.Add(new CustomListViewItem { Name = "Frustated" });
@@ -105,6 +108,9 @@ namespace PurposeColor
 
         public static List<CustomListViewItem> GetEventsList()
         {
+            if (eventsListSource != null && eventsListSource.Count > 0)
+                return eventsListSource;
+
             eventsListSource = new List<CustomListViewItem>();
             eventsListSource.Add(new CustomListViewItem { Name = "Lost Job" });
             eventsListSource.Add(new CustomListViewItem { Name = "married" });
@@ -118,6 +124,9 @@ namespace PurposeColor
 
         public static  List<CustomListViewItem> GetActionsList()
         {
+            if (actionsListSource != null && actionsListSource.Count > 0)
+                return actionsListSource;
+
             actionsListSource = new List<CustomListViewItem>();
             actionsListSource.Add(new CustomListViewItem { Name = "Save money" });
             actionsListSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
@@ -130,6 +139,9 @@ namespace PurposeColor
 
         public static List<CustomListViewItem> GetGoalsList()
         {
+            if (goalsListSource != null && goalsListSource.Count > 0)
+                return goalsListSource;
+
             goalsListSource = new List<CustomListViewItem>();
             goalsListSource.Add(new CustomListViewItem { Name = "Goal 1" });
             goalsListSource.Add(new CustomListViewItem { Name = "Goal 2" });

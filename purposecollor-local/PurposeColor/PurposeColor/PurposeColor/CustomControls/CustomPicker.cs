@@ -77,6 +77,7 @@ namespace PurposeColor.CustomControls
             {
                 View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                 pageContainedLayout.Children.Remove(pickView);
+                pickView = null;
 
             };
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
@@ -135,8 +136,12 @@ namespace PurposeColor.CustomControls
             {
                 masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
                 masterLayout.AddChildToLayout(listTitle, 5, (100 - topY - 1) - 7 );
-                masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
-                masterLayout.AddChildToLayout(addButtonLayout, 80, (100 - topY - 1) - 9); 
+                if (addButtonRequired)
+                {
+                    masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
+                    masterLayout.AddChildToLayout(addButtonLayout, 80, (100 - topY - 1) - 9); 
+                }
+
             }
             masterLayout.AddChildToLayout(listContainer, 2, 100 - topY - 1);
             this.BackgroundColor = Color.Transparent;
@@ -148,6 +153,9 @@ namespace PurposeColor.CustomControls
         void OnAddButtonClicked(object sender, EventArgs e)
         {
             Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
+            View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+            pageContainedLayout.Children.Remove(pickView);
+            pickView = null;
         }
 
 

@@ -28,6 +28,7 @@ namespace PurposeColor.screens
         StackLayout iconContainer;
         StackLayout textinputAndIconsHolder;
         TapGestureRecognizer CameraTapRecognizer;
+        string pageTitle;
         
         #endregion
                 
@@ -37,6 +38,7 @@ namespace PurposeColor.screens
             masterLayout = new CustomLayout();
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            pageTitle = title;
 
             #region TITLE BARS
             TopTitleBar = new StackLayout
@@ -50,14 +52,14 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(TopTitleBar, 0, 0);
 
-            string pageTitle = string.Empty;
+            string trimmedPageTitle = string.Empty;
             if (title.Length > 20)
             {
-                pageTitle = title.Substring(0, 20);
-                pageTitle += "...";
+                trimmedPageTitle = title.Substring(0, 20);
+                trimmedPageTitle += "...";
             }
 
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, pageTitle, true, true);
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, trimmedPageTitle, true, true);
             masterLayout.AddChildToLayout(subTitleBar, 0, 1);
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
@@ -211,8 +213,20 @@ namespace PurposeColor.screens
 
         void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            string input = (sender as Editor).Text;
-            // to do.. according to the page title, save to the corresponding local db
+            string input = pageTitle;
+            CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
+            if( input == Constants.ADD_ACTIONS )
+            {
+                App.actionsListSource.Add(item);
+            }
+            else if( input == Constants.ADD_EVENTS )
+            {
+                App.eventsListSource.Add(item);
+            }
+            else if (input == Constants.ADD_GOALS)
+            {
+                App.goalsListSource.Add(item);
+            }
 
             Navigation.PopAsync();
         }

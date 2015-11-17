@@ -22,6 +22,12 @@ namespace PurposeColor
 
         public const string HOW_YOU_ARE_FEELING = "Do you like how you are";
 
+        public const string ADD_EVENTS = "Add Events Situation or Thoughts";
+
+        public const string ADD_GOALS = "Add Goals And Dreams";
+
+        public const string ADD_ACTIONS = "Add Supporting Actions";
+
         public const int PICKER_ANIMATION_OFFSET = 40;
 
         public static Color MENU_BG_COLOR = Color.FromRgb(36, 189, 229);

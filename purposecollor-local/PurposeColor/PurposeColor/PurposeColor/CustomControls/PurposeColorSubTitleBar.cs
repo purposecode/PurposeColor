@@ -69,7 +69,7 @@ namespace PurposeColor.CustomControls
            // nextImage.HeightRequest = spec.ScreenHeight * 4 / 100;
 
            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(title, 20, 20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(imgDivider, 83, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
 
@@ -80,7 +80,7 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = spec.ScreenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 76), Device.OnPlatform(10, 40, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 74), Device.OnPlatform(10, 40, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
                 masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 76), Device.OnPlatform(10, 2, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 

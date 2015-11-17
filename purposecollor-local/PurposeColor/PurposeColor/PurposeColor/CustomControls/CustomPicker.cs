@@ -56,7 +56,7 @@ namespace PurposeColor.CustomControls
     {
         public ListView listView;
         CustomLayout pageContainedLayout;
-        public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired = true)
+        public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
         {
             pageContainedLayout = containerLayout;
             CustomLayout masterLayout = new CustomLayout();

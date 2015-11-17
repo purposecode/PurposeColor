@@ -87,6 +87,7 @@ namespace PurposeColor
 
 
             actionPickerButton = new PurposeColor.interfaces.CustomImageButton();
+            actionPickerButton.IsVisible = false;
             actionPickerButton.ImageName = "select_box_whitebg.png";
             actionPickerButton.Text = "Supporting Action";
             actionPickerButton.FontSize = 18;
@@ -105,6 +106,18 @@ namespace PurposeColor
                 WidthRequest = deviceSpec.ScreenWidth * 90 / 100
             };
 
+
+            Image sliderDivider1 = new Image();
+            sliderDivider1.Source = "drag_sepeate.png";
+
+
+            Image sliderDivider2 = new Image();
+            sliderDivider2.Source = "drag_sepeate.png";
+
+
+            Image sliderDivider3 = new Image();
+            sliderDivider3.Source = "drag_sepeate.png";
+
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
@@ -113,8 +126,11 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(secondLine, 0, 27);
             masterLayout.AddChildToLayout(thirdLine, 0, 32);
             masterLayout.AddChildToLayout(slider, 5, 40);
-            masterLayout.AddChildToLayout(actionPickerButton, 5, 55);
-            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 75);
+            masterLayout.AddChildToLayout(sliderDivider1, 30, 45);
+            masterLayout.AddChildToLayout(sliderDivider2, 50, 45);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 45);
+            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 55);
+            masterLayout.AddChildToLayout(actionPickerButton, 5, 70);
 
             Content = masterLayout;
 
@@ -148,7 +164,7 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetActionsList(), 50, "Add Supporting Actions", true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetActionsList(), 50, "Add Supporting Actions", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -163,7 +179,7 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetGoalsList(), 50, "Add Goals And Dreams", true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetGoalsList(), 50, "Add Goals And Dreams", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -231,6 +247,7 @@ namespace PurposeColor
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
             pickView = null;
+            actionPickerButton.IsVisible = true;
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)

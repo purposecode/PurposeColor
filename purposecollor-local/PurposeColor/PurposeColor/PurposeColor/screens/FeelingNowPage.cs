@@ -35,7 +35,7 @@ namespace PurposeColor
 
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-
+            mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
@@ -123,9 +123,9 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(howYouAreFeeling2, 28, 27);
             masterLayout.AddChildToLayout(slider, 5, 35);
 
-            masterLayout.AddChildToLayout(sliderDivider1, 29, 37);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 37);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 37);
+            masterLayout.AddChildToLayout(sliderDivider1, 30, 40);
+            masterLayout.AddChildToLayout(sliderDivider2, 50, 40);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 40);
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
             masterLayout.AddChildToLayout(about, 5, 65);
@@ -158,11 +158,11 @@ namespace PurposeColor
         {
             if(  emotionalPickerButton.Text == "Select Emotion")
             {
-                DisplayAlert("Purpose Color", "Emotion not selected.", "cancel");
+                DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
             }
             else if (eventPickerButton.Text == "Events, Situation & Thoughts")
             {
-                DisplayAlert("Purpose Color", "Event not selected.", "cancel");
+                DisplayAlert("Purpose Color", "Event not selected.", "Ok");
             }
             else if( slider.Value == 0 )
             {
@@ -177,7 +177,7 @@ namespace PurposeColor
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            App.masterPage.IsPresented = !App.masterPage.IsPresented;
+            Navigation.PushAsync(new MenuPage());
         }
 
         void backButton_Clicked(object sender, System.EventArgs e)
@@ -188,8 +188,7 @@ namespace PurposeColor
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
-
-            CustomPicker ePicker = new CustomPicker( masterLayout, GetEmotionsList(), 70 ,"", false);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetEmotionsList(), 65, "Select Emotions", true, false);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -204,7 +203,7 @@ namespace PurposeColor
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, GetEventsList(), 50, "Add Events Situation or Thoughts", true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, GetEventsList(), 50, "Add Events Situation or Thoughts", true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

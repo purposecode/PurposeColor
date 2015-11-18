@@ -1,8 +1,9 @@
 
+using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Editor), typeof(PurposeColor.Droid.Renderers.CustomEditorRenderer))]
+[assembly: ExportRenderer(typeof(PurposeColor.CustomControls.CustomEditor), typeof(PurposeColor.Droid.Renderers.CustomEditorRenderer))]
 namespace PurposeColor.Droid.Renderers
 {
     public class CustomEditorRenderer : EditorRenderer
@@ -21,6 +22,23 @@ namespace PurposeColor.Droid.Renderers
             base.OnElementChanged(e);
             Control.SetTextColor(_textColor);
             Control.SetBackgroundColor(_bgColor);
+            if (e.NewElement != null)
+            {
+                var element = e.NewElement as PurposeColor.CustomControls.CustomEditor;
+                this.Control.Hint = element.Placeholder;
+            }
+        }
+        protected override void OnElementPropertyChanged(
+        object sender,
+        PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+
+            if (e.PropertyName == PurposeColor.CustomControls.CustomEditor.PlaceholderProperty.PropertyName)
+            {
+                var element = this.Element as PurposeColor.CustomControls.CustomEditor;
+                this.Control.Hint = element.Placeholder;
+            }
         }
     }
 }

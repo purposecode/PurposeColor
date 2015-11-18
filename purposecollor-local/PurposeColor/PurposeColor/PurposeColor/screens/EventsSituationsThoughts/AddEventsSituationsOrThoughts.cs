@@ -14,7 +14,7 @@ namespace PurposeColor.screens
         CustomLayout masterLayout;
         StackLayout TopTitleBar;
         PurposeColorBlueSubTitleBar subTitleBar;
-        Editor textInput;
+        CustomEditor textInput;
         StackLayout textInputContainer;
         StackLayout audioInputStack;
         Image cameraInput;
@@ -77,12 +77,12 @@ namespace PurposeColor.screens
 
             #region TEXT INPUT CONTROL
 
-            textInput = new Editor
+            textInput = new CustomEditor
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 HeightRequest = 150,
-                Text = pageTitle
+                Placeholder = pageTitle
             };
 
             //string input = pageTitle;
@@ -109,8 +109,6 @@ namespace PurposeColor.screens
             int devWidth = (int)deviceSpec.ScreenWidth;
             int textInputWidth = (int)(devWidth * .92); // 80% of screen
             textInput.WidthRequest = textInputWidth;
-
-            //int textInputX = (devWidth - textInputWidth) / 2;
 
             #endregion
 
@@ -286,8 +284,8 @@ namespace PurposeColor.screens
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = (int)(devWidth * .92) + 4, /// 4 pxl padding added to text input.
-                Padding = 0,
                 Spacing = deviceSpec.ScreenWidth * 4.5 / 100,
+                Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };
 
@@ -306,11 +304,6 @@ namespace PurposeColor.screens
             #endregion
 
             Content = masterLayout;
-        }
-
-        void CameraTapRecognizer_Tapped(object sender, System.EventArgs e)
-        {
-            //throw new System.NotImplementedException();
         }
 
         void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)

@@ -14,7 +14,7 @@ namespace PurposeColor.screens
             App.Navigator = Navigation;
             NavigationPage.SetHasNavigationBar(this, false);
             Master = new MenuPage();
-            Detail = new NavigationPage(new CommunityGemsPage());
+            Detail = new NavigationPage(new FeelingNowPage());
         }
     }
 }

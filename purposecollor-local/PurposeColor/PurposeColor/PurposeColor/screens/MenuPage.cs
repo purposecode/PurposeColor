@@ -33,8 +33,8 @@ namespace PurposeColor.screens
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
-            name.TextColor = Color.White;
-            name.FontSize = Device.OnPlatform(12, 13, 18);
+            name.TextColor = Color.Black;
+            name.FontSize = Device.OnPlatform(12, 18, 18);
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
@@ -42,17 +42,17 @@ namespace PurposeColor.screens
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
             Image sideImage = new Image();
-            sideImage.WidthRequest = 20;
-            sideImage.HeightRequest = 20;
+            sideImage.WidthRequest = 25;
+            sideImage.HeightRequest = 25;
             sideImage.SetBinding(Image.SourceProperty, "ImageName");
             sideImage.Aspect = Aspect.Fill;
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
+            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
 
             masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			masterLayout.AddChildToLayout(name, (float)Device.OnPlatform( 15, 15 , 15 ), (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+           // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }
 
@@ -72,13 +72,13 @@ namespace PurposeColor.screens
             PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             List<MenuItems> menuItems = new List<MenuItems>();
-            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_AWARENESS, ImageName = Device.OnPlatform("emotion.png", "emotion.png", "//Assets//emotion.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GEM, ImageName = Device.OnPlatform("settings.png", "settings.png", "//Assets//settings.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GOALS_AND_DREAMS, ImageName = Device.OnPlatform("goals.png", "goals.png", "//Assets//goals.png") });
-            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion.png", "emotion.png", "//Assets//emotion.png") });
-            menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("Intel.png", "Intel.png", "//Assets//Intel.png") });
-            menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("goals.png", "goals.png", "//Assets//goals.png") });
-            menuItems.Add(new MenuItems { Name = Constants.AUDIO_RECORDING, ImageName = Device.OnPlatform("settings.png", "settings.png", "//Assets//settings.png") });
+            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_AWARENESS, ImageName = Device.OnPlatform("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotion.png") });
+            menuItems.Add(new MenuItems { Name = Constants.GEM, ImageName = Device.OnPlatform("settings.png", "gem_menu_icon.png", "//Assets//settings.png") });
+            menuItems.Add(new MenuItems { Name = Constants.GOALS_AND_DREAMS, ImageName = Device.OnPlatform("goals.png", "goals_drms_menu_icon.png", "//Assets//goals.png") });
+            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion.png") });
+            menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("Intel.png", "comunity_menu_icon.png", "//Assets//Intel.png") });
+            menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("goals.png", "setings_menu_icon.png", "//Assets//goals.png") });
+      
 
             listView = new ListView();
             listView.ItemsSource = menuItems;
@@ -86,6 +86,8 @@ namespace PurposeColor.screens
             listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
+            listView.RowHeight =(int) deviceSpec.ScreenHeight * 8 / 100;
+            
 
             Icon = "icon.png";
             Title = "Menu";
@@ -96,7 +98,7 @@ namespace PurposeColor.screens
 
 
             masterLayout.AddChildToLayout(titleBar, 0, 0);
-            masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 30,30, 10 ));
+            masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 30,15, 10 ));
             Content = masterLayout;
         }
 
@@ -110,6 +112,11 @@ namespace PurposeColor.screens
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
+            if (listView.SelectedItem == null)
+                return;
+            DisplayAlert("Yet to implement", "Functionality yet to be implemented.", "OK");
+            listView.SelectedItem = null;
+            return;
 
             MenuItems selItem = e.SelectedItem as MenuItems;
 

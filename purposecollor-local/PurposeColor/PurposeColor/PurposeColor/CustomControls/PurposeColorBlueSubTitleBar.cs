@@ -31,19 +31,17 @@ namespace PurposeColor.CustomControls
             masterLayout.BackgroundColor = backGroundColor;
 
             Image bgImage = new Image();
-            bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//top_bg.png");
+            bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//light_blue_bg.png");
             //  bgImage.WidthRequest = spec.ScreenWidth;
             // bgImage.HeightRequest = titlebarHeight;
             bgImage.Aspect = Aspect.Fill;
 
             Image backArrow = new Image();
-            backArrow.Source = Device.OnPlatform("back_arrow.png", "arrow_blue.png", "//Assets//back_arrow.png");
+            backArrow.Source = Device.OnPlatform("arrow_blue.png", "arrow_blue.png", "//Assets//arrow_blue.png");
             // backArrow.HeightRequest = spec.ScreenHeight * 4 / 100;
             // backArrow.WidthRequest = spec.ScreenWidth * 5 / 100;
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
-
-       
 
             title = new Label();
             title.Text = titleValue;
@@ -51,23 +49,12 @@ namespace PurposeColor.CustomControls
             title.FontSize = Device.OnPlatform(17, 20, 22);
             title.TextColor = Color.FromRgb( 30, 127, 210 );
 
-            Image logo = new Image();
-            logo.Source = Device.OnPlatform("logo.png", "logo.png", "//Assets//logo.png");
-            logo.WidthRequest = spec.ScreenWidth;
-            logo.HeightRequest = titlebarHeight;
-            // logo.WidthRequest = spec.ScreenWidth * 70 / 100;
-            // logo.HeightRequest = spec.ScreenHeight * 8 / 100;
-
             Image nextImage = new Image();
-            nextImage.Source = Device.OnPlatform("logo.png", "tick_blue.png", "//Assets//logo.png");
+            nextImage.Source = Device.OnPlatform("tick_blue.png", "tick_blue.png", "//Assets//tick_blue.png");
             NextButtonTapRecognizer = new TapGestureRecognizer();
             nextImage.GestureRecognizers.Add(NextButtonTapRecognizer);
 
-
-            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-           
-
 
             if (nextButtonVisible)
             {
@@ -76,8 +63,8 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = spec.ScreenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 74), Device.OnPlatform(10, 10, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 76), Device.OnPlatform(10, 2, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(10, 10, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 85), Device.OnPlatform(10, 2, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             if (backButtonVisible)

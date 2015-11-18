@@ -103,11 +103,12 @@ namespace PurposeColor.screens
             {
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Padding = 1,
+                Spacing = 0,
                 Children = { textInput }
             };
 
             int devWidth = (int)deviceSpec.ScreenWidth;
-            int textInputWidth = (int)(devWidth * .92); // 80% of screen
+            int textInputWidth = (int)(devWidth * .92); // 92% of screen
             textInput.WidthRequest = textInputWidth;
 
             #endregion
@@ -142,9 +143,9 @@ namespace PurposeColor.screens
                 Children = { cameraInput, new Label { Text = "Camera", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
 
+            #region CAMERA TAP RECOGNIZER
             CameraTapRecognizer = new TapGestureRecognizer();
             cameraInputStack.GestureRecognizers.Add(CameraTapRecognizer);
-
             CameraTapRecognizer.Tapped += async (s, e) =>
             {
                 try
@@ -172,6 +173,10 @@ namespace PurposeColor.screens
                     DisplayAlert("Camera", ex.Message + " Please try again later", "ok");
                 }
             };
+            
+            #endregion
+
+            #region AUDIO TAP RECOGNIZER
 
             TapGestureRecognizer audioTapGestureRecognizer = new TapGestureRecognizer();
 
@@ -198,13 +203,15 @@ namespace PurposeColor.screens
                         DisplayAlert("Audio recording", "Audio saved to gallery.", "ok");
                     }
                 }
-                catch (System.Exception ex)
+                catch (System.Exception)
                 {
                     DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
                 }
             };
             audioInputStack.GestureRecognizers.Add(audioTapGestureRecognizer);
-
+            
+            #endregion
+            
             galleryInput = new Image()
             {
                 Source = Device.OnPlatform("icn_gallery.png", "icn_gallery.png", "//Assets//icn_gallery.png"),
@@ -219,6 +226,7 @@ namespace PurposeColor.screens
                 Children = { galleryInput, new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
 
+            #region GALLERY  TAP RECOGNIZER
 
             TapGestureRecognizer galleryInputStackTapRecognizer = new TapGestureRecognizer();
             galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
@@ -231,8 +239,10 @@ namespace PurposeColor.screens
                 }
 
                 var file = await CrossMedia.Current.PickPhotoAsync();
-                
+
             };
+            
+            #endregion
 
             locationInput = new Image()
             {
@@ -241,18 +251,23 @@ namespace PurposeColor.screens
             };
             locationInputStack = new StackLayout
             {
-                Padding = 10,
+                Padding = new Thickness(Device.OnPlatform(10,10,14),10,Device.OnPlatform(10,10,14),10),
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
                 Children = { locationInput, new Label { Text = "Location", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
+
+            #region LOCATION TAP RECOGNIZER
+
             TapGestureRecognizer locationInputTapRecognizer = new TapGestureRecognizer();
             locationInputStack.GestureRecognizers.Add(locationInputTapRecognizer);
             locationInputTapRecognizer.Tapped += (s, e) =>
             {
                 DisplayAlert("Yet to implement", "Functionality yet to be implemented.", "OK");
             };
+            
+            #endregion
 
             contactInput = new Image()
             {
@@ -268,12 +283,18 @@ namespace PurposeColor.screens
                 HorizontalOptions = LayoutOptions.Center,
                 Children = { contactInput, new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
             };
+
+            #region CONTACTS TAP RECOGNIZER
+
             TapGestureRecognizer contactsInputTapRecognizer = new TapGestureRecognizer();
             contactInputStack.GestureRecognizers.Add(contactsInputTapRecognizer);
             contactsInputTapRecognizer.Tapped += (s, e) =>
             {
                 DisplayAlert("Yet to implement", "Functionality yet to be implemented.", "OK");
             };
+            
+            #endregion
+
             #endregion
 
             #region CONTAINERS
@@ -284,7 +305,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = (int)(devWidth * .92) + 2, /// 2 pxl padding added to text input.
-                Spacing = deviceSpec.ScreenWidth * 4.5 / 100,
+                Spacing = Device.OnPlatform((deviceSpec.ScreenWidth * 4.5 / 100),(deviceSpec.ScreenWidth * 4.5 / 100),(deviceSpec.ScreenWidth * 3.8 / 100)),
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };

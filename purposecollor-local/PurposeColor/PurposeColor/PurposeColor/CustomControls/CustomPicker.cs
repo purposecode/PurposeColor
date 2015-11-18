@@ -101,7 +101,15 @@ namespace PurposeColor.CustomControls
 
 
             CustomImageButton addButton = new CustomImageButton();
-            addButton.ImageName = "icn_plus.png";
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                addButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png"));
+            }
+            else
+            {
+                addButton.ImageName = "icn_plus.png";
+            }
+            
             addButton.WidthRequest = 15;
             addButton.HeightRequest = 15;
 
@@ -139,7 +147,7 @@ namespace PurposeColor.CustomControls
                 if (addButtonRequired)
                 {
                     masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
-                    masterLayout.AddChildToLayout(addButtonLayout, 80, (100 - topY - 1) - 9); 
+                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
                 }
 
             }

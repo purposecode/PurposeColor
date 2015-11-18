@@ -37,7 +37,7 @@ namespace PurposeColor.CustomControls
             bgImage.Aspect = Aspect.Fill;
 
             Image backArrow = new Image();
-            backArrow.Source = Device.OnPlatform("back_arrow.png", "bckarow.png", "//Assets//back_arrow.png");
+            backArrow.Source = Device.OnPlatform("bckarow.png", "bckarow.png", "//Assets//bckarow.png");
            // backArrow.HeightRequest = spec.ScreenHeight * 4 / 100;
            // backArrow.WidthRequest = spec.ScreenWidth * 5 / 100;
             BackButtonTapRecognizer = new TapGestureRecognizer();
@@ -61,7 +61,7 @@ namespace PurposeColor.CustomControls
            // logo.HeightRequest = spec.ScreenHeight * 8 / 100;
 
             Image nextImage = new Image();
-            nextImage.Source = Device.OnPlatform("logo.png", "icon_tick.png", "//Assets//logo.png");
+            nextImage.Source = Device.OnPlatform("icon_tick.png", "icon_tick.png", "//Assets//icon_tick.png");
             NextButtonTapRecognizer = new TapGestureRecognizer();
             nextImage.GestureRecognizers.Add(NextButtonTapRecognizer);
            // nextImage.Aspect = Aspect.Fill;
@@ -80,8 +80,8 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = spec.ScreenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 74), Device.OnPlatform(10, 40, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 76), Device.OnPlatform(10, 2, -5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(10, 40, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 85), Device.OnPlatform(10, 2, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             if (backButtonVisible)

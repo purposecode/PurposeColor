@@ -106,6 +106,7 @@ namespace PurposeColor
 
             Image sliderDivider1 = new Image();
             sliderDivider1.Source = "drag_sepeate.png";
+            //bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//light_blue_bg.png");
 
 
             Image sliderDivider2 = new Image();

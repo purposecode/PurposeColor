@@ -13,7 +13,7 @@ namespace PurposeColor.screens
 
         CustomLayout masterLayout;
         StackLayout TopTitleBar;
-        PurposeColorSubTitleBar subTitleBar;
+        PurposeColorBlueSubTitleBar subTitleBar;
         Editor textInput;
         StackLayout textInputContainer;
         StackLayout audioInputStack;
@@ -69,7 +69,7 @@ namespace PurposeColor.screens
                 trimmedPageTitle = pageTitle;
             }
 
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, trimmedPageTitle, true, true);
+            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, trimmedPageTitle, true, true);
             masterLayout.AddChildToLayout(subTitleBar, 0, 1);
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;

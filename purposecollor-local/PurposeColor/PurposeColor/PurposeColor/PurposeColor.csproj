@@ -44,6 +44,7 @@
     <Compile Include="CustomControls\CustomPicker.cs" />
     <Compile Include="CustomControls\CustomSlider.cs" />
     <Compile Include="CustomControls\CustomTitleBar.cs" />
+    <Compile Include="CustomControls\PurposeColorBlueSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorTitleBar.cs" />
     <Compile Include="CustomControls\RoundedButton.cs" />

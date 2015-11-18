@@ -45,7 +45,7 @@ namespace PurposeColor
             NavigationPage.SetHasNavigationBar(this, false);
             MenuPage menuPage = new MenuPage();
             masterPage = new PurposeMasterDetailPage();
-            MainPage = new NavigationPage(new FeelingNowPage()); //FeelingNowPage());// AddEventsSituationsOrThoughts());
+            MainPage = masterPage;
         }
 
         protected override void OnStart()

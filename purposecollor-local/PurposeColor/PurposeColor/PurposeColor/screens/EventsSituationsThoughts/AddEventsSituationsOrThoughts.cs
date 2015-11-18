@@ -64,6 +64,10 @@ namespace PurposeColor.screens
                 trimmedPageTitle = title.Substring(0, 20);
                 trimmedPageTitle += "...";
             }
+            else
+            {
+                trimmedPageTitle = pageTitle;
+            }
 
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, trimmedPageTitle, true, true);
             masterLayout.AddChildToLayout(subTitleBar, 0, 1);

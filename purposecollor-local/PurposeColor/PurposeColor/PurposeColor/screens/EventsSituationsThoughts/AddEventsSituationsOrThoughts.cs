@@ -102,7 +102,7 @@ namespace PurposeColor.screens
             textInputContainer = new StackLayout
             {
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
-                Padding = 2,
+                Padding = 1,
                 Children = { textInput }
             };
 
@@ -283,7 +283,7 @@ namespace PurposeColor.screens
                 Orientation = StackOrientation.Horizontal,
                 BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
-                WidthRequest = (int)(devWidth * .92) + 4, /// 4 pxl padding added to text input.
+                WidthRequest = (int)(devWidth * .92) + 2, /// 2 pxl padding added to text input.
                 Spacing = deviceSpec.ScreenWidth * 4.5 / 100,
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
@@ -308,22 +308,30 @@ namespace PurposeColor.screens
 
         void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            string input = pageTitle;
-            CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
-            if (input == Constants.ADD_ACTIONS)
-            {
-                App.actionsListSource.Add(item);
-            }
-            else if (input == Constants.ADD_EVENTS)
-            {
-                App.eventsListSource.Add(item);
-            }
-            else if (input == Constants.ADD_GOALS)
-            {
-                App.goalsListSource.Add(item);
-            }
 
-            Navigation.PopAsync();
+            if (textInput.Text == null )
+            {
+                DisplayAlert(pageTitle, "value cannot be empty", "ok");
+            }
+            else
+            {
+                string input = pageTitle;
+                CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
+                if (input == Constants.ADD_ACTIONS)
+                {
+                    App.actionsListSource.Add(item);
+                }
+                else if (input == Constants.ADD_EVENTS)
+                {
+                    App.eventsListSource.Add(item);
+                }
+                else if (input == Constants.ADD_GOALS)
+                {
+                    App.goalsListSource.Add(item);
+                }
+
+                Navigation.PopAsync();
+            }
         }
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)

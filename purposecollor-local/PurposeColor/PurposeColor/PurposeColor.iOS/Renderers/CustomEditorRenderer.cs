@@ -5,7 +5,7 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(Editor), typeof(PurposeColor.iOS.Renderers.CustomEditorRenderer))]
+[assembly: ExportRenderer(typeof(PurposeColor.CustomControls.CustomEditor), typeof(PurposeColor.iOS.Renderers.CustomEditorRenderer))]
 namespace PurposeColor.iOS.Renderers
 {
     

@@ -14,7 +14,7 @@ using ImageCircle.Forms.Plugin.Droid;
 
 namespace PurposeColor.Droid
 {
-    [Activity(Label = "PurposeColor", Icon = "@drawable/icon", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "PurposeColor", Icon = "@drawable/icon", ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
         static Activity curentActivity;

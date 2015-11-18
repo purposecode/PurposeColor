@@ -314,6 +314,10 @@
     <AndroidResource Include="Resources\drawable\smile.png" />
     <AndroidResource Include="Resources\drawable\tick_blue.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\tick_blue.png" />
+    <AndroidResource Include="Resources\drawable\app_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\app_icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\app_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\app_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

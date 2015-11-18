@@ -130,9 +130,9 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(thirdLine, 0, 32);
             masterLayout.AddChildToLayout(sliderBG, 7, 45);
             masterLayout.AddChildToLayout(slider, 5, 39);
-            masterLayout.AddChildToLayout(sliderDivider1, 30, 45);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 45);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 45);
+            masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
+            masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);
             masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 55);
             masterLayout.AddChildToLayout(actionPickerButton, 5, 70);
 
@@ -168,7 +168,7 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 50, Constants.ADD_ACTIONS, true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -183,7 +183,7 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 50, Constants.ADD_GOALS, true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

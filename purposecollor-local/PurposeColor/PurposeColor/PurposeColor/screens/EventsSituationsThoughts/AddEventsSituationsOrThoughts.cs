@@ -287,6 +287,7 @@ namespace PurposeColor.screens
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = (int)(devWidth * .92) + 4, /// 4 pxl padding added to text input.
                 Padding = 0,
+                Spacing = deviceSpec.ScreenWidth * 4.5 / 100,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };
 

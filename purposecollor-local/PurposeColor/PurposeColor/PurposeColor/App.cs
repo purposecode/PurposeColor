@@ -101,6 +101,16 @@ namespace PurposeColor
             emotionsListSource.Add(new CustomListViewItem { Name = "Motivated" });
             emotionsListSource.Add(new CustomListViewItem { Name = "Cool" });
 
+            emotionsListSource.Add(new CustomListViewItem { Name = "Fantastic" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Frustated" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Determined" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Bored" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Happy" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Tired" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Pissed off" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Motivated" });
+            emotionsListSource.Add(new CustomListViewItem { Name = "Cool" });
+
             return emotionsListSource;
         }
 
@@ -143,12 +153,13 @@ namespace PurposeColor
                 return goalsListSource;
 
             goalsListSource = new List<CustomListViewItem>();
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 1" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 2" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 3" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 4" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 5" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Goal 6" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Loose Weight" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Learn Yoga" });
+            goalsListSource.Add(new CustomListViewItem { Name = "To be Rich" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Peace Of Mind" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Buy a New Car" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Visit Everest" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Meet Prime Minister" });
             return goalsListSource;
         }
 

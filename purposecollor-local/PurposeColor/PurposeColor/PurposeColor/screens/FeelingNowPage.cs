@@ -127,9 +127,9 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(sliderBG, 7, 40);
             masterLayout.AddChildToLayout(slider, 5, 34);
 
-            masterLayout.AddChildToLayout(sliderDivider1, 30, 40);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 40);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 40);
+            masterLayout.AddChildToLayout(sliderDivider1, 30, 40.5f);
+            masterLayout.AddChildToLayout(sliderDivider2, 50, 40.5f);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
             masterLayout.AddChildToLayout(about, 5, 65);

@@ -47,7 +47,6 @@ namespace PurposeColor
                 Maximum = 2,
                 WidthRequest = deviceSpec.ScreenWidth * 90 / 100
             };
-            slider.TestName = "sample";
             slider.PropertyChanged += slider_PropertyChanged;
             slider.StopGesture = GetstopGetsture;
             //slider.ValueChanged += slider_ValueChanged;

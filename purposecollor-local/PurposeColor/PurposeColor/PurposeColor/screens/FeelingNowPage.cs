@@ -47,6 +47,10 @@ namespace PurposeColor
                 Maximum = 2,
                 WidthRequest = deviceSpec.ScreenWidth * 90 / 100
             };
+            slider.TestName = "sample";
+            slider.PropertyChanged += slider_PropertyChanged;
+            slider.StopGesture = GetstopGetsture;
+            //slider.ValueChanged += slider_ValueChanged;
 
 
             Label howYouAreFeeling = new Label();
@@ -137,6 +141,46 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(eventPickerButton, 5, 70);
 
             Content = masterLayout;
+
+        }
+
+        void slider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            string test = "test";
+        }
+
+        public void GetstopGetsture()
+        {
+            if (slider.Value != 0)
+            {
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                if (pickView != null)
+                    return;
+
+                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
+                ePicker.WidthRequest = deviceSpec.ScreenWidth;
+                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
+            }
+        }
+
+        void slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            if( slider.Value != 0 )
+            {
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                if (pickView != null)
+                    return;
+  
+                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
+                ePicker.WidthRequest = deviceSpec.ScreenWidth;
+                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
+            }
 
         }
 

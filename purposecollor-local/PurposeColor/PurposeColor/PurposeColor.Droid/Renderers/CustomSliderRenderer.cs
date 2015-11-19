@@ -25,13 +25,21 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
             control = (SeekBar)Control;
-
+           
             //control.ScaleY = 3;
             //control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
             formsSlider = (CustomSlider)this.Element;
             formsSlider.ValueChanged += formsSlider_ValueChanged;
             formsSlider.Value = 1;
+            control.StopTrackingTouch += control_StopTrackingTouch;
 
+           
+
+        }
+
+        void control_StopTrackingTouch(object sender, SeekBar.StopTrackingTouchEventArgs e)
+        {
+            formsSlider.StopGesture( );
         }
 
         void formsSlider_ValueChanged(object sender, ValueChangedEventArgs e)

@@ -21,7 +21,7 @@
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
     <JavaOptions />
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -318,6 +318,17 @@
     <AndroidResource Include="Resources\drawable-hdpi\app_icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\app_icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\app_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\drag_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\drag_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\drag_sepeate.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\select_box_whitebg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\drag_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\drag_sepeate.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\select_box_whitebg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\drag_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\drag_btn_no.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\tick_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\tick_blue.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

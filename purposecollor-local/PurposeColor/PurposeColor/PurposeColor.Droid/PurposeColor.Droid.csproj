@@ -21,7 +21,7 @@
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
     <JavaOptions />
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -329,6 +329,29 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\drag_btn_no.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\tick_blue.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\tick_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\arrow_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\bckarow.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\bg_top.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\comunity.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\emotion_inte.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\emotional_awrness.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\gem.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\goals_drms.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_music.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_attach.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_camera.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_contact.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_gallery.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_list.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_location.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_plus.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_selected.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_seperate.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_tick.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\light_blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\setings.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\text_box.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

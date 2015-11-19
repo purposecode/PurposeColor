@@ -69,7 +69,8 @@ namespace PurposeColor.CustomControls
            // nextImage.HeightRequest = spec.ScreenHeight * 4 / 100;
 
            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            //masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(18, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(imgDivider, 83, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
 

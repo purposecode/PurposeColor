@@ -150,7 +150,7 @@ namespace PurposeColor
 
         public void GetstopGetsture()
         {
-            if (slider.Value != 0)
+           /* if (slider.Value != 0)
             {
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                 if (pickView != null)
@@ -162,7 +162,8 @@ namespace PurposeColor
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
-            }
+            }*/
+            OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
         }
 
         void slider_ValueChanged(object sender, ValueChangedEventArgs e)

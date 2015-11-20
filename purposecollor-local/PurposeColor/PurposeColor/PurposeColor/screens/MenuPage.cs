@@ -97,8 +97,9 @@ namespace PurposeColor.screens
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
 
 
-            masterLayout.AddChildToLayout(titleBar, 0, 0);
+           // masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 30,15, 10 ));
+            this.TranslationY = deviceSpec.ScreenHeight * 10 / 100;
             Content = masterLayout;
         }
 

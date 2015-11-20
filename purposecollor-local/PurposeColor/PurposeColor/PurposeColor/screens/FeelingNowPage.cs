@@ -277,6 +277,7 @@ namespace PurposeColor
            pickView = null;
            eventPickerButton.IsVisible = true;
            about.IsVisible = true;
+           OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
      
         }
 

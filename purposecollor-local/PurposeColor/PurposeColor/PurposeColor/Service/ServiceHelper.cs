@@ -93,6 +93,39 @@ namespace PurposeColor.Service
 
             return null;
         }
+
+
+
+
+        public static async Task<bool> PostMedia(MediaPost mediaFile)
+        {
+            string url = "http://purposecodes.com/pc/api.php?action=eventinsert";// Constants.SERVICE_BASE_URL;
+            string result = String.Empty;
+
+            using (var client = new HttpClient())
+            {
+                var content = new FormUrlEncodedContent(new[]
+                       {
+                             new KeyValuePair<string, string>("event_details", mediaFile.event_details),
+                             new KeyValuePair<string, string>("event_title", mediaFile.event_title),
+                              new KeyValuePair<string, string>("user_id",  mediaFile.user_id.ToString()),
+                              new KeyValuePair<string, string>("event_image",  mediaFile.event_image )
+                        });
+
+
+
+                using (var response = await client.PostAsync(url, content))
+                {
+                    using (var responseContent = response.Content)
+                    {
+
+
+                    }
+                }
+            }
+            return true;
+        }
+
        
     }
 }

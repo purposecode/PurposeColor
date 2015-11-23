@@ -104,13 +104,13 @@ namespace PurposeColor
             if (eventsListSource != null && eventsListSource.Count > 0)
                 return eventsListSource;
 
-            eventsListSource = new List<CustomListViewItem>();
-            eventsListSource.Add(new CustomListViewItem { Name = "Lost Job" });
-            eventsListSource.Add(new CustomListViewItem { Name = "married" });
-            eventsListSource.Add(new CustomListViewItem { Name = "divorsed" });
-            eventsListSource.Add(new CustomListViewItem { Name = "got promotion" });
-            eventsListSource.Add(new CustomListViewItem { Name = "got a trip" });
-            eventsListSource.Add(new CustomListViewItem { Name = "bought a car" });
+            //eventsListSource = new List<CustomListViewItem>();
+            //eventsListSource.Add(new CustomListViewItem { Name = "Lost Job" });
+            //eventsListSource.Add(new CustomListViewItem { Name = "married" });
+            //eventsListSource.Add(new CustomListViewItem { Name = "divorsed" });
+            //eventsListSource.Add(new CustomListViewItem { Name = "got promotion" });
+            //eventsListSource.Add(new CustomListViewItem { Name = "got a trip" });
+            //eventsListSource.Add(new CustomListViewItem { Name = "bought a car" });
             return eventsListSource;
         }
 

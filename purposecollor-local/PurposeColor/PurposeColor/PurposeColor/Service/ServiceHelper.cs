@@ -56,6 +56,10 @@ namespace PurposeColor.Service
             var client = new System.Net.Http.HttpClient();
             User user = App.Settings.GetUser();
 
+            ///////// for testing
+
+            user = new User { UserId = 2, UserName="sam" };
+
             if (user == null)
             {
                 // show alert
@@ -64,19 +68,19 @@ namespace PurposeColor.Service
             else
             {
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-                string uriString = "api.php?action=getallevents&user_id=" + user.ID;
+                string uriString = "api.php?action=getallevents&user_id=" + user.UserId;
                 var response = await client.GetAsync(uriString);
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
-                    var earthquakesJson = response.Content.ReadAsStringAsync().Result;
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
 
-                    var rootobject = JsonConvert.DeserializeObject<Emotions>(earthquakesJson);
+                    var rootobject = JsonConvert.DeserializeObject<Events>(eventsJson);
 
                     List<CustomListViewItem> eventsList = new List<CustomListViewItem>();
 
-                    if (rootobject != null && rootobject.emotion_title != null)
+                    if (rootobject != null && rootobject.event_title != null)
                     {
-                        foreach (var item in rootobject.emotion_title)
+                        foreach (var item in rootobject.event_title)
                         {
                             CustomListViewItem listItem = new CustomListViewItem();
                             listItem.Name = item;

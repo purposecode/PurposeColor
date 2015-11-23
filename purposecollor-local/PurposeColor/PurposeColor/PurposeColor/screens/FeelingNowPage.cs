@@ -306,6 +306,9 @@ namespace PurposeColor
             await DownloadAllEmotions();
 
             progressBar.HideProgressbar();
+
+            await DownloadAllEvents();
+
         }
 
         private async Task<bool> DownloadAllEmotions()
@@ -359,6 +362,30 @@ namespace PurposeColor
                 }
 
             }
+
+            return true;
+        }
+
+        private async Task<bool> DownloadAllEvents()
+        {
+            try
+            {
+                var eventList = await ServiceHelper.GetAllEvents();
+                if (eventList != null)
+                {
+                    App.eventsListSource = null;
+                    App.eventsListSource = new List<CustomListViewItem>();
+                    foreach (var item in eventList)
+                    {
+                        App.eventsListSource.Add(item);
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+            
 
             return true;
         }

@@ -38,6 +38,7 @@ namespace PurposeColor.Service
                     {
                         CustomListViewItem listItem = new CustomListViewItem();
                         listItem.Name = item;
+                        listItem.ID = sliderValue;
                         emotionsList.Add(listItem);
                     }
                 }

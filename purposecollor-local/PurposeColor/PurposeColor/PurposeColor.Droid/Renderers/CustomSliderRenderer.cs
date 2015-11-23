@@ -32,6 +32,7 @@ namespace PurposeColor.Droid.Renderers
             //control.SetBackgroundDrawable(Resources.GetDrawable(Resource.Drawable.drag_bg));
             formsSlider = (CustomSlider)this.Element;
             formsSlider.Value = 1;
+            formsSlider.CurrentValue = 1;
             Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable(Resource.Drawable.drag_btn);
             control.SetThumb(drawable);
 

@@ -36,7 +36,6 @@ namespace PurposeColor
             masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
-
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
@@ -125,7 +124,7 @@ namespace PurposeColor
             Image sliderBG = new Image();
             sliderBG.Source = "drag_bg.png";
 
-            this.Appearing += FeelingNowPage_Appearing;
+            this.Appearing += OnFeelingNowPageAppearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
@@ -162,22 +161,7 @@ namespace PurposeColor
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
             }*/
-
-
-
-            Button test = new Button();
-           IProgressBar progressBar = DependencyService.Get<IProgressBar>();
-            progressBar.ShowProgressbar( "Loading..." );
-
-            var emotionsList = await ServiceHelper.GetEmotions((int)slider.CurrentValue);
-            if( emotionsList != null )
-            {
-                App.emotionsListSource = null;
-                App.emotionsListSource = emotionsList;
-                OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
-            }
-            progressBar.HideProgressbar();
-
+            OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
 
         }
 
@@ -252,7 +236,8 @@ namespace PurposeColor
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
+            List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.ID == slider.CurrentValue).ToList();
+            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Emotions", true, false);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -312,20 +297,70 @@ namespace PurposeColor
         {
         }
 
-        async  void FeelingNowPage_Appearing(object sender, System.EventArgs e)
+        async  void OnFeelingNowPageAppearing(object sender, System.EventArgs e)
         {
-           /* int val = 2;
-            for( int index = 0; index < 200; index++ )
+            IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+            progressBar.ShowProgressbar("Loading emotions...");
 
+
+            await DownloadAllEmotions();
+
+            progressBar.HideProgressbar();
+        }
+
+        private async Task<bool> DownloadAllEmotions()
+        {
+            // Value 1
+            var emotionsList = await ServiceHelper.GetEmotions(1);
+            if (emotionsList != null)
             {
-                await Task.Delay(2);
-
-                if( slider.Value > 90 )
+                foreach (var item in emotionsList)
                 {
-                    val = -2;
+                    App.emotionsListSource = null;
+                    App.emotionsListSource = emotionsList;
                 }
-                slider.Value += val;
-            }*/
+
+            }
+
+
+            // Value 2
+            emotionsList = null;
+            emotionsList = await ServiceHelper.GetEmotions(2);
+            if (emotionsList != null)
+            {
+                foreach (var item in emotionsList)
+                {
+                    App.emotionsListSource.Add(item);
+                }
+
+            }
+
+
+            // Value -1
+            emotionsList = null;
+            emotionsList = await ServiceHelper.GetEmotions(-1);
+            if (emotionsList != null)
+            {
+                foreach (var item in emotionsList)
+                {
+                    App.emotionsListSource.Add(item);
+                }
+
+            }
+
+            // Value -2
+            emotionsList = null;
+            emotionsList = await ServiceHelper.GetEmotions(-2);
+            if (emotionsList != null)
+            {
+                foreach (var item in emotionsList)
+                {
+                    App.emotionsListSource.Add(item);
+                }
+
+            }
+
+            return true;
         }
 
         public void Dispose()

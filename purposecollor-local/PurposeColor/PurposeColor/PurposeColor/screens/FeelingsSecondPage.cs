@@ -168,12 +168,12 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
+          /*  CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.listView.ItemSelected += OnActionPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
+            masterLayout.AddChildToLayout(ePicker, 0, 0);*/
 
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
@@ -183,12 +183,12 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
+          /*  CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
+            masterLayout.AddChildToLayout(ePicker, 0, 0);*/
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
             // ePicker.FadeTo(1, 750, Easing.Linear); 

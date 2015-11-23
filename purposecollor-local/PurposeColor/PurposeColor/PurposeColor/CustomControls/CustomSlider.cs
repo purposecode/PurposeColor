@@ -9,6 +9,7 @@ namespace PurposeColor.CustomControls
 {
     public class CustomSlider : XLabs.Forms.Controls.ExtendedSlider
     {
-        public Action StopGesture { get; set; }
+        public Action<bool> StopGesture { get; set; }
+        public int CurrentValue { get; set; }
     }
 }

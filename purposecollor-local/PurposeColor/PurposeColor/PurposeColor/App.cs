@@ -89,28 +89,11 @@ namespace PurposeColor
         {
             if (emotionsListSource != null && emotionsListSource.Count > 0)
                 return emotionsListSource;
-
-            emotionsListSource = new List<CustomListViewItem>();
-            emotionsListSource.Add(new CustomListViewItem { Name = "Fantastic" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Frustated" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Determined" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Bored" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Happy" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Tired" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Motivated" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Cool" });
-
-            emotionsListSource.Add(new CustomListViewItem { Name = "Fantastic" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Frustated" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Determined" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Bored" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Happy" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Tired" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Pissed off" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Motivated" });
-            emotionsListSource.Add(new CustomListViewItem { Name = "Cool" });
-
+          /*  eventsListSource.Add(new CustomListViewItem { Name = "married" });
+            eventsListSource.Add(new CustomListViewItem { Name = "divorsed" });
+            eventsListSource.Add(new CustomListViewItem { Name = "got promotion" });
+            eventsListSource.Add(new CustomListViewItem { Name = "got a trip" });
+            eventsListSource.Add(new CustomListViewItem { Name = "bought a car" });*/
             return emotionsListSource;
         }
 

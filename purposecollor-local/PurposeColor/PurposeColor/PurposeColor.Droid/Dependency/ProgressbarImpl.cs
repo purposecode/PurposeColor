@@ -18,13 +18,43 @@ namespace PurposeColor.WinPhone.Dependency
 
         public void ShowProgressbar(string text)
         {
+           /* Device.BeginInvokeOnMainThread(() =>
+            {
+                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                try
+                {
+                    AndHUD.Shared.Show(MainActivity.GetMainActivity(), text, -1, MaskType.Clear);
+                    tcs.SetResult(null);
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });*/
+
             AndHUD.Shared.Show(MainActivity.GetMainActivity(), text, -1, MaskType.Clear);
+            
         }
 
 
         public void HideProgressbar()
         {
+           /* Device.BeginInvokeOnMainThread(() =>
+            {
+                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                try
+                {
+                    AndHUD.Shared.Dismiss();
+                    tcs.SetResult(null);
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });*/
+
             AndHUD.Shared.Dismiss();
+
         }
 
     }

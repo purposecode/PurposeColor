@@ -11,6 +11,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PurposeColor.screens;
+using PurposeColor.Service;
+using System.Diagnostics;
+using PurposeColor.interfaces;
 
 namespace PurposeColor
 {
@@ -47,8 +50,8 @@ namespace PurposeColor
                 Maximum = 2,
                 WidthRequest = deviceSpec.ScreenWidth * 90 / 100
             };
-            slider.PropertyChanged += slider_PropertyChanged;
             slider.StopGesture = GetstopGetsture;
+
             //slider.ValueChanged += slider_ValueChanged;
 
 
@@ -143,12 +146,8 @@ namespace PurposeColor
 
         }
 
-        void slider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            string test = "test";
-        }
 
-        public void GetstopGetsture()
+        public async void GetstopGetsture( bool pressed )
         {
            /* if (slider.Value != 0)
             {
@@ -163,7 +162,23 @@ namespace PurposeColor
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
             }*/
-            OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+
+
+
+            Button test = new Button();
+           IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+            progressBar.ShowProgressbar( "Loading..." );
+
+            var emotionsList = await ServiceHelper.GetEmotions((int)slider.CurrentValue);
+            if( emotionsList != null )
+            {
+                App.emotionsListSource = null;
+                App.emotionsListSource = emotionsList;
+                OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+            }
+            progressBar.HideProgressbar();
+
+
         }
 
         void slider_ValueChanged(object sender, ValueChangedEventArgs e)
@@ -277,6 +292,8 @@ namespace PurposeColor
            pickView = null;
            eventPickerButton.IsVisible = true;
            about.IsVisible = true;
+
+
            OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
      
         }

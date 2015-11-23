@@ -45,8 +45,10 @@ namespace PurposeColor
         public static Color STACK_BG_COLOR_GRAY = Color.FromHex("#d6d6c2");
         
         public static Color PAGE_BG_COLOR_LIGHT_GRAY = Color.FromHex("#f4f4f4");
-        
-        
+
+        #region SERVICE
+        public const string SERVICE_BASE_URL = "http://purposecodes.com/pc/";
+        #endregion
 
     }
 

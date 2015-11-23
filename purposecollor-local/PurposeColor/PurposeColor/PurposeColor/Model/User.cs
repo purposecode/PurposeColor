@@ -13,6 +13,11 @@ namespace PurposeColor.Model
         public int ID { get; set; }
 
         /// <summary>
+        /// Gets or sets the UserId
+        /// </summary>
+        public int UserId { get; set; }
+
+        /// <summary>
         /// Gets or sets the UserName.
         /// </summary>
         public string UserName { get; set; }

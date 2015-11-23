@@ -50,6 +50,44 @@ namespace PurposeColor.Service
 
         }
 
+        public static async Task<List<CustomListViewItem>> GetAllEvents()
+        {
+            var client = new System.Net.Http.HttpClient();
+            User user = App.Settings.GetUser();
+
+            if (user == null)
+            {
+                // show alert
+                return null;
+            }
+            else
+            {
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                string uriString = "api.php?action=getallevents&user_id=" + user.ID;
+                var response = await client.GetAsync(uriString);
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var earthquakesJson = response.Content.ReadAsStringAsync().Result;
+
+                    var rootobject = JsonConvert.DeserializeObject<Emotions>(earthquakesJson);
+
+                    List<CustomListViewItem> eventsList = new List<CustomListViewItem>();
+
+                    if (rootobject != null && rootobject.emotion_title != null)
+                    {
+                        foreach (var item in rootobject.emotion_title)
+                        {
+                            CustomListViewItem listItem = new CustomListViewItem();
+                            listItem.Name = item;
+                            eventsList.Add(listItem);
+                        }
+                    }
+                    return eventsList;
+                }
+            }// else ie, user != null
+
+            return null;
+        }
        
     }
 }

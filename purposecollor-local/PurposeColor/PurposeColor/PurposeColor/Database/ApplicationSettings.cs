@@ -26,12 +26,16 @@ namespace PurposeColor.Database
                 {
                     Connection.CreateTable<User>();
                 }
-
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("AplicationSettings :: " + ex.Message);
             }
+        }
+
+        public User GetUser()
+        {
+            return Connection.Table<User>().FirstOrDefault();
         }
 
         public List<User> GetAllUsers()
@@ -113,6 +117,7 @@ namespace PurposeColor.Database
                 newUser.Gender = user.Gender;
                 newUser.Age = user.Age;
                 newUser.Country = user.Country;
+                newUser.UserId = user.UserId;
 
                 if (user.ID == 0)
                 {

@@ -7,6 +7,7 @@ using System.Net;
 using Newtonsoft.Json;
 using PurposeColor.Model;
 using PurposeColor.CustomControls;
+using System.Net.Http;
 
 namespace PurposeColor.Service
 {

@@ -11,6 +11,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PurposeColor.screens;
+using PurposeColor.interfaces;
 
 namespace PurposeColor
 {
@@ -38,6 +39,7 @@ namespace PurposeColor
 
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
+            subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
 
 
             Label firstLine = new Label();
@@ -105,6 +107,7 @@ namespace PurposeColor
                 Maximum = 2,
                 WidthRequest = deviceSpec.ScreenWidth * 90 / 100
             };
+            slider.StopGesture = GetstopGetsture;
 
 
             Image sliderDivider1 = new Image();
@@ -140,6 +143,20 @@ namespace PurposeColor
 
         }
 
+        void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
+        {
+            ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+            notfiy.ShowNotification("Purpose Color", "Emotional awareness created");
+        }
+
+
+        
+        public async void GetstopGetsture(bool pressed)
+        {
+
+            OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
+        }
+
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
             Navigation.PopAsync();
@@ -168,12 +185,12 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-          /*  CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.listView.ItemSelected += OnActionPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);*/
+            masterLayout.AddChildToLayout(ePicker, 0, 0);
 
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
@@ -183,12 +200,12 @@ namespace PurposeColor
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-          /*  CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);*/
+            masterLayout.AddChildToLayout(ePicker, 0, 0);
             //double yPos = 60 * deviceSpec.ScreenHeight / 100;
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
             // ePicker.FadeTo(1, 750, Easing.Linear); 
@@ -228,6 +245,8 @@ namespace PurposeColor
             masterLayout.Children.Remove(pickView);
             pickView = null;
             actionPickerButton.IsVisible = true;
+
+            OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)

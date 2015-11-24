@@ -4,6 +4,7 @@ using Cross;
 using CustomControls;
 using PurposeColor.interfaces;
 using PurposeColor.screens;
+using PurposeColor.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -197,14 +198,29 @@ namespace PurposeColor.CustomControls
 				addEmotionButtonLayout.BackgroundColor = Color.Transparent;
 
 				TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
-				addEmotionButtonLayoutTapGestureRecognizer.Tapped += (
+				addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
 					object addsender, EventArgs adde) => 
 				{
+
+                    IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+
+                    progressBar.ShowProgressbar("sending new emotion");
+
+
 					listTitle.IsVisible = true;
 					addButton.IsVisible = true;
 					addEmotionButton.IsVisible  = false;
 					emotionsEntry.IsVisible  = false;
 					addEmotionButtonLayout.IsVisible  = false;
+
+                    var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
+
+                    View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                    pageContainedLayout.Children.Remove(pickView);
+                    pickView = null;
+
+                    progressBar.HideProgressbar();
+
 				};
 				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
@@ -227,6 +243,12 @@ namespace PurposeColor.CustomControls
         {
             listView = null;
             pageContainedLayout = null;
+            pageTitle = null;
+            masterLayout = null;
+            listTitle = null;
+            deviceSpec = null;
+            addButton = null;
+            addEmotionButton = null;
             GC.Collect();
         }
     }

@@ -27,7 +27,7 @@ namespace PurposeColor
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
         Label about;
-
+        public static int sliderValue;
         public FeelingNowPage()
         {
 
@@ -126,6 +126,8 @@ namespace PurposeColor
 
             this.Appearing += OnFeelingNowPageAppearing;
 
+
+            sliderValue = slider.CurrentValue;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(howYouAreFeeling, 15, 22);
@@ -161,6 +163,7 @@ namespace PurposeColor
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
             }*/
 
+            sliderValue = slider.CurrentValue;
             if( slider.CurrentValue == 0 )
             {
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
@@ -243,6 +246,12 @@ namespace PurposeColor
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
+            if( App.emotionsListSource == null || App.emotionsListSource.Count <= 0 )
+            {
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                progress.ShowToast("emotions empty");
+                return;
+            }
             List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.ID == slider.CurrentValue).ToList();
             CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
@@ -307,7 +316,13 @@ namespace PurposeColor
             if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
             {
                 progressBar.ShowProgressbar("Loading emotions...");
-                await DownloadAllEmotions();
+                var downloadEmotionStatus = await DownloadAllEmotions();
+                if( !downloadEmotionStatus )
+                {
+                    DisplayAlert("Purpose Color", "Netwrok error occured.", "Ok");
+                    progressBar.HideProgressbar();
+                    return;
+                }
                 App.Settings.SaveEmotions(App.emotionsListSource);
                 progressBar.HideProgressbar();
 
@@ -338,7 +353,10 @@ namespace PurposeColor
                 }
 
             }
-
+            else
+            {
+                return false;
+            }
 
             // Value 2
             emotionsList = null;
@@ -350,6 +368,10 @@ namespace PurposeColor
                     App.emotionsListSource.Add(item);
                 }
 
+            }
+            else
+            {
+                return false;
             }
 
 
@@ -364,6 +386,10 @@ namespace PurposeColor
                 }
 
             }
+            else
+            {
+                return false;
+            }
 
             // Value -2
             emotionsList = null;
@@ -375,6 +401,10 @@ namespace PurposeColor
                     App.emotionsListSource.Add(item);
                 }
 
+            }
+            else
+            {
+                return false;
             }
 
             return true;

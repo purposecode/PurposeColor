@@ -8,14 +8,22 @@ using Newtonsoft.Json;
 using PurposeColor.Model;
 using PurposeColor.CustomControls;
 using System.Net.Http;
+using Connectivity.Plugin;
 
 namespace PurposeColor.Service
 {
     public class ServiceHelper
     {
 
+
         public static async Task<List<CustomListViewItem>> GetEmotions(int sliderValue)
         {
+
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return null;
+            }
+
 
             var client = new System.Net.Http.HttpClient();
 
@@ -54,6 +62,11 @@ namespace PurposeColor.Service
 
         public static async Task<List<CustomListViewItem>> GetAllEvents()
         {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return null;
+            }
+
             var client = new System.Net.Http.HttpClient();
             User user = App.Settings.GetUser();
 
@@ -100,6 +113,11 @@ namespace PurposeColor.Service
 
         public static async Task<bool> PostMedia(MediaPost mediaFile)
         {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
             string url = "http://purposecodes.com/pc/api.php?action=eventinsert";// Constants.SERVICE_BASE_URL;
             string result = String.Empty;
 
@@ -127,6 +145,48 @@ namespace PurposeColor.Service
             return true;
         }
 
+
+
+        public static async Task<bool> AddEmotion( string emotionID, string title, string userID)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+                 string url = "http://purposecodes.com/pc/api.php?action=newemotion";
+                string result = String.Empty;
+
+                using (var client = new HttpClient())
+                {
+                    var content = new FormUrlEncodedContent(new[]
+                           {
+                                 new KeyValuePair<string, string>("emotion_value", emotionID),
+                                 new KeyValuePair<string, string>("user_id", userID),
+                                  new KeyValuePair<string, string>("emotion_title",  title )
+                            });
+
+
+
+                    using (var response = await client.PostAsync(url, content))
+                    {
+                        using (var responseContent = response.Content)
+                        {
+
+
+                        }
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+        }
        
     }
 }

@@ -305,9 +305,19 @@ namespace PurposeColor
 
             await DownloadAllEmotions();
 
+            App.Settings.SaveEmotions(App.emotionsListSource);
+
             progressBar.HideProgressbar();
 
+            // for testing
+            var testEmotions = App.Settings.GetAllEmotions();
+
+
             await DownloadAllEvents();
+
+            App.Settings.SaveEvents(App.eventsListSource);
+
+            var testEvents = App.Settings.GetAllEvents();
 
         }
 

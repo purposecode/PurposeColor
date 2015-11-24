@@ -13,4 +13,12 @@ namespace PurposeColor.Model
         public List<string> event_id { get; set; }
         public List<string> event_title { get; set; }
     }
+
+    public class UserEvent
+    {
+        [SQLite.Net.Attributes.PrimaryKey,SQLite.Net.Attributes.AutoIncrement]
+        public int ID { get; set; }
+        public int EventId { get; set; }
+        public string EventName { get; set; }
+    }
 }

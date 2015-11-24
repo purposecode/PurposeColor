@@ -1,11 +1,10 @@
-﻿using PurposeColor.interfaces;
+﻿using PurposeColor.CustomControls;
+using PurposeColor.interfaces;
 using PurposeColor.Model;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PurposeColor.Database
@@ -26,12 +25,26 @@ namespace PurposeColor.Database
                 {
                     Connection.CreateTable<User>();
                 }
+
+                var emationsInfo = Connection.GetTableInfo("Emotion");
+                if (emationsInfo == null || emationsInfo.Count < 1)
+                {
+                    Connection.CreateTable<Emotion>();
+                }
+
+                var userEventInfo = Connection.GetTableInfo("UserEvent");
+                if (userEventInfo == null || userEventInfo.Count < 1)
+                {
+                    Connection.CreateTable<UserEvent>();
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine("AplicationSettings :: " + ex.Message);
             }
         }
+
+        #region USER TABLE
 
         public User GetUser()
         {
@@ -140,5 +153,115 @@ namespace PurposeColor.Database
 
             return isUserAdded;
         }
+
+        #endregion
+
+        #region EMOTIONS TABLE
+        public List<Emotion> GetAllEmotions()
+        {
+            try
+            {
+                return (from t in Connection.Table<Emotion>() select t).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("GetAllEmotions :: " + ex.Message);
+                return null;
+            }
+        }
+
+        public bool SaveEmotions(List<CustomListViewItem> emotionList)
+        {
+            if (emotionList == null || emotionList.Count < 1)
+            {
+                return false;
+            }
+
+            try
+            {
+                List<Emotion> emotions = new List<Emotion>();
+                foreach (CustomListViewItem item in emotionList)
+                {
+                    emotions.Add(new Emotion { EmpotionName = item.Name, EmotionValue = item.ID, EmotionId = item.ID });
+                }
+                Connection.InsertAll(emotions);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("SaveEmotion :: " + ex.Message);
+            }
+
+            return false;
+        }
+
+        public void DeleteAllEmotions()
+        {
+            try
+            {
+                Connection.DeleteAll<Emotion>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("DeleteAllEmotions :: " + ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region EVENTS TABLE
+
+        public bool SaveEvents(List<CustomListViewItem> eventsList)
+        {
+            if (eventsList == null || eventsList.Count < 1)
+            {
+                return false;
+            }
+
+            try
+            {
+                List<UserEvent> events = new List<UserEvent>();
+                foreach (CustomListViewItem item in eventsList)
+                {
+                    events.Add(new UserEvent { EventId = item.ID, EventName = item.Name });
+                }
+                Connection.InsertAll(events);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("SaveEvents :: " + ex.Message);
+                return false;
+            }
+        }
+
+        public List<UserEvent> GetAllEvents()
+        {
+            try
+            {
+                return (from t in Connection.Table<UserEvent>() select t).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("GetAllEvents :: " + ex.Message);
+                return null;
+            }
+        }
+
+
+        public void DeleteAllEvents()
+        {
+            try
+            {
+                Connection.DeleteAll<UserEvent>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("DeleteAllEvents :: " + ex.Message);
+            }
+        }
+
+        #endregion
+
     }
 }

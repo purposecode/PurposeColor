@@ -83,9 +83,11 @@ namespace PurposeColor.Droid.Renderers
 
         }
 
+
+
         void control_StopTrackingTouch(object sender, SeekBar.StopTrackingTouchEventArgs e)
         {
-
+            if( formsSlider.StopGesture != null )
             formsSlider.StopGesture( false );
         }
 

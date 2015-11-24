@@ -52,6 +52,7 @@
     <Compile Include="Database\ApplicationSettings.cs" />
     <Compile Include="interfaces\IDBConnection.cs" />
     <Compile Include="CustomControls\ImageButton.cs" />
+    <Compile Include="interfaces\ILocalNotification.cs" />
     <Compile Include="interfaces\IReminder.cs" />
     <Compile Include="interfaces\IResize.cs" />
     <Compile Include="Model\Emotions.cs" />

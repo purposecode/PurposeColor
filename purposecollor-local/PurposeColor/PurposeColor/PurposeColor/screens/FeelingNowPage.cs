@@ -145,7 +145,6 @@ namespace PurposeColor
 
         }
 
-
         public async void GetstopGetsture( bool pressed )
         {
            /* if (slider.Value != 0)
@@ -182,7 +181,6 @@ namespace PurposeColor
             }
 
         }
-
 
         protected override bool OnBackButtonPressed()
         {
@@ -233,7 +231,6 @@ namespace PurposeColor
             Navigation.PushAsync( new GraphPage() );
         }
 
-
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
             List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.ID == slider.CurrentValue).ToList();
@@ -262,9 +259,6 @@ namespace PurposeColor
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
            // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
-
-
-       
 
         void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
@@ -300,25 +294,25 @@ namespace PurposeColor
         async  void OnFeelingNowPageAppearing(object sender, System.EventArgs e)
         {
             IProgressBar progressBar = DependencyService.Get<IProgressBar>();
-            progressBar.ShowProgressbar("Loading emotions...");
+            if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
+            {
+                progressBar.ShowProgressbar("Loading emotions...");
+                await DownloadAllEmotions();
+                App.Settings.SaveEmotions(App.emotionsListSource);
+                progressBar.HideProgressbar();
 
+                // for testing
+                var testEmotions = App.Settings.GetAllEmotions();
+            }
 
-            await DownloadAllEmotions();
+            if (App.eventsListSource == null || App.eventsListSource.Count < 1)
+            {
+                await DownloadAllEvents();
+                App.Settings.SaveEvents(App.eventsListSource);
 
-            App.Settings.SaveEmotions(App.emotionsListSource);
-
-            progressBar.HideProgressbar();
-
-            // for testing
-            var testEmotions = App.Settings.GetAllEmotions();
-
-
-            await DownloadAllEvents();
-
-            App.Settings.SaveEvents(App.eventsListSource);
-
-            var testEvents = App.Settings.GetAllEvents();
-
+                // for testing
+                var testEvents = App.Settings.GetAllEvents();
+            }
         }
 
         private async Task<bool> DownloadAllEmotions()

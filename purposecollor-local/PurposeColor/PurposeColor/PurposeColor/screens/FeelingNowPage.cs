@@ -161,7 +161,17 @@ namespace PurposeColor
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
             }*/
-            OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+
+            if( slider.CurrentValue == 0 )
+            {
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                progress.ShowToast( "slider is in neutral" );
+            }
+            else
+            {
+                OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+            }
+
 
         }
 

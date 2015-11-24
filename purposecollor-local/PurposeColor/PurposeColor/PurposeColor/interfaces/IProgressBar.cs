@@ -10,7 +10,6 @@ namespace PurposeColor.interfaces
     {
         void ShowProgressbar( string text );
         void HideProgressbar();
-
-      //  void ShowToast(string messege);
+        void ShowToast(string messege);
     }
 }

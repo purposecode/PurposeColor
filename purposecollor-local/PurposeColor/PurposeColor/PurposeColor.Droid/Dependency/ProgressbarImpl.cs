@@ -18,19 +18,6 @@ namespace PurposeColor.WinPhone.Dependency
 
         public void ShowProgressbar(string text)
         {
-           /* Device.BeginInvokeOnMainThread(() =>
-            {
-                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-                try
-                {
-                    AndHUD.Shared.Show(MainActivity.GetMainActivity(), text, -1, MaskType.Clear);
-                    tcs.SetResult(null);
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });*/
 
             AndHUD.Shared.Show(MainActivity.GetMainActivity(), text, -1, MaskType.Clear);
             
@@ -55,6 +42,12 @@ namespace PurposeColor.WinPhone.Dependency
 
             AndHUD.Shared.Dismiss();
 
+        }
+
+        public void ShowToast(string messege)
+        {
+            AndHUD.Shared.ShowToast(Forms.Context, messege, MaskType.Black,  TimeSpan.FromSeconds( .5 ));
+            
         }
 
     }

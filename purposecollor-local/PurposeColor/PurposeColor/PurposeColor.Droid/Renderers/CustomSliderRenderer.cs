@@ -87,8 +87,39 @@ namespace PurposeColor.Droid.Renderers
 
         void control_StopTrackingTouch(object sender, SeekBar.StopTrackingTouchEventArgs e)
         {
+            int sliderPercent = 100;
+         /*   if( formsSlider.CurrentValue == 1 )
+            {
+                sliderPercent = control.Max * 75 / 100;
+                control.Progress = sliderPercent;
+            }
+            else if (formsSlider.CurrentValue == 2)
+            {
+                sliderPercent = control.Max * 100 / 100;
+                control.Progress = sliderPercent;
+            }
+            else if (formsSlider.CurrentValue == -1)
+            {
+                sliderPercent = control.Max * 25 / 100;
+                control.Progress = sliderPercent;
+            }
+            else if (formsSlider.CurrentValue == -2)
+            {
+                sliderPercent = 0;
+                control.Progress = sliderPercent;
+            }
+            else if (formsSlider.CurrentValue == 0)
+            {
+                sliderPercent = control.Max * 50 / 100;
+                control.Progress = sliderPercent;
+            }*/
+
+
             if( formsSlider.StopGesture != null )
-            formsSlider.StopGesture( false );
+            {
+                formsSlider.StopGesture(false);
+            }
+
         }
 
         void control_StartTrackingTouch(object sender, SeekBar.StartTrackingTouchEventArgs e)

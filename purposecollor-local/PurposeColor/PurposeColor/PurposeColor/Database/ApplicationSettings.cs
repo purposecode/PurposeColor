@@ -182,7 +182,7 @@ namespace PurposeColor.Database
                 List<Emotion> emotions = new List<Emotion>();
                 foreach (CustomListViewItem item in emotionList)
                 {
-                    emotions.Add(new Emotion { EmpotionName = item.Name, EmotionValue = item.ID, EmotionId = item.ID });
+                    emotions.Add(new Emotion { EmpotionName = item.Name, EmotionValue = item.SliderValue, EmotionId = item.SliderValue });
                 }
                 Connection.InsertAll(emotions);
                 return true;
@@ -223,7 +223,7 @@ namespace PurposeColor.Database
                 List<UserEvent> events = new List<UserEvent>();
                 foreach (CustomListViewItem item in eventsList)
                 {
-                    events.Add(new UserEvent { EventId = item.ID, EventName = item.Name });
+                    events.Add(new UserEvent { EventId = item.SliderValue, EventName = item.Name });
                 }
                 Connection.InsertAll(events);
                 return true;

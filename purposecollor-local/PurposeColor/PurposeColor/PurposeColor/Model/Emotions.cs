@@ -18,4 +18,20 @@ namespace PurposeColor.Model
         public string EmpotionName { get; set; }
         public int EmotionValue { get; set; }
     }
+
+    public class EmotionDetails
+    {
+        public string emotion_id { get; set; }
+        public string user_id { get; set; }
+        public string emotion_title { get; set; }
+        public string emotion_value { get; set; }
+        public string status { get; set; }
+    }
+
+    public class EmotionsCollections
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+        public List<EmotionDetails> resultarray { get; set; }
+    }
 }

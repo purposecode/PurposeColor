@@ -18,7 +18,8 @@ namespace PurposeColor.CustomControls
     public class CustomListViewItem
     {
         public string Name { get; set; }
-        public int ID { get; set; }
+        public string EmotionID { get; set; }
+        public int SliderValue { get; set; }
         public CustomListViewItem()
         {
         }
@@ -64,6 +65,11 @@ namespace PurposeColor.CustomControls
         IDeviceSpec deviceSpec;
         CustomImageButton addButton;
         CustomImageButton addEmotionButton;
+        public FeelingNowPage FeelingsPage
+        {
+            get;
+            set;
+        }
         int topYPos;
         public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
         {
@@ -215,6 +221,8 @@ namespace PurposeColor.CustomControls
 
                     var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
 
+                    App.emotionsListSource.Add(new CustomListViewItem { SliderValue = FeelingNowPage.sliderValue, Name = emotionsEntry.Text });
+
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);
                     pickView = null;
@@ -224,7 +232,7 @@ namespace PurposeColor.CustomControls
 				};
 				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
-				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 1) - 6);
+				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
                 masterLayout.AddChildToLayout(emotionsEntry, 5, (100 - topYPos  - 2 ) - 7);
 				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
             }

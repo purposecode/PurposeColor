@@ -252,11 +252,12 @@ namespace PurposeColor
                 progress.ShowToast("emotions empty");
                 return;
             }
-            List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.ID == slider.CurrentValue).ToList();
+            List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
             CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
+            ePicker.FeelingsPage = this;
             ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
             masterLayout.AddChildToLayout(ePicker, 0, 0);
 
@@ -342,72 +343,15 @@ namespace PurposeColor
 
         private async Task<bool> DownloadAllEmotions()
         {
-            // Value 1
-            var emotionsList = await ServiceHelper.GetEmotions(1);
-            if (emotionsList != null)
+            var emotionsReult = await ServiceHelper.GetAllEmotions(2);
+            if( emotionsReult != null )
             {
-                foreach (var item in emotionsList)
-                {
-                    App.emotionsListSource = null;
-                    App.emotionsListSource = emotionsList;
-                }
-
+                App.emotionsListSource = null;
+                App.emotionsListSource = emotionsReult;
+                return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
 
-            // Value 2
-            emotionsList = null;
-            emotionsList = await ServiceHelper.GetEmotions(2);
-            if (emotionsList != null)
-            {
-                foreach (var item in emotionsList)
-                {
-                    App.emotionsListSource.Add(item);
-                }
-
-            }
-            else
-            {
-                return false;
-            }
-
-
-            // Value -1
-            emotionsList = null;
-            emotionsList = await ServiceHelper.GetEmotions(-1);
-            if (emotionsList != null)
-            {
-                foreach (var item in emotionsList)
-                {
-                    App.emotionsListSource.Add(item);
-                }
-
-            }
-            else
-            {
-                return false;
-            }
-
-            // Value -2
-            emotionsList = null;
-            emotionsList = await ServiceHelper.GetEmotions(-2);
-            if (emotionsList != null)
-            {
-                foreach (var item in emotionsList)
-                {
-                    App.emotionsListSource.Add(item);
-                }
-
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
         }
 
         private async Task<bool> DownloadAllEvents()

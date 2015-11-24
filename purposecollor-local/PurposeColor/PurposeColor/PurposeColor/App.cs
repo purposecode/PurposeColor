@@ -16,7 +16,6 @@ namespace PurposeColor
     public class App : Application
     {
         public static bool IsLoggedIn { get; set; }
-        public static string SelectedEmotion { get; set; }
         public static INavigation Navigator { get; set; }
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }
@@ -135,14 +134,14 @@ namespace PurposeColor
             if (goalsListSource != null && goalsListSource.Count > 0)
                 return goalsListSource;
 
-            goalsListSource = new List<CustomListViewItem>();
+         /*   goalsListSource = new List<CustomListViewItem>();
             goalsListSource.Add(new CustomListViewItem { Name = "Loose Weight" });
             goalsListSource.Add(new CustomListViewItem { Name = "Learn Yoga" });
             goalsListSource.Add(new CustomListViewItem { Name = "To be Rich" });
             goalsListSource.Add(new CustomListViewItem { Name = "Peace Of Mind" });
             goalsListSource.Add(new CustomListViewItem { Name = "Buy a New Car" });
             goalsListSource.Add(new CustomListViewItem { Name = "Visit Everest" });
-            goalsListSource.Add(new CustomListViewItem { Name = "Meet Prime Minister" });
+            goalsListSource.Add(new CustomListViewItem { Name = "Meet Prime Minister" });*/
             return goalsListSource;
         }
 

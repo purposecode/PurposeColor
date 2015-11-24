@@ -26,6 +26,8 @@ namespace PurposeColor
         IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
+        CustomListViewItem selectedEmotionItem;
+        CustomListViewItem selectedEventItem;
         Label about;
         public static int sliderValue;
         public FeelingNowPage()
@@ -213,7 +215,7 @@ namespace PurposeColor
             Navigation.PopAsync();
         }
 
-        void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        async void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
             if(  emotionalPickerButton.Text == "Select Emotion")
             {
@@ -229,6 +231,7 @@ namespace PurposeColor
             }
             else
             {
+                await ServiceHelper.SaveEmotionAndEvent(  selectedEmotionItem.EmotionID,  )
                 Navigation.PushAsync(new FeelingsSecondPage());
             }
             
@@ -284,7 +287,7 @@ namespace PurposeColor
         {
            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
            emotionalPickerButton.Text = item.Name;
-           App.SelectedEmotion = item.Name;
+           selectedEmotionItem = item;
            emotionalPickerButton.TextColor = Color.Black;
            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
            masterLayout.Children.Remove( pickView );
@@ -302,6 +305,7 @@ namespace PurposeColor
             CustomListViewItem item = e.SelectedItem as CustomListViewItem;
             eventPickerButton.Text = item.Name;
             eventPickerButton.TextColor = Color.Black;
+            selectedEventItem = item;
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
             pickView = null;
@@ -341,7 +345,7 @@ namespace PurposeColor
             }
         }
 
-        private async Task<bool> DownloadAllEmotions()
+        public async Task<bool> DownloadAllEmotions()
         {
             var emotionsReult = await ServiceHelper.GetAllEmotions(2);
             if( emotionsReult != null )

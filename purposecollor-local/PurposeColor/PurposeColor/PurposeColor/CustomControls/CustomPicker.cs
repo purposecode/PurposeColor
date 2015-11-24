@@ -19,6 +19,7 @@ namespace PurposeColor.CustomControls
     {
         public string Name { get; set; }
         public string EmotionID { get; set; }
+        public string EventID { get; set; }
         public int SliderValue { get; set; }
         public CustomListViewItem()
         {
@@ -221,7 +222,7 @@ namespace PurposeColor.CustomControls
 
                     var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
 
-                    App.emotionsListSource.Add(new CustomListViewItem { SliderValue = FeelingNowPage.sliderValue, Name = emotionsEntry.Text });
+                    await FeelingsPage.DownloadAllEmotions();
 
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);

@@ -199,7 +199,12 @@ namespace PurposeColor
 
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
-
+            if (App.goalsListSource == null || App.goalsListSource.Count <= 0)
+            {
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                progress.ShowToast("Goals empty");
+                return;
+            }
             CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;

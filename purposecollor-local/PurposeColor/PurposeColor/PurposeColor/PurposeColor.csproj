@@ -59,6 +59,7 @@
     <Compile Include="Model\Events.cs" />
     <Compile Include="Model\GEMCategory.cs" />
     <Compile Include="Model\CustomeGraphModel.cs" />
+    <Compile Include="Model\Goals.cs" />
     <Compile Include="Model\Media.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />

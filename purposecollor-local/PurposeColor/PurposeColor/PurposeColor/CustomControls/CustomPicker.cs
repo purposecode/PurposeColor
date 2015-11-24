@@ -58,14 +58,21 @@ namespace PurposeColor.CustomControls
         public ListView listView;
         CustomLayout pageContainedLayout;
         string pageTitle;
+        CustomLayout masterLayout;
+        Label listTitle;
+        IDeviceSpec deviceSpec;
+        CustomImageButton addButton;
+        CustomImageButton addEmotionButton;
+        int topYPos;
         public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
         {
             pageContainedLayout = containerLayout;
-            CustomLayout masterLayout = new CustomLayout();
+            masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             pageTitle = title;
+            topYPos = topY;
 
             StackLayout layout = new StackLayout();
             layout.BackgroundColor = Color.Black;
@@ -94,14 +101,14 @@ namespace PurposeColor.CustomControls
             listHeader.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
             listHeader.BackgroundColor = Color.FromRgb( 30, 126, 210 );
 
-            Label listTitle = new Label();
+            listTitle = new Label();
             listTitle.Text = title;
             listTitle.TextColor = Color.White;
             listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             listTitle.FontSize = 17;
 
 
-            CustomImageButton addButton = new CustomImageButton();
+            addButton = new CustomImageButton();
             if (Device.OS == TargetPlatform.WinPhone)
             {
                 addButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png"));
@@ -147,6 +154,7 @@ namespace PurposeColor.CustomControls
                 masterLayout.AddChildToLayout(listTitle, 5, (100 - topY - 1) - 7 );
                 if (addButtonRequired)
                 {
+
                     masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
                     masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
                 }
@@ -161,10 +169,57 @@ namespace PurposeColor.CustomControls
 
         void OnAddButtonClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
-            View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            pageContainedLayout.Children.Remove(pickView);
-            pickView = null;
+            if (pageTitle == Constants.SELECT_EMOTIONS)
+            {
+                Entry emotionsEntry = new Entry();
+                emotionsEntry.BackgroundColor = Color.White;
+                emotionsEntry.WidthRequest =  deviceSpec.ScreenWidth * 75 / 100;
+                emotionsEntry.TextColor = Color.Black;
+                listTitle.IsVisible = false;
+                addButton.IsVisible = false;
+
+                addEmotionButton = new CustomImageButton();
+                if (Device.OS == TargetPlatform.WinPhone)
+                {
+					addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
+                }
+                else
+                {
+					addEmotionButton.ImageName = "tick_with_bg.png";
+                }
+
+                addEmotionButton.WidthRequest = 25;
+                addEmotionButton.HeightRequest = 25;
+
+				StackLayout addEmotionButtonLayout = new StackLayout();
+				addEmotionButtonLayout.HeightRequest = 50;
+				addEmotionButtonLayout.WidthRequest = 50;
+				addEmotionButtonLayout.BackgroundColor = Color.Transparent;
+
+				TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
+				addEmotionButtonLayoutTapGestureRecognizer.Tapped += (
+					object addsender, EventArgs adde) => 
+				{
+					listTitle.IsVisible = true;
+					addButton.IsVisible = true;
+					addEmotionButton.IsVisible  = false;
+					emotionsEntry.IsVisible  = false;
+					addEmotionButtonLayout.IsVisible  = false;
+				};
+				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
+
+				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 1) - 6);
+                masterLayout.AddChildToLayout(emotionsEntry, 5, (100 - topYPos  - 2 ) - 7);
+				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
+            }
+            else
+            {
+                Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
+                View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                pageContainedLayout.Children.Remove(pickView);
+                pickView = null;
+            }
+
         }
 
 

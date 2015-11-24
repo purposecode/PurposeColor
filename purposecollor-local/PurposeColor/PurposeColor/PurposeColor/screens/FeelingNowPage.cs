@@ -244,7 +244,7 @@ namespace PurposeColor
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
             List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.ID == slider.CurrentValue).ToList();
-            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Emotions", true, false);
+            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

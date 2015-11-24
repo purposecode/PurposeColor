@@ -21,7 +21,7 @@ namespace PurposeColor.Service
 
             client.BaseAddress = new Uri( Constants.SERVICE_BASE_URL );
 
-            string uriString = "api.php?action=emotions&emotion_value=" + sliderValue.ToString();
+            string uriString = "api.php?action=emotions&user_id=2&emotion_value=" + sliderValue.ToString();
 
             var response = await client.GetAsync(uriString);
 

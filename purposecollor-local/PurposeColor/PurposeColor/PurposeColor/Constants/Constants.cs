@@ -15,7 +15,7 @@ namespace PurposeColor
         public const string EMOTIONAL_INTELLIGENCE = "Emtional Intelligence";
         public const string COMMUNITY_GEMS = "Community GEMs";
         public const string APPLICATION_SETTTINGS = "Application Settings";
-
+        public const string SELECT_EMOTIONS = "Select Emotions";
 		//-------------- for testing ----
 		public const string AUDIO_RECORDING = "Audio recording";
 		//-------------- for testing ----

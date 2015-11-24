@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PurposeColor.screens;
 using PurposeColor.interfaces;
+using PurposeColor.Service;
 
 namespace PurposeColor
 {
@@ -54,7 +55,7 @@ namespace PurposeColor
 
 
             Label secondLine = new Label();
-            secondLine.Text = App.SelectedEmotion;
+            secondLine.Text = "<<null>>";
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             secondLine.TextColor = Color.FromRgb(40, 47, 50);
             secondLine.FontSize = Device.OnPlatform(20, 22, 30);
@@ -153,6 +154,13 @@ namespace PurposeColor
         
         public async void GetstopGetsture(bool pressed)
         {
+            var goalsList = await ServiceHelper.GetAlGoals(2);
+
+            if( goalsList != null )
+            {
+                App.goalsListSource = null;
+                App.goalsListSource = goalsList;
+            }
 
             OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
         }

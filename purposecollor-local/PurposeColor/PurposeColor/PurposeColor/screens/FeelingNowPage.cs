@@ -231,7 +231,7 @@ namespace PurposeColor
             }
             else
             {
-                await ServiceHelper.SaveEmotionAndEvent(  selectedEmotionItem.EmotionID,  )
+              //  await ServiceHelper.SaveEmotionAndEvent(  selectedEmotionItem.EmotionID,  )
                 Navigation.PushAsync(new FeelingsSecondPage());
             }
             

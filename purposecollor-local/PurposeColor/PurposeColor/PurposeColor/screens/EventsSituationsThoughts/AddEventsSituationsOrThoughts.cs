@@ -2,6 +2,10 @@
 using CustomControls;
 using Media.Plugin;
 using PurposeColor.CustomControls;
+using PurposeColor.Model;
+using PurposeColor.Service;
+using System;
+using System.IO;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 
@@ -239,6 +243,21 @@ namespace PurposeColor.screens
                 }
 
                 var file = await CrossMedia.Current.PickPhotoAsync();
+
+                MemoryStream ms = new MemoryStream();
+                file.GetStream().CopyTo(ms);
+                string convertedSrting = Convert.ToBase64String(ms.ToArray());
+
+
+
+                MediaPost mediaWeb = new MediaPost();
+                mediaWeb.event_details = "final event";
+                mediaWeb.event_title = "final title";
+                mediaWeb.user_id = 2;
+                mediaWeb.event_image = convertedSrting;
+
+
+                var test = await ServiceHelper.PostMedia(mediaWeb);
 
             };
             

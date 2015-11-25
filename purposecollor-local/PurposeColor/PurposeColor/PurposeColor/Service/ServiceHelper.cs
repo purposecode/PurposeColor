@@ -225,16 +225,17 @@ namespace PurposeColor.Service
                 {
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
 
-                    var rootobject = JsonConvert.DeserializeObject<Events>(eventsJson);
+                    var rootobject = JsonConvert.DeserializeObject<AllEvents>(eventsJson);
 
                     List<CustomListViewItem> eventsList = new List<CustomListViewItem>();
 
-                    if (rootobject != null && rootobject.event_title != null)
+                    if (rootobject != null && rootobject.resultarray != null)
                     {
-                        foreach (var item in rootobject.event_title)
+                        foreach (var item in rootobject.resultarray)
                         {
                             CustomListViewItem listItem = new CustomListViewItem();
-                            listItem.Name = item;
+                            listItem.Name = item.event_title;
+                            listItem.EventID = item.event_id;
                             eventsList.Add(listItem);
                         }
                     }

@@ -19,7 +19,7 @@ namespace PurposeColor.Droid
 			{
 				foreach (var item in addresses)
 				{
-					string address =  item.Thoroughfare + " " + item.SubLocality + "  " + item.SubAdminArea + "  " + item.AdminArea +  "  " + item.CountryName;
+					string address =  "@" + item.Thoroughfare + " " + item.SubLocality + "  " + item.SubAdminArea + "  " + item.AdminArea +  "  " + item.CountryName;
 					return address;
 				}
 			}

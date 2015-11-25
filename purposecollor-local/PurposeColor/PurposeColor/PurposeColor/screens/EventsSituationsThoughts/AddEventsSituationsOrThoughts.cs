@@ -15,6 +15,7 @@ using XLabs.Forms.Controls;
 using System.Linq;
 using Geolocator.Plugin;
 using PurposeColor.interfaces;
+using System.Net.Http;
 
 namespace PurposeColor.screens
 {
@@ -272,8 +273,6 @@ namespace PurposeColor.screens
 				file.GetStream().CopyTo(ms);
 				string convertedSrting = Convert.ToBase64String(ms.ToArray());
 
-
-
 				MediaPost mediaWeb = new MediaPost();
 				mediaWeb.event_details = textInput.Text;
 				mediaWeb.event_title = titleText.Text;
@@ -332,7 +331,39 @@ namespace PurposeColor.screens
 			{
 				try
 				{
-					if (await CrossContacts.Current.RequestPermission())
+
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    progress.ShowProgressbar("Fetching contacts..");
+                    List<string> conatctList = new List<string>();
+                    PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
+                    conatctList = await contacts.GetContacts();
+
+                    if( conatctList != null && conatctList.Count > 0 )
+                    {
+                        List<CustomListViewItem> contactsListViewSource = new List<CustomListViewItem>();
+                        foreach (var item in conatctList)
+                        {
+                            if (item != null)
+                                contactsListViewSource.Add(new CustomListViewItem { Name = item });
+                        }
+
+                        System.Collections.Generic.List<CustomListViewItem> pickerSource = contactsListViewSource;
+                        CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Contact", true, false);
+                        ePicker.WidthRequest = deviceSpec.ScreenWidth;
+                        ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                        ePicker.ClassId = "ePicker";
+                        ePicker.listView.ItemSelected += OnContactsPickerItemSelected;
+                        masterLayout.AddChildToLayout(ePicker, 0, 0);
+                    }
+                    else
+                    {
+                        DisplayAlert("Purpose Color", "No contacts to display.", "Ok");
+                    }
+
+
+                    progress.HideProgressbar();
+                
+				/*	if (await CrossContacts.Current.RequestPermission())
 					{
 						try 
 						{	        
@@ -377,7 +408,7 @@ namespace PurposeColor.screens
 					else
 					{
 						DisplayAlert("contacts access permission ", "Please add permission to access contacts", "ok");
-					}
+					}*/
 				}
 				catch (Exception ex)
 				{
@@ -425,7 +456,7 @@ namespace PurposeColor.screens
 			locator.DesiredAccuracy = 50;
 			IProgressBar progress = DependencyService.Get<IProgressBar> ();
 
-			if (locator.IsGeolocationEnabled) 
+			if (!locator.IsGeolocationEnabled) 
 			{
 				DisplayAlert ("Purpose Color", "Please turn ON location services", "Ok");
 				return;
@@ -434,14 +465,20 @@ namespace PurposeColor.screens
 		
 			progress.ShowProgressbar ( "Getting Location.." );
 
-
+            locator.StartListening(1, 100);
 			var position = await locator.GetPositionAsync (timeoutMilliseconds: 10000);
 			App.Lattitude = position.Latitude;
 			App.Longitude = position.Longitude;
+            locator.StopListening();
 
 			ILocation loc = DependencyService.Get<ILocation> ();
 			var address = await loc.GetLocation ( position.Latitude, position.Longitude );
-			textInput.Text = "@ " + address;
+             if( App.CurrentAddress!= null && textInput.Text.Contains(App.CurrentAddress))
+             {
+                textInput.Text = textInput.Text.Replace(App.CurrentAddress, "");
+             }
+			textInput.Text = textInput.Text + address;
+            App.CurrentAddress = address;
 			progress.HideProgressbar ();
 		}
 

@@ -185,6 +185,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dependency\AndroidContactsImpl.cs" />
     <Compile Include="Dependency\AndroidLocalNotificationImpl.cs" />
     <Compile Include="Dependency\AndroidResize.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />

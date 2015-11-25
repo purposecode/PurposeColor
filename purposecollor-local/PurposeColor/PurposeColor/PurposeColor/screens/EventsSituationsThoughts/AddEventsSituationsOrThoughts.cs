@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using XLabs.Forms.Controls;
 using System.Linq;
+using Geolocator.Plugin;
+using PurposeColor.interfaces;
 
 namespace PurposeColor.screens
 {
@@ -303,10 +305,7 @@ namespace PurposeColor.screens
 
 			TapGestureRecognizer locationInputTapRecognizer = new TapGestureRecognizer();
 			locationInputStack.GestureRecognizers.Add(locationInputTapRecognizer);
-			locationInputTapRecognizer.Tapped += (s, e) =>
-			{
-				DisplayAlert("Yet to implement", "Functionality yet to be implemented.", "OK");
-			};
+			locationInputTapRecognizer.Tapped += LocationInputTapRecognizer_Tapped;
 
 			#endregion
 
@@ -335,30 +334,45 @@ namespace PurposeColor.screens
 				{
 					if (await CrossContacts.Current.RequestPermission())
 					{
+						try 
+						{	        
+							CrossContacts.Current.PreferContactAggregation = false;
 
-						CrossContacts.Current.PreferContactAggregation = false;
+							if (CrossContacts.Current.Contacts == null)
+							{
+								return;
+							}
 
-						if (CrossContacts.Current.Contacts == null)
-						{
-							return;
+							List<Contact> contactSource = new List<Contact>();
+
+							contactSource = CrossContacts.Current.Contacts.Where( name => name.DisplayName != null ).ToList();
+							contacts = new List<CustomListViewItem>();
+							foreach (var item in contactSource)
+							{
+								
+								try {
+									if( item != null && item.DisplayName != null)
+										contacts.Add(new CustomListViewItem { Name = item.DisplayName});
+								} catch (Exception ex) {
+									
+								}
+								
+							}
+
+							contacts = contacts.OrderBy(c => c.Name).ToList();
+
+							System.Collections.Generic.List<CustomListViewItem> pickerSource = contacts;
+							CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Contact", true, false);
+							ePicker.WidthRequest = deviceSpec.ScreenWidth;
+							ePicker.HeightRequest = deviceSpec.ScreenHeight;
+							ePicker.ClassId = "ePicker";
+							ePicker.listView.ItemSelected += OnContactsPickerItemSelected;
+							masterLayout.AddChildToLayout(ePicker, 0, 0);
 						}
-						contacts = new List<CustomListViewItem>();
-						foreach (var item in CrossContacts.Current.Contacts)
+						catch (Exception ex)
 						{
-
-							contacts.Add(new CustomListViewItem { Name = item.DisplayName});
+							DisplayAlert( "",ex.Message, "ok" );
 						}
-
-						contacts = contacts.OrderBy(c => c.Name).ToList();
-
-						System.Collections.Generic.List<CustomListViewItem> pickerSource = contacts;
-						CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Contact", true, false);
-						ePicker.WidthRequest = deviceSpec.ScreenWidth;
-						ePicker.HeightRequest = deviceSpec.ScreenHeight;
-						ePicker.ClassId = "ePicker";
-						ePicker.listView.ItemSelected += OnContactsPickerItemSelected;
-						masterLayout.AddChildToLayout(ePicker, 0, 0);
-
 					}
 					else
 					{
@@ -403,6 +417,23 @@ namespace PurposeColor.screens
 			#endregion
 
 			Content = masterLayout;
+		}
+
+		async void LocationInputTapRecognizer_Tapped (object sender, EventArgs e)
+		{
+			IProgressBar progress = DependencyService.Get<IProgressBar> ();
+			progress.ShowProgressbar ( "Getting Location.." );
+			var locator = CrossGeolocator.Current;
+			locator.DesiredAccuracy = 50;
+
+			var position = await locator.GetPositionAsync (timeoutMilliseconds: 10000);
+			App.Lattitude = position.Latitude;
+			App.Longitude = position.Longitude;
+
+			ILocation loc = DependencyService.Get<ILocation> ();
+			var address = await loc.GetLocation ( position.Latitude, position.Longitude );
+			textInput.Text = "@ " + address;
+			progress.HideProgressbar ();
 		}
 
 		private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)

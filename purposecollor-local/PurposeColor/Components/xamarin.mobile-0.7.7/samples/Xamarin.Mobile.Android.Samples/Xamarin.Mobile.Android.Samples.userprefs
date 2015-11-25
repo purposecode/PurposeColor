@@ -1,0 +1,39 @@
+﻿<Properties StartupItem="ContactsSample\Contacts Sample.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.Lolipop" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="GeolocationSample\MainActivity.cs">
+    <Files>
+      <File FileName="..\..\..\..\PurposeColor\PurposeColor\Service\ServiceHelper.cs" Line="231" Column="6" />
+      <File FileName="..\..\..\..\PurposeColor\PurposeColor\interfaces\ILocation.cs" Line="7" Column="22" />
+      <File FileName="..\..\..\..\PurposeColor\PurposeColor.Droid\Dependency\AndroidLocationImpl.cs" Line="19" Column="3" />
+      <File FileName="..\..\..\..\PurposeColor\PurposeColor.Droid\Dependency\AndroidLocalNotificationImpl.cs" Line="15" Column="1" />
+      <File FileName="GeolocationSample\MainActivity.cs" Line="112" Column="49" />
+      <File FileName="..\..\..\..\PurposeColor\PurposeColor.Droid\Dependency\ProgressbarImpl.cs" Line="29" Column="45" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="PurposeColor" expanded="True">
+            <Node name="PurposeColor" expanded="True">
+              <Node name="interfaces" expanded="True" />
+            </Node>
+            <Node name="PurposeColor.Droid" expanded="True" selected="True">
+              <Node name="ComponentReferenceFolder" expanded="True" />
+              <Node name="Dependency" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Xamarin.Mobile.Android.Samples" expanded="True">
+            <Node name="Geolocation Sample" expanded="True">
+              <Node name="Resources" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="E:\Workspace\251115\PurposeColor_Bkp_Code\purposecollor-local\PurposeColor\PurposeColor\PurposeColor\Service\ServiceHelper.cs" line="207" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

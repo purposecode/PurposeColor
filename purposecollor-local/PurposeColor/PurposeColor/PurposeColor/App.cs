@@ -22,6 +22,8 @@ namespace PurposeColor
         public static string SelectedEmotion { get; set; }
         public static PurposeMasterDetailPage masterPage;
         static string token;
+		public static double Lattitude;
+		public static double Longitude;
         static ApplicationSettings applicationSettings;
         public static List<CustomListViewItem> goalsListSource;
         public static List<CustomListViewItem> actionsListSource;

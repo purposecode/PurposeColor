@@ -132,11 +132,11 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(firstLine, 0, 22);
             masterLayout.AddChildToLayout(secondLine, 0, 27);
             masterLayout.AddChildToLayout(thirdLine, 0, 32);
-            masterLayout.AddChildToLayout(sliderBG, 7, 45);
+            //masterLayout.AddChildToLayout(sliderBG, 7, 45);
             masterLayout.AddChildToLayout(slider, 5, 39);
-            masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
+          /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
             masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/
             masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 55);
             masterLayout.AddChildToLayout(actionPickerButton, 5, 70);
 

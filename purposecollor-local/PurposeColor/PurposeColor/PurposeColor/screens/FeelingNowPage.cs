@@ -134,12 +134,12 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(howYouAreFeeling, 15, 22);
             masterLayout.AddChildToLayout(howYouAreFeeling2, 28, 27);
-            masterLayout.AddChildToLayout(sliderBG, 7, 40);
+          //  masterLayout.AddChildToLayout(sliderBG, 7, 40);
             masterLayout.AddChildToLayout(slider, 5, 34);
 
-            masterLayout.AddChildToLayout(sliderDivider1, 30, 40.5f);
+           /* masterLayout.AddChildToLayout(sliderDivider1, 30, 40.5f);
             masterLayout.AddChildToLayout(sliderDivider2, 50, 40.5f);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);
+            masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);*/
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
             masterLayout.AddChildToLayout(about, 5, 65);

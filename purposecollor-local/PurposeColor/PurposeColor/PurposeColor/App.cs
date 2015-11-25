@@ -19,6 +19,7 @@ namespace PurposeColor
         public static INavigation Navigator { get; set; }
         public static bool IsGoogleLogin { get; set; }
         public static bool IsFacebookLogin { get; set; }
+        public static string SelectedEmotion { get; set; }
         public static PurposeMasterDetailPage masterPage;
         static string token;
         static ApplicationSettings applicationSettings;

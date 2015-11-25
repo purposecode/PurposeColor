@@ -55,7 +55,7 @@ namespace PurposeColor
 
 
             Label secondLine = new Label();
-            secondLine.Text = "<<null>>";
+            secondLine.Text = App.SelectedEmotion;
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             secondLine.TextColor = Color.FromRgb(40, 47, 50);
             secondLine.FontSize = Device.OnPlatform(20, 22, 30);

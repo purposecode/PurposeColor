@@ -181,6 +181,7 @@ namespace PurposeColor.CustomControls
             {
                 Entry emotionsEntry = new Entry();
                 emotionsEntry.BackgroundColor = Color.White;
+                emotionsEntry.Placeholder = "Enter emotion";
                 emotionsEntry.WidthRequest =  deviceSpec.ScreenWidth * 75 / 100;
                 emotionsEntry.TextColor = Color.Black;
                 listTitle.IsVisible = false;
@@ -220,6 +221,13 @@ namespace PurposeColor.CustomControls
 					emotionsEntry.IsVisible  = false;
 					addEmotionButtonLayout.IsVisible  = false;
 
+                    string emotionValue = emotionsEntry.Text.Trim();
+                    if( emotionValue != null && emotionValue.Length == 0 )
+                    {
+                        progressBar.ShowToast("emotion is empty");
+                        progressBar.HideProgressbar();
+                        return;
+                    }
                     var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
 
                     await FeelingsPage.DownloadAllEmotions();
@@ -234,7 +242,7 @@ namespace PurposeColor.CustomControls
 				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
 				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
-                masterLayout.AddChildToLayout(emotionsEntry, 5, (100 - topYPos  - 2 ) - 7);
+                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos  - 2 ) - 7);
 				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
             }
             else

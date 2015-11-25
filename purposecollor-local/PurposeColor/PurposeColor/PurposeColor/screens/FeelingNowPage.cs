@@ -289,6 +289,7 @@ namespace PurposeColor
            emotionalPickerButton.Text = item.Name;
            selectedEmotionItem = item;
            emotionalPickerButton.TextColor = Color.Black;
+           App.SelectedEmotion = item.Name;
            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
            masterLayout.Children.Remove( pickView );
            pickView = null;

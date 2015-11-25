@@ -275,8 +275,8 @@ namespace PurposeColor.screens
 
 
 				MediaPost mediaWeb = new MediaPost();
-				mediaWeb.event_details = "final event";
-				mediaWeb.event_title = "final title";
+				mediaWeb.event_details = textInput.Text;
+				mediaWeb.event_title = titleText.Text;
 				mediaWeb.user_id = 2;
 				mediaWeb.event_image = convertedSrting;
 
@@ -421,10 +421,19 @@ namespace PurposeColor.screens
 
 		async void LocationInputTapRecognizer_Tapped (object sender, EventArgs e)
 		{
-			IProgressBar progress = DependencyService.Get<IProgressBar> ();
-			progress.ShowProgressbar ( "Getting Location.." );
 			var locator = CrossGeolocator.Current;
 			locator.DesiredAccuracy = 50;
+			IProgressBar progress = DependencyService.Get<IProgressBar> ();
+
+			if (locator.IsGeolocationEnabled) 
+			{
+				DisplayAlert ("Purpose Color", "Please turn ON location services", "Ok");
+				return;
+			}
+
+		
+			progress.ShowProgressbar ( "Getting Location.." );
+
 
 			var position = await locator.GetPositionAsync (timeoutMilliseconds: 10000);
 			App.Lattitude = position.Latitude;

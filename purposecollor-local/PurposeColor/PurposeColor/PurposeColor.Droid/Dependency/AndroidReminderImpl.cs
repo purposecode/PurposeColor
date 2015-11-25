@@ -22,14 +22,14 @@ namespace PurposeColor.Droid.Renderers
 {
     public class AndroidReminderImpl : IReminderService
     {
-        public void Remind(DateTime dateTime, string title, string message)
+        public  void Remind(DateTime startDate, DateTime endtDate, string title, string message)
         {
             ContentValues eventValues = new ContentValues();
             eventValues.Put(CalendarContract.Events.InterfaceConsts.CalendarId, 1);
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Title, " No ID purpose color event");
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Description, "No ID IReminderService trgered");
-            eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtstart, GetDateTimeMS(2015, 12, 23, 10, 0));
-            eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtend, GetDateTimeMS(2015, 12, 23, 11, 0));
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtstart, GetDateTimeMS(startDate.Year, startDate.Month, startDate.Day, startDate.Hour, startDate.Minute));
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtend, GetDateTimeMS(endtDate.Year, endtDate.Month, endtDate.Day, endtDate.Hour, endtDate.Minute));
             eventValues.Put(CalendarContract.Events.InterfaceConsts.EventTimezone, "UTC");
             eventValues.Put(CalendarContract.Events.InterfaceConsts.EventEndTimezone, "UTC");
             var uri = Forms.Context.ContentResolver.Insert(CalendarContract.Events.ContentUri, eventValues);

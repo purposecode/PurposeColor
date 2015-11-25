@@ -231,7 +231,10 @@ namespace PurposeColor
             }
             else
             {
-              //  await ServiceHelper.SaveEmotionAndEvent(  selectedEmotionItem.EmotionID,  )
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                progress.ShowProgressbar("Saving Details..");
+                await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
+                progress.HideProgressbar();
                 Navigation.PushAsync(new FeelingsSecondPage());
             }
             

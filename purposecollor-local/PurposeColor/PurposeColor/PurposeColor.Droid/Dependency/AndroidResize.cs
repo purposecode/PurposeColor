@@ -19,10 +19,18 @@ namespace PurposeColor.Droid.Dependency
 {
     public class AndroidResize : IResize
     {
-        public void Resize(byte[] imageData, float width, float height)
+        public byte[] Resize(byte[] imageData, float width, float height)
         {
-            ResizeImageAndroid(imageData, width, height);
+            return ResizeImageAndroid(imageData, width, height);
         }
+
+        public MemoryStream CompessImage(int ratio, MemoryStream ms)
+        {
+            MemoryStream compressedStream = new MemoryStream();
+            compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, 50);
+            return compressedStream;
+        }
+
 
         public static byte[] ResizeImageAndroid(byte[] imageData, float width, float height)
         {

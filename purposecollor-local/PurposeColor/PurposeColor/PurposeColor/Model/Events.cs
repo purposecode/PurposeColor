@@ -40,4 +40,15 @@ namespace PurposeColor.Model
         public string text { get; set; }
         public List<EventDetails> resultarray { get; set; }
     }
+
+
+    public class TestJSon
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+        public string outputstring { get; set; }
+    }
+
+
+
 }

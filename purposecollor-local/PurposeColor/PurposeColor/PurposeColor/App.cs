@@ -25,6 +25,8 @@ namespace PurposeColor
 		public static double Lattitude;
 		public static double Longitude;
         public static string CurrentAddress { get; set; }
+        public static string SelectedActionStartDate { get; set; }
+        public static string SelectedActionEndDate { get; set; }
         static ApplicationSettings applicationSettings;
         public static List<CustomListViewItem> goalsListSource;
         public static List<CustomListViewItem> actionsListSource;

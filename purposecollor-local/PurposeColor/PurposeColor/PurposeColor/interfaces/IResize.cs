@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ namespace PurposeColor.interfaces
 {
     public interface IResize
     {
-        void Resize(byte[] imageData, float width, float height);
+        byte[] Resize(byte[] imageData, float width, float height);
+
+        MemoryStream CompessImage(int ratio, MemoryStream ms);
     }
 }

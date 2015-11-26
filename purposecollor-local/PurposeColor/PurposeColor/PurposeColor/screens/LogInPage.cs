@@ -132,7 +132,7 @@ namespace PurposeColor.screens
 			//Navigation.PushAsync( new TestScreen() );
 
             IReminderService reminder = DependencyService.Get<IReminderService>();
-            reminder.Remind(DateTime.Now, "", "");
+            reminder.Remind(DateTime.Now,DateTime.Now, "", "");
 
 
 			#region FOR DB testing

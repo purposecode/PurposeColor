@@ -58,6 +58,7 @@ namespace PurposeColor.iOS.Renderers
                     textView.TextColor = UIColor.Black;
                 }
                 textView.BecomeFirstResponder();
+                textView.BackgroundColor = UIColor.White;
                 UIView view = getRootSuperView(textView);
                 CoreGraphics.CGRect rect = view.Frame;
                 rect.Y -= 80;
@@ -81,6 +82,7 @@ namespace PurposeColor.iOS.Renderers
                 }
                 textView.ResignFirstResponder();
                 UIView view = getRootSuperView(textView);
+                textView.BackgroundColor = UIColor.White;
                 CoreGraphics.CGRect rect = view.Frame;
                 rect.Y += 80;
                 view.Frame = rect;

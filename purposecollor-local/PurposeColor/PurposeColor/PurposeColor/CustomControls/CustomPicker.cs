@@ -179,7 +179,7 @@ namespace PurposeColor.CustomControls
         {
             if (pageTitle == Constants.SELECT_EMOTIONS)
             {
-                Entry emotionsEntry = new Entry();
+                CustomEntry emotionsEntry = new CustomEntry();
                 emotionsEntry.BackgroundColor = Color.White;
                 emotionsEntry.Placeholder = "Enter emotion";
                 emotionsEntry.WidthRequest =  deviceSpec.ScreenWidth * 75 / 100;

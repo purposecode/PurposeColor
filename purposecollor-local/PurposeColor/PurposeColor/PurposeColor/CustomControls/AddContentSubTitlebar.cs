@@ -49,7 +49,7 @@ namespace PurposeColor.CustomControls
             NextButton = new Button();
             NextButton.Text = "Next";
             NextButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            NextButton.FontSize = Device.OnPlatform(12, 12, 18);
+            NextButton.FontSize = Device.OnPlatform(12, 12, 17);
             NextButton.TextColor = Color.White;
             NextButton.BackgroundColor = Color.Transparent;
             NextButton.BorderColor = Color.Transparent;

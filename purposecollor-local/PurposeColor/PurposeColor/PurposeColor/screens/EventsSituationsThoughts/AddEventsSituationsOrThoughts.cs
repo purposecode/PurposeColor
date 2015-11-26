@@ -26,8 +26,8 @@ namespace PurposeColor.screens
 		CustomLayout masterLayout;
 		StackLayout TopTitleBar;
 		PurposeColorBlueSubTitleBar subTitleBar;
-		CustomEditor textInput;
-		Entry titleText;
+		CustomEditor eventDescription;
+        CustomEntry eventTitle;
 		StackLayout textInputContainer;
 		StackLayout audioInputStack;
 		Image cameraInput;
@@ -90,7 +90,7 @@ namespace PurposeColor.screens
 			subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
 			#endregion
 
-			titleText = new Entry
+            eventTitle = new CustomEntry
 			{
 				VerticalOptions = LayoutOptions.StartAndExpand,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -102,11 +102,11 @@ namespace PurposeColor.screens
 					//  FontFamily = Constants.HELVERTICA_NEUE_LT_STD
 			};
 
-			masterLayout.AddChildToLayout(titleText, 3, 11);
+			masterLayout.AddChildToLayout(eventTitle, 3, 11);
 
 			#region TEXT INPUT CONTROL
 
-			textInput = new CustomEditor
+			eventDescription = new CustomEditor
 			{
 				VerticalOptions = LayoutOptions.StartAndExpand,
 				HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -133,12 +133,12 @@ namespace PurposeColor.screens
 				BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
 				Padding = 1,
 				Spacing = 0,
-				Children = { textInput }
+				Children = { eventDescription }
 			};
 
 			//int devWidth = (int)deviceSpec.ScreenWidth;
 			int textInputWidth = (int)(devWidth * .92); // 92% of screen
-			textInput.WidthRequest = textInputWidth;
+			eventDescription.WidthRequest = textInputWidth;
 
 			#endregion
 
@@ -274,8 +274,8 @@ namespace PurposeColor.screens
 				string convertedSrting = Convert.ToBase64String(ms.ToArray());
 
 				MediaPost mediaWeb = new MediaPost();
-				mediaWeb.event_details = textInput.Text;
-				mediaWeb.event_title = titleText.Text;
+				mediaWeb.event_details = eventDescription.Text;
+				mediaWeb.event_title = eventTitle.Text;
 				mediaWeb.user_id = 2;
 				mediaWeb.event_image = convertedSrting;
 
@@ -442,7 +442,7 @@ namespace PurposeColor.screens
 				Children = { textInputContainer, iconContainer }
 			};
 
-			int iconY = (int)textInput.Y + (int)textInput.Height + 5;
+			int iconY = (int)eventDescription.Y + (int)eventDescription.Height + 5;
 			masterLayout.AddChildToLayout(textinputAndIconsHolder, 3, 21);
 
 			#endregion
@@ -473,11 +473,11 @@ namespace PurposeColor.screens
 
 			ILocation loc = DependencyService.Get<ILocation> ();
 			var address = await loc.GetLocation ( position.Latitude, position.Longitude );
-             if( App.CurrentAddress!= null && textInput.Text.Contains(App.CurrentAddress))
+             if( App.CurrentAddress!= null && eventDescription.Text.Contains(App.CurrentAddress))
              {
-                textInput.Text = textInput.Text.Replace(App.CurrentAddress, "");
+                eventDescription.Text = eventDescription.Text.Replace(App.CurrentAddress, "");
              }
-			textInput.Text = textInput.Text + address;
+			eventDescription.Text = eventDescription.Text + address;
             App.CurrentAddress = address;
 			progress.HideProgressbar ();
 		}
@@ -490,15 +490,15 @@ namespace PurposeColor.screens
 			{
 				int nIndex = 0;
 				string preText = " with ";
-				if (textInput.Text != null)
+				if (eventDescription.Text != null)
 				{
-					nIndex = textInput.Text.IndexOf(name);
-					preText = textInput.Text.IndexOf("with") <= 0 ? " with " : ", ";
+					nIndex = eventDescription.Text.IndexOf(name);
+					preText = eventDescription.Text.IndexOf("with") <= 0 ? " with " : ", ";
 				}
 
 				if (nIndex <= 0)
 				{
-					textInput.Text = textInput.Text + preText + name;
+					eventDescription.Text = eventDescription.Text + preText + name;
 				}
 
 			}
@@ -512,27 +512,27 @@ namespace PurposeColor.screens
 		{
            
 
-			if (string.IsNullOrWhiteSpace(textInput.Text)|| string.IsNullOrWhiteSpace(titleText.Text))
+			if (string.IsNullOrWhiteSpace(eventDescription.Text)|| string.IsNullOrWhiteSpace(eventTitle.Text))
 			{
 				DisplayAlert(pageTitle, "value cannot be empty", "ok");
 			}
 			else
 			{
 				string input = pageTitle;
-				CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
+				CustomListViewItem item = new CustomListViewItem { Name = eventDescription.Text };
 				if (input == Constants.ADD_ACTIONS)
 				{
                     IReminderService reminder = DependencyService.Get<IReminderService>();
-                    reminder.Remind( DateTime.UtcNow.AddMinutes( 1 ), DateTime.UtcNow.AddMinutes( 2 ), "Purpose Color Event", titleText.Text );
+                    reminder.Remind( DateTime.UtcNow.AddMinutes( 1 ), DateTime.UtcNow.AddMinutes( 2 ), "Purpose Color Event", eventTitle.Text );
 
                     ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                    notfiy.ShowNotification("Purpose Color - Action Created", titleText.Text);
+                    notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
 					//App.actionsListSource.Add(item);
 				}
 				else if (input == Constants.ADD_EVENTS)
 				{
 					UserEvent newEvent = new UserEvent();
-					newEvent.EventName = textInput.Text;
+					newEvent.EventName = eventDescription.Text;
 
 					// save event to local db and send to API.
 					//App.eventsListSource.Add(item);
@@ -558,7 +558,7 @@ namespace PurposeColor.screens
 			this.masterLayout = null;
 			this.TopTitleBar = null;
 			this.subTitleBar = null;
-			this.textInput = null;
+			this.eventDescription = null;
 			this.textInputContainer = null;
 			this.audioInputStack = null;
 			this.cameraInput = null;
@@ -573,7 +573,7 @@ namespace PurposeColor.screens
 			this.iconContainer = null;
 			this.textinputAndIconsHolder = null;
 			this.audioRecorder = null;
-			this.titleText = null;
+			this.eventTitle = null;
 			this.contacts = null;
 		}
 	}

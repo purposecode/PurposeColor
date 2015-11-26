@@ -24,8 +24,8 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
             nativeTextView = Control;
-            nativeTextView.SetBackgroundColor( Android.Graphics.Color.LightSteelBlue );
-
+			nativeTextView.SetBackgroundColor( Android.Graphics.Color.White );
+			//nativeTextView.TextSize = 15;
         }
     }
 }

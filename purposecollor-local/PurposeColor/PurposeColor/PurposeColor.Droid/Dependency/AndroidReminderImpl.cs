@@ -26,8 +26,8 @@ namespace PurposeColor.Droid.Renderers
         {
             ContentValues eventValues = new ContentValues();
             eventValues.Put(CalendarContract.Events.InterfaceConsts.CalendarId, 1);
-            eventValues.Put(CalendarContract.Events.InterfaceConsts.Title, " No ID purpose color event");
-            eventValues.Put(CalendarContract.Events.InterfaceConsts.Description, "No ID IReminderService trgered");
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.Title, title);
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.Description, message);
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtstart, GetDateTimeMS(startDate.Year, startDate.Month, startDate.Day, startDate.Hour, startDate.Minute));
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtend, GetDateTimeMS(endtDate.Year, endtDate.Month, endtDate.Day, endtDate.Hour, endtDate.Minute));
             eventValues.Put(CalendarContract.Events.InterfaceConsts.EventTimezone, "UTC");

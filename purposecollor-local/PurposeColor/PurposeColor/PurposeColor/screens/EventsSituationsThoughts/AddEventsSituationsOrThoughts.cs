@@ -48,7 +48,7 @@ namespace PurposeColor.screens
 		string folder;
 		string path;
 		List<CustomListViewItem> contacts;
-
+        IDeviceSpec deviceSpec;
 		#endregion
 
 		public AddEventsSituationsOrThoughts(string title)
@@ -56,7 +56,7 @@ namespace PurposeColor.screens
 			NavigationPage.SetHasNavigationBar(this, false);
 			masterLayout = new CustomLayout();
 			audioRecorder = DependencyService.Get<PurposeColor.interfaces.IAudioRecorder>();
-			IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+		    deviceSpec = DependencyService.Get<IDeviceSpec>();
 			masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
 			pageTitle = title;
 			int devWidth = (int)deviceSpec.ScreenWidth;
@@ -510,6 +510,7 @@ namespace PurposeColor.screens
 
 		void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
 		{
+           
 
 			if (string.IsNullOrWhiteSpace(textInput.Text)|| string.IsNullOrWhiteSpace(titleText.Text))
 			{
@@ -521,7 +522,12 @@ namespace PurposeColor.screens
 				CustomListViewItem item = new CustomListViewItem { Name = textInput.Text };
 				if (input == Constants.ADD_ACTIONS)
 				{
-					App.actionsListSource.Add(item);
+                    IReminderService reminder = DependencyService.Get<IReminderService>();
+                    reminder.Remind( DateTime.UtcNow.AddMinutes( 1 ), DateTime.UtcNow.AddMinutes( 2 ), "Purpose Color Event", titleText.Text );
+
+                    ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                    notfiy.ShowNotification("Purpose Color - Action Created", titleText.Text);
+					//App.actionsListSource.Add(item);
 				}
 				else if (input == Constants.ADD_EVENTS)
 				{
@@ -529,11 +535,11 @@ namespace PurposeColor.screens
 					newEvent.EventName = textInput.Text;
 
 					// save event to local db and send to API.
-					App.eventsListSource.Add(item);
+					//App.eventsListSource.Add(item);
 				}
 				else if (input == Constants.ADD_GOALS)
 				{
-					App.goalsListSource.Add(item);
+					//App.goalsListSource.Add(item);
 				}
 
 				Navigation.PopAsync();

@@ -327,6 +327,137 @@ namespace PurposeColor.Service
         }
 
 
+        public static async Task<bool> AddEvent(  EventDetails eventDetails )
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+
+                string result = String.Empty;
+
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=eventinsertarray";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                for (int index = 0; index < App.MediaArray.Count; index++)
+                {
+                    int imgIndex = index + 1;
+                    content.Add(new StringContent(App.MediaArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
+                    content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                }
+
+
+                content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "event_image_count");
+                content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
+                content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
+                   if( rootobject.code == "200" )
+                   {
+                       client.Dispose();
+                       App.ExtentionArray.Clear();
+                       App.MediaArray.Clear();
+                       return true;
+                   }
+
+                }
+                else
+                {
+                    client.Dispose();
+                    return false;
+                }
+
+                client.Dispose();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
+
+        public static async Task<bool> AddGoal(EventDetails eventDetails)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+
+                string result = String.Empty;
+
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=eventinsertarray";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                for (int index = 0; index < App.MediaArray.Count; index++)
+                {
+                    int imgIndex = index + 1;
+                    content.Add(new StringContent(App.MediaArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
+                    content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                }
+
+
+                content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "event_image_count");
+                content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
+                content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
+                    if (rootobject.code == "200")
+                    {
+                        client.Dispose();
+                        App.ExtentionArray.Clear();
+                        App.MediaArray.Clear();
+                        return true;
+                    }
+
+                }
+                else
+                {
+                    client.Dispose();
+                    return false;
+                }
+
+                client.Dispose();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+
         public static async Task<bool> SaveEmotionAndEvent(string emotionID, string eventID, string userID)
         {
             if (!CrossConnectivity.Current.IsConnected)

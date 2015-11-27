@@ -16,6 +16,9 @@ using System.Linq;
 using Geolocator.Plugin;
 using PurposeColor.interfaces;
 using System.Net.Http;
+using System.Text;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace PurposeColor.screens
 {
@@ -228,7 +231,16 @@ namespace PurposeColor.screens
 					else
 					{
 						isAudioRecording = false;
-						audioRecorder.StopRecording();
+						MemoryStream stream = audioRecorder.StopRecording();
+
+                        Byte[] inArray = stream.ToArray();
+                        Char[] outArray = new Char[(int)(stream.ToArray().Length * 1.34)];
+                        Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                        string test2 = new string(outArray);
+
+                        App.ExtentionArray.Add("3gpp");
+                        App.MediaArray.Add(test2);
+                   
 						DisplayAlert("Audio recording", "Audio saved to gallery.", "ok");
 					}
 				}
@@ -269,18 +281,14 @@ namespace PurposeColor.screens
 
 				var file = await CrossMedia.Current.PickPhotoAsync();
 
+                if (file == null)
+                    return;
+
 				MemoryStream ms = new MemoryStream();
 				file.GetStream().CopyTo(ms);
-				string convertedSrting = Convert.ToBase64String(ms.ToArray());
+                ms.Position = 0;
 
-				MediaPost mediaWeb = new MediaPost();
-				mediaWeb.event_details = eventDescription.Text;
-				mediaWeb.event_title = eventTitle.Text;
-				mediaWeb.user_id = 2;
-				mediaWeb.event_image = convertedSrting;
-
-
-				var test = await ServiceHelper.PostMedia(mediaWeb);
+                AddFileToMediaArray( ms, file.Path );
 
 			};
 
@@ -508,10 +516,9 @@ namespace PurposeColor.screens
 			pickView = null;
 		}
 
-		void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
+		async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
 		{
-           
-
+          
 			if (string.IsNullOrWhiteSpace(eventDescription.Text)|| string.IsNullOrWhiteSpace(eventTitle.Text))
 			{
 				DisplayAlert(pageTitle, "value cannot be empty", "ok");
@@ -531,11 +538,19 @@ namespace PurposeColor.screens
 				}
 				else if (input == Constants.ADD_EVENTS)
 				{
-					UserEvent newEvent = new UserEvent();
-					newEvent.EventName = eventDescription.Text;
+                    EventDetails details = new EventDetails();
+                    details.event_title = eventTitle.Text;
+                    details.event_details = eventDescription.Text;
+                    details.user_id = "2";
 
-					// save event to local db and send to API.
-					//App.eventsListSource.Add(item);
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    progress.ShowProgressbar( "Creating Event.." );
+                    if( !await ServiceHelper.AddEvent(details))
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                    }
+                    progress.HideProgressbar();
+					
 				}
 				else if (input == Constants.ADD_GOALS)
 				{
@@ -550,6 +565,31 @@ namespace PurposeColor.screens
 		{
 			Navigation.PopAsync();
 		}
+
+
+        private void AddFileToMediaArray( MemoryStream ms, string path )
+        {
+            MediaPost mediaWeb = new MediaPost();
+            mediaWeb.event_details = eventDescription.Text;
+            mediaWeb.event_title = eventTitle.Text;
+            mediaWeb.user_id = 2;
+
+            string imgType = System.IO.Path.GetExtension(path);
+            imgType = imgType.Replace(".", "");
+
+            MemoryStream compressedStream = new MemoryStream();
+            IResize resize = DependencyService.Get<IResize>();
+            compressedStream = resize.CompessImage(50, ms);
+
+            Byte[] inArray = compressedStream.ToArray();
+            Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+            Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+            string test2 = new string(outArray);
+
+            App.ExtentionArray.Add(imgType);
+            App.MediaArray.Add(test2);
+        }
+
 
 		public void Dispose()
 		{

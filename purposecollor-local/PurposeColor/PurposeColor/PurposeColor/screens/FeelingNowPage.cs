@@ -73,18 +73,15 @@ namespace PurposeColor
             howYouAreFeeling2.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
             howYouAreFeeling2.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
 
-
-
-
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
             emotionalPickerButton.ImageName = "select_box_whitebg.png";
             emotionalPickerButton.Text = "Select Emotion";
-            emotionalPickerButton.FontSize = 18;
+            emotionalPickerButton.FontSize = 17;
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             emotionalPickerButton.TextColor = Color.Gray;
             emotionalPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            emotionalPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //emotionalPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
@@ -93,13 +90,11 @@ namespace PurposeColor
             eventPickerButton.Text = "Events, Situation & Thoughts";
             eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            eventPickerButton.FontSize = 18;
+            eventPickerButton.FontSize = 17;
             eventPickerButton.TextColor = Color.Gray;
             eventPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            eventPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //eventPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             eventPickerButton.Clicked += OnEventPickerButtonClicked;
-
-
 
             about = new Label();
             about.IsVisible = false;
@@ -275,7 +270,7 @@ namespace PurposeColor
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 50, Constants.ADD_EVENTS, true, true);
+            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 65, Constants.ADD_EVENTS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";

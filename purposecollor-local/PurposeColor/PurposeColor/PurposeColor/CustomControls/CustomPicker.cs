@@ -17,7 +17,27 @@ namespace PurposeColor.CustomControls
 
     public class CustomListViewItem
     {
-        public string Name { get; set; }
+        string name;
+
+        public string Name
+        {
+            get { return name; }
+            set {
+                string trimmedName = string.Empty;
+                if (value.Length > 20)
+                {
+                    trimmedName = value.Substring(0, 28);
+                    trimmedName += "...";
+                }
+                else
+                {
+                    trimmedName = value;
+                }
+
+                name = trimmedName;
+            }
+        }
+
         public string EmotionID { get; set; }
         public string EventID { get; set; }
         public int SliderValue { get; set; }
@@ -39,7 +59,7 @@ namespace PurposeColor.CustomControls
             name.TextColor = Color.Black;
             name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             name.FontSize = 18;
-
+            
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth * 60 * 100;
             divider.HeightRequest = 1;
@@ -79,6 +99,17 @@ namespace PurposeColor.CustomControls
             masterLayout.BackgroundColor = Color.Transparent;
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
+            string trimmedPageTitle = string.Empty;
+            if (title.Length > 20)
+            {
+                trimmedPageTitle = title.Substring(0, 25);
+                trimmedPageTitle += "...";
+            }
+            else
+            {
+                trimmedPageTitle = title;
+            }
+
             pageTitle = title;
             topYPos = topY;
 
@@ -101,7 +132,7 @@ namespace PurposeColor.CustomControls
 
             StackLayout listContainer = new StackLayout();
             listContainer.WidthRequest = deviceSpec.ScreenWidth * 96 / 100;
-            listContainer.HeightRequest = deviceSpec.ScreenHeight * topY / 100;
+            listContainer.HeightRequest = (deviceSpec.ScreenHeight * topY / 100) - 20;
 
 
             StackLayout listHeader = new StackLayout();
@@ -110,7 +141,7 @@ namespace PurposeColor.CustomControls
             listHeader.BackgroundColor = Color.FromRgb( 30, 126, 210 );
 
             listTitle = new Label();
-            listTitle.Text = title;
+            listTitle.Text = trimmedPageTitle;
             listTitle.TextColor = Color.White;
             listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             listTitle.FontSize = 17;
@@ -147,7 +178,18 @@ namespace PurposeColor.CustomControls
             listView.Opacity = 1;
             listView.BackgroundColor = Constants.LIST_BG_COLOR;
             listView.WidthRequest = deviceSpec.ScreenWidth * 60;
-            listContainer.Children.Add( listView );
+            StackLayout listViewSpacer = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                Padding = new Thickness(5,0,5,5),
+                BackgroundColor = Constants.LIST_BG_COLOR,//Color.White,
+                Children = { listView }
+            };
+            listViewSpacer.WidthRequest = deviceSpec.ScreenWidth * 95 / 100;
+            listViewSpacer.HeightRequest = (deviceSpec.ScreenHeight * topY / 100)-20;
+
+
+            listContainer.Children.Add( listViewSpacer );
 
 
 
@@ -159,7 +201,7 @@ namespace PurposeColor.CustomControls
             if (titelBarRequired)
             {
                 masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
-                masterLayout.AddChildToLayout(listTitle, 5, (100 - topY - 1) - 7 );
+                masterLayout.AddChildToLayout(listTitle, 7, (100 - topY - 1) - 7 );
                 if (addButtonRequired)
                 {
 

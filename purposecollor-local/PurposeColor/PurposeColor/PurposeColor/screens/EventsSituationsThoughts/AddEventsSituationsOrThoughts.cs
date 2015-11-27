@@ -205,10 +205,10 @@ namespace PurposeColor.screens
 								Name = fileName
 							});
 
-						//if (file == null)
-						//{
-						//    DisplayAlert("Alert", "Image could not be saved, please try again later", "ok");
-						//}
+                        if (file == null)
+                        {
+                            DisplayAlert("Alert", "Image could not be saved, please try again later", "ok");
+                        }
 					}
 				}
 				catch (System.Exception ex)

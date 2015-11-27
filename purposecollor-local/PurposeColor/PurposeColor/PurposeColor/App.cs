@@ -32,6 +32,8 @@ namespace PurposeColor
         public static List<CustomListViewItem> actionsListSource;
         public static List<CustomListViewItem> eventsListSource;
         public static List<CustomListViewItem> emotionsListSource;
+        public static List<string> gallleryArray { get; set; }
+        public static List<string> ExtentionArray { get; set; }
         public static ApplicationSettings Settings
         {
             get
@@ -47,6 +49,8 @@ namespace PurposeColor
 
         public App()
         {
+            gallleryArray = new List<string>();
+            ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
             MenuPage menuPage = new MenuPage();
             masterPage = new PurposeMasterDetailPage();

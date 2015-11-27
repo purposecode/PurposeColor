@@ -16,6 +16,9 @@ using System.Linq;
 using Geolocator.Plugin;
 using PurposeColor.interfaces;
 using System.Net.Http;
+using System.Text;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace PurposeColor.screens
 {
@@ -271,16 +274,28 @@ namespace PurposeColor.screens
 
 				MemoryStream ms = new MemoryStream();
 				file.GetStream().CopyTo(ms);
-				string convertedSrting = Convert.ToBase64String(ms.ToArray());
+                ms.Position = 0;
 
 				MediaPost mediaWeb = new MediaPost();
 				mediaWeb.event_details = eventDescription.Text;
 				mediaWeb.event_title = eventTitle.Text;
 				mediaWeb.user_id = 2;
-				mediaWeb.event_image = convertedSrting;
 
+                string imgType = System.IO.Path.GetExtension(file.Path);
 
-				var test = await ServiceHelper.PostMedia(mediaWeb);
+                imgType = imgType.Replace(".", "");
+
+                 MemoryStream compressedStream = new MemoryStream();
+                 IResize resize = DependencyService.Get<IResize>();
+                 compressedStream = resize.CompessImage(50, ms);
+
+                Byte[] inArray = compressedStream.ToArray();
+                Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+
+                App.ExtentionArray.Add(imgType);
+                App.gallleryArray.Add(test2);
 
 			};
 
@@ -508,10 +523,68 @@ namespace PurposeColor.screens
 			pickView = null;
 		}
 
-		void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
+		async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
 		{
-           
 
+            IProgressBar progress = DependencyService.Get<IProgressBar>();
+            try
+            {
+
+                progress.ShowProgressbar("Media uploading...");
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 20, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=eventinsertarray";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                for (int index = 0; index < App.gallleryArray.Count; index++)
+                {
+                    int imgIndex = index + 1;
+                    content.Add(new StringContent(App.gallleryArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
+                    content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                }
+
+
+                /*  content.Add(new StringContent(App.gallleryArray[0] , Encoding.UTF8), "event_image1");
+                  content.Add(new StringContent("jpeg", Encoding.UTF8), "file_type");
+
+                  content.Add(new StringContent(App.gallleryArray[1], Encoding.UTF8), "event_image2");
+                  content.Add(new StringContent("jpeg", Encoding.UTF8), "file_type");*/
+
+
+                content.Add(new StringContent(App.gallleryArray.Count.ToString(), Encoding.UTF8), "event_image_count");
+                content.Add(new StringContent("event_titleeeee", Encoding.UTF8), "event_title");
+                content.Add(new StringContent("2", Encoding.UTF8), "user_id");
+
+                content.Add(new StringContent("event_detailseeee", Encoding.UTF8), "event_details");
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
+
+                    string test = "test";
+
+                }
+
+                progress.HideProgressbar();
+
+            }
+            catch (Exception ex)
+            {
+                progress.HideProgressbar();
+                DisplayAlert(ex.Message, ex.Message, "ok");
+            }
+
+
+
+
+
+            return;
 			if (string.IsNullOrWhiteSpace(eventDescription.Text)|| string.IsNullOrWhiteSpace(eventTitle.Text))
 			{
 				DisplayAlert(pageTitle, "value cannot be empty", "ok");

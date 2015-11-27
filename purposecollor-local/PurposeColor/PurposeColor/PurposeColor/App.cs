@@ -32,7 +32,7 @@ namespace PurposeColor
         public static List<CustomListViewItem> actionsListSource;
         public static List<CustomListViewItem> eventsListSource;
         public static List<CustomListViewItem> emotionsListSource;
-        public static List<string> gallleryArray { get; set; }
+        public static List<string> MediaArray { get; set; }
         public static List<string> ExtentionArray { get; set; }
         public static ApplicationSettings Settings
         {
@@ -49,7 +49,7 @@ namespace PurposeColor
 
         public App()
         {
-            gallleryArray = new List<string>();
+            MediaArray = new List<string>();
             ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
             MenuPage menuPage = new MenuPage();

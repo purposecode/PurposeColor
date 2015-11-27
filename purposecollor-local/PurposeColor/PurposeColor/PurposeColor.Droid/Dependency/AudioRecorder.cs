@@ -77,6 +77,7 @@ namespace PurposeColor.Droid.Dependency
                 _recorder.SetOutputFile(path);
                 _recorder.Prepare();
                 _recorder.Start();
+          
                 return true;
             }
             catch (System.Exception ex)
@@ -88,7 +89,7 @@ namespace PurposeColor.Droid.Dependency
             }
         }
 
-        public void StopRecording()
+        public MemoryStream StopRecording()
         {
             try
             {
@@ -96,10 +97,21 @@ namespace PurposeColor.Droid.Dependency
                 _recorder.Reset();
                 _recorder.Release();
                 _recorder = null;
+
+              //  _reader.Close();
+
+                MemoryStream memStream = new MemoryStream();
+                using (FileStream fs = File.OpenRead(path))
+                {
+                    fs.CopyTo(memStream);
+                }
+                return memStream;
             }
             catch (Exception ex)
             {
                 var test = ex.ToString();
+                return null;
+
             }
         }
 

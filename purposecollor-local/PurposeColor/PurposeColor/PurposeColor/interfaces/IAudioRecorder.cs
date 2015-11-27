@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 
 namespace PurposeColor.interfaces
 {
 	public interface IAudioRecorder
 	{
 		bool RecordAudio();
-		void StopRecording();
+        MemoryStream StopRecording();
 		void PlayAudio();
 	}
 }

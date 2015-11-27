@@ -28,6 +28,10 @@ namespace PurposeColor
 
         public const string ADD_ACTIONS = "Add Supporting Actions";
 
+        public const string ALERT_TITLE = "Purpose Color";
+        public const string ALERT_OK = "Ok";
+        public const string NETWORK_ERROR_MSG = "Network error occured.";
+
         public const int PICKER_ANIMATION_OFFSET = 40;
 
         public static Color MENU_BG_COLOR = Color.FromRgb(255, 255, 255);

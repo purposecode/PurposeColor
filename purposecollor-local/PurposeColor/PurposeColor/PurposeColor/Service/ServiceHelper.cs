@@ -256,7 +256,7 @@ namespace PurposeColor.Service
                 return false;
             }
 
-            string url = "http://purposecodes.com/pc/api.php?action=eventinsert";// Constants.SERVICE_BASE_URL;
+            string url = "http://purposecodes.com/pc/api.php?action=eventinsert";
             string result = String.Empty;
 
             using (var client = new HttpClient())
@@ -322,7 +322,7 @@ namespace PurposeColor.Service
             catch (Exception ex)
             {
                 
-                throw;
+                return false;
             }
         }
 
@@ -344,7 +344,7 @@ namespace PurposeColor.Service
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
 
-                var url = "api.php?action=eventinsertarray";
+                var url = "api.php?action=eventinsert";
 
                 MultipartFormDataContent content = new MultipartFormDataContent();
 
@@ -356,10 +356,13 @@ namespace PurposeColor.Service
                 }
 
 
-                content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "event_image_count");
+                content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
                 content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
                 content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
                 content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+                content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
 
                 HttpResponseMessage response = await client.PostAsync(url, content);
 

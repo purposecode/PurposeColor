@@ -52,6 +52,9 @@ namespace PurposeColor.screens
 		string path;
 		List<CustomListViewItem> contacts;
         IDeviceSpec deviceSpec;
+        string lattitude;
+        string longitude;
+        string address;
 		#endregion
 
 		public AddEventsSituationsOrThoughts(string title)
@@ -174,6 +177,7 @@ namespace PurposeColor.screens
 				Spacing = 0,
 				Children = { cameraInput, new Label { Text = "Camera", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
 			};
+            cameraInputStack.ClassId = "camera";
 
 			#region CAMERA TAP RECOGNIZER
 			CameraTapRecognizer = new TapGestureRecognizer();
@@ -182,6 +186,13 @@ namespace PurposeColor.screens
 			{
 				try
 				{
+                    StackLayout send = s as StackLayout;
+                    MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
+                    chooser.ClassId = "mediachooser";
+                    masterLayout.AddChildToLayout(chooser, 0, 0);
+                    return;
+
+
 					if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
 					{
 
@@ -266,6 +277,7 @@ namespace PurposeColor.screens
 				Spacing = 0,
 				Children = { galleryInput, new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
 			};
+            galleryInputStack.ClassId = "gallery";
 
 			#region GALLERY  TAP RECOGNIZER
 
@@ -273,7 +285,15 @@ namespace PurposeColor.screens
 			galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
 			galleryInputStackTapRecognizer.Tapped += async (s, e) =>
 			{
-				if (!CrossMedia.Current.IsPickPhotoSupported)
+                StackLayout send = s as StackLayout;
+                MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
+                chooser.ClassId = "mediachooser";
+                masterLayout.AddChildToLayout(chooser, 0, 0);
+                return;
+
+
+
+			/*	if (!CrossMedia.Current.IsPickPhotoSupported)
 				{
 					DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
 					return;
@@ -288,7 +308,7 @@ namespace PurposeColor.screens
 				file.GetStream().CopyTo(ms);
                 ms.Position = 0;
 
-                AddFileToMediaArray( ms, file.Path );
+                AddFileToMediaArray( ms, file.Path );*/
 
 			};
 
@@ -460,35 +480,53 @@ namespace PurposeColor.screens
 
 		async void LocationInputTapRecognizer_Tapped (object sender, EventArgs e)
 		{
-			var locator = CrossGeolocator.Current;
-			locator.DesiredAccuracy = 50;
-			IProgressBar progress = DependencyService.Get<IProgressBar> ();
+            IProgressBar progress = DependencyService.Get<IProgressBar>();
+            try
+            {
+                var locator = CrossGeolocator.Current;
+                locator.DesiredAccuracy = 50;
 
-			if (!locator.IsGeolocationEnabled) 
-			{
-				DisplayAlert ("Purpose Color", "Please turn ON location services", "Ok");
-				return;
-			}
+                if (!locator.IsGeolocationEnabled)
+                {
+                    DisplayAlert("Purpose Color", "Please turn ON location services", "Ok");
+                    return;
+                }
 
-		
-			progress.ShowProgressbar ( "Getting Location.." );
 
-            locator.StartListening(1, 100);
-			var position = await locator.GetPositionAsync (timeoutMilliseconds: 10000);
-			App.Lattitude = position.Latitude;
-			App.Longitude = position.Longitude;
-            locator.StopListening();
+                progress.ShowProgressbar("Getting Location..");
 
-			ILocation loc = DependencyService.Get<ILocation> ();
-			var address = await loc.GetLocation ( position.Latitude, position.Longitude );
-             if( App.CurrentAddress!= null && eventDescription.Text.Contains(App.CurrentAddress))
-             {
-                eventDescription.Text = eventDescription.Text.Replace(App.CurrentAddress, "");
-             }
-			eventDescription.Text = eventDescription.Text + address;
-            App.CurrentAddress = address;
-			progress.HideProgressbar ();
+                locator.StartListening(1, 100);
+                var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                App.Lattitude = position.Latitude;
+                App.Longitude = position.Longitude;
+                lattitude = position.Latitude.ToString();
+                longitude = position.Longitude.ToString();
+                locator.StopListening();
+
+                ILocation loc = DependencyService.Get<ILocation>();
+                var address = await loc.GetLocation(position.Latitude, position.Longitude);
+                if (App.CurrentAddress != null && eventDescription.Text.Contains(App.CurrentAddress))
+                {
+                    eventDescription.Text = eventDescription.Text.Replace(App.CurrentAddress, "");
+                }
+                eventDescription.Text = eventDescription.Text + address;
+                App.CurrentAddress = address;
+                progress.HideProgressbar();
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Location service failed.", Constants.ALERT_OK);
+                progress.HideProgressbar();
+                throw;
+            }
+			
 		}
+
+      
+        void imageButton_Clicked(object sender, EventArgs e)
+        {
+            
+        }
 
 		private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
@@ -542,6 +580,9 @@ namespace PurposeColor.screens
                     details.event_title = eventTitle.Text;
                     details.event_details = eventDescription.Text;
                     details.user_id = "2";
+                    details.location_latitude = lattitude;
+                    details.location_longitude = longitude;
+                    details.location_address = App.CurrentAddress;
 
                     IProgressBar progress = DependencyService.Get<IProgressBar>();
                     progress.ShowProgressbar( "Creating Event.." );
@@ -567,7 +608,7 @@ namespace PurposeColor.screens
 		}
 
 
-        private void AddFileToMediaArray( MemoryStream ms, string path )
+        public void AddFileToMediaArray( MemoryStream ms, string path, bool isImage )
         {
             MediaPost mediaWeb = new MediaPost();
             mediaWeb.event_details = eventDescription.Text;
@@ -576,18 +617,30 @@ namespace PurposeColor.screens
 
             string imgType = System.IO.Path.GetExtension(path);
             imgType = imgType.Replace(".", "");
+            if( isImage )
+            {
+ 
+                MemoryStream compressedStream = new MemoryStream();
+                IResize resize = DependencyService.Get<IResize>();
+                compressedStream = resize.CompessImage(50, ms);
 
-            MemoryStream compressedStream = new MemoryStream();
-            IResize resize = DependencyService.Get<IResize>();
-            compressedStream = resize.CompessImage(50, ms);
+                Byte[] inArray = compressedStream.ToArray();
+                Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+                App.ExtentionArray.Add(imgType);
+                App.MediaArray.Add(test2);
+            }
+            else
+            {
+                Byte[] inArray = ms.ToArray();
+                Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+                App.ExtentionArray.Add(imgType);
+                App.MediaArray.Add(test2);
+            }
 
-            Byte[] inArray = compressedStream.ToArray();
-            Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
-            Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-            string test2 = new string(outArray);
-
-            App.ExtentionArray.Add(imgType);
-            App.MediaArray.Add(test2);
         }
 
 
@@ -617,4 +670,177 @@ namespace PurposeColor.screens
 			this.contacts = null;
 		}
 	}
+
+
+
+
+
+
+
+
+    public class MediaSourceChooser : ContentView
+    {
+        CustomLayout PageContainer;
+        AddEventsSituationsOrThoughts MasterObject;
+        public MediaSourceChooser( AddEventsSituationsOrThoughts masterObject,  CustomLayout pageContainer, string type )
+        {
+            MasterObject = masterObject;
+            CustomLayout masterLayout = new CustomLayout();
+            masterLayout.BackgroundColor = Color.Transparent;
+            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            PageContainer = pageContainer;
+
+            StackLayout layout = new StackLayout();
+            layout.BackgroundColor = Color.Black;
+            layout.Opacity = .4;
+            layout.WidthRequest = deviceSpec.ScreenWidth;
+            layout.HeightRequest = deviceSpec.ScreenHeight;
+
+            TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
+            emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
+            {
+
+                View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+                PageContainer.Children.Remove(pickView);
+                pickView = null;
+              
+            };
+            layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
+
+
+
+            CustomImageButton imageButton = new CustomImageButton();
+            imageButton.ImageName = "image.png";
+            imageButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
+            imageButton.HeightRequest = deviceSpec.ScreenHeight * 7 / 100;
+            imageButton.ClassId = type;
+            imageButton.Clicked += OnImageButtonClicked;
+
+
+            CustomImageButton videoButton = new CustomImageButton();
+            videoButton.ImageName = "video.png";
+            videoButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
+            videoButton.HeightRequest = deviceSpec.ScreenHeight * 7 / 100;
+            videoButton.ClassId = type;
+            videoButton.Clicked += OnVideoButtonClicked;
+
+
+
+            masterLayout.AddChildToLayout(layout, 0, 0);
+            masterLayout.AddChildToLayout(imageButton, 40, 50);
+            masterLayout.AddChildToLayout(videoButton, 40, 60);
+
+
+            this.BackgroundColor = Color.Transparent;
+   
+            Content = masterLayout;
+        }
+
+        async void OnImageButtonClicked(object sender, EventArgs e)
+        {
+            if( (sender as CustomImageButton).ClassId == "camera" )
+            {
+                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                {
+
+                    string fileName = string.Format("Image{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+
+                    var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                    {
+
+                        Directory = "Purposecolor",
+                        Name = fileName
+                    });
+
+
+                    if (file == null)
+                        return;
+
+                    MemoryStream ms = new MemoryStream();
+                    file.GetStream().CopyTo(ms);
+                    ms.Position = 0;
+
+                    MasterObject.AddFileToMediaArray(ms, file.Path, true);
+                }
+            }
+            else if ((sender as CustomImageButton).ClassId == "gallery")
+            {
+                if (!CrossMedia.Current.IsPickPhotoSupported)
+                {
+                   
+                    return;
+                }
+
+                var file = await CrossMedia.Current.PickPhotoAsync();
+
+                if (file == null)
+                    return;
+
+                MemoryStream ms = new MemoryStream();
+                file.GetStream().CopyTo(ms);
+                ms.Position = 0;
+
+                MasterObject.AddFileToMediaArray(ms, file.Path, true);
+            }
+
+
+            View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+            PageContainer.Children.Remove(pickView);
+            pickView = null;
+        }
+
+        async void OnVideoButtonClicked(object sender, EventArgs e)
+        {
+            if ((sender as CustomImageButton).ClassId == "camera")
+            {
+                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                {
+
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
+                    {
+                        return;
+                    }
+
+                    string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+                    var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
+                    {
+                        Name = fileName,
+
+                        Directory = "DefaultVideos",
+                    });
+
+                    if (file == null)
+                        return;
+
+                    MemoryStream ms = new MemoryStream();
+                    file.GetStream().CopyTo(ms);
+                    ms.Position = 0;
+
+                    MasterObject.AddFileToMediaArray(ms, file.Path, false);
+                }
+            }
+            else if ((sender as CustomImageButton).ClassId == "gallery")
+            {
+                if (!CrossMedia.Current.IsPickVideoSupported)
+                {
+                    return;
+                }
+                var file = await CrossMedia.Current.PickVideoAsync();
+
+                if (file == null)
+                    return;
+
+                MemoryStream ms = new MemoryStream();
+                file.GetStream().CopyTo(ms);
+                ms.Position = 0;
+
+                MasterObject.AddFileToMediaArray(ms, file.Path, false);
+            }
+
+
+            View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+            PageContainer.Children.Remove(pickView);
+            pickView = null;
+        }
+    }
 }

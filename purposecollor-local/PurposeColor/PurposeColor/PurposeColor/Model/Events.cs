@@ -32,6 +32,9 @@ namespace PurposeColor.Model
         public string event_details { get; set; }
         public string event_datetime { get; set; }
         public string status { get; set; }
+        public string location_latitude { get; set; }
+        public string location_longitude { get; set; }
+        public string location_address { get; set; }
     }
 
     public class AllEvents

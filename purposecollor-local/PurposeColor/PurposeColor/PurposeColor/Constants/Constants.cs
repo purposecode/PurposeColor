@@ -22,7 +22,7 @@ namespace PurposeColor
 
         public const string HOW_YOU_ARE_FEELING = "Do you like how you are";
 
-        public const string ADD_EVENTS = "Add Events Situation or Thoughts";
+        public const string ADD_EVENTS = "Add Events, Situation or Thoughts";
 
         public const string ADD_GOALS = "Add Goals And Dreams";
 

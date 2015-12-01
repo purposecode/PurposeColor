@@ -621,7 +621,10 @@ namespace PurposeColor.screens
                 Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
                 string test2 = new string(outArray);
                 App.ExtentionArray.Add(imgType);
-                App.MediaArray.Add(test2);
+                MediaItem item = new MediaItem();
+                item.MediaString = test2;
+                item.Name = fileName;
+                App.MediaArray.Add( item );
             }
             else
             {
@@ -630,7 +633,10 @@ namespace PurposeColor.screens
                 Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
                 string test2 = new string(outArray);
                 App.ExtentionArray.Add(imgType);
-                App.MediaArray.Add(test2);
+                MediaItem item = new MediaItem();
+                item.MediaString = test2;
+                item.Name = fileName;
+                App.MediaArray.Add(item);
             }
 
 
@@ -908,6 +914,9 @@ namespace PurposeColor.screens
                 if( itemToDel != null )
                 {
                     App.PreviewListSource.Remove(itemToDel);
+                    MediaItem media = App.MediaArray.FirstOrDefault( med => med.Name == itemToDel.Name );
+                    if (media != null)
+                        App.MediaArray.Remove( media );
                 }
 
             };

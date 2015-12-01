@@ -33,7 +33,7 @@ namespace PurposeColor
         public static List<CustomListViewItem> actionsListSource;
         public static List<CustomListViewItem> eventsListSource;
         public static List<CustomListViewItem> emotionsListSource;
-        public static List<string> MediaArray { get; set; }
+        public static List<MediaItem> MediaArray { get; set; }
         public static List<string> ExtentionArray { get; set; }
         public static List<string> ContactsArray { get; set; }
         public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
@@ -52,7 +52,7 @@ namespace PurposeColor
 
         public App()
         {
-            MediaArray = new List<string>();
+            MediaArray = new List<MediaItem>();
             ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
             MenuPage menuPage = new MenuPage();

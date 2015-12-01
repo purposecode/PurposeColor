@@ -11,4 +11,10 @@ namespace PurposeColor.Model
         public string Name { get; set; }
         public string Image { get; set; }
     }
+
+    public class MediaItem
+    {
+        public string Name { get; set; }
+        public string MediaString { get; set; }
+    }
 }

@@ -54,7 +54,7 @@ namespace PurposeColor.screens
         IDeviceSpec deviceSpec;
         string lattitude;
         string longitude;
-        string address;
+        string currentAddress;
         string selectedContact;
         StackLayout listContainer;
         ListView previewListView;
@@ -70,6 +70,7 @@ namespace PurposeColor.screens
 			pageTitle = title;
             lattitude = string.Empty;
             longitude = string.Empty;
+            currentAddress = string.Empty;
 			int devWidth = (int)deviceSpec.ScreenWidth;
 
 			#region TITLE BARS
@@ -483,12 +484,12 @@ namespace PurposeColor.screens
 
                 ILocation loc = DependencyService.Get<ILocation>();
                 var address = await loc.GetLocation(position.Latitude, position.Longitude);
-                if (App.CurrentAddress != null && eventDescription.Text.Contains(App.CurrentAddress))
+                if (currentAddress != null && eventDescription.Text.Contains(currentAddress))
                 {
-                    eventDescription.Text = eventDescription.Text.Replace(App.CurrentAddress, "");
+                    eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
                 }
                 eventDescription.Text = eventDescription.Text + address;
-                App.CurrentAddress = address;
+                currentAddress = address;
                 progress.HideProgressbar();
             }
             catch (Exception ex)

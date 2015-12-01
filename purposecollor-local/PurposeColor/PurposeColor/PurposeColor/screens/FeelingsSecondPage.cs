@@ -154,7 +154,7 @@ namespace PurposeColor
         
         public async void GetstopGetsture(bool pressed)
         {
-            var goalsList = await ServiceHelper.GetAlGoals(2);
+            var goalsList = await ServiceHelper.GetAllGoals(2); // user id 2 for testing only // test
 
             if( goalsList != null )
             {
@@ -207,12 +207,13 @@ namespace PurposeColor
 
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
-            if (App.goalsListSource == null || App.goalsListSource.Count <= 0)
-            {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowToast("Goals empty");
-                return;
-            }
+            //if (App.goalsListSource == null || App.goalsListSource.Count <= 0)
+            //{
+            //    IProgressBar progress = DependencyService.Get<IProgressBar>();
+            //    progress.ShowToast("Goals empty");
+            //    return;
+            //}
+
             CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
@@ -259,7 +260,7 @@ namespace PurposeColor
             pickView = null;
             actionPickerButton.IsVisible = true;
 
-            OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
+            //OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)

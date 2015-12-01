@@ -571,7 +571,11 @@ namespace PurposeColor.screens
 				}
 				else if (input == Constants.ADD_GOALS)
 				{
-					//App.goalsListSource.Add(item);
+                    if (App.goalsListSource == null)
+                    {
+                        App.goalsListSource = new List<CustomListViewItem>();
+                    }
+					App.goalsListSource.Add(item);
 				}
 
 				Navigation.PopAsync();

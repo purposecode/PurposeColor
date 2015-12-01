@@ -23,19 +23,29 @@ namespace PurposeColor.Droid.Dependency
     {
         public async Task<List<string>> GetContacts()
         {
-            List<string> contactList = new List<string>();
-            var book = new AddressBook( MainActivity.GetMainActivity() );
-
-            if (!await book.RequestPermission())
+            List<string> contactList = null;
+            try
             {
-                Toast.MakeText(MainActivity.GetMainActivity(), "Permission denied.", ToastLength.Short);
-                return null;
+
+                contactList = new List<string>();
+                var book = new AddressBook(MainActivity.GetMainActivity());
+
+                if (!await book.RequestPermission())
+                {
+                    Toast.MakeText(MainActivity.GetMainActivity(), "Permission denied.", ToastLength.Short);
+                    return null;
+                }
+
+                foreach (Xamarin.Contacts.Contact contact in book.OrderBy(c => c.LastName))
+                {
+                    if (contact.FirstName != null && contact.FirstName.Trim().Length > 0)
+                        contactList.Add(contact.FirstName);
+                }
+
             }
-
-            foreach (Xamarin.Contacts.Contact contact in book.OrderBy(c => c.LastName))
+            catch (Exception ex)
             {
-                if (contact.FirstName != null && contact.FirstName.Trim().Length > 0)
-                    contactList.Add(contact.FirstName);
+                var test = ex.Message;
             }
             return contactList;
         }

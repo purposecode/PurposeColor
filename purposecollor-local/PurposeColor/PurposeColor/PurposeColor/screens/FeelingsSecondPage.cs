@@ -82,10 +82,10 @@ namespace PurposeColor
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            goalsAndDreamsPickerButton.FontSize = 18;
+            goalsAndDreamsPickerButton.FontSize = 17;
             goalsAndDreamsPickerButton.TextColor = Color.Gray;
             goalsAndDreamsPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             goalsAndDreamsPickerButton.Clicked += OnGoalsPickerButtonClicked;
 
 
@@ -93,12 +93,12 @@ namespace PurposeColor
             actionPickerButton.IsVisible = false;
             actionPickerButton.ImageName = "select_box_whitebg.png";
             actionPickerButton.Text = "Supporting Action";
-            actionPickerButton.FontSize = 18;
+            actionPickerButton.FontSize = 17;
             actionPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             actionPickerButton.TextColor = Color.Gray;
             actionPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 

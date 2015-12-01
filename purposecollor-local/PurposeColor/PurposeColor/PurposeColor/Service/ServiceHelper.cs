@@ -15,7 +15,6 @@ namespace PurposeColor.Service
     public class ServiceHelper
     {
 
-
         public static async Task<List<CustomListViewItem>> GetEmotions(int sliderValue)
         {
 
@@ -59,9 +58,6 @@ namespace PurposeColor.Service
             return null;
 
         }
-
-
-
 
         public static async Task<List<CustomListViewItem>> GetAllEmotions(int userID)
         {
@@ -116,8 +112,6 @@ namespace PurposeColor.Service
 
         }
 
-
-
         public static async Task<List<CustomListViewItem>> GetGoalCategory(int userID)
         {
             try
@@ -149,9 +143,7 @@ namespace PurposeColor.Service
 
         }
 
-
-
-        public static async Task<List<CustomListViewItem>> GetAlGoals(int userID)
+        public static async Task<List<CustomListViewItem>> GetAllGoals(int userID)
         {
             try
             {
@@ -195,7 +187,6 @@ namespace PurposeColor.Service
 
 
         }
-
 
         public static async Task<List<CustomListViewItem>> GetAllEvents()
         {
@@ -246,9 +237,6 @@ namespace PurposeColor.Service
             return null;
         }
 
-
-
-
         public static async Task<bool> PostMedia(MediaPost mediaFile)
         {
             if (!CrossConnectivity.Current.IsConnected)
@@ -282,8 +270,6 @@ namespace PurposeColor.Service
             }
             return true;
         }
-
-
 
         public static async Task<bool> AddEmotion(string emotionID, string title, string userID)
         {
@@ -326,7 +312,6 @@ namespace PurposeColor.Service
             }
         }
 
-
         public static async Task<bool> AddEvent(EventDetails eventDetails)
         {
             if (!CrossConnectivity.Current.IsConnected)
@@ -336,9 +321,7 @@ namespace PurposeColor.Service
 
             try
             {
-
                 string result = String.Empty;
-
                 var client = new HttpClient();
                 client.Timeout = new TimeSpan(0, 15, 0);
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
@@ -356,6 +339,7 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                 }
                 content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
+               // content.Add(new StringContent(eventDetails.emotion_value, Encoding.UTF8), "emotion_value");
 
                 for (int index = 0; index < App.ContactsArray.Count; index++)
                 {
@@ -363,19 +347,20 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
                 }
                 content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
-
+                content.Add(new StringContent(eventDetails.category_id, Encoding.UTF8), "category_id");
+                
                 if (eventDetails.event_title != null)
                 content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
                 if (eventDetails.user_id != null)
                 content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
                 if (eventDetails.event_details != null)
                 content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
-                if (eventDetails.location_latitude != null)
-                content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
-                if (eventDetails.location_longitude != null)
-                content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
-                if (eventDetails.location_address != null)
-                content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
+                if (!string.IsNullOrEmpty(eventDetails.location_latitude))
+                    content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                if (!string.IsNullOrEmpty(eventDetails.location_longitude))
+                    content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                if (!string.IsNullOrEmpty(eventDetails.location_address))
+                    content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
 
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
@@ -418,31 +403,64 @@ namespace PurposeColor.Service
 
             try
             {
-
                 string result = String.Empty;
-
                 var client = new HttpClient();
                 client.Timeout = new TimeSpan(0, 15, 0);
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
 
-                var url = "api.php?action=eventinsertarray";
+                var url = "api.php?action=goalinsert";
 
                 MultipartFormDataContent content = new MultipartFormDataContent();
-
-                for (int index = 0; index < App.MediaArray.Count; index++)
+                if (App.MediaArray != null && App.MediaArray.Count > 0)
                 {
-                    int imgIndex = index + 1;
-                    MediaItem media = App.MediaArray[index];
-                    content.Add(new StringContent(media.MediaString, Encoding.UTF8), "event_media" + imgIndex.ToString());
-                    content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                    for (int index = 0; index < App.MediaArray.Count; index++)
+                    {
+                        int imgIndex = index + 1;
+                        MediaItem media = App.MediaArray[index];
+                        content.Add(new StringContent(media.MediaString, Encoding.UTF8), "goal_media" + imgIndex.ToString());
+                        content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                    }
                 }
 
+                if (App.ContactsArray != null && App.ContactsArray.Count > 0)
+                {
+                    for (int index = 0; index < App.ContactsArray.Count; index++)
+                    {
+                        int contactsindex = index + 1;
+                        content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
+                    }
+                }
 
-                content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "event_image_count");
-                content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
-                content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
-                content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+                if (App.ContactsArray != null && App.ContactsArray.Count > 0)
+                {
+                    content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
+                }
+
+                if (App.MediaArray != null && App.MediaArray.Count > 0)
+                {
+                    content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
+                }
+                
+                // date for testing only // test
+                content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "start_date");
+                content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "end_date");
+
+                if (!string.IsNullOrEmpty(eventDetails.location_latitude))
+                    content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                if (!string.IsNullOrEmpty(eventDetails.location_longitude))
+                    content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                if (!string.IsNullOrEmpty(eventDetails.location_address))
+                    content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
+
+                if (eventDetails.event_title != null && eventDetails.event_details != null && eventDetails.user_id != null)
+                {
+                    content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "goal_title");
+                    content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "goal_details");
+                    content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                }
+                content.Add(new StringContent("1", Encoding.UTF8), "actionstatus_id");//  to be confirmed - status id of new goal // for testing only // test
+                content.Add(new StringContent("1", Encoding.UTF8), "category_id"); // category_id = 1 for testing only // test
 
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
@@ -470,6 +488,7 @@ namespace PurposeColor.Service
             }
             catch (Exception ex)
             {
+                var test = ex.Message;
                 return false;
             }
         }

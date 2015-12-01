@@ -72,6 +72,9 @@ namespace PurposeColor.screens
             longitude = string.Empty;
             currentAddress = string.Empty;
 			int devWidth = (int)deviceSpec.ScreenWidth;
+            App.MediaArray = new List<MediaItem>();
+            App.ContactsArray = new List<string>();
+            
 
 			#region TITLE BARS
 			TopTitleBar = new StackLayout
@@ -318,14 +321,24 @@ namespace PurposeColor.screens
 			contactInputStack.GestureRecognizers.Add(contactsInputTapRecognizer);
 			contactsInputTapRecognizer.Tapped += async (s, e) =>
 			{
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
 				try
 				{
 
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    
                     progress.ShowProgressbar("Fetching contacts..");
                     List<string> conatctList = new List<string>();
                     PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
                     conatctList = await contacts.GetContacts();
+                    if (conatctList == null)
+                    {
+                        conatctList = new List<string>();
+                    }
+                    
+                    
+                    conatctList.Add("Sam");
+                    conatctList.Add("Tom");
+                    
 
                     if( conatctList != null && conatctList.Count > 0 )
                     {
@@ -403,6 +416,7 @@ namespace PurposeColor.screens
 				{
 					DisplayAlert("contactsInputTapRecognizer: ", ex.Message,"ok");
 				}
+                progress.HideProgressbar();
 			};
 
 			#endregion
@@ -474,29 +488,48 @@ namespace PurposeColor.screens
 
                 progress.ShowProgressbar("Getting Location..");
 
-                locator.StartListening(1, 100);
                 var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+                try
+                {
+                    locator.StartListening(1, 100);
+                
+                if (position == null)
+                {
+                    return;
+                }
                 App.Lattitude = position.Latitude;
                 App.Longitude = position.Longitude;
-                lattitude = position.Latitude.ToString();
-                longitude = position.Longitude.ToString();
+                lattitude = position.Latitude.ToString() != null ? position.Latitude.ToString(): string.Empty;
+                longitude = position.Longitude.ToString() != null ? position.Longitude.ToString(): string.Empty;
                 locator.StopListening();
 
-                ILocation loc = DependencyService.Get<ILocation>();
-                var address = await loc.GetLocation(position.Latitude, position.Longitude);
-                if (currentAddress != null && eventDescription.Text.Contains(currentAddress))
-                {
-                    eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
                 }
-                eventDescription.Text = eventDescription.Text + address;
-                currentAddress = address;
+                catch (Exception)
+                {
+                    DisplayAlert("Location error", "Location could not be retrived", "OK");
+                }
+                ILocation loc = DependencyService.Get<ILocation>();
+                try
+                {
+                    var address = await loc.GetLocation(position.Latitude, position.Longitude);
+                    currentAddress = address;
+                    if (currentAddress != null && eventDescription.Text.Contains(currentAddress))
+                    {
+                        eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
+                    }
+                    eventDescription.Text = eventDescription.Text + address;
+                }
+                catch (Exception)
+                {
+                    DisplayAlert("Location error", "Address could not be retrived", "OK");
+                }
+                
                 progress.HideProgressbar();
             }
             catch (Exception ex)
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Location service failed.", Constants.ALERT_OK);
                 progress.HideProgressbar();
-                throw;
             }
 			
 		}
@@ -526,6 +559,9 @@ namespace PurposeColor.screens
 				{
 					eventDescription.Text = eventDescription.Text + preText + name;
 				}
+                //App.ContactsArray = new List<string>();
+                App.ContactsArray.Add(name);
+                //App.ContactsArray.Add("Tom");
 
 			}
 
@@ -576,14 +612,43 @@ namespace PurposeColor.screens
 				}
 				else if (input == Constants.ADD_GOALS)
 				{
-                    if (App.goalsListSource == null)
+                    try
                     {
-                        App.goalsListSource = new List<CustomListViewItem>();
+
+                        EventDetails newGoal = new EventDetails();
+                        newGoal.event_title = eventTitle.Text;
+                        newGoal.event_details = eventDescription.Text;
+                        newGoal.user_id = "2"; // for testing only // test
+                        newGoal.location_latitude = lattitude;
+                        newGoal.location_longitude = longitude;
+
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowProgressbar("Creating new goal..");
+                        if (!await ServiceHelper.AddGoal(newGoal))
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                        }
+
+                        progress.HideProgressbar();
+
+
+                        // for testing 
+                        if (App.goalsListSource == null)
+                        {
+                            App.goalsListSource = new List<CustomListViewItem>();
+                        }
+                        App.goalsListSource.Add(item);
+                        
+
                     }
-					App.goalsListSource.Add(item);
+                    catch (Exception ex)
+                    {
+                        DisplayAlert("Alert", ex.Message, Constants.ALERT_OK);
+                    }
 				}
 
 				Navigation.PopAsync();
+
 			}
 		}
 

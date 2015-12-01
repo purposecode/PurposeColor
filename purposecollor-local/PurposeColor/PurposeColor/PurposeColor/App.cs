@@ -53,6 +53,7 @@ namespace PurposeColor
         public App()
         {
             MediaArray = new List<MediaItem>();
+            ContactsArray = new List<string>();
             ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
             MenuPage menuPage = new MenuPage();

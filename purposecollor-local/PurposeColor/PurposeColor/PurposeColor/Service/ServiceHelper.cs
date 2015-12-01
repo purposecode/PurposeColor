@@ -351,7 +351,8 @@ namespace PurposeColor.Service
                 for (int index = 0; index < App.MediaArray.Count; index++)
                 {
                     int imgIndex = index + 1;
-                    content.Add(new StringContent(App.MediaArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
+                    MediaItem media = App.MediaArray[index];
+                    content.Add(new StringContent(media.MediaString, Encoding.UTF8), "event_media" + imgIndex.ToString());
                     content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                 }
                 content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
@@ -426,7 +427,8 @@ namespace PurposeColor.Service
                 for (int index = 0; index < App.MediaArray.Count; index++)
                 {
                     int imgIndex = index + 1;
-                    content.Add(new StringContent(App.MediaArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
+                    MediaItem media = App.MediaArray[index];
+                    content.Add(new StringContent(media.MediaString, Encoding.UTF8), "event_media" + imgIndex.ToString());
                     content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                 }
 

@@ -68,6 +68,8 @@ namespace PurposeColor.screens
 		    deviceSpec = DependencyService.Get<IDeviceSpec>();
 			masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
 			pageTitle = title;
+            lattitude = string.Empty;
+            longitude = string.Empty;
 			int devWidth = (int)deviceSpec.ScreenWidth;
 
 			#region TITLE BARS

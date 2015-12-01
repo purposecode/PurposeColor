@@ -231,15 +231,6 @@ namespace PurposeColor.screens
 
                         AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
 
-                   /*     Byte[] inArray = stream.ToArray();
-                        Char[] outArray = new Char[(int)(stream.ToArray().Length * 1.34)];
-                        Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                        string test2 = new string(outArray);
-
-                        App.ExtentionArray.Add("3gpp");
-                        App.MediaArray.Add(test2);*/
-                   
-						DisplayAlert("Audio recording", "Audio saved to gallery.", "ok");
 					}
 				}
 				catch (System.Exception)
@@ -276,26 +267,6 @@ namespace PurposeColor.screens
                 MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                 chooser.ClassId = "mediachooser";
                 masterLayout.AddChildToLayout(chooser, 0, 0);
-                return;
-
-
-
-			/*	if (!CrossMedia.Current.IsPickPhotoSupported)
-				{
-					DisplayAlert("Photos Not Supported", ":( Permission not granted to photos.", "OK");
-					return;
-				}
-
-				var file = await CrossMedia.Current.PickPhotoAsync();
-
-                if (file == null)
-                    return;
-
-				MemoryStream ms = new MemoryStream();
-				file.GetStream().CopyTo(ms);
-                ms.Position = 0;
-
-                AddFileToMediaArray( ms, file.Path );*/
 
 			};
 
@@ -633,7 +604,7 @@ namespace PurposeColor.screens
             }
             else
             {
-                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "icn_attach.png" });
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "ic_music.png" });
             }
 
 
@@ -767,6 +738,8 @@ namespace PurposeColor.screens
 
         async void OnImageButtonClicked(object sender, EventArgs e)
         {
+            IProgressBar progres = DependencyService.Get<IProgressBar>();
+            progres.ShowProgressbar( "Preparing media.." );
             if( (sender as CustomImageButton).ClassId == "camera" )
             {
                 if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
@@ -783,7 +756,11 @@ namespace PurposeColor.screens
 
 
                     if (file == null)
+                    {
+                        progres.HideProgressbar();
                         return;
+                    }
+                        
 
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
@@ -796,14 +773,18 @@ namespace PurposeColor.screens
             {
                 if (!CrossMedia.Current.IsPickPhotoSupported)
                 {
-                   
+                    progres.HideProgressbar();
                     return;
                 }
 
                 var file = await CrossMedia.Current.PickPhotoAsync();
 
                 if (file == null)
+                {
+                    progres.HideProgressbar();
                     return;
+                }
+                    
 
                 MemoryStream ms = new MemoryStream();
                 file.GetStream().CopyTo(ms);
@@ -817,10 +798,14 @@ namespace PurposeColor.screens
             PageContainer.Children.Remove(mediaChooserView);
             mediaChooserView = null;
 
+            progres.HideProgressbar();
+
         }
 
         async void OnVideoButtonClicked(object sender, EventArgs e)
         {
+            IProgressBar progres = DependencyService.Get<IProgressBar>();
+            progres.ShowProgressbar("Preparing media..");
             if ((sender as CustomImageButton).ClassId == "camera")
             {
                 if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
@@ -828,6 +813,7 @@ namespace PurposeColor.screens
 
                     if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
                     {
+                        progres.HideProgressbar();
                         return;
                     }
 
@@ -835,12 +821,15 @@ namespace PurposeColor.screens
                     var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
                     {
                         Name = fileName,
-
                         Directory = "DefaultVideos",
                     });
 
                     if (file == null)
+                    {
+                        progres.HideProgressbar();
                         return;
+                    }
+                        
 
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
@@ -853,12 +842,16 @@ namespace PurposeColor.screens
             {
                 if (!CrossMedia.Current.IsPickVideoSupported)
                 {
+                    progres.HideProgressbar();
                     return;
                 }
                 var file = await CrossMedia.Current.PickVideoAsync();
 
                 if (file == null)
+                {
+                    progres.HideProgressbar();
                     return;
+                }
 
                 MemoryStream ms = new MemoryStream();
                 file.GetStream().CopyTo(ms);
@@ -871,6 +864,7 @@ namespace PurposeColor.screens
             View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
             PageContainer.Children.Remove(pickView);
             pickView = null;
+            progres.HideProgressbar();
         }
     }
 
@@ -888,6 +882,7 @@ namespace PurposeColor.screens
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
             name.FontSize = Device.OnPlatform(12, 13, 18);
+            name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
@@ -902,8 +897,8 @@ namespace PurposeColor.screens
 
             CustomImageButton deleteButton = new CustomImageButton();
             deleteButton.ImageName = "delete_button.png";
-            deleteButton.WidthRequest = 15;
-            deleteButton.HeightRequest = 15;
+            deleteButton.WidthRequest = 20;
+            deleteButton.HeightRequest = 20;
             deleteButton.SetBinding( CustomImageButton.ClassIdProperty, "Name" );
 
             deleteButton.Clicked += ( sender,  e) =>
@@ -922,7 +917,7 @@ namespace PurposeColor.screens
 
             masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(15, 15, 15), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
 

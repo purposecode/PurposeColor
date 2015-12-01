@@ -364,11 +364,17 @@ namespace PurposeColor.Service
                 }
                 content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
 
+                if (eventDetails.event_title != null)
                 content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
+                if (eventDetails.user_id != null)
                 content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                if (eventDetails.event_details != null)
                 content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+                if (eventDetails.location_latitude != null)
                 content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                if (eventDetails.location_longitude != null)
                 content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                if (eventDetails.location_address != null)
                 content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
 
                 HttpResponseMessage response = await client.PostAsync(url, content);

@@ -55,6 +55,9 @@ namespace PurposeColor.screens
         string lattitude;
         string longitude;
         string address;
+        string selectedContact;
+        StackLayout listContainer;
+        ListView previewListView;
 		#endregion
 
 		public AddEventsSituationsOrThoughts(string title)
@@ -190,26 +193,7 @@ namespace PurposeColor.screens
                     MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                     chooser.ClassId = "mediachooser";
                     masterLayout.AddChildToLayout(chooser, 0, 0);
-                    return;
-
-
-					if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
-					{
-
-						string fileName = string.Format("Image{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-						var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
-							{
-
-								Directory = "Purposecolor",
-								Name = fileName
-							});
-
-                        if (file == null)
-                        {
-                            DisplayAlert("Alert", "Image could not be saved, please try again later", "ok");
-                        }
-					}
+					
 				}
 				catch (System.Exception ex)
 				{
@@ -244,13 +228,16 @@ namespace PurposeColor.screens
 						isAudioRecording = false;
 						MemoryStream stream = audioRecorder.StopRecording();
 
-                        Byte[] inArray = stream.ToArray();
+
+                        AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
+
+                   /*     Byte[] inArray = stream.ToArray();
                         Char[] outArray = new Char[(int)(stream.ToArray().Length * 1.34)];
                         Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
                         string test2 = new string(outArray);
 
                         App.ExtentionArray.Add("3gpp");
-                        App.MediaArray.Add(test2);
+                        App.MediaArray.Add(test2);*/
                    
 						DisplayAlert("Audio recording", "Audio saved to gallery.", "ok");
 					}
@@ -473,6 +460,24 @@ namespace PurposeColor.screens
 			int iconY = (int)eventDescription.Y + (int)eventDescription.Height + 5;
 			masterLayout.AddChildToLayout(textinputAndIconsHolder, 3, 21);
 
+
+            #region PREVIEW LIST
+            listContainer = new StackLayout();
+            listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            listContainer.HeightRequest = deviceSpec.ScreenHeight * 30 / 100;
+            listContainer.ClassId = "preview";
+
+            previewListView = new ListView();
+            previewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            previewListView.ItemTemplate = new DataTemplate(typeof(PreviewListViewCellItem));
+            previewListView.SeparatorVisibility = SeparatorVisibility.None;
+            previewListView.Opacity = 1;
+            previewListView.ItemsSource = App.PreviewListSource;
+            listContainer.Children.Add( previewListView );
+            masterLayout.AddChildToLayout(listContainer, 5, 60);
+            #endregion
+
 			#endregion
 
 			Content = masterLayout;
@@ -536,6 +541,7 @@ namespace PurposeColor.screens
 			{
 				int nIndex = 0;
 				string preText = " with ";
+                selectedContact = name;
 				if (eventDescription.Text != null)
 				{
 					nIndex = eventDescription.Text.IndexOf(name);
@@ -582,7 +588,6 @@ namespace PurposeColor.screens
                     details.user_id = "2";
                     details.location_latitude = lattitude;
                     details.location_longitude = longitude;
-                    details.location_address = App.CurrentAddress;
 
                     IProgressBar progress = DependencyService.Get<IProgressBar>();
                     progress.ShowProgressbar( "Creating Event.." );
@@ -608,7 +613,7 @@ namespace PurposeColor.screens
 		}
 
 
-        public void AddFileToMediaArray( MemoryStream ms, string path, bool isImage )
+        public void AddFileToMediaArray( MemoryStream ms, string path, PurposeColor.Constants.MediaType mediaType )
         {
             MediaPost mediaWeb = new MediaPost();
             mediaWeb.event_details = eventDescription.Text;
@@ -616,8 +621,24 @@ namespace PurposeColor.screens
             mediaWeb.user_id = 2;
 
             string imgType = System.IO.Path.GetExtension(path);
+            string fileName = System.IO.Path.GetFileName(path);
+
+            if( mediaType == Constants.MediaType.Image )
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
+            }
+            else if (mediaType == Constants.MediaType.Video)
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
+            }
+            else
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "icn_attach.png" });
+            }
+
+
             imgType = imgType.Replace(".", "");
-            if( isImage )
+            if (mediaType == Constants.MediaType.Image)
             {
  
                 MemoryStream compressedStream = new MemoryStream();
@@ -641,6 +662,14 @@ namespace PurposeColor.screens
                 App.MediaArray.Add(test2);
             }
 
+
+         /*   StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
+            masterLayout.Children.Remove(preview);
+            preview = null;
+            previewListView.ItemsSource = null;
+            previewListView.ItemsSource = App.PreviewListSource;
+            masterLayout.AddChildToLayout(listContainer, 5, 60);*/
+            
         }
 
 
@@ -743,7 +772,7 @@ namespace PurposeColor.screens
                 if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                 {
 
-                    string fileName = string.Format("Image{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+                    string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
 
                     var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
                     {
@@ -760,7 +789,7 @@ namespace PurposeColor.screens
                     file.GetStream().CopyTo(ms);
                     ms.Position = 0;
 
-                    MasterObject.AddFileToMediaArray(ms, file.Path, true);
+                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
                 }
             }
             else if ((sender as CustomImageButton).ClassId == "gallery")
@@ -780,13 +809,14 @@ namespace PurposeColor.screens
                 file.GetStream().CopyTo(ms);
                 ms.Position = 0;
 
-                MasterObject.AddFileToMediaArray(ms, file.Path, true);
+                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
             }
 
 
-            View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
-            PageContainer.Children.Remove(pickView);
-            pickView = null;
+            View mediaChooserView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+            PageContainer.Children.Remove(mediaChooserView);
+            mediaChooserView = null;
+
         }
 
         async void OnVideoButtonClicked(object sender, EventArgs e)
@@ -816,7 +846,7 @@ namespace PurposeColor.screens
                     file.GetStream().CopyTo(ms);
                     ms.Position = 0;
 
-                    MasterObject.AddFileToMediaArray(ms, file.Path, false);
+                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
                 }
             }
             else if ((sender as CustomImageButton).ClassId == "gallery")
@@ -834,7 +864,7 @@ namespace PurposeColor.screens
                 file.GetStream().CopyTo(ms);
                 ms.Position = 0;
 
-                MasterObject.AddFileToMediaArray(ms, file.Path, false);
+                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
             }
 
 
@@ -842,5 +872,63 @@ namespace PurposeColor.screens
             PageContainer.Children.Remove(pickView);
             pickView = null;
         }
+    }
+
+
+
+
+    public class PreviewListViewCellItem : ViewCell
+    {
+        public PreviewListViewCellItem()
+        {
+            CustomLayout masterLayout = new CustomLayout();
+            masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
+            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            Label name = new Label();
+            name.SetBinding(Label.TextProperty, "Name");
+            name.TextColor = Color.Black;
+            name.FontSize = Device.OnPlatform(12, 13, 18);
+
+            StackLayout divider = new StackLayout();
+            divider.WidthRequest = deviceSpec.ScreenWidth;
+            divider.HeightRequest = .75;
+            divider.BackgroundColor = Color.FromRgb(255, 255, 255);
+
+            Image sideImage = new Image();
+            sideImage.WidthRequest = 15;
+            sideImage.HeightRequest = 15;
+            sideImage.SetBinding(Image.SourceProperty, "Image");
+            sideImage.Aspect = Aspect.Fill;
+
+            CustomImageButton deleteButton = new CustomImageButton();
+            deleteButton.ImageName = "delete_button.png";
+            deleteButton.WidthRequest = 15;
+            deleteButton.HeightRequest = 15;
+            deleteButton.SetBinding( CustomImageButton.ClassIdProperty, "Name" );
+
+            deleteButton.Clicked += ( sender,  e) =>
+            {
+                CustomImageButton button = sender as CustomImageButton;
+                PreviewItem itemToDel = App.PreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
+                if( itemToDel != null )
+                {
+                    App.PreviewListSource.Remove(itemToDel);
+                }
+
+            };
+          
+            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
+            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
+
+            masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(15, 15, 15), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            this.View = masterLayout;
+
+        }
+
+    
+
     }
 }

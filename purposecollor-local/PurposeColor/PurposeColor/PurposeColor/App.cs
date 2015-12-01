@@ -6,6 +6,7 @@ using PurposeColor.screens;
 using PushNotification.Plugin;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,7 @@ namespace PurposeColor
         public static List<CustomListViewItem> emotionsListSource;
         public static List<string> MediaArray { get; set; }
         public static List<string> ExtentionArray { get; set; }
+        public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
         public static ApplicationSettings Settings
         {
             get

@@ -239,6 +239,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\video.png" />
+    <AndroidResource Include="Resources\drawable\delete_button.png" />
     <AndroidResource Include="Resources\drawable\image.png" />
     <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />

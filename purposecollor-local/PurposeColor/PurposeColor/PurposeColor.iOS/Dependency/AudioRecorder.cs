@@ -17,6 +17,15 @@ namespace PurposeColor.iOS.Dependency
 		{
 		}
 
+        public string AudioPath
+        {
+            get
+            {
+                return "";
+            }
+        }
+
+
 		public bool RecordAudio()
 		{
 			try {

@@ -63,6 +63,7 @@
     <Compile Include="Model\CustomeGraphModel.cs" />
     <Compile Include="Model\Goals.cs" />
     <Compile Include="Model\Media.cs" />
+    <Compile Include="Model\Preview.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />

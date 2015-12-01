@@ -54,6 +54,15 @@ namespace PurposeColor
         public const string SERVICE_BASE_URL = "http://purposecodes.com/pc/";
         #endregion
 
+
+        #region ENUMS
+        public enum MediaType
+        {
+	        Audio,
+	        Video,
+	        Image
+        };
+        #endregion
     }
 
 }

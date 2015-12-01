@@ -17,6 +17,14 @@ namespace PurposeColor.WinPhone.Dependency
         System.Windows.Threading.DispatcherTimer dispatcherTimer;
         string fileName = string.Empty;
 
+        public string AudioPath
+        {
+            get
+            {
+                return fileName;
+            }
+        }
+
         public AudioRecorder()
         {
             microphone = Microphone.Default;

@@ -16,6 +16,14 @@ namespace PurposeColor.Droid.Dependency
             
         string directoryname;
 
+        public string AudioPath
+        {
+            get
+            {
+                return path;
+            }
+        }
+
         public AudioRecorder()
         {
             try

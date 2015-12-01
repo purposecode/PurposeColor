@@ -65,8 +65,8 @@
     <Compile Include="Model\Media.cs" />
     <Compile Include="Model\Preview.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
-    <Compile Include="screens\AddSupportingActionPage.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
+    <Compile Include="screens\CustomeMultiSelectionList.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />
     <Compile Include="screens\FeelingsSecondPage.cs" />
     <Compile Include="screens\GemDetailedView.xaml.cs">

@@ -35,6 +35,7 @@ namespace PurposeColor
         public static List<CustomListViewItem> emotionsListSource;
         public static List<string> MediaArray { get; set; }
         public static List<string> ExtentionArray { get; set; }
+        public static List<string> ContactsArray { get; set; }
         public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
         public static ApplicationSettings Settings
         {

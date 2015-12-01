@@ -27,13 +27,13 @@ namespace PurposeColor.Service
 
             var client = new System.Net.Http.HttpClient();
 
-            client.BaseAddress = new Uri( Constants.SERVICE_BASE_URL );
+            client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
             string uriString = "api.php?action=emotions&user_id=2&emotion_value=" + sliderValue.ToString();
 
             var response = await client.GetAsync(uriString);
 
-            if( response != null && response.StatusCode == HttpStatusCode.OK )
+            if (response != null && response.StatusCode == HttpStatusCode.OK)
             {
                 var earthquakesJson = response.Content.ReadAsStringAsync().Result;
 
@@ -54,7 +54,7 @@ namespace PurposeColor.Service
                 return emotionsList;
             }
 
-            List<CustomListViewItem>  noEmotionsList = new List<CustomListViewItem>();
+            List<CustomListViewItem> noEmotionsList = new List<CustomListViewItem>();
             noEmotionsList.Add(new CustomListViewItem { Name = "No emotions Found" });
             return null;
 
@@ -63,7 +63,7 @@ namespace PurposeColor.Service
 
 
 
-        public static async Task<List<CustomListViewItem>> GetAllEmotions(int userID )
+        public static async Task<List<CustomListViewItem>> GetAllEmotions(int userID)
         {
             try
             {
@@ -112,7 +112,7 @@ namespace PurposeColor.Service
                 return null;
                 throw;
             }
-        
+
 
         }
 
@@ -173,7 +173,7 @@ namespace PurposeColor.Service
 
                 var rootobject = JsonConvert.DeserializeObject<Goals>(allGoalsJson);
 
-                if( rootobject != null && rootobject.goal_title != null )
+                if (rootobject != null && rootobject.goal_title != null)
                 {
                     List<CustomListViewItem> goalsList = new List<CustomListViewItem>();
                     foreach (var item in rootobject.goal_title)
@@ -209,7 +209,7 @@ namespace PurposeColor.Service
 
             ///////// for testing
 
-            user = new User { UserId = 2, UserName="sam" };
+            user = new User { UserId = 2, UserName = "sam" };
 
             if (user == null)
             {
@@ -285,7 +285,7 @@ namespace PurposeColor.Service
 
 
 
-        public static async Task<bool> AddEmotion( string emotionID, string title, string userID)
+        public static async Task<bool> AddEmotion(string emotionID, string title, string userID)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -294,7 +294,7 @@ namespace PurposeColor.Service
 
             try
             {
-                 string url = "http://purposecodes.com/pc/api.php?action=newemotion";
+                string url = "http://purposecodes.com/pc/api.php?action=newemotion";
                 string result = String.Empty;
 
                 using (var client = new HttpClient())
@@ -321,13 +321,13 @@ namespace PurposeColor.Service
             }
             catch (Exception ex)
             {
-                
+
                 return false;
             }
         }
 
 
-        public static async Task<bool> AddEvent(  EventDetails eventDetails )
+        public static async Task<bool> AddEvent(EventDetails eventDetails)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -354,9 +354,15 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(App.MediaArray[index], Encoding.UTF8), "event_media" + imgIndex.ToString());
                     content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                 }
-
-
                 content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
+
+                for (int index = 0; index < App.ContactsArray.Count; index++)
+                {
+                    int contactsindex = index + 1;
+                    content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
+                }
+                content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
+
                 content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
                 content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
                 content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
@@ -370,13 +376,13 @@ namespace PurposeColor.Service
                 {
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
                     var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
-                   if( rootobject.code == "200" )
-                   {
-                       client.Dispose();
-                       App.ExtentionArray.Clear();
-                       App.MediaArray.Clear();
-                       return true;
-                   }
+                    if (rootobject.code == "200")
+                    {
+                        client.Dispose();
+                        App.ExtentionArray.Clear();
+                        App.MediaArray.Clear();
+                        return true;
+                    }
 
                 }
                 else
@@ -501,7 +507,7 @@ namespace PurposeColor.Service
                 throw;
             }
         }
-       
-       
+
+
     }
 }

@@ -569,6 +569,8 @@ namespace PurposeColor.screens
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
                     }
+
+                    await FeelingNowPage.DownloadAllEvents();
                     progress.HideProgressbar();
 					
 				}

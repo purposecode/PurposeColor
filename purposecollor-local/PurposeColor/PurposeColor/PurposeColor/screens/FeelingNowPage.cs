@@ -357,7 +357,7 @@ namespace PurposeColor
 
         }
 
-        private async Task<bool> DownloadAllEvents()
+        public static async Task<bool> DownloadAllEvents()
         {
             try
             {

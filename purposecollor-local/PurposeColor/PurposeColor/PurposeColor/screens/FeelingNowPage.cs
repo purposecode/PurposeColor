@@ -32,7 +32,6 @@ namespace PurposeColor
         public static int sliderValue;
         public FeelingNowPage()
         {
-
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
@@ -44,7 +43,6 @@ namespace PurposeColor
             subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
 
-
             slider = new CustomSlider
             {
                 Minimum = -2,
@@ -55,7 +53,6 @@ namespace PurposeColor
 
             //slider.ValueChanged += slider_ValueChanged;
 
-
             Label howYouAreFeeling = new Label();
             howYouAreFeeling.Text = Constants.HOW_YOU_ARE_FEELING;
             howYouAreFeeling.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -63,7 +60,6 @@ namespace PurposeColor
             howYouAreFeeling.FontSize = Device.OnPlatform( 20, 22, 30 );
             howYouAreFeeling.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
             howYouAreFeeling.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
-
 
             Label howYouAreFeeling2 = new Label();
             howYouAreFeeling2.Text = "feeling now ?";
@@ -110,10 +106,8 @@ namespace PurposeColor
             sliderDivider1.Source = "drag_sepeate.png";
             //bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//light_blue_bg.png");
 
-
             Image sliderDivider2 = new Image();
             sliderDivider2.Source = "drag_sepeate.png";
-
 
             Image sliderDivider3 = new Image();
             sliderDivider3.Source = "drag_sepeate.png";
@@ -122,7 +116,6 @@ namespace PurposeColor
             sliderBG.Source = "drag_bg.png";
 
             this.Appearing += OnFeelingNowPageAppearing;
-
 
             sliderValue = slider.CurrentValue;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
@@ -316,31 +309,41 @@ namespace PurposeColor
 
         async  void OnFeelingNowPageAppearing(object sender, System.EventArgs e)
         {
-            IProgressBar progressBar = DependencyService.Get<IProgressBar>();
-            if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
+            try
             {
-                progressBar.ShowProgressbar("Loading emotions...");
-                var downloadEmotionStatus = await DownloadAllEmotions();
-                if( !downloadEmotionStatus )
+                base.OnAppearing();
+
+                IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+                if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {
-                    DisplayAlert("Purpose Color", "Netwrok error occured.", "Ok");
+                    progressBar.ShowProgressbar("Loading emotions...");
+                    var downloadEmotionStatus = await DownloadAllEmotions();
+                    if (!downloadEmotionStatus)
+                    {
+                        DisplayAlert("Purpose Color", "Netwrok error occured.", "Ok");
+                        progressBar.HideProgressbar();
+                        return;
+                    }
+                    App.Settings.SaveEmotions(App.emotionsListSource);
                     progressBar.HideProgressbar();
-                    return;
+
+                    // for testing
+                  //  var testEmotions = App.Settings.GetAllEmotions();
                 }
-                App.Settings.SaveEmotions(App.emotionsListSource);
-                progressBar.HideProgressbar();
 
-                // for testing
-                var testEmotions = App.Settings.GetAllEmotions();
+                if (App.eventsListSource == null || App.eventsListSource.Count < 1)
+                {
+                    await DownloadAllEvents();
+                    App.Settings.SaveEvents(App.eventsListSource);
+
+                    // for testing
+                   // var testEvents = App.Settings.GetAllEvents();
+                }
+
             }
-
-            if (App.eventsListSource == null || App.eventsListSource.Count < 1)
+            catch (System.Exception ex)
             {
-                await DownloadAllEvents();
-                App.Settings.SaveEvents(App.eventsListSource);
-
-                // for testing
-                var testEvents = App.Settings.GetAllEvents();
+                DisplayAlert(Constants.ALERT_TITLE, "somthing went wrong, please try again", Constants.ALERT_OK);
             }
         }
 
@@ -380,6 +383,8 @@ namespace PurposeColor
 
             return true;
         }
+
+       
 
         public void Dispose()
         {

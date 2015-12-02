@@ -14,7 +14,6 @@ namespace PurposeColor.Service
 {
     public class ServiceHelper
     {
-
         public static async Task<List<CustomListViewItem>> GetEmotions(int sliderValue)
         {
 
@@ -145,6 +144,7 @@ namespace PurposeColor.Service
 
         public static async Task<List<CustomListViewItem>> GetAllGoals(int userID)
         {
+            List<CustomListViewItem> goalsList = null;
             try
             {
                 if (!CrossConnectivity.Current.IsConnected)
@@ -152,89 +152,140 @@ namespace PurposeColor.Service
                     return null;
                 }
 
-
                 var client = new System.Net.Http.HttpClient();
-
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-
                 string uriString = "api.php?action=getallgoals&user_id=" + userID.ToString();
-
                 var response = await client.GetAsync(uriString);
-
                 var allGoalsJson = response.Content.ReadAsStringAsync().Result;
+                goalsList = new List<CustomListViewItem>();
 
-                var rootobject = JsonConvert.DeserializeObject<Goals>(allGoalsJson);
-
-                if (rootobject != null && rootobject.goal_title != null)
+                var rootobject = JsonConvert.DeserializeObject<AllGoals>(allGoalsJson);
+                if (rootobject != null && rootobject.resultarray != null)
                 {
-                    List<CustomListViewItem> goalsList = new List<CustomListViewItem>();
-                    foreach (var item in rootobject.goal_title)
+                    foreach (var item in rootobject.resultarray)
                     {
                         CustomListViewItem listItem = new CustomListViewItem();
-                        listItem.Name = item;
+                        listItem.Name = item.goal_title;
+                        listItem.EventID = item.goal_id;
                         goalsList.Add(listItem);
                     }
-                    return goalsList;
                 }
 
-                return null;
+                return goalsList;
             }
             catch (Exception ex)
             {
-                return null;
-                throw;
+                var test = ex.Message;
+                return goalsList;
             }
-
-
         }
 
         public static async Task<List<CustomListViewItem>> GetAllEvents()
         {
-            if (!CrossConnectivity.Current.IsConnected)
+            try
             {
-                return null;
-            }
 
-            var client = new System.Net.Http.HttpClient();
-            User user = App.Settings.GetUser();
-
-            ///////// for testing
-
-            user = new User { UserId = 2, UserName = "sam" };
-
-            if (user == null)
-            {
-                // show alert
-                return null;
-            }
-            else
-            {
-                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-                string uriString = "api.php?action=getallevents&user_id=" + user.UserId;
-                var response = await client.GetAsync(uriString);
-                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                if (!CrossConnectivity.Current.IsConnected)
                 {
-                    var eventsJson = response.Content.ReadAsStringAsync().Result;
-
-                    var rootobject = JsonConvert.DeserializeObject<AllEvents>(eventsJson);
-
-                    List<CustomListViewItem> eventsList = new List<CustomListViewItem>();
-
-                    if (rootobject != null && rootobject.resultarray != null)
-                    {
-                        foreach (var item in rootobject.resultarray)
-                        {
-                            CustomListViewItem listItem = new CustomListViewItem();
-                            listItem.Name = item.event_title;
-                            listItem.EventID = item.event_id;
-                            eventsList.Add(listItem);
-                        }
-                    }
-                    return eventsList;
+                    return null;
                 }
-            }// else ie, user != null
 
+                var client = new System.Net.Http.HttpClient();
+                User user = App.Settings.GetUser();
+
+                ///////// for testing
+
+                user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    // show alert
+                    return null;
+                }
+                else
+                {
+                    client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                    string uriString = "api.php?action=getallevents&user_id=" + user.UserId;
+                    var response = await client.GetAsync(uriString);
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var eventsJson = response.Content.ReadAsStringAsync().Result;
+
+                        var rootobject = JsonConvert.DeserializeObject<AllEvents>(eventsJson);
+
+                        List<CustomListViewItem> eventsList = new List<CustomListViewItem>();
+
+                        if (rootobject != null && rootobject.resultarray != null)
+                        {
+                            foreach (var item in rootobject.resultarray)
+                            {
+                                CustomListViewItem listItem = new CustomListViewItem();
+                                listItem.Name = item.event_title;
+                                listItem.EventID = item.event_id;
+                                eventsList.Add(listItem);
+                            }
+                        }
+                        return eventsList;
+                    }
+                }// else ie, user != null
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
             return null;
+        }
+
+        public static async Task<List<CustomListViewItem>> GetAllSpportingActions()
+        {
+            List<CustomListViewItem> actionsList = null;
+            try
+            {
+                //////// for testing
+
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    // show alert
+                    return null;
+                }
+
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return null;
+                }
+                var client = new System.Net.Http.HttpClient();
+
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+                string uriString = "api.php?action=getallactions&user_id=" + user.UserId.ToString();
+
+                var response = await client.GetAsync(uriString);
+
+                var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+                actionsList = new List<CustomListViewItem>();
+
+                var rootobject = JsonConvert.DeserializeObject<AllSupportingActions>(actionsJson);
+                if (rootobject != null && rootobject.resultarray != null)
+                {
+                    foreach (var item in rootobject.resultarray)
+                    {
+                        CustomListViewItem listItem = new CustomListViewItem();
+                        listItem.Name = item.action_title;
+                        listItem.EventID = item.action_id;
+                        actionsList.Add(listItem);
+                    }
+                }
+                return actionsList;
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+                return actionsList;
+            }
         }
 
         public static async Task<bool> PostMedia(MediaPost mediaFile)
@@ -339,7 +390,7 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                 }
                 content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
-               // content.Add(new StringContent(eventDetails.emotion_value, Encoding.UTF8), "emotion_value");
+                // content.Add(new StringContent(eventDetails.emotion_value, Encoding.UTF8), "emotion_value");
 
                 for (int index = 0; index < App.ContactsArray.Count; index++)
                 {
@@ -347,14 +398,13 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
                 }
                 content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
-                content.Add(new StringContent(eventDetails.category_id, Encoding.UTF8), "category_id");
-                
+
                 if (eventDetails.event_title != null)
-                content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
+                    content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "event_title");
                 if (eventDetails.user_id != null)
-                content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                    content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
                 if (eventDetails.event_details != null)
-                content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
+                    content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "event_details");
                 if (!string.IsNullOrEmpty(eventDetails.location_latitude))
                     content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
                 if (!string.IsNullOrEmpty(eventDetails.location_longitude))
@@ -367,7 +417,7 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
                     if (rootobject.code == "200")
                     {
                         client.Dispose();
@@ -388,13 +438,12 @@ namespace PurposeColor.Service
             }
             catch (Exception ex)
             {
+                var test = ex.Message;
                 return false;
             }
         }
 
-
-
-        public static async Task<bool> AddGoal(EventDetails eventDetails)
+        public static async Task<bool> AddGoal(GoalDetails goalDetails)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -421,6 +470,7 @@ namespace PurposeColor.Service
                         content.Add(new StringContent(media.MediaString, Encoding.UTF8), "goal_media" + imgIndex.ToString());
                         content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
                     }
+                    content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
                 }
 
                 if (App.ContactsArray != null && App.ContactsArray.Count > 0)
@@ -430,34 +480,25 @@ namespace PurposeColor.Service
                         int contactsindex = index + 1;
                         content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
                     }
-                }
-
-                if (App.ContactsArray != null && App.ContactsArray.Count > 0)
-                {
                     content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
                 }
 
-                if (App.MediaArray != null && App.MediaArray.Count > 0)
-                {
-                    content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
-                }
-                
                 // date for testing only // test
                 content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "start_date");
                 content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "end_date");
 
-                if (!string.IsNullOrEmpty(eventDetails.location_latitude))
-                    content.Add(new StringContent(eventDetails.location_latitude, Encoding.UTF8), "location_latitude");
-                if (!string.IsNullOrEmpty(eventDetails.location_longitude))
-                    content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
-                if (!string.IsNullOrEmpty(eventDetails.location_address))
-                    content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
+                if (!string.IsNullOrEmpty(goalDetails.location_latitude))
+                    content.Add(new StringContent(goalDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                if (!string.IsNullOrEmpty(goalDetails.location_longitude))
+                    content.Add(new StringContent(goalDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                if (!string.IsNullOrEmpty(goalDetails.location_address))
+                    content.Add(new StringContent(goalDetails.location_address, Encoding.UTF8), "location_address");
 
-                if (eventDetails.event_title != null && eventDetails.event_details != null && eventDetails.user_id != null)
+                if (goalDetails.goal_title != null && goalDetails.goal_details != null && goalDetails.user_id != null)
                 {
-                    content.Add(new StringContent(eventDetails.event_title, Encoding.UTF8), "goal_title");
-                    content.Add(new StringContent(eventDetails.event_details, Encoding.UTF8), "goal_details");
-                    content.Add(new StringContent(eventDetails.user_id, Encoding.UTF8), "user_id");
+                    content.Add(new StringContent(goalDetails.goal_title, Encoding.UTF8), "goal_title");
+                    content.Add(new StringContent(goalDetails.goal_details, Encoding.UTF8), "goal_details");
+                    content.Add(new StringContent(goalDetails.user_id, Encoding.UTF8), "user_id");
                 }
                 content.Add(new StringContent("1", Encoding.UTF8), "actionstatus_id");//  to be confirmed - status id of new goal // for testing only // test
                 content.Add(new StringContent("1", Encoding.UTF8), "category_id"); // category_id = 1 for testing only // test
@@ -467,15 +508,15 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<TestJSon>(eventsJson);
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
                     if (rootobject.code == "200")
                     {
                         client.Dispose();
                         App.ExtentionArray.Clear();
                         App.MediaArray.Clear();
+
                         return true;
                     }
-
                 }
                 else
                 {
@@ -493,6 +534,105 @@ namespace PurposeColor.Service
             }
         }
 
+        public static async Task<bool> AddAction(ActionModel actionDetails)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=actioninsert";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+                if (App.MediaArray != null && App.MediaArray.Count > 0)
+                {
+                    for (int index = 0; index < App.MediaArray.Count; index++)
+                    {
+                        int imgIndex = index + 1;
+                        MediaItem media = App.MediaArray[index];
+                        content.Add(new StringContent(media.MediaString, Encoding.UTF8), "action_media" + imgIndex.ToString());
+                        content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+                    }
+                    content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
+                }
+
+                if (App.ContactsArray != null && App.ContactsArray.Count > 0)
+                {
+                    for (int index = 0; index < App.ContactsArray.Count; index++)
+                    {
+                        int contactsindex = index + 1;
+                        content.Add(new StringContent(App.ContactsArray[index], Encoding.UTF8), "contact_name" + contactsindex.ToString());
+                    }
+                    content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
+                }
+
+                if (!string.IsNullOrEmpty(actionDetails.start_date))
+                    content.Add(new StringContent(actionDetails.start_date, Encoding.UTF8), "action_startdate");
+                if (!string.IsNullOrEmpty(actionDetails.end_date))
+                    content.Add(new StringContent(actionDetails.end_date, Encoding.UTF8), "action_enddate");
+                if (!string.IsNullOrEmpty(actionDetails.start_time))
+                    content.Add(new StringContent(actionDetails.start_time, Encoding.UTF8), "action_starttime");
+                if (!string.IsNullOrEmpty(actionDetails.end_time))
+                    content.Add(new StringContent(actionDetails.end_time, Encoding.UTF8), "action_endtime");
+
+                if (!string.IsNullOrEmpty(actionDetails.location_latitude))
+                    content.Add(new StringContent(actionDetails.location_latitude, Encoding.UTF8), "location_latitude");
+                if (!string.IsNullOrEmpty(actionDetails.location_longitude))
+                    content.Add(new StringContent(actionDetails.location_longitude, Encoding.UTF8), "location_longitude");
+                if (!string.IsNullOrEmpty(actionDetails.location_address))
+                    content.Add(new StringContent(actionDetails.location_address, Encoding.UTF8), "location_address");
+
+                if (!string.IsNullOrEmpty(actionDetails.action_repeat))
+                    content.Add(new StringContent(actionDetails.action_repeat, Encoding.UTF8), "action_repeat");
+                if (!string.IsNullOrEmpty(actionDetails.action_alert))
+                    content.Add(new StringContent(actionDetails.action_alert, Encoding.UTF8), "action_alert");
+
+                if (actionDetails.action_title != null && actionDetails.action_details != null && actionDetails.user_id != null)
+                {
+                    content.Add(new StringContent(actionDetails.action_title, Encoding.UTF8), "action_title");
+                    content.Add(new StringContent(actionDetails.action_details, Encoding.UTF8), "action_details");
+                    content.Add(new StringContent(actionDetails.user_id, Encoding.UTF8), "user_id");
+                }
+                content.Add(new StringContent("1", Encoding.UTF8), "actionstatus_id");//  to be confirmed - status id of new goal // for testing only // test
+                content.Add(new StringContent("1", Encoding.UTF8), "category_id"); // category_id = 1 for testing only // test
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code == "200")
+                    {
+                        client.Dispose();
+                        App.ExtentionArray.Clear();
+                        App.MediaArray.Clear();
+                        return true;
+                    }
+                }
+                else
+                {
+                    client.Dispose();
+                    return false;
+                }
+
+                client.Dispose();
+                return false;
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+                return false;
+            }
+        }
 
         public static async Task<bool> SaveEmotionAndEvent(string emotionID, string eventID, string userID)
         {
@@ -515,8 +655,6 @@ namespace PurposeColor.Service
                                   new KeyValuePair<string, string>("event_id",  eventID )
                             });
 
-
-
                     using (var response = await client.PostAsync(url, content))
                     {
                         using (var responseContent = response.Content)
@@ -534,7 +672,5 @@ namespace PurposeColor.Service
                 throw;
             }
         }
-
-
     }
 }

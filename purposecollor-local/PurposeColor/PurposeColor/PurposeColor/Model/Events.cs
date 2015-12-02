@@ -36,7 +36,6 @@ namespace PurposeColor.Model
         public string location_longitude { get; set; }
         public string location_address { get; set; }
         public string emotion_value { get; set; }
-        public string category_id { get; set; }
     }
 
     public class AllEvents
@@ -47,7 +46,7 @@ namespace PurposeColor.Model
     }
 
 
-    public class TestJSon
+    public class ResultJSon
     {
         public string code { get; set; }
         public string text { get; set; }

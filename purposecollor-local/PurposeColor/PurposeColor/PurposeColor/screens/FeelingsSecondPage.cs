@@ -86,10 +86,10 @@ namespace PurposeColor
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            goalsAndDreamsPickerButton.FontSize = 18;
+            goalsAndDreamsPickerButton.FontSize = 17;
             goalsAndDreamsPickerButton.TextColor = Color.Gray;
             goalsAndDreamsPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             goalsAndDreamsPickerButton.Clicked += OnGoalsPickerButtonClicked;
 
 
@@ -98,12 +98,12 @@ namespace PurposeColor
             actionPickerButton.BackgroundColor = Color.FromRgb(30, 126, 210);
             actionPickerButton.Text = "Add Supporting Action";
             actionPickerButton.TextColor = Color.White;
-            actionPickerButton.FontSize = 18;
+            actionPickerButton.FontSize = 17;
             actionPickerButton.TextOrientation = TextOrientation.Middle;
             actionPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             // actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             actionPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            //actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 
@@ -175,15 +175,54 @@ namespace PurposeColor
         
         public async void GetstopGetsture(bool pressed)
         {
-            var goalsList = await ServiceHelper.GetAllGoals(2); // user id 2 for testing only // test
-
-            if( goalsList != null )
-            {
-                App.goalsListSource = null;
-                App.goalsListSource = goalsList;
-            }
+            var goalsList = await DownloadAllGoals();
 
             OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
+        }
+        public static async Task<bool> DownloadAllGoals()
+        {
+            try
+            {
+                var goals = await ServiceHelper.GetAllGoals(2); //for testing only
+                if (goals != null)
+                {
+                    App.goalsListSource = null;
+                    App.goalsListSource = new List<CustomListViewItem>();
+                    foreach (var item in goals)
+                    {
+                        App.goalsListSource.Add(item);
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static async Task<bool> DownloadAllSupportingActions()
+        {
+            try
+            {
+                var actions = await ServiceHelper.GetAllSpportingActions();
+                if (actions != null)
+                {
+                    App.actionsListSource = null;
+                    App.actionsListSource = new List<CustomListViewItem>();
+                    foreach (var item in actions)
+                    {
+                        App.actionsListSource.Add(item);
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
@@ -191,9 +230,47 @@ namespace PurposeColor
             Navigation.PopAsync();
         }
 
-        void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)
+        async void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)
         {
-            base.OnAppearing();
+            IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+            progressBar.ShowProgressbar("Loading goals...");
+            try
+            {
+                base.OnAppearing();
+               
+                if (App.goalsListSource == null || App.goalsListSource.Count < 1)
+                {
+                    
+                    bool isGoalsAvailable = await DownloadAllGoals();
+                    if (!isGoalsAvailable)
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Netwrok error occured.", Constants.ALERT_OK);
+                        progressBar.HideProgressbar();
+                        return;
+                    }
+                    else
+                    {
+                        // save goals to local db
+                    }
+                }
+
+                if (App.actionsListSource == null || App.actionsListSource.Count < 1)
+                {
+                    bool isActionsAvailable = await DownloadAllSupportingActions();
+                    
+                    // save actions to local db
+
+                }
+                progressBar.HideProgressbar();
+
+            }
+            catch (System.Exception ex)
+            {
+                progressBar.HideProgressbar();
+                DisplayAlert(Constants.ALERT_TITLE, "somthing went wrong, please try again", Constants.ALERT_OK);
+            }
+            progressBar.HideProgressbar();
+
            // this.Animate("", (s) => Layout(new Rectangle(((1 - s) * Width), Y, Width, Height)), 0, 600, Easing.SpringIn, null, null);
           //  this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); //slide down
 
@@ -214,11 +291,11 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            App.actionsListSource = new List<CustomListViewItem>();
-            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Go to gym", SliderValue = 2 });
-            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make reservations", SliderValue = 2 });
-            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "book flight", SliderValue = 2 });
-            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Acquire Money", SliderValue = 2 });
+            //App.actionsListSource = new List<CustomListViewItem>();
+            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Go to gym", SliderValue = 2 });
+            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make reservations", SliderValue = 2 });
+            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "book flight", SliderValue = 2 });
+            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Acquire Money", SliderValue = 2 });
            
 
             CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
@@ -241,13 +318,13 @@ namespace PurposeColor
             //    progress.ShowToast("Goals empty");
             //    return;
             //}
-
+            /*
             App.goalsListSource = new List<CustomListViewItem>();
             App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Loose weight", SliderValue = 2 });
             App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make a trip", SliderValue = 2 });
             App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Learn Yoga", SliderValue = 2 });
             App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make certification", SliderValue = 2 });
-
+            */
             CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;

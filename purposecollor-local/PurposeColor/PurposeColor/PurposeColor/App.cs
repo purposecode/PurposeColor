@@ -132,10 +132,10 @@ namespace PurposeColor
             if (actionsListSource != null && actionsListSource.Count > 0)
                 return actionsListSource;
 
-            actionsListSource = new List<CustomListViewItem>();
-            actionsListSource.Add(new CustomListViewItem { Name = "Save money" });
-            actionsListSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
-            actionsListSource.Add(new CustomListViewItem { Name = "Make reservation" });
+            //actionsListSource = new List<CustomListViewItem>();
+            //actionsListSource.Add(new CustomListViewItem { Name = "Save money" });
+            //actionsListSource.Add(new CustomListViewItem { Name = "Serch for places to go" });
+            //actionsListSource.Add(new CustomListViewItem { Name = "Make reservation" });
 
 
             return actionsListSource;

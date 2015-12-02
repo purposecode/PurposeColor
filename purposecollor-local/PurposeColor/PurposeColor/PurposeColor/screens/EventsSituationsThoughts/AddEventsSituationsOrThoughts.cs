@@ -74,6 +74,7 @@ namespace PurposeColor.screens
 			int devWidth = (int)deviceSpec.ScreenWidth;
             App.MediaArray = new List<MediaItem>();
             App.ContactsArray = new List<string>();
+            App.PreviewListSource.Clear();
             
 
 			#region TITLE BARS
@@ -463,7 +464,7 @@ namespace PurposeColor.screens
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
             listContainer.Children.Add( previewListView );
-            masterLayout.AddChildToLayout(listContainer, 5, 60);
+           // masterLayout.AddChildToLayout(listContainer, 5, 60);
             #endregion
 
 			#endregion
@@ -581,69 +582,158 @@ namespace PurposeColor.screens
 			{
 				string input = pageTitle;
 				CustomListViewItem item = new CustomListViewItem { Name = eventDescription.Text };
+
+
 				if (input == Constants.ADD_ACTIONS)
 				{
-                    IReminderService reminder = DependencyService.Get<IReminderService>();
-                    reminder.Remind( DateTime.UtcNow.AddMinutes( 1 ), DateTime.UtcNow.AddMinutes( 2 ), "Purpose Color Event", eventTitle.Text );
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    progress.ShowProgressbar("Creating new action..");
 
-                    ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                    notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
-					//App.actionsListSource.Add(item);
+                    try
+                    {
+
+                        IReminderService reminder = DependencyService.Get<IReminderService>();
+                        reminder.Remind(DateTime.UtcNow.AddMinutes(1), DateTime.UtcNow.AddMinutes(2), "Purpose Color Event", eventTitle.Text);
+
+                        ActionModel details = new ActionModel();
+                        details.action_title = eventTitle.Text;
+                        details.action_details = eventDescription.Text;
+                        details.user_id = "2";
+                        details.location_latitude = lattitude;
+                        details.location_longitude = longitude;
+
+                        details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                        details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
+                        details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
+                        details.end_time = DateTime.Now.AddHours(2).ToString("HH:mm"); //for testing only
+                        details.action_repeat = "0";
+                        details.action_alert = "0";
+
+                        if (!string.IsNullOrEmpty(currentAddress))
+                        {
+                            details.location_address = currentAddress;
+                        }
+
+                        if (!await ServiceHelper.AddAction(details))
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                        }
+                        else
+                        {
+                            try
+                            {
+                                var suportingActions = await ServiceHelper.GetAllSpportingActions(); //for testing only
+                                if (suportingActions != null)
+                                {
+                                    App.actionsListSource = null;
+                                    App.actionsListSource = new List<CustomListViewItem>();
+                                    foreach (var action in suportingActions)
+                                    {
+                                        App.actionsListSource.Add(action);
+                                    }
+                                }
+                            }
+                            catch (System.Exception)
+                            {
+                                DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
+                            }
+                        }
+
+                        ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                        notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                        progress.HideProgressbar();
+                    }
+
+                    progress.HideProgressbar();
 				}
 				else if (input == Constants.ADD_EVENTS)
 				{
-                    EventDetails details = new EventDetails();
-                    details.event_title = eventTitle.Text;
-                    details.event_details = eventDescription.Text;
-                    details.user_id = "2";
-                    details.location_latitude = lattitude;
-                    details.location_longitude = longitude;
-
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
-                    progress.ShowProgressbar( "Creating Event.." );
-                    if( !await ServiceHelper.AddEvent(details))
+                    try
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
-                    }
 
-                    await FeelingNowPage.DownloadAllEvents();
-                    progress.HideProgressbar();
-					
+                        EventDetails details = new EventDetails();
+                        details.event_title = eventTitle.Text;
+                        details.event_details = eventDescription.Text;
+                        details.user_id = "2";
+                        details.location_latitude = lattitude;
+                        details.location_longitude = longitude;
+                        if (!string.IsNullOrEmpty(currentAddress))
+                        {
+                            details.location_address = currentAddress;
+                        }
+
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowProgressbar("Creating new event..");
+                        if (!await ServiceHelper.AddEvent(details))
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                        }
+                        await FeelingNowPage.DownloadAllEvents();
+
+                        progress.HideProgressbar();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                    }
 				}
 				else if (input == Constants.ADD_GOALS)
 				{
                     try
                     {
-
-                        EventDetails newGoal = new EventDetails();
-                        newGoal.event_title = eventTitle.Text;
-                        newGoal.event_details = eventDescription.Text;
+                        GoalDetails newGoal = new GoalDetails();
+                        //EventDetails newGoal = new EventDetails();
+                        newGoal.goal_title = eventTitle.Text;
+                        newGoal.goal_details = eventDescription.Text;
                         newGoal.user_id = "2"; // for testing only // test
                         newGoal.location_latitude = lattitude;
                         newGoal.location_longitude = longitude;
+                        newGoal.category_id = "1";
+                        newGoal.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                        newGoal.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing onl
 
+                        if (!string.IsNullOrEmpty(currentAddress))
+                        {
+                            newGoal.location_address = currentAddress;
+                        }
                         IProgressBar progress = DependencyService.Get<IProgressBar>();
                         progress.ShowProgressbar("Creating new goal..");
                         if (!await ServiceHelper.AddGoal(newGoal))
                         {
                             await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
                         }
+                        else
+                        {
+                            try
+                            {
+                                var goals = await ServiceHelper.GetAllGoals(2); //for testing only
+                                if (goals != null)
+                                {
+                                    App.goalsListSource = null;
+                                    App.goalsListSource = new List<CustomListViewItem>();
+                                    foreach (var goal in goals)
+                                    {
+                                        App.goalsListSource.Add(goal);
+                                    }
+                                }
+                            }
+                            catch (System.Exception)
+                            {
+                                DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
+                            }
+                        }
 
                         progress.HideProgressbar();
-
-
-                        // for testing 
-                        if (App.goalsListSource == null)
-                        {
-                            App.goalsListSource = new List<CustomListViewItem>();
-                        }
-                        App.goalsListSource.Add(item);
-                        
-
                     }
                     catch (Exception ex)
                     {
-                        DisplayAlert("Alert", ex.Message, Constants.ALERT_OK);
+                        DisplayAlert(Constants.ALERT_TITLE, ex.Message, Constants.ALERT_OK);
                     }
 				}
 
@@ -660,67 +750,85 @@ namespace PurposeColor.screens
 
         public void AddFileToMediaArray( MemoryStream ms, string path, PurposeColor.Constants.MediaType mediaType )
         {
-            MediaPost mediaWeb = new MediaPost();
-            mediaWeb.event_details = eventDescription.Text;
-            mediaWeb.event_title = eventTitle.Text;
-            mediaWeb.user_id = 2;
-
-            string imgType = System.IO.Path.GetExtension(path);
-            string fileName = System.IO.Path.GetFileName(path);
-
-            if( mediaType == Constants.MediaType.Image )
+            try
             {
-                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
+                MediaPost mediaWeb = new MediaPost();
+                mediaWeb.event_details = eventDescription.Text;
+                mediaWeb.event_title = eventTitle.Text;
+                mediaWeb.user_id = 2;
+
+                string imgType = System.IO.Path.GetExtension(path);
+                string fileName = System.IO.Path.GetFileName(path);
+
+                if (mediaType == Constants.MediaType.Image)
+                {
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
+                }
+                else if (mediaType == Constants.MediaType.Video)
+                {
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
+                }
+                else
+                {
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "ic_music.png" });
+                }
+
+
+                imgType = imgType.Replace(".", "");
+                if (mediaType == Constants.MediaType.Image)
+                {
+
+                    MemoryStream compressedStream = new MemoryStream();
+                    IResize resize = DependencyService.Get<IResize>();
+                    compressedStream = resize.CompessImage(50, ms);
+
+                    Byte[] inArray = compressedStream.ToArray();
+                    Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                    string test2 = new string(outArray);
+                    App.ExtentionArray.Add(imgType);
+                    MediaItem item = new MediaItem();
+                    item.MediaString = test2;
+                    item.Name = fileName;
+                    App.MediaArray.Add(item);
+
+                    inArray = null;
+                    outArray = null;
+                    test2 = null;
+                    item = null;
+                }
+                else
+                {
+                    Byte[] inArray = ms.ToArray();
+                    Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
+                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                    string test2 = new string(outArray);
+                    App.ExtentionArray.Add(imgType);
+                    MediaItem item = new MediaItem();
+                    item.MediaString = test2;
+                    item.Name = fileName;
+                    App.MediaArray.Add(item);
+
+                    inArray = null;
+                    outArray = null;
+                    test2 = null;
+                    item = null;
+                }
+                imgType = string.Empty;
+                fileName = string.Empty;
+
+                   StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
+                   masterLayout.Children.Remove(preview);
+                   preview = null;
+                   previewListView.ItemsSource = null;
+                   previewListView.ItemsSource = App.PreviewListSource;
+                   masterLayout.AddChildToLayout(listContainer, 5, 60);
             }
-            else if (mediaType == Constants.MediaType.Video)
+            catch(Exception ex)
             {
-                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
+                DisplayAlert(Constants.ALERT_TITLE, "Unable to add the media", Constants.ALERT_OK);
+                var test = ex.Message;
             }
-            else
-            {
-                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "ic_music.png" });
-            }
-
-
-            imgType = imgType.Replace(".", "");
-            if (mediaType == Constants.MediaType.Image)
-            {
- 
-                MemoryStream compressedStream = new MemoryStream();
-                IResize resize = DependencyService.Get<IResize>();
-                compressedStream = resize.CompessImage(50, ms);
-
-                Byte[] inArray = compressedStream.ToArray();
-                Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
-                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                string test2 = new string(outArray);
-                App.ExtentionArray.Add(imgType);
-                MediaItem item = new MediaItem();
-                item.MediaString = test2;
-                item.Name = fileName;
-                App.MediaArray.Add( item );
-            }
-            else
-            {
-                Byte[] inArray = ms.ToArray();
-                Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
-                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                string test2 = new string(outArray);
-                App.ExtentionArray.Add(imgType);
-                MediaItem item = new MediaItem();
-                item.MediaString = test2;
-                item.Name = fileName;
-                App.MediaArray.Add(item);
-            }
-
-
-         /*   StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
-            masterLayout.Children.Remove(preview);
-            preview = null;
-            previewListView.ItemsSource = null;
-            previewListView.ItemsSource = App.PreviewListSource;
-            masterLayout.AddChildToLayout(listContainer, 5, 60);*/
-            
         }
 
 
@@ -813,22 +921,57 @@ namespace PurposeColor.screens
 
         async void OnImageButtonClicked(object sender, EventArgs e)
         {
+            
             IProgressBar progres = DependencyService.Get<IProgressBar>();
             progres.ShowProgressbar("Preparing media..");
             if ((sender as CustomImageButton).ClassId == "camera")
             {
-                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    try
+                    {
+                        if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                        {
+                            string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+
+                            var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                            {
+
+                                Directory = "Purposecolor",
+                                Name = fileName
+                            });
+
+
+                            if (file == null)
+                            {
+                                progres.HideProgressbar();
+                                return;
+                            }
+
+
+                            MemoryStream ms = new MemoryStream();
+                            file.GetStream().CopyTo(ms);
+                            ms.Position = 0;
+
+                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                    }
+                
+            }
+            else if ((sender as CustomImageButton).ClassId == "gallery")
+            {
+                try
                 {
 
-                    string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-                    var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                    if (!CrossMedia.Current.IsPickPhotoSupported)
                     {
+                        progres.HideProgressbar();
+                        return;
+                    }
 
-                        Directory = "Purposecolor",
-                        Name = fileName
-                    });
-
+                    var file = await CrossMedia.Current.PickPhotoAsync();
 
                     if (file == null)
                     {
@@ -842,30 +985,13 @@ namespace PurposeColor.screens
                     ms.Position = 0;
 
                     MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+
                 }
-            }
-            else if ((sender as CustomImageButton).ClassId == "gallery")
-            {
-                if (!CrossMedia.Current.IsPickPhotoSupported)
+                catch (Exception ex)
                 {
-                    progres.HideProgressbar();
-                    return;
+                    var test = ex.Message;
                 }
-
-                var file = await CrossMedia.Current.PickPhotoAsync();
-
-                if (file == null)
-                {
-                    progres.HideProgressbar();
-                    return;
-                }
-
-
-                MemoryStream ms = new MemoryStream();
-                file.GetStream().CopyTo(ms);
-                ms.Position = 0;
-
-                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+                progres.HideProgressbar();
             }
 
 
@@ -883,21 +1009,57 @@ namespace PurposeColor.screens
             progres.ShowProgressbar("Preparing media..");
             if ((sender as CustomImageButton).ClassId == "camera")
             {
-                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                try
                 {
 
-                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
+                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    {
+
+                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
+                        {
+                            progres.HideProgressbar();
+                            return;
+                        }
+
+                        string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+                        var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
+                        {
+                            Name = fileName,
+                            Directory = "DefaultVideos",
+                        });
+
+                        if (file == null)
+                        {
+                            progres.HideProgressbar();
+                            return;
+                        }
+
+
+                        MemoryStream ms = new MemoryStream();
+                        file.GetStream().CopyTo(ms);
+                        ms.Position = 0;
+
+                        MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
+                progres.HideProgressbar();
+            }
+            else if ((sender as CustomImageButton).ClassId == "gallery")
+            {
+                try
+                {
+
+                    if (!CrossMedia.Current.IsPickVideoSupported)
                     {
                         progres.HideProgressbar();
                         return;
                     }
-
-                    string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-                    var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
-                    {
-                        Name = fileName,
-                        Directory = "DefaultVideos",
-                    });
+                    var file = await CrossMedia.Current.PickVideoAsync();
 
                     if (file == null)
                     {
@@ -905,34 +1067,18 @@ namespace PurposeColor.screens
                         return;
                     }
 
-
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
                     ms.Position = 0;
 
                     MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+
                 }
-            }
-            else if ((sender as CustomImageButton).ClassId == "gallery")
-            {
-                if (!CrossMedia.Current.IsPickVideoSupported)
+                catch (Exception ex)
                 {
-                    progres.HideProgressbar();
-                    return;
+                    var test = ex.Message;
                 }
-                var file = await CrossMedia.Current.PickVideoAsync();
-
-                if (file == null)
-                {
-                    progres.HideProgressbar();
-                    return;
-                }
-
-                MemoryStream ms = new MemoryStream();
-                file.GetStream().CopyTo(ms);
-                ms.Position = 0;
-
-                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                progres.HideProgressbar();
             }
 
 
@@ -940,6 +1086,7 @@ namespace PurposeColor.screens
             PageContainer.Children.Remove(pickView);
             pickView = null;
             progres.HideProgressbar();
+
         }
     }
 

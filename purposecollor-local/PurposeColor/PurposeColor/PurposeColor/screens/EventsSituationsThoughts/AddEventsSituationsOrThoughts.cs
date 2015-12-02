@@ -58,6 +58,8 @@ namespace PurposeColor.screens
         string selectedContact;
         StackLayout listContainer;
         ListView previewListView;
+        Label startDateLabel;
+        Label endDateLabel;
 		#endregion
 
 		public AddEventsSituationsOrThoughts(string title)
@@ -454,7 +456,7 @@ namespace PurposeColor.screens
             listContainer = new StackLayout();
             listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            listContainer.HeightRequest = deviceSpec.ScreenHeight * 30 / 100;
+            listContainer.HeightRequest = deviceSpec.ScreenHeight * 25 / 100;
             listContainer.ClassId = "preview";
 
             previewListView = new ListView();
@@ -464,13 +466,112 @@ namespace PurposeColor.screens
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
             listContainer.Children.Add( previewListView );
-           // masterLayout.AddChildToLayout(listContainer, 5, 60);
+            masterLayout.AddChildToLayout(listContainer, 5, 63);
             #endregion
 
 			#endregion
 
+
+            if( pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
+            {
+                CustomImageButton startDateCalander = new CustomImageButton();
+                startDateCalander.ImageName = "icn_calander.png";
+                startDateCalander.WidthRequest = deviceSpec.ScreenWidth * 8 / 100;
+                startDateCalander.HeightRequest = deviceSpec.ScreenWidth * 8 / 100;
+                startDateCalander.Clicked += OnStartDateCalanderClicked;
+
+                startDateLabel = new Label();
+                startDateLabel.XAlign = TextAlignment.Start;
+                startDateLabel.YAlign = TextAlignment.Center;
+                startDateLabel.FontSize = 10;
+
+                CustomImageButton endDateCalander = new CustomImageButton();
+                endDateCalander.ImageName = "icn_calander.png";
+                endDateCalander.WidthRequest = deviceSpec.ScreenWidth * 8 / 100;
+                endDateCalander.HeightRequest = deviceSpec.ScreenWidth * 8 / 100;
+                endDateCalander.Clicked += OnEndDateCalanderClicked;
+
+                endDateLabel = new Label();
+                endDateLabel.XAlign = TextAlignment.Start;
+                endDateLabel.YAlign = TextAlignment.Center;
+                endDateLabel.FontSize = 10;
+
+                masterLayout.AddChildToLayout(startDateCalander, 5, 55);
+                masterLayout.AddChildToLayout(startDateLabel, 15, 57);
+
+                masterLayout.AddChildToLayout(endDateCalander, 60, 55);
+                masterLayout.AddChildToLayout(endDateLabel, 70, 57);
+            }
 			Content = masterLayout;
 		}
+
+        void OnEndDateCalanderClicked(object sender, EventArgs e)
+        {
+            CalendarView endCalendarView = new CalendarView()
+            {
+                BackgroundColor =   Color.FromRgb( 30, 126, 210 ),// Color.FromRgb(200, 219, 238),
+                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                ShouldHighlightDaysOfWeekLabels = false,
+                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                ShowNavigationArrows = true,
+                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                MonthTitleForegroundColor = Color.White,
+                DayOfWeekLabelForegroundColor = Color.White,
+
+            };
+            endCalendarView.ClassId = "endcalander";
+            endCalendarView.DateSelected += OnEndCalendarViewDateSelected;
+            masterLayout.AddChildToLayout(endCalendarView, 0, 35);
+        }
+
+        void OnEndCalendarViewDateSelected(object sender, DateTime e)
+        {
+            endDateLabel.Text = "Ends : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+            View view = masterLayout.Children.First(child => child.ClassId == "endcalander");
+            if (view != null)
+            {
+                masterLayout.Children.Remove(view);
+                view = null;
+            }
+        }
+
+        void OnStartDateCalanderClicked(object sender, EventArgs e)
+        {
+            CalendarView calendarView = new CalendarView()
+            {
+                BackgroundColor =   Color.FromRgb( 30, 126, 210 ),// Color.FromRgb(200, 219, 238),
+                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                ShouldHighlightDaysOfWeekLabels = false,
+                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                ShowNavigationArrows = true,
+                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                MonthTitleForegroundColor = Color.White,
+                DayOfWeekLabelForegroundColor = Color.White,
+
+            };
+            calendarView.ClassId = "startcalander";
+            calendarView.DateSelected += OnStartDateCalendarViewDateSelected;
+            masterLayout.AddChildToLayout(calendarView, 0, 35);
+        }
+
+        void OnStartDateCalendarViewDateSelected(object sender, DateTime e)
+        {
+            startDateLabel.Text = "Starts : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+            View view = masterLayout.Children.First(child => child.ClassId == "startcalander");
+            if( view != null )
+            {
+                masterLayout.Children.Remove( view );
+                view = null;
+            }
+        }
 
 		async void LocationInputTapRecognizer_Tapped (object sender, EventArgs e)
 		{
@@ -592,7 +693,7 @@ namespace PurposeColor.screens
                     try
                     {
 
-                        IReminderService reminder = DependencyService.Get<IReminderService>();
+                    IReminderService reminder = DependencyService.Get<IReminderService>();
                         reminder.Remind(DateTime.UtcNow.AddMinutes(1), DateTime.UtcNow.AddMinutes(2), "Purpose Color Event", eventTitle.Text);
 
                         ActionModel details = new ActionModel();
@@ -642,7 +743,7 @@ namespace PurposeColor.screens
                         ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
                         notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
 
-                    }
+				}
                     catch (Exception ex)
                     {
                         var test = ex.Message;
@@ -656,28 +757,28 @@ namespace PurposeColor.screens
                     try
                     {
 
-                        EventDetails details = new EventDetails();
-                        details.event_title = eventTitle.Text;
-                        details.event_details = eventDescription.Text;
-                        details.user_id = "2";
-                        details.location_latitude = lattitude;
-                        details.location_longitude = longitude;
+                    EventDetails details = new EventDetails();
+                    details.event_title = eventTitle.Text;
+                    details.event_details = eventDescription.Text;
+                    details.user_id = "2";
+                    details.location_latitude = lattitude;
+                    details.location_longitude = longitude;
                         if (!string.IsNullOrEmpty(currentAddress))
                         {
                             details.location_address = currentAddress;
                         }
 
-                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
                         progress.ShowProgressbar("Creating new event..");
                         if (!await ServiceHelper.AddEvent(details))
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
-                        }
-                        await FeelingNowPage.DownloadAllEvents();
-
-                        progress.HideProgressbar();
-
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
                     }
+                    await FeelingNowPage.DownloadAllEvents();
+
+                    progress.HideProgressbar();
+					
+				}
                     catch (Exception ex)
                     {
                         var test = ex.Message;
@@ -714,9 +815,9 @@ namespace PurposeColor.screens
                             {
                                 var goals = await ServiceHelper.GetAllGoals(2); //for testing only
                                 if (goals != null)
-                                {
+                        {
                                     App.goalsListSource = null;
-                                    App.goalsListSource = new List<CustomListViewItem>();
+                            App.goalsListSource = new List<CustomListViewItem>();
                                     foreach (var goal in goals)
                                     {
                                         App.goalsListSource.Add(goal);
@@ -752,76 +853,76 @@ namespace PurposeColor.screens
         {
             try
             {
-                MediaPost mediaWeb = new MediaPost();
-                mediaWeb.event_details = eventDescription.Text;
-                mediaWeb.event_title = eventTitle.Text;
-                mediaWeb.user_id = 2;
+            MediaPost mediaWeb = new MediaPost();
+            mediaWeb.event_details = eventDescription.Text;
+            mediaWeb.event_title = eventTitle.Text;
+            mediaWeb.user_id = 2;
 
-                string imgType = System.IO.Path.GetExtension(path);
-                string fileName = System.IO.Path.GetFileName(path);
+            string imgType = System.IO.Path.GetExtension(path);
+            string fileName = System.IO.Path.GetFileName(path);
 
                 if (mediaType == Constants.MediaType.Image)
-                {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
-                }
-                else if (mediaType == Constants.MediaType.Video)
-                {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
-                }
-                else
-                {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "ic_music.png" });
-                }
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
+            }
+            else if (mediaType == Constants.MediaType.Video)
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
+            }
+            else
+            {
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "ic_music.png" });
+            }
 
 
-                imgType = imgType.Replace(".", "");
-                if (mediaType == Constants.MediaType.Image)
-                {
+            imgType = imgType.Replace(".", "");
+            if (mediaType == Constants.MediaType.Image)
+            {
+ 
+                MemoryStream compressedStream = new MemoryStream();
+                IResize resize = DependencyService.Get<IResize>();
+                compressedStream = resize.CompessImage(50, ms);
 
-                    MemoryStream compressedStream = new MemoryStream();
-                    IResize resize = DependencyService.Get<IResize>();
-                    compressedStream = resize.CompessImage(50, ms);
-
-                    Byte[] inArray = compressedStream.ToArray();
-                    Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
-                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                    string test2 = new string(outArray);
-                    App.ExtentionArray.Add(imgType);
-                    MediaItem item = new MediaItem();
-                    item.MediaString = test2;
-                    item.Name = fileName;
+                Byte[] inArray = compressedStream.ToArray();
+                Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+                App.ExtentionArray.Add(imgType);
+                MediaItem item = new MediaItem();
+                item.MediaString = test2;
+                item.Name = fileName;
                     App.MediaArray.Add(item);
 
                     inArray = null;
                     outArray = null;
                     test2 = null;
                     item = null;
-                }
-                else
-                {
-                    Byte[] inArray = ms.ToArray();
-                    Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
-                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                    string test2 = new string(outArray);
-                    App.ExtentionArray.Add(imgType);
-                    MediaItem item = new MediaItem();
-                    item.MediaString = test2;
-                    item.Name = fileName;
-                    App.MediaArray.Add(item);
+            }
+            else
+            {
+                Byte[] inArray = ms.ToArray();
+                Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+                App.ExtentionArray.Add(imgType);
+                MediaItem item = new MediaItem();
+                item.MediaString = test2;
+                item.Name = fileName;
+                App.MediaArray.Add(item);
 
                     inArray = null;
                     outArray = null;
                     test2 = null;
                     item = null;
-                }
+            }
                 imgType = string.Empty;
                 fileName = string.Empty;
 
                    StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
-                   masterLayout.Children.Remove(preview);
-                   preview = null;
-                   previewListView.ItemsSource = null;
-                   previewListView.ItemsSource = App.PreviewListSource;
+            masterLayout.Children.Remove(preview);
+            preview = null;
+            previewListView.ItemsSource = null;
+            previewListView.ItemsSource = App.PreviewListSource;
                    masterLayout.AddChildToLayout(listContainer, 5, 60);
             }
             catch(Exception ex)
@@ -928,50 +1029,17 @@ namespace PurposeColor.screens
             {
                     try
                     {
-                        if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
-                        {
-                            string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-                            var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
-                            {
-
-                                Directory = "Purposecolor",
-                                Name = fileName
-                            });
-
-
-                            if (file == null)
-                            {
-                                progres.HideProgressbar();
-                                return;
-                            }
-
-
-                            MemoryStream ms = new MemoryStream();
-                            file.GetStream().CopyTo(ms);
-                            ms.Position = 0;
-
-                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        var test = ex.Message;
-                    }
-                
-            }
-            else if ((sender as CustomImageButton).ClassId == "gallery")
-            {
-                try
+                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                 {
+                    string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
 
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
+                    var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
                     {
-                        progres.HideProgressbar();
-                        return;
-                    }
 
-                    var file = await CrossMedia.Current.PickPhotoAsync();
+                        Directory = "Purposecolor",
+                        Name = fileName
+                    });
+
 
                     if (file == null)
                     {
@@ -985,6 +1053,39 @@ namespace PurposeColor.screens
                     ms.Position = 0;
 
                     MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+                }
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                    }
+                
+            }
+            else if ((sender as CustomImageButton).ClassId == "gallery")
+            {
+                try
+                {
+
+                if (!CrossMedia.Current.IsPickPhotoSupported)
+                {
+                    progres.HideProgressbar();
+                    return;
+                }
+
+                var file = await CrossMedia.Current.PickPhotoAsync();
+
+                if (file == null)
+                {
+                    progres.HideProgressbar();
+                    return;
+                }
+
+
+                MemoryStream ms = new MemoryStream();
+                file.GetStream().CopyTo(ms);
+                ms.Position = 0;
+
+                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
 
                 }
                 catch (Exception ex)
@@ -1012,35 +1113,35 @@ namespace PurposeColor.screens
                 try
                 {
 
-                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                {
+
+                    if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
                     {
-
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
-                        {
-                            progres.HideProgressbar();
-                            return;
-                        }
-
-                        string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-                        var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
-                        {
-                            Name = fileName,
-                            Directory = "DefaultVideos",
-                        });
-
-                        if (file == null)
-                        {
-                            progres.HideProgressbar();
-                            return;
-                        }
-
-
-                        MemoryStream ms = new MemoryStream();
-                        file.GetStream().CopyTo(ms);
-                        ms.Position = 0;
-
-                        MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                        progres.HideProgressbar();
+                        return;
                     }
+
+                    string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+                    var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
+                    {
+                        Name = fileName,
+                        Directory = "DefaultVideos",
+                    });
+
+                    if (file == null)
+                    {
+                        progres.HideProgressbar();
+                        return;
+                    }
+
+
+                    MemoryStream ms = new MemoryStream();
+                    file.GetStream().CopyTo(ms);
+                    ms.Position = 0;
+
+                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                }
 
                 }
                 catch (Exception ex)
@@ -1054,24 +1155,24 @@ namespace PurposeColor.screens
                 try
                 {
 
-                    if (!CrossMedia.Current.IsPickVideoSupported)
-                    {
-                        progres.HideProgressbar();
-                        return;
-                    }
-                    var file = await CrossMedia.Current.PickVideoAsync();
+                if (!CrossMedia.Current.IsPickVideoSupported)
+                {
+                    progres.HideProgressbar();
+                    return;
+                }
+                var file = await CrossMedia.Current.PickVideoAsync();
 
-                    if (file == null)
-                    {
-                        progres.HideProgressbar();
-                        return;
-                    }
+                if (file == null)
+                {
+                    progres.HideProgressbar();
+                    return;
+                }
 
-                    MemoryStream ms = new MemoryStream();
-                    file.GetStream().CopyTo(ms);
-                    ms.Position = 0;
+                MemoryStream ms = new MemoryStream();
+                file.GetStream().CopyTo(ms);
+                ms.Position = 0;
 
-                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
 
                 }
                 catch (Exception ex)
@@ -1101,7 +1202,7 @@ namespace PurposeColor.screens
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
-            name.FontSize = Device.OnPlatform(12, 13, 18);
+            name.FontSize = Device.OnPlatform(12, 10, 18);
             name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
 
             StackLayout divider = new StackLayout();

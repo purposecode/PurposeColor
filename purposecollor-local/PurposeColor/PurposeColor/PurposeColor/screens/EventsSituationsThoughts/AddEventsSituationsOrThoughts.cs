@@ -471,7 +471,7 @@ namespace PurposeColor.screens
 			#endregion
 
 
-            if( pageTitle == Constants.ADD_ACTIONS )
+            if( pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
             {
                 CustomImageButton startDateCalander = new CustomImageButton();
                 startDateCalander.ImageName = "icn_calander.png";

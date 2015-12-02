@@ -100,7 +100,7 @@ namespace PurposeColor.CustomControls
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             string trimmedPageTitle = string.Empty;
-            if (title.Length > 20)
+            if (title.Length > 25)
             {
                 trimmedPageTitle = title.Substring(0, 25);
                 trimmedPageTitle += "...";

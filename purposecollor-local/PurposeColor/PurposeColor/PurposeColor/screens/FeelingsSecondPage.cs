@@ -13,6 +13,8 @@ using System.Threading.Tasks;
 using PurposeColor.screens;
 using PurposeColor.interfaces;
 using PurposeColor.Service;
+using System.Collections.ObjectModel;
+using PurposeColor.Model;
 
 namespace PurposeColor
 {
@@ -24,6 +26,7 @@ namespace PurposeColor
         IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton actionPickerButton;
         PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton;
+        public static ObservableCollection<PreviewItem> actionPreviewListSource = new ObservableCollection<PreviewItem>();
 
         public FeelingsSecondPage()
         {
@@ -33,6 +36,7 @@ namespace PurposeColor
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             deviceSpec = DependencyService.Get<IDeviceSpec>();
             this.Appearing += FeelingsSecondPage_Appearing;
+            actionPreviewListSource = new ObservableCollection<PreviewItem>();
 
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
@@ -63,7 +67,7 @@ namespace PurposeColor
             secondLine.HorizontalOptions = LayoutOptions.Center;
             secondLine.WidthRequest = deviceSpec.ScreenWidth;
             secondLine.XAlign = TextAlignment.Center;
-            
+
 
 
             Label thirdLine = new Label();
@@ -82,23 +86,24 @@ namespace PurposeColor
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            goalsAndDreamsPickerButton.FontSize = 17;
+            goalsAndDreamsPickerButton.FontSize = 18;
             goalsAndDreamsPickerButton.TextColor = Color.Gray;
             goalsAndDreamsPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             goalsAndDreamsPickerButton.Clicked += OnGoalsPickerButtonClicked;
 
 
-            actionPickerButton = new PurposeColor.interfaces.CustomImageButton();
+            actionPickerButton = new CustomImageButton();
             actionPickerButton.IsVisible = false;
-            actionPickerButton.ImageName = "select_box_whitebg.png";
-            actionPickerButton.Text = "Supporting Action";
-            actionPickerButton.FontSize = 17;
+            actionPickerButton.BackgroundColor = Color.FromRgb(30, 126, 210);
+            actionPickerButton.Text = "Add Supporting Action";
+            actionPickerButton.TextColor = Color.White;
+            actionPickerButton.FontSize = 18;
+            actionPickerButton.TextOrientation = TextOrientation.Middle;
             actionPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            actionPickerButton.TextColor = Color.Gray;
+            // actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             actionPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 
@@ -128,17 +133,33 @@ namespace PurposeColor
             this.Appearing += FeelingNowPage_Appearing;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(firstLine, 0, 22);
-            masterLayout.AddChildToLayout(secondLine, 0, 27);
-            masterLayout.AddChildToLayout(thirdLine, 0, 32);
+            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 9));
+            masterLayout.AddChildToLayout(firstLine, 0, 20);
+            masterLayout.AddChildToLayout(secondLine, 0, 25);
+            masterLayout.AddChildToLayout(thirdLine, 0, 30);
             //masterLayout.AddChildToLayout(sliderBG, 7, 45);
-            masterLayout.AddChildToLayout(slider, 5, 39);
-          /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/
-            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 55);
-            masterLayout.AddChildToLayout(actionPickerButton, 5, 70);
+            masterLayout.AddChildToLayout(slider, 5, 34);
+            /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
+              masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
+              masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/
+            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 50);
+            masterLayout.AddChildToLayout(actionPickerButton, 5, 65);
+
+
+            StackLayout listContainer = new StackLayout();
+            listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            listContainer.HeightRequest = deviceSpec.ScreenHeight * 20 / 100;
+            listContainer.ClassId = "preview";
+
+            ListView actionPreviewListView = new ListView();
+            actionPreviewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            actionPreviewListView.ItemTemplate = new DataTemplate(typeof(ActionPreviewCellItem));
+            actionPreviewListView.SeparatorVisibility = SeparatorVisibility.None;
+            actionPreviewListView.Opacity = 1;
+            actionPreviewListView.ItemsSource = actionPreviewListSource;
+            listContainer.Children.Add(actionPreviewListView);
+            masterLayout.AddChildToLayout(listContainer, 5, 73);
 
             Content = masterLayout;
 
@@ -193,7 +214,14 @@ namespace PurposeColor
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetActionsList(), 35, Constants.ADD_ACTIONS, true, true);
+            App.actionsListSource = new List<CustomListViewItem>();
+            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Go to gym", SliderValue = 2 });
+            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make reservations", SliderValue = 2 });
+            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "book flight", SliderValue = 2 });
+            App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Acquire Money", SliderValue = 2 });
+           
+
+            CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
             ePicker.ClassId = "ePicker";
@@ -213,6 +241,12 @@ namespace PurposeColor
             //    progress.ShowToast("Goals empty");
             //    return;
             //}
+
+            App.goalsListSource = new List<CustomListViewItem>();
+            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Loose weight", SliderValue = 2 });
+            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make a trip", SliderValue = 2 });
+            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Learn Yoga", SliderValue = 2 });
+            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make certification", SliderValue = 2 });
 
             CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
@@ -243,11 +277,10 @@ namespace PurposeColor
         void OnActionPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            actionPickerButton.Text = item.Name;
-            actionPickerButton.TextColor = Color.Black;
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
             pickView = null;
+            actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
         }
 
         void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -291,5 +324,59 @@ namespace PurposeColor
             actionPickerButton = null;
             goalsAndDreamsPickerButton = null;
         }
+    }
+
+
+
+
+    public class ActionPreviewCellItem : ViewCell
+    {
+        public ActionPreviewCellItem()
+        {
+            CustomLayout masterLayout = new CustomLayout();
+            masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
+            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            Label name = new Label();
+            name.SetBinding(Label.TextProperty, "Name");
+            name.TextColor = Color.Gray;
+            name.FontSize = Device.OnPlatform(12, 15, 18);
+            name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
+
+            StackLayout divider = new StackLayout();
+            divider.WidthRequest = deviceSpec.ScreenWidth;
+            divider.HeightRequest = .75;
+            divider.BackgroundColor = Color.FromRgb(255, 255, 255);
+
+
+            CustomImageButton deleteButton = new CustomImageButton();
+            deleteButton.ImageName = "delete_button.png";
+            deleteButton.WidthRequest = 20;
+            deleteButton.HeightRequest = 20;
+            deleteButton.SetBinding(CustomImageButton.ClassIdProperty, "Name");
+
+            deleteButton.Clicked += (sender, e) =>
+            {
+                CustomImageButton button = sender as CustomImageButton;
+                PreviewItem itemToDel = FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
+                if (itemToDel != null)
+                {
+                    FeelingsSecondPage.actionPreviewListSource.Remove(itemToDel);
+                }
+
+            };
+
+            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
+            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
+
+
+            masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(5, 5, 5), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            this.View = masterLayout;
+
+        }
+
+
+
     }
 }

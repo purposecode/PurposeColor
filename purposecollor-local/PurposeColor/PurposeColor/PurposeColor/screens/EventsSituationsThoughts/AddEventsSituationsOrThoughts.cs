@@ -513,7 +513,7 @@ namespace PurposeColor.screens
                 {
                     var address = await loc.GetLocation(position.Latitude, position.Longitude);
                     currentAddress = address;
-                    if (currentAddress != null && eventDescription.Text.Contains(currentAddress))
+                    if (currentAddress != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
                     {
                         eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
                     }
@@ -753,16 +753,11 @@ namespace PurposeColor.screens
 
 
 
-
-
-
-
-
     public class MediaSourceChooser : ContentView
     {
         CustomLayout PageContainer;
         AddEventsSituationsOrThoughts MasterObject;
-        public MediaSourceChooser( AddEventsSituationsOrThoughts masterObject,  CustomLayout pageContainer, string type )
+        public MediaSourceChooser(AddEventsSituationsOrThoughts masterObject, CustomLayout pageContainer, string type)
         {
             MasterObject = masterObject;
             CustomLayout masterLayout = new CustomLayout();
@@ -772,7 +767,7 @@ namespace PurposeColor.screens
 
             StackLayout layout = new StackLayout();
             layout.BackgroundColor = Color.Black;
-            layout.Opacity = .4;
+            layout.Opacity = .6;
             layout.WidthRequest = deviceSpec.ScreenWidth;
             layout.HeightRequest = deviceSpec.ScreenHeight;
 
@@ -783,7 +778,7 @@ namespace PurposeColor.screens
                 View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
                 PageContainer.Children.Remove(pickView);
                 pickView = null;
-              
+
             };
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
@@ -791,36 +786,36 @@ namespace PurposeColor.screens
 
             CustomImageButton imageButton = new CustomImageButton();
             imageButton.ImageName = "image.png";
-            imageButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
-            imageButton.HeightRequest = deviceSpec.ScreenHeight * 7 / 100;
+            imageButton.WidthRequest = deviceSpec.ScreenWidth * 20 / 100;
+            imageButton.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
             imageButton.ClassId = type;
             imageButton.Clicked += OnImageButtonClicked;
 
 
             CustomImageButton videoButton = new CustomImageButton();
             videoButton.ImageName = "video.png";
-            videoButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
-            videoButton.HeightRequest = deviceSpec.ScreenHeight * 7 / 100;
+            videoButton.WidthRequest = deviceSpec.ScreenWidth * 20 / 100;
+            videoButton.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
             videoButton.ClassId = type;
             videoButton.Clicked += OnVideoButtonClicked;
 
 
 
             masterLayout.AddChildToLayout(layout, 0, 0);
-            masterLayout.AddChildToLayout(imageButton, 40, 50);
+            masterLayout.AddChildToLayout(imageButton, 40, 40);
             masterLayout.AddChildToLayout(videoButton, 40, 60);
 
 
             this.BackgroundColor = Color.Transparent;
-   
+
             Content = masterLayout;
         }
 
         async void OnImageButtonClicked(object sender, EventArgs e)
         {
             IProgressBar progres = DependencyService.Get<IProgressBar>();
-            progres.ShowProgressbar( "Preparing media.." );
-            if( (sender as CustomImageButton).ClassId == "camera" )
+            progres.ShowProgressbar("Preparing media..");
+            if ((sender as CustomImageButton).ClassId == "camera")
             {
                 if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                 {
@@ -840,7 +835,7 @@ namespace PurposeColor.screens
                         progres.HideProgressbar();
                         return;
                     }
-                        
+
 
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
@@ -864,7 +859,7 @@ namespace PurposeColor.screens
                     progres.HideProgressbar();
                     return;
                 }
-                    
+
 
                 MemoryStream ms = new MemoryStream();
                 file.GetStream().CopyTo(ms);
@@ -909,7 +904,7 @@ namespace PurposeColor.screens
                         progres.HideProgressbar();
                         return;
                     }
-                        
+
 
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
@@ -947,8 +942,6 @@ namespace PurposeColor.screens
             progres.HideProgressbar();
         }
     }
-
-
 
 
     public class PreviewListViewCellItem : ViewCell

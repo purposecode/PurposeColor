@@ -58,6 +58,8 @@ namespace PurposeColor.screens
         string selectedContact;
         StackLayout listContainer;
         ListView previewListView;
+        Label startDateLabel;
+        Label endDateLabel;
 		#endregion
 
 		public AddEventsSituationsOrThoughts(string title)
@@ -453,7 +455,7 @@ namespace PurposeColor.screens
             listContainer = new StackLayout();
             listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            listContainer.HeightRequest = deviceSpec.ScreenHeight * 30 / 100;
+            listContainer.HeightRequest = deviceSpec.ScreenHeight * 25 / 100;
             listContainer.ClassId = "preview";
 
             previewListView = new ListView();
@@ -463,13 +465,112 @@ namespace PurposeColor.screens
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
             listContainer.Children.Add( previewListView );
-            masterLayout.AddChildToLayout(listContainer, 5, 60);
+            masterLayout.AddChildToLayout(listContainer, 5, 63);
             #endregion
 
 			#endregion
 
+
+            if( pageTitle == Constants.ADD_ACTIONS )
+            {
+                CustomImageButton startDateCalander = new CustomImageButton();
+                startDateCalander.ImageName = "icn_calander.png";
+                startDateCalander.WidthRequest = deviceSpec.ScreenWidth * 8 / 100;
+                startDateCalander.HeightRequest = deviceSpec.ScreenWidth * 8 / 100;
+                startDateCalander.Clicked += OnStartDateCalanderClicked;
+
+                startDateLabel = new Label();
+                startDateLabel.XAlign = TextAlignment.Start;
+                startDateLabel.YAlign = TextAlignment.Center;
+                startDateLabel.FontSize = 10;
+
+                CustomImageButton endDateCalander = new CustomImageButton();
+                endDateCalander.ImageName = "icn_calander.png";
+                endDateCalander.WidthRequest = deviceSpec.ScreenWidth * 8 / 100;
+                endDateCalander.HeightRequest = deviceSpec.ScreenWidth * 8 / 100;
+                endDateCalander.Clicked += OnEndDateCalanderClicked;
+
+                endDateLabel = new Label();
+                endDateLabel.XAlign = TextAlignment.Start;
+                endDateLabel.YAlign = TextAlignment.Center;
+                endDateLabel.FontSize = 10;
+
+                masterLayout.AddChildToLayout(startDateCalander, 5, 55);
+                masterLayout.AddChildToLayout(startDateLabel, 15, 57);
+
+                masterLayout.AddChildToLayout(endDateCalander, 60, 55);
+                masterLayout.AddChildToLayout(endDateLabel, 70, 57);
+            }
 			Content = masterLayout;
 		}
+
+        void OnEndDateCalanderClicked(object sender, EventArgs e)
+        {
+            CalendarView endCalendarView = new CalendarView()
+            {
+                BackgroundColor =   Color.FromRgb( 30, 126, 210 ),// Color.FromRgb(200, 219, 238),
+                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                ShouldHighlightDaysOfWeekLabels = false,
+                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                ShowNavigationArrows = true,
+                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                MonthTitleForegroundColor = Color.White,
+                DayOfWeekLabelForegroundColor = Color.White,
+
+            };
+            endCalendarView.ClassId = "endcalander";
+            endCalendarView.DateSelected += OnEndCalendarViewDateSelected;
+            masterLayout.AddChildToLayout(endCalendarView, 0, 35);
+        }
+
+        void OnEndCalendarViewDateSelected(object sender, DateTime e)
+        {
+            endDateLabel.Text = "Ends : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+            View view = masterLayout.Children.First(child => child.ClassId == "endcalander");
+            if (view != null)
+            {
+                masterLayout.Children.Remove(view);
+                view = null;
+            }
+        }
+
+        void OnStartDateCalanderClicked(object sender, EventArgs e)
+        {
+            CalendarView calendarView = new CalendarView()
+            {
+                BackgroundColor =   Color.FromRgb( 30, 126, 210 ),// Color.FromRgb(200, 219, 238),
+                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                ShouldHighlightDaysOfWeekLabels = false,
+                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                ShowNavigationArrows = true,
+                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                MonthTitleForegroundColor = Color.White,
+                DayOfWeekLabelForegroundColor = Color.White,
+
+            };
+            calendarView.ClassId = "startcalander";
+            calendarView.DateSelected += OnStartDateCalendarViewDateSelected;
+            masterLayout.AddChildToLayout(calendarView, 0, 35);
+        }
+
+        void OnStartDateCalendarViewDateSelected(object sender, DateTime e)
+        {
+            startDateLabel.Text = "Starts : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+            View view = masterLayout.Children.First(child => child.ClassId == "startcalander");
+            if( view != null )
+            {
+                masterLayout.Children.Remove( view );
+                view = null;
+            }
+        }
 
 		async void LocationInputTapRecognizer_Tapped (object sender, EventArgs e)
 		{
@@ -584,10 +685,10 @@ namespace PurposeColor.screens
 				if (input == Constants.ADD_ACTIONS)
 				{
                     IReminderService reminder = DependencyService.Get<IReminderService>();
-                    reminder.Remind( DateTime.UtcNow.AddMinutes( 1 ), DateTime.UtcNow.AddMinutes( 2 ), "Purpose Color Event", eventTitle.Text );
+                    reminder.Remind( DateTime.Now.AddMinutes( 2 ), DateTime.Now.AddDays( 2 ), "Purpose Color Event", eventTitle.Text );
 
-                    ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                    notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
+                   /* ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                    notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);*/
 					//App.actionsListSource.Add(item);
 				}
 				else if (input == Constants.ADD_EVENTS)
@@ -954,7 +1055,7 @@ namespace PurposeColor.screens
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
-            name.FontSize = Device.OnPlatform(12, 13, 18);
+            name.FontSize = Device.OnPlatform(12, 10, 18);
             name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
 
             StackLayout divider = new StackLayout();

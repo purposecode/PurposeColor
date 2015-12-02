@@ -26,6 +26,8 @@ namespace PurposeColor.Droid.Renderers
         {
             ContentValues eventValues = new ContentValues();
             eventValues.Put(CalendarContract.Events.InterfaceConsts.CalendarId, 1);
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.AllDay, 0);
+            eventValues.Put(CalendarContract.Events.InterfaceConsts.HasAlarm, 1);
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Title, title);
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Description, message);
             eventValues.Put(CalendarContract.Events.InterfaceConsts.Dtstart, GetDateTimeMS(startDate.Year, startDate.Month, startDate.Day, startDate.Hour, startDate.Minute));
@@ -33,6 +35,15 @@ namespace PurposeColor.Droid.Renderers
             eventValues.Put(CalendarContract.Events.InterfaceConsts.EventTimezone, "UTC");
             eventValues.Put(CalendarContract.Events.InterfaceConsts.EventEndTimezone, "UTC");
             var uri = Forms.Context.ContentResolver.Insert(CalendarContract.Events.ContentUri, eventValues);
+
+             long eventID = long.Parse(uri.LastPathSegment);
+            // reminder insert
+            Uri REMINDERS_URI = new Uri (CalendarContract.Reminders.ContentUri + "reminders");
+            ContentValues remindervalues = new ContentValues();
+            remindervalues.Put(CalendarContract.Reminders.InterfaceConsts.Minutes, 10);
+            remindervalues.Put(CalendarContract.Reminders.InterfaceConsts.EventId, eventID);
+            remindervalues.Put(CalendarContract.Reminders.InterfaceConsts.Method, (int)Android.Provider.RemindersMethod.Alert);
+            var reminderURI = Forms.Context.ContentResolver.Insert(CalendarContract.Reminders.ContentUri, remindervalues);
 
         }
 

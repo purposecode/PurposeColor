@@ -17,9 +17,6 @@ namespace PurposeColor
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Gray;
 
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
-
-
             CustomEntry paswordEntry = new CustomEntry
             {
                 Placeholder = "Password"
@@ -40,9 +37,9 @@ namespace PurposeColor
             };
 
 
-            paswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            confirmPaswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            submitButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
+            paswordEntry.WidthRequest = App.screenWidth * 80 / 100;
+            confirmPaswordEntry.WidthRequest = App.screenWidth * 80 / 100;
+            submitButton.WidthRequest = App.screenWidth * 40 / 100;
 
 
             masterLayout.AddChildToLayout(paswordEntry, 10, 30);

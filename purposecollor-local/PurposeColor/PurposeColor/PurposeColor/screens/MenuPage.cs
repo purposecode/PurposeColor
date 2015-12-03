@@ -30,14 +30,16 @@ namespace PurposeColor.screens
 
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            double screenWidth = App.screenWidth;
+            double screenHeight = App.screenHeight;
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
             name.FontSize = Device.OnPlatform(12, 18, 18);
 
             StackLayout divider = new StackLayout();
-            divider.WidthRequest = deviceSpec.ScreenWidth;
+            divider.WidthRequest = screenWidth;
             divider.HeightRequest = .75;
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
@@ -47,8 +49,8 @@ namespace PurposeColor.screens
             sideImage.SetBinding(Image.SourceProperty, "ImageName");
             sideImage.Aspect = Aspect.Fill;
 
-            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
+            masterLayout.WidthRequest = screenWidth;
+            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 50, 10) / 100;
 
             masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			masterLayout.AddChildToLayout(name, (float)Device.OnPlatform( 15, 15 , 15 ), (float)Device.OnPlatform(5, 0, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -67,8 +69,9 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
-
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            double screenWidth = App.screenWidth;
+            double screenHeight = App.screenHeight;
             PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             List<MenuItems> menuItems = new List<MenuItems>();
@@ -86,7 +89,7 @@ namespace PurposeColor.screens
             listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
-            listView.RowHeight =(int) deviceSpec.ScreenHeight * 8 / 100;
+            listView.RowHeight =(int) screenHeight * 8 / 100;
             
 
             Icon = "icon.png";
@@ -99,7 +102,7 @@ namespace PurposeColor.screens
 
            // masterLayout.AddChildToLayout(titleBar, 0, 0);
             masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 30,15, 10 ));
-            this.TranslationY = deviceSpec.ScreenHeight * 10 / 100;
+            this.TranslationY = screenHeight * 10 / 100;
             Content = masterLayout;
         }
 

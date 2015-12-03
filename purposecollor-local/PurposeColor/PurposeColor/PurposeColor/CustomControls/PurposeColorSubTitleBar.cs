@@ -20,9 +20,9 @@ namespace PurposeColor.CustomControls
 
         public PurposeColorSubTitleBar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true )
         {
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)spec.ScreenHeight * 7 / 100;
-            int titlebarWidth = (int)spec.ScreenWidth;
+            //Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
+            int titlebarHeight = (int)App.screenHeight * 7 / 100;
+            int titlebarWidth = (int)App.screenWidth;
             this.BackgroundColor = backGroundColor;
 
             masterLayout = new CustomLayout();
@@ -55,7 +55,7 @@ namespace PurposeColor.CustomControls
 
             Image logo = new Image();
             logo.Source = Device.OnPlatform("logo.png", "logo.png", "//Assets//logo.png");
-            logo.WidthRequest = spec.ScreenWidth;
+            logo.WidthRequest = App.screenWidth;
             logo.HeightRequest = titlebarHeight;
            // logo.WidthRequest = spec.ScreenWidth * 70 / 100;
            // logo.HeightRequest = spec.ScreenHeight * 8 / 100;
@@ -78,7 +78,7 @@ namespace PurposeColor.CustomControls
             {
                 StackLayout touchArea = new StackLayout();
                 touchArea.WidthRequest = 100;
-                touchArea.HeightRequest = spec.ScreenHeight * 8 / 100;
+                touchArea.HeightRequest = App.screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
                 masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(10, 40, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);

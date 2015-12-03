@@ -14,16 +14,20 @@ namespace PurposeColor.screens
 
     public class CommunityGemsCell : ViewCell
     {
+        double screenHeight;
+        double screenWidth;
+
         public CommunityGemsCell()
         {
-
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             Image profileImage = new Image();
-            profileImage.WidthRequest = deviceSpec.ScreenWidth * 15 / 100;
-            profileImage.HeightRequest = deviceSpec.ScreenHeight * 9 / 100;
+            profileImage.WidthRequest = screenWidth * 15 / 100;
+            profileImage.HeightRequest = screenHeight * 9 / 100;
             profileImage.SetBinding(Image.SourceProperty, "ProfilePhoto");
             profileImage.Aspect = Aspect.Fill;
 
@@ -38,12 +42,12 @@ namespace PurposeColor.screens
             Label gemInfo = new Label();
             gemInfo.TextColor = Color.Black;
             gemInfo.SetBinding(Label.TextProperty, "TruncatedGemInfo");
-            gemInfo.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            gemInfo.WidthRequest = screenWidth * 90 / 100;
 
 
             Image gemImage = new Image();
-            gemImage.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            gemImage.HeightRequest = deviceSpec.ScreenHeight * 25 / 100;
+            gemImage.WidthRequest = screenWidth * 90 / 100;
+            gemImage.HeightRequest = screenHeight * 25 / 100;
             gemImage.SetBinding( Image.SourceProperty, "GemImage" );
             gemImage.Aspect = Aspect.Fill;
 
@@ -68,8 +72,8 @@ namespace PurposeColor.screens
 
 
 
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * 50 / 100;
-            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
+            masterLayout.HeightRequest = screenHeight * 50 / 100;
+            masterLayout.WidthRequest = screenWidth;
 
 
             masterLayout.AddChildToLayout(profileImage, 5, 5);
@@ -89,8 +93,13 @@ namespace PurposeColor.screens
     public class GemsPage : BasePage, IDisposable
     {
         public static List<Gems> gemsSource = new List<Gems>();
+        double screenHeight;
+        double screenWidth;
         public GemsPage()
         {
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
+
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
@@ -168,8 +177,8 @@ namespace PurposeColor.screens
             gemsList.SeparatorVisibility = SeparatorVisibility.None;
             gemsList.BackgroundColor = Color.FromRgb(230, 255, 254);
             gemsList.ItemsSource = gemsSource;
-            gemsList.RowHeight = (int)deviceSpec.ScreenHeight * 50 / 100;
-            gemsList.HeightRequest = deviceSpec.ScreenHeight * 75 / 100;
+            gemsList.RowHeight = (int)screenHeight * 50 / 100;
+            gemsList.HeightRequest = screenHeight * 75 / 100;
          //   gemsList.HasUnevenRows = true;
 
             masterLayout.AddChildToLayout(titleBar, 0, 0);

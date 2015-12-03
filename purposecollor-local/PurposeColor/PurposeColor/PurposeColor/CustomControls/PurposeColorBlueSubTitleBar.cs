@@ -17,12 +17,15 @@ namespace PurposeColor.CustomControls
         public TapGestureRecognizer NextButtonTapRecognizer;
         public CustomImageButton NextButton;
         Label title;
+        double screenHeight;
+        double screenWidth;
 
         public PurposeColorBlueSubTitleBar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true)
         {
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)spec.ScreenHeight * 7 / 100;
-            int titlebarWidth = (int)spec.ScreenWidth;
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
+            int titlebarHeight = (int)screenHeight * 7 / 100;
+            int titlebarWidth = (int)screenWidth;
             this.BackgroundColor = backGroundColor;
 
             masterLayout = new CustomLayout();
@@ -32,14 +35,14 @@ namespace PurposeColor.CustomControls
 
             Image bgImage = new Image();
             bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//light_blue_bg.png");
-            //  bgImage.WidthRequest = spec.ScreenWidth;
+            //  bgImage.WidthRequest = screenWidth;
             // bgImage.HeightRequest = titlebarHeight;
             bgImage.Aspect = Aspect.Fill;
 
             Image backArrow = new Image();
             backArrow.Source = Device.OnPlatform("arrow_blue.png", "arrow_blue.png", "//Assets//arrow_blue.png");
-            // backArrow.HeightRequest = spec.ScreenHeight * 4 / 100;
-            // backArrow.WidthRequest = spec.ScreenWidth * 5 / 100;
+            // backArrow.HeightRequest = screenHeightv * 4 / 100;
+            // backArrow.WidthRequest = screenWidth * 5 / 100;
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
@@ -60,7 +63,7 @@ namespace PurposeColor.CustomControls
             {
                 StackLayout touchArea = new StackLayout();
                 touchArea.WidthRequest = 100;
-                touchArea.HeightRequest = spec.ScreenHeight * 8 / 100;
+                touchArea.HeightRequest = screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
                 masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(10, 10, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);

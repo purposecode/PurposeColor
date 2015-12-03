@@ -26,7 +26,8 @@ namespace PurposeColor.CustomControls
         IDeviceSpec deviceSpec;
         CustomImageButton startDatePickerButton;
         CustomImageButton endDatePickerButton;
-
+        double screenHeight;
+        double screenWidth;
 
         int topYPos;
         public CustomEventView(CustomLayout containerLayout, int topY, string title, bool titelBarRequired, bool addButtonRequired)
@@ -34,7 +35,8 @@ namespace PurposeColor.CustomControls
             pageContainedLayout = containerLayout;
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
-            deviceSpec = DependencyService.Get<IDeviceSpec>();
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
 
             pageTitle = title;
             topYPos = topY;
@@ -42,8 +44,8 @@ namespace PurposeColor.CustomControls
             StackLayout layout = new StackLayout();
             layout.BackgroundColor = Color.Black;
             layout.Opacity = .4;
-            layout.WidthRequest = deviceSpec.ScreenWidth;
-            layout.HeightRequest = deviceSpec.ScreenHeight;
+            layout.WidthRequest = screenWidth;
+            layout.HeightRequest = screenHeight;
 
             TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
             emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
@@ -57,14 +59,14 @@ namespace PurposeColor.CustomControls
 
 
             StackLayout listContainer = new StackLayout();
-            listContainer.WidthRequest = deviceSpec.ScreenWidth * 96 / 100;
-            listContainer.HeightRequest = deviceSpec.ScreenHeight * topY / 100;
+            listContainer.WidthRequest = screenWidth * 96 / 100;
+            listContainer.HeightRequest = screenHeight * topY / 100;
             listContainer.Orientation = StackOrientation.Vertical;
 
 
             StackLayout listHeader = new StackLayout();
-            listHeader.WidthRequest = deviceSpec.ScreenWidth * 96 / 100;
-            listHeader.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
+            listHeader.WidthRequest = screenWidth * 96 / 100;
+            listHeader.HeightRequest = screenHeight * 10 / 100;
             listHeader.BackgroundColor = Color.FromRgb(30, 126, 210);
 
             listTitle = new Label();
@@ -89,8 +91,8 @@ namespace PurposeColor.CustomControls
             startDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             startDatePickerButton.TextOrientation = interfaces.TextOrientation.Left;
             startDatePickerButton.TextColor = Color.Gray;
-            startDatePickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            startDatePickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            startDatePickerButton.WidthRequest = screenWidth * 90 / 100;
+            startDatePickerButton.HeightRequest = screenHeight * 8 / 100;
             startDatePickerButton.Clicked += startDatePickerButton_Clicked;
 
             endDatePickerButton = new PurposeColor.interfaces.CustomImageButton();
@@ -108,15 +110,15 @@ namespace PurposeColor.CustomControls
             endDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             endDatePickerButton.TextOrientation = interfaces.TextOrientation.Left;
             endDatePickerButton.TextColor = Color.Gray;
-            endDatePickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            endDatePickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            endDatePickerButton.WidthRequest = screenWidth * 90 / 100;
+            endDatePickerButton.HeightRequest = screenHeight * 8 / 100;
             endDatePickerButton.Clicked += endDatePickerButton_Clicked;
 
 
 
 
-            this.WidthRequest = deviceSpec.ScreenWidth;
-            this.HeightRequest = deviceSpec.ScreenHeight;
+            this.WidthRequest = screenWidth;
+            this.HeightRequest = screenHeight;
 
             masterLayout.AddChildToLayout(layout, 0, 0);
           /*  if (titelBarRequired)

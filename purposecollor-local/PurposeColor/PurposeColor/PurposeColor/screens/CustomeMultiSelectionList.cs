@@ -26,7 +26,7 @@ namespace PurposeColor.screens
             set
             {
                 string trimmedName = string.Empty;
-                if (value.Length > 20)
+                if (value.Length > 28)
                 {
                     trimmedName = value.Substring(0, 28);
                     trimmedName += "...";

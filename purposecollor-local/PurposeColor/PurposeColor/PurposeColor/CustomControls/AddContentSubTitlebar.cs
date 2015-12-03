@@ -18,9 +18,8 @@ namespace PurposeColor.CustomControls
 
         public AddContentSubTitlebar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true)
         {
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)spec.ScreenHeight * 7 / 100;
-            int titlebarWidth = (int)spec.ScreenWidth;
+            int titlebarHeight = (int)App.screenHeight * 7 / 100;
+            int titlebarWidth = (int)App.screenWidth;
             this.BackgroundColor = backGroundColor;
 
             masterLayout = new CustomLayout();
@@ -30,14 +29,14 @@ namespace PurposeColor.CustomControls
 
             Image bgImage = new Image();
             bgImage.Source = Device.OnPlatform("top_bg.png", "top_bg.png", "//Assets//top_bg.png");
-            bgImage.WidthRequest = spec.ScreenWidth;
+            bgImage.WidthRequest = App.screenWidth;
             bgImage.HeightRequest = titlebarHeight;
             bgImage.Aspect = Aspect.Fill;
 
             Image backArrow = new Image();
             backArrow.Source = Device.OnPlatform("arrow_blue.png", "arrow_blue.png", "//Assets//arrow_blue.png");
-            backArrow.HeightRequest = spec.ScreenHeight * 4 / 100;
-            backArrow.WidthRequest = spec.ScreenWidth * 5 / 100;
+            backArrow.HeightRequest = App.screenHeight * 4 / 100;
+            backArrow.WidthRequest = App.screenWidth * 5 / 100;
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
@@ -54,8 +53,8 @@ namespace PurposeColor.CustomControls
             NextButton.BackgroundColor = Color.Transparent;
             NextButton.BorderColor = Color.Transparent;
             NextButton.BorderWidth = 0;
-            NextButton.WidthRequest = spec.ScreenWidth * Device.OnPlatform(15, 15, 25) / 100;
-            NextButton.HeightRequest = spec.ScreenHeight * Device.OnPlatform(5, 5, 8) / 100;
+            NextButton.WidthRequest = App.screenWidth * Device.OnPlatform(15, 15, 25) / 100;
+            NextButton.HeightRequest = App.screenHeight * Device.OnPlatform(5, 5, 8) / 100;
 
 
             title = new Label();

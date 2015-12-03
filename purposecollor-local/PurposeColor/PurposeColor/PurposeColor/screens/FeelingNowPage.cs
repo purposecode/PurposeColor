@@ -23,19 +23,24 @@ namespace PurposeColor
         CustomSlider slider;
         CustomPicker ePicker;
         CustomLayout masterLayout;
-        IDeviceSpec deviceSpec;
+        //IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
         CustomListViewItem selectedEmotionItem;
         CustomListViewItem selectedEventItem;
         Label about;
         public static int sliderValue;
+        double screenHeight;
+        double screenWidth;
         public FeelingNowPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
-            deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //deviceSpec = DependencyService.Get<IDeviceSpec>();
+
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
@@ -47,7 +52,7 @@ namespace PurposeColor
             {
                 Minimum = -2,
                 Maximum = 2,
-                WidthRequest = deviceSpec.ScreenWidth * 90 / 100
+                WidthRequest = screenWidth * 90 / 100
             };
             slider.StopGesture = GetstopGetsture;
 
@@ -58,16 +63,16 @@ namespace PurposeColor
             howYouAreFeeling.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             howYouAreFeeling.TextColor = Color.FromRgb(40, 47, 50);
             howYouAreFeeling.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
-            howYouAreFeeling.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            howYouAreFeeling.WidthRequest = screenWidth * 70 / 100;
+            howYouAreFeeling.HeightRequest = screenHeight * 15 / 100;
 
             Label howYouAreFeeling2 = new Label();
             howYouAreFeeling2.Text = "feeling now ?";
             howYouAreFeeling2.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             howYouAreFeeling2.TextColor = Color.FromRgb( 40, 47, 50 );
             howYouAreFeeling2.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling2.WidthRequest = deviceSpec.ScreenWidth * 70 / 100;
-            howYouAreFeeling2.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            howYouAreFeeling2.WidthRequest = screenWidth * 70 / 100;
+            howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
 
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
             emotionalPickerButton.ImageName = "select_box_whitebg.png";
@@ -76,8 +81,8 @@ namespace PurposeColor
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             emotionalPickerButton.TextColor = Color.Gray;
-            emotionalPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //emotionalPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            emotionalPickerButton.WidthRequest = screenWidth * 90 / 100;
+            //emotionalPickerButton.HeightRequest = screenHeight * 8 / 100;
             emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
@@ -88,8 +93,8 @@ namespace PurposeColor
             eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             eventPickerButton.FontSize = 17;
             eventPickerButton.TextColor = Color.Gray;
-            eventPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //eventPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            eventPickerButton.WidthRequest = screenWidth * 90 / 100;
+            //eventPickerButton.HeightRequest = screenHeight * 8 / 100;
             eventPickerButton.Clicked += OnEventPickerButtonClicked;
 
             about = new Label();
@@ -98,8 +103,8 @@ namespace PurposeColor
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             about.TextColor = Color.Gray;
             about.FontSize = Device.OnPlatform(20, 16, 30);
-            about.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
-            about.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            about.WidthRequest = screenWidth * 50 / 100;
+            about.HeightRequest = screenHeight * 15 / 100;
             about.HorizontalOptions = LayoutOptions.Center;
 
             Image sliderDivider1 = new Image();
@@ -146,8 +151,8 @@ namespace PurposeColor
                     return;
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                ePicker.WidthRequest = deviceSpec.ScreenWidth;
-                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
@@ -176,8 +181,8 @@ namespace PurposeColor
                     return;
   
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                ePicker.WidthRequest = deviceSpec.ScreenWidth;
-                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
@@ -247,16 +252,16 @@ namespace PurposeColor
                 return;
             }
             List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
-            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);
-            ePicker.WidthRequest = deviceSpec.ScreenWidth;
-            ePicker.HeightRequest = deviceSpec.ScreenHeight;
+            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65
+            ePicker.WidthRequest = screenWidth;
+            ePicker.HeightRequest = screenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.FeelingsPage = this;
             ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
             masterLayout.AddChildToLayout(ePicker, 0, 0);
-
-            //double yPos = 60 * deviceSpec.ScreenHeight / 100;
-           // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
+            //ePicker.FadeTo(1, 1000, Easing.CubicOut);
+            //double yPos = 60 * screenHeight / 100;
+            //ePicker.TranslateTo(0, 65, 3000, Easing.Linear);
            // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
 
@@ -264,12 +269,12 @@ namespace PurposeColor
         {
 
             CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 65, Constants.ADD_EVENTS, true, true);
-            ePicker.WidthRequest = deviceSpec.ScreenWidth;
-            ePicker.HeightRequest = deviceSpec.ScreenHeight;
+            ePicker.WidthRequest = screenWidth;
+            ePicker.HeightRequest = screenHeight;
             ePicker.ClassId = "ePicker";
             ePicker.listView.ItemSelected += OnEventPickerItemSelected;
             masterLayout.AddChildToLayout(ePicker, 0, 0);
-            //double yPos = 60 * deviceSpec.ScreenHeight / 100;
+            //double yPos = 60 * screenHeight / 100;
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
            // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
@@ -391,7 +396,7 @@ namespace PurposeColor
             slider = null;
             ePicker = null;
             masterLayout = null;
-            deviceSpec = null;
+            //deviceSpec = null;
             emotionalPickerButton = null;
             eventPickerButton = null;
         }

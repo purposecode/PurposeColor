@@ -24,7 +24,7 @@ namespace PurposeColor.CustomControls
             get { return name; }
             set {
                 string trimmedName = string.Empty;
-                if (value.Length > 20)
+                if (value.Length > 28)
                 {
                     trimmedName = value.Substring(0, 28);
                     trimmedName += "...";
@@ -53,7 +53,9 @@ namespace PurposeColor.CustomControls
         {
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.LIST_BG_COLOR;
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            double screenWidth = App.screenWidth;
+            double screenHeight = App.screenHeight;
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
@@ -61,12 +63,12 @@ namespace PurposeColor.CustomControls
             name.FontSize = 18;
             
             StackLayout divider = new StackLayout();
-            divider.WidthRequest = deviceSpec.ScreenWidth * 60 * 100;
+            divider.WidthRequest = screenWidth * 60 * 100;
             divider.HeightRequest = 1;
             divider.BackgroundColor = Color.FromRgb(220, 220, 220);
 
-            masterLayout.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 30, 10) / 100;
+            masterLayout.WidthRequest = screenWidth * 60 / 100;
+            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 10) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -83,7 +85,7 @@ namespace PurposeColor.CustomControls
         string pageTitle;
         CustomLayout masterLayout;
         Label listTitle;
-        IDeviceSpec deviceSpec;
+        //IDeviceSpec deviceSpec;
         CustomImageButton addButton;
         CustomImageButton addEmotionButton;
         public FeelingNowPage FeelingsPage
@@ -92,13 +94,16 @@ namespace PurposeColor.CustomControls
             set;
         }
         int topYPos;
+        double screenHeight;
+        double screenWidth;
         public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
         {
             pageContainedLayout = containerLayout;
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
-            deviceSpec = DependencyService.Get<IDeviceSpec>();
-
+            //deviceSpec = DependencyService.Get<IDeviceSpec>();
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
             string trimmedPageTitle = string.Empty;
             if (title.Length > 25)
             {
@@ -116,8 +121,8 @@ namespace PurposeColor.CustomControls
             StackLayout layout = new StackLayout();
             layout.BackgroundColor = Color.Black;
             layout.Opacity = .4;
-            layout.WidthRequest = deviceSpec.ScreenWidth;
-            layout.HeightRequest = deviceSpec.ScreenHeight;
+            layout.WidthRequest = screenWidth;
+            layout.HeightRequest = screenHeight;
 
             TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
             emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
@@ -131,13 +136,13 @@ namespace PurposeColor.CustomControls
 
 
             StackLayout listContainer = new StackLayout();
-            listContainer.WidthRequest = deviceSpec.ScreenWidth * 96 / 100;
-            listContainer.HeightRequest = (deviceSpec.ScreenHeight * topY / 100) - 20;
+            listContainer.WidthRequest = screenWidth * 96 / 100;
+            listContainer.HeightRequest = (screenHeight * topY / 100) - 20;
 
 
             StackLayout listHeader = new StackLayout();
-            listHeader.WidthRequest = deviceSpec.ScreenWidth * 96 / 100;
-            listHeader.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
+            listHeader.WidthRequest = screenWidth * 96 / 100;
+            listHeader.HeightRequest = screenHeight * 10 / 100;
             listHeader.BackgroundColor = Color.FromRgb( 30, 126, 210 );
 
             listTitle = new Label();
@@ -173,11 +178,11 @@ namespace PurposeColor.CustomControls
             listView = new ListView();
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
-            listView.HeightRequest = deviceSpec.ScreenHeight * 42 / 100;
+            listView.HeightRequest = screenHeight * 42 / 100;
             listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.Opacity = 1;
             listView.BackgroundColor = Constants.LIST_BG_COLOR;
-            listView.WidthRequest = deviceSpec.ScreenWidth * 60;
+            listView.WidthRequest = screenWidth * 60;
             StackLayout listViewSpacer = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
@@ -185,8 +190,8 @@ namespace PurposeColor.CustomControls
                 BackgroundColor = Constants.LIST_BG_COLOR,//Color.White,
                 Children = { listView }
             };
-            listViewSpacer.WidthRequest = deviceSpec.ScreenWidth * 95 / 100;
-            listViewSpacer.HeightRequest = (deviceSpec.ScreenHeight * topY / 100)-20;
+            listViewSpacer.WidthRequest = screenWidth * 95 / 100;
+            listViewSpacer.HeightRequest = (screenHeight * topY / 100)-20;
 
 
             listContainer.Children.Add( listViewSpacer );
@@ -194,8 +199,8 @@ namespace PurposeColor.CustomControls
 
 
 
-            this.WidthRequest = deviceSpec.ScreenWidth;
-            this.HeightRequest = deviceSpec.ScreenHeight;
+            this.WidthRequest = screenWidth;
+            this.HeightRequest = screenHeight;
 
             masterLayout.AddChildToLayout(layout, 0, 0);
             if (titelBarRequired)
@@ -224,7 +229,7 @@ namespace PurposeColor.CustomControls
                 CustomEntry emotionsEntry = new CustomEntry();
                 emotionsEntry.BackgroundColor = Color.White;
                 emotionsEntry.Placeholder = "Enter emotion";
-                emotionsEntry.WidthRequest =  deviceSpec.ScreenWidth * 75 / 100;
+                emotionsEntry.WidthRequest =  screenWidth * 75 / 100;
                 emotionsEntry.TextColor = Color.Black;
                 listTitle.IsVisible = false;
                 addButton.IsVisible = false;
@@ -305,7 +310,7 @@ namespace PurposeColor.CustomControls
             pageTitle = null;
             masterLayout = null;
             listTitle = null;
-            deviceSpec = null;
+            //deviceSpec = null;
             addButton = null;
             addEmotionButton = null;
             GC.Collect();

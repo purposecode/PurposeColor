@@ -1,4 +1,5 @@
-﻿using CustomControls;
+﻿using Cross;
+using CustomControls;
 using PurposeColor.CustomControls;
 using PurposeColor.Database;
 using PurposeColor.Model;
@@ -48,9 +49,15 @@ namespace PurposeColor
         {
             get { return token; }
         }
+        IDeviceSpec deviceSpec;
+        public static double screenHeight;
+        public static double screenWidth;
 
         public App()
         {
+            deviceSpec = DependencyService.Get<IDeviceSpec>();
+            screenHeight = deviceSpec.ScreenHeight;
+            screenWidth = deviceSpec.ScreenWidth;
             MediaArray = new List<MediaItem>();
             ContactsArray = new List<string>();
             ExtentionArray = new List<string>();
@@ -58,6 +65,7 @@ namespace PurposeColor
             MenuPage menuPage = new MenuPage();
             masterPage = new PurposeMasterDetailPage();
             MainPage = masterPage;
+
         }
 
         protected override void OnStart()
@@ -216,19 +224,19 @@ namespace PurposeColor
             masterPage = master;
 
             //  Title = "details";
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)spec.ScreenHeight * 10 / 100;
-            int titlebarWidth = (int)spec.ScreenWidth;
+            //Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
+            int titlebarHeight = (int)App.screenHeight * 10 / 100;//(int)spec.ScreenHeight * 10 / 100;
+            int titlebarWidth = (int)App.screenWidth; //(int)spec.ScreenWidth;
 
             CustomLayout masteLlayout = new CustomLayout();
-            masteLlayout.WidthRequest = (int)spec.ScreenWidth;
-            masteLlayout.HeightRequest = (int)spec.ScreenHeight;
+            masteLlayout.WidthRequest = (int)App.screenWidth;//(int)spec.ScreenWidth;
+            masteLlayout.HeightRequest = (int)App.screenHeight;//(int)spec.ScreenHeight;
 
     //        CustomTitleBar titleBar = new CustomTitleBar();
 
             StackLayout layout = new StackLayout();
-            layout.WidthRequest = (int)spec.ScreenWidth; ;
-            layout.HeightRequest = (int)spec.ScreenHeight * 90 / 100;
+            layout.WidthRequest = (int)App.screenWidth;//(int)spec.ScreenWidth;
+            layout.HeightRequest = (int)App.screenHeight * 90 / 100; //(int)spec.ScreenHeight * 90 / 100;
         
             masteLlayout.AddChildToLayout(layout, 0, 10);
 

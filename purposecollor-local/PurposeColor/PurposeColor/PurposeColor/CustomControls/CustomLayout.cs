@@ -14,9 +14,9 @@ namespace CustomControls
         double screenWidth;
         public CustomLayout()
         {
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
-            screenHeight = deviceSpec.ScreenHeight;
-            screenWidth = deviceSpec.ScreenWidth;
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            screenHeight = PurposeColor.App.screenHeight;//deviceSpec.ScreenHeight;
+            screenWidth = PurposeColor.App.screenWidth;//deviceSpec.ScreenWidth;
         }
         public void AddChildToLayout( View view, float xPercent, float yPercent )
         {

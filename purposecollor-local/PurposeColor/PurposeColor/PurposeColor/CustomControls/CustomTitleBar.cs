@@ -21,9 +21,9 @@ namespace PurposeColor.CustomControls
 
         public CustomTitleBar( Color backGroundColor, string titleValue, Color titleColor, string backButtonTitle )
         {
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)spec.ScreenHeight * 10 / 100;
-            int titlebarWidth = (int)spec.ScreenWidth;
+            //Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
+            int titlebarHeight = (int)App.screenHeight * 10 / 100;//(int)spec.ScreenHeight * 10 / 100;
+            int titlebarWidth = (int)App.screenWidth;//(int)spec.ScreenWidth;
             this.BackgroundColor = backGroundColor;
 
             masterLayout = new CustomLayout();
@@ -48,7 +48,7 @@ namespace PurposeColor.CustomControls
 
             Image logo = new Image();
             logo.Source = Device.OnPlatform("logo.png", "logo.png", "//Assets//logo.png");
-            logo.WidthRequest = spec.ScreenWidth;
+            logo.WidthRequest = App.screenWidth; //spec.ScreenWidth;
             logo.HeightRequest = titlebarHeight;
 
 

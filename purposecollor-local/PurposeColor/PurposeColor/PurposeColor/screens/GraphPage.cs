@@ -28,25 +28,28 @@ namespace PurposeColor.screens
 
         public GraphPage()
         {
+            double screenWidth = App.screenWidth;
+            double screenHeight = App.screenHeight;
+
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             canvas = new StackLayout();
-            canvas.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            canvas.HeightRequest = deviceSpec.ScreenHeight * 50 / 100;
+            canvas.WidthRequest = screenWidth * 90 / 100;
+            canvas.HeightRequest = screenHeight * 50 / 100;
             canvas.BackgroundColor = Color.Aqua;
 
             StackLayout yAxis = new StackLayout();
             yAxis.BackgroundColor = Color.Black;
             yAxis.WidthRequest = 1;
-            yAxis.HeightRequest = deviceSpec.ScreenHeight * 50 / 100;
+            yAxis.HeightRequest = screenHeight * 50 / 100;
 
             StackLayout xAxis = new StackLayout();
             xAxis.BackgroundColor = Color.Black;
-            xAxis.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
+            xAxis.WidthRequest = screenWidth * 90 / 100;
             xAxis.HeightRequest = 1;
 
             RoundedButton button = new RoundedButton();
@@ -54,8 +57,8 @@ namespace PurposeColor.screens
             button.WidthRequest = 5;
             button.HeightRequest = 5;
 
-            canvasXPos = deviceSpec.ScreenWidth * CANVAS_X_POS_PERCENTAGE / 100;
-            canvasYPos = deviceSpec.ScreenHeight * CANVAS_Y_POS_PERCENTAGE / 100;
+            canvasXPos = screenWidth * CANVAS_X_POS_PERCENTAGE / 100;
+            canvasYPos = screenHeight * CANVAS_Y_POS_PERCENTAGE / 100;
 
             masterLayout.AddChildToLayout(canvas, CANVAS_X_POS_PERCENTAGE, CANVAS_Y_POS_PERCENTAGE);
             masterLayout.AddChildToLayout(yAxis, 50, 25);

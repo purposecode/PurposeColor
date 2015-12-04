@@ -48,10 +48,8 @@ namespace PurposeColor.screens
         string pageTitle;
         bool isAudioRecording = false;
         PurposeColor.interfaces.IAudioRecorder audioRecorder;
-        string folder;
-        string path;
-        List<CustomListViewItem> contacts;
-        //IDeviceSpec deviceSpec;
+       
+        IDeviceSpec deviceSpec;
         string lattitude;
         string longitude;
         string currentAddress;
@@ -69,7 +67,7 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             audioRecorder = DependencyService.Get<PurposeColor.interfaces.IAudioRecorder>();
-            //deviceSpec = DependencyService.Get<IDeviceSpec>();
+            deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
 
@@ -97,9 +95,9 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(TopTitleBar, 0, 0);
 
             string trimmedPageTitle = string.Empty;
-            if (title.Length > 20)
+            if (title.Length > 22)
             {
-                trimmedPageTitle = title.Substring(0, 20);
+                trimmedPageTitle = title.Substring(0, 22);
                 trimmedPageTitle += "...";
             }
             else
@@ -133,7 +131,7 @@ namespace PurposeColor.screens
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                HeightRequest = 150,
+                HeightRequest = 100,
                 Placeholder = pageTitle
             };
 
@@ -153,8 +151,8 @@ namespace PurposeColor.screens
 
             textInputContainer = new StackLayout
             {
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
-                Padding = 1,
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                //Padding = 1,
                 Spacing = 0,
                 Children = { eventDescription }
             };
@@ -166,6 +164,7 @@ namespace PurposeColor.screens
             #endregion
 
             #region ICONS
+            double iconsTotalWidth = 0;
 
             audioInput = new Image()
             {
@@ -175,11 +174,14 @@ namespace PurposeColor.screens
             audioInputStack = new StackLayout
             {
                 Padding = 10,
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
-                Children = { audioInput, new Label { Text = "Audio", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
+                Children = { audioInput 
+                                /*, new Label { Text = "Audio", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) }*/ 
+                           }
             };
+            iconsTotalWidth += audioInput.Width;
 
             cameraInput = new Image()
             {
@@ -189,11 +191,15 @@ namespace PurposeColor.screens
             cameraInputStack = new StackLayout
             {
                 Padding = 10,
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
-                Children = { cameraInput, new Label { Text = "Camera", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
+                Children = { cameraInput
+                                /*, new Label { Text = "Camera", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } 
+                                 */
+                            }
             };
+            iconsTotalWidth += cameraInput.Width;
             cameraInputStack.ClassId = "camera";
 
             #region CAMERA TAP RECOGNIZER
@@ -263,12 +269,15 @@ namespace PurposeColor.screens
             };
             galleryInputStack = new StackLayout
             {
-                Padding = 10,
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                Padding = 10,//new Thickness(0, 10, 10, 10),//
+               // BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
-                Children = { galleryInput, new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
+                Children = { galleryInput 
+                                //new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } 
+                            }
             };
+            iconsTotalWidth += galleryInput.Width;
             galleryInputStack.ClassId = "gallery";
 
             #region GALLERY  TAP RECOGNIZER
@@ -293,12 +302,15 @@ namespace PurposeColor.screens
             };
             locationInputStack = new StackLayout
             {
-                Padding = new Thickness(Device.OnPlatform(10, 10, 14), 10, Device.OnPlatform(10, 10, 14), 10),
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                Padding = 10,// new Thickness(Device.OnPlatform(10, 10, 14), 10, Device.OnPlatform(10, 10, 14), 10),
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
-                Children = { locationInput, new Label { Text = "Location", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
+                Children = { locationInput
+                                //, new Label { Text = "Location", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } 
+                            }
             };
+            iconsTotalWidth += locationInput.Width;
 
             #region LOCATION TAP RECOGNIZER
 
@@ -316,13 +328,16 @@ namespace PurposeColor.screens
 
             contactInputStack = new StackLayout
             {
-                Padding = 10,
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                Padding = 10,//new Thickness(10,10,0,10),//
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 Spacing = 0,
                 HorizontalOptions = LayoutOptions.Center,
-                Children = { contactInput, new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } }
+                Children = { contactInput
+                    //new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) }
+                     }
             };
-
+            iconsTotalWidth += contactInput.Width;
+ 
             #region CONTACTS TAP RECOGNIZER
 
             TapGestureRecognizer contactsInputTapRecognizer = new TapGestureRecognizer();
@@ -332,8 +347,6 @@ namespace PurposeColor.screens
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 try
                 {
-
-
                     progress.ShowProgressbar("Fetching contacts..");
                     List<string> conatctList = new List<string>();
                     PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
@@ -372,6 +385,8 @@ namespace PurposeColor.screens
 
 
                     progress.HideProgressbar();
+
+                    #region CONTACTS BK UP
 
                     /*	if (await CrossContacts.Current.RequestPermission())
                         {
@@ -419,6 +434,8 @@ namespace PurposeColor.screens
                         {
                             DisplayAlert("contacts access permission ", "Please add permission to access contacts", "ok");
                         }*/
+                    
+                    #endregion
                 }
                 catch (Exception ex)
                 {
@@ -432,17 +449,23 @@ namespace PurposeColor.screens
             #endregion
 
             #region CONTAINERS
-
+            var screenDensity = App.screenDensity;
+            
             iconContainer = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
-                HorizontalOptions = LayoutOptions.Center,
-                WidthRequest = (int)(devWidth * .92) + 2, /// 2 pxl padding added to text input.
-                Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 4.5 / 100), (screenWidth * 3.8 / 100)),
+                //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                WidthRequest = (int)(devWidth * .92),
+               
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };
+
+            if (deviceSpec.ScreenDensity > 1.5)
+            {
+                iconContainer.Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 5 / 100), (screenWidth * 3.8 / 100));//4.6
+            }
 
             textinputAndIconsHolder = new StackLayout
             {
@@ -640,7 +663,6 @@ namespace PurposeColor.screens
             }
 
         }
-
 
         void imageButton_Clicked(object sender, EventArgs e)
         {
@@ -853,14 +875,13 @@ namespace PurposeColor.screens
             Navigation.PopAsync();
         }
 
-
         public void AddFileToMediaArray(MemoryStream ms, string path, PurposeColor.Constants.MediaType mediaType)
         {
             try
             {
                 MediaPost mediaWeb = new MediaPost();
-                mediaWeb.event_details = eventDescription.Text;
-                mediaWeb.event_title = eventTitle.Text;
+                mediaWeb.event_details = string.IsNullOrWhiteSpace(eventDescription.Text) ? string.Empty : eventDescription.Text;
+                mediaWeb.event_title = string.IsNullOrWhiteSpace(eventTitle.Text) ? string.Empty : eventTitle.Text;
                 mediaWeb.user_id = 2;
 
                 string imgType = System.IO.Path.GetExtension(path);
@@ -939,7 +960,6 @@ namespace PurposeColor.screens
             }
         }
 
-
         public void Dispose()
         {
             subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
@@ -963,12 +983,9 @@ namespace PurposeColor.screens
             this.textinputAndIconsHolder = null;
             this.audioRecorder = null;
             this.eventTitle = null;
-            this.contacts = null;
             GC.Collect();
         }
     }
-
-
 
     public class MediaSourceChooser : ContentView
     {

@@ -26,7 +26,14 @@ namespace PurposeColor
         IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton actionPickerButton;
         PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton;
-        public static ObservableCollection<PreviewItem> actionPreviewListSource = new ObservableCollection<PreviewItem>();
+        public static ObservableCollection<PreviewItem> actionPreviewListSource = null;
+        PurposeColorSubTitleBar subTitleBar = null;
+        PurposeColorTitleBar mainTitleBar = null;
+        ListView actionPreviewListView = null;
+        StackLayout listContainer = null;
+        CustomSlider slider = null;
+        CustomListViewItem selectedGoal = null;
+        List<CustomListViewItem> selectedActions = null;
 
         public FeelingsSecondPage()
         {
@@ -38,48 +45,52 @@ namespace PurposeColor
             this.Appearing += FeelingsSecondPage_Appearing;
             actionPreviewListSource = new ObservableCollection<PreviewItem>();
 
-
-            PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+            mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
-            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
-
 
             Label firstLine = new Label();
             firstLine.Text = "Does being";
             firstLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             firstLine.TextColor = Color.FromRgb(40, 47, 50);
-            firstLine.FontSize = Device.OnPlatform(20, 22, 30);
             firstLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
             firstLine.HorizontalOptions = LayoutOptions.Center;
             firstLine.WidthRequest = deviceSpec.ScreenWidth;
             firstLine.XAlign = TextAlignment.Center;
 
-
             Label secondLine = new Label();
             secondLine.Text = App.SelectedEmotion;
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             secondLine.TextColor = Color.FromRgb(40, 47, 50);
-            secondLine.FontSize = Device.OnPlatform(20, 22, 30);
             secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
             secondLine.HorizontalOptions = LayoutOptions.Center;
             secondLine.WidthRequest = deviceSpec.ScreenWidth;
             secondLine.XAlign = TextAlignment.Center;
 
-
-
             Label thirdLine = new Label();
             thirdLine.Text = "support your goals and dreams?";
             thirdLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             thirdLine.TextColor = Color.FromRgb(40, 47, 50);
-            thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
             thirdLine.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
             thirdLine.HorizontalOptions = LayoutOptions.Center;
             thirdLine.WidthRequest = deviceSpec.ScreenWidth;
             thirdLine.XAlign = TextAlignment.Center;
 
+            if (App.screenDensity > 1.5)
+            {
+                firstLine.FontSize = Device.OnPlatform(20, 22, 30);
+                secondLine.FontSize = Device.OnPlatform(20, 22, 30);
+                thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
+            }
+            else
+            {
+                firstLine.FontSize = Device.OnPlatform(16, 18, 26);
+                secondLine.FontSize = Device.OnPlatform(16, 18, 26);
+                thirdLine.FontSize = Device.OnPlatform(16, 18, 26);
+            }
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
             goalsAndDreamsPickerButton.ImageName = "select_box_whitebg.png";
@@ -107,7 +118,7 @@ namespace PurposeColor
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
 
-            CustomSlider slider = new CustomSlider
+            slider = new CustomSlider
             {
                 Minimum = -2,
                 Maximum = 2,
@@ -146,13 +157,13 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(actionPickerButton, 5, 65);
 
 
-            StackLayout listContainer = new StackLayout();
+            listContainer = new StackLayout();
             listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
             listContainer.HeightRequest = deviceSpec.ScreenHeight * 20 / 100;
             listContainer.ClassId = "preview";
 
-            ListView actionPreviewListView = new ListView();
+            actionPreviewListView = new ListView();
             actionPreviewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             actionPreviewListView.ItemTemplate = new DataTemplate(typeof(ActionPreviewCellItem));
             actionPreviewListView.SeparatorVisibility = SeparatorVisibility.None;
@@ -165,13 +176,26 @@ namespace PurposeColor
 
         }
 
-        void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
+        async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-            notfiy.ShowNotification("Purpose Color", "Emotional awareness created");
+            try
+            {
+
+                ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                notfiy.ShowNotification("Purpose Color", "Emotional awareness created");
+
+                if (goalsAndDreamsPickerButton.Text == "Goals & Dreams")
+                {
+                    //
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+                DisplayAlert(Constants.ALERT_TITLE, "Could not save the data, please try again", Constants.ALERT_OK);
+            }
         }
-
-
         
         public async void GetstopGetsture(bool pressed)
         {
@@ -179,6 +203,7 @@ namespace PurposeColor
 
             OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
         }
+
         public static async Task<bool> DownloadAllGoals()
         {
             try
@@ -244,7 +269,7 @@ namespace PurposeColor
                     bool isGoalsAvailable = await DownloadAllGoals();
                     if (!isGoalsAvailable)
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Netwrok error occured.", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "Could not retrive the goals.", Constants.ALERT_OK);
                         progressBar.HideProgressbar();
                         return;
                     }
@@ -257,8 +282,16 @@ namespace PurposeColor
                 if (App.actionsListSource == null || App.actionsListSource.Count < 1)
                 {
                     bool isActionsAvailable = await DownloadAllSupportingActions();
-                    
-                    // save actions to local db
+
+                    if (!isActionsAvailable)
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Could not retrive the acions.", Constants.ALERT_OK);
+                        return;
+                    }
+                    else
+                    {
+                        // save goals to local db
+                    }
 
                 }
                 progressBar.HideProgressbar();
@@ -287,7 +320,6 @@ namespace PurposeColor
             Navigation.PushAsync(new GraphPage());
         }
 
-
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
 
@@ -312,19 +344,6 @@ namespace PurposeColor
 
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
-            //if (App.goalsListSource == null || App.goalsListSource.Count <= 0)
-            //{
-            //    IProgressBar progress = DependencyService.Get<IProgressBar>();
-            //    progress.ShowToast("Goals empty");
-            //    return;
-            //}
-            /*
-            App.goalsListSource = new List<CustomListViewItem>();
-            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Loose weight", SliderValue = 2 });
-            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make a trip", SliderValue = 2 });
-            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Learn Yoga", SliderValue = 2 });
-            App.goalsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make certification", SliderValue = 2 });
-            */
             CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
             ePicker.WidthRequest = deviceSpec.ScreenWidth;
             ePicker.HeightRequest = deviceSpec.ScreenHeight;
@@ -335,8 +354,6 @@ namespace PurposeColor
             //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
             // ePicker.FadeTo(1, 750, Easing.Linear); 
         }
-
-
 
         protected override bool OnBackButtonPressed()
         {
@@ -358,6 +375,11 @@ namespace PurposeColor
             masterLayout.Children.Remove(pickView);
             pickView = null;
             actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
+            if (selectedActions == null)
+            {
+                selectedActions = new List<CustomListViewItem>();
+            }
+            selectedActions.Add(item);
         }
 
         void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -369,8 +391,9 @@ namespace PurposeColor
             masterLayout.Children.Remove(pickView);
             pickView = null;
             actionPickerButton.IsVisible = true;
-
-            //OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
+            selectedGoal = item;
+            
+            OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -395,37 +418,55 @@ namespace PurposeColor
 
         public void Dispose()
         {
-            ePicker = null;
-            masterLayout = null;
-            deviceSpec = null;
-            actionPickerButton = null;
-            goalsAndDreamsPickerButton = null;
+            this.mainTitleBar.imageAreaTapGestureRecognizer.Tapped -= imageAreaTapGestureRecognizer_Tapped;
+            this.mainTitleBar = null;
+            this.subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
+            this.subTitleBar.NextButtonTapRecognizer.Tapped -= NextButtonTapRecognizer_Tapped;
+            this.Appearing -= FeelingNowPage_Appearing;
+            this.goalsAndDreamsPickerButton.Clicked -= OnGoalsPickerButtonClicked;
+            this.goalsAndDreamsPickerButton = null;
+            this.actionPickerButton.Clicked -= OnActionPickerButtonClicked;
+            this.actionPickerButton = null;
+            this.subTitleBar = null;
+            this.ePicker = null;
+            this.masterLayout = null;
+            this.deviceSpec = null;
+            actionPreviewListSource.Clear();
+            actionPreviewListSource = null;
+            this.actionPreviewListView = null;
+            this.listContainer = null;
+            this.slider = null;
+            this.selectedGoal = null;
+            this.selectedActions = null;
+            
+            GC.Collect();
         }
     }
 
-
-
-
     public class ActionPreviewCellItem : ViewCell
     {
+        CustomLayout masterLayout = null;
+        Label name = null;
+        StackLayout divider = null;
+        CustomImageButton deleteButton = null;
+
         public ActionPreviewCellItem()
         {
-            CustomLayout masterLayout = new CustomLayout();
+            masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
-            Label name = new Label();
+            name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Gray;
             name.FontSize = Device.OnPlatform(12, 15, 18);
             name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
 
-            StackLayout divider = new StackLayout();
+            divider = new StackLayout();
             divider.WidthRequest = deviceSpec.ScreenWidth;
             divider.HeightRequest = .75;
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
-
-            CustomImageButton deleteButton = new CustomImageButton();
+            deleteButton = new CustomImageButton();
             deleteButton.ImageName = "delete_button.png";
             deleteButton.WidthRequest = 20;
             deleteButton.HeightRequest = 20;
@@ -444,8 +485,6 @@ namespace PurposeColor
 
             masterLayout.WidthRequest = deviceSpec.ScreenWidth;
             masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
-
-
             masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(5, 5, 5), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -453,7 +492,14 @@ namespace PurposeColor
 
         }
 
+        public void Dispose()
+        {
+            this.masterLayout = null;
+            this.name = null;
+            this.divider = null;
+            this.deleteButton = null;
 
-
+            GC.Collect();
+        }
     }
 }

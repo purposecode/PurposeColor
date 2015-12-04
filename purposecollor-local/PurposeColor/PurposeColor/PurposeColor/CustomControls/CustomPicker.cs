@@ -44,6 +44,10 @@ namespace PurposeColor.CustomControls
         public CustomListViewItem()
         {
         }
+        public void Dispose()
+        {
+            GC.Collect();
+        }
     }
 
 
@@ -53,15 +57,21 @@ namespace PurposeColor.CustomControls
         {
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.LIST_BG_COLOR;
-            //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             double screenWidth = App.screenWidth;
             double screenHeight = App.screenHeight;
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
             name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            name.FontSize = 18;
-            
+            //name.FontSize = 18;
+            if (App.screenDensity > 1.5)
+            {
+                name.FontSize = 17;
+            }
+            else
+            {
+                name.FontSize = 15;
+            }
             StackLayout divider = new StackLayout();
             divider.WidthRequest = screenWidth * 60 * 100;
             divider.HeightRequest = 1;
@@ -73,9 +83,12 @@ namespace PurposeColor.CustomControls
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
-
         }
 
+        public void Dispose()
+        {
+            GC.Collect();
+        }
     }
 
     public class CustomPicker : ContentView, IDisposable
@@ -85,7 +98,6 @@ namespace PurposeColor.CustomControls
         string pageTitle;
         CustomLayout masterLayout;
         Label listTitle;
-        //IDeviceSpec deviceSpec;
         CustomImageButton addButton;
         CustomImageButton addEmotionButton;
         public FeelingNowPage FeelingsPage
@@ -101,13 +113,12 @@ namespace PurposeColor.CustomControls
             pageContainedLayout = containerLayout;
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
-            //deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             string trimmedPageTitle = string.Empty;
-            if (title.Length > 25)
+            if (title.Length > 33)
             {
-                trimmedPageTitle = title.Substring(0, 25);
+                trimmedPageTitle = title.Substring(0, 33);
                 trimmedPageTitle += "...";
             }
             else
@@ -149,8 +160,15 @@ namespace PurposeColor.CustomControls
             listTitle.Text = trimmedPageTitle;
             listTitle.TextColor = Color.White;
             listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            listTitle.FontSize = 17;
 
+            if (App.screenDensity > 1.5)
+            {
+                listTitle.FontSize = 17;
+            }
+            else
+            {
+                listTitle.FontSize = 15;
+            }
 
             addButton = new CustomImageButton();
             if (Device.OS == TargetPlatform.WinPhone)

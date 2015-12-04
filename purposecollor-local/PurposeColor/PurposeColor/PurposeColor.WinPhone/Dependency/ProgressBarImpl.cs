@@ -35,6 +35,10 @@ namespace PurposeColor.WinPhone.Dependency
                 SystemTray.ProgressIndicator.IsVisible = false;
             }
         }
+        public void ShowToast(string messege)
+        {
+
+        }
 
     }
 }

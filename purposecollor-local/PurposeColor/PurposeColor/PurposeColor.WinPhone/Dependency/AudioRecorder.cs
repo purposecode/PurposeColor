@@ -77,7 +77,7 @@ namespace PurposeColor.WinPhone.Dependency
             }
         }
 
-        public void StopRecording()
+        public MemoryStream StopRecording()
         {
             try
             {
@@ -87,6 +87,8 @@ namespace PurposeColor.WinPhone.Dependency
             {
                 System.Diagnostics.Debug.WriteLine("StopRecording :" + ex.Message);
             }
+
+            return null; //for testing only
         }
 
         public void PlayAudio()

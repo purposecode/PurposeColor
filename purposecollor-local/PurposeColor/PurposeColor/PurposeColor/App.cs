@@ -37,6 +37,7 @@ namespace PurposeColor
         public static List<string> ExtentionArray { get; set; }
         public static List<string> ContactsArray { get; set; }
         public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
+        public static string newEmotionId;
         public static ApplicationSettings Settings
         {
             get
@@ -52,12 +53,14 @@ namespace PurposeColor
         IDeviceSpec deviceSpec;
         public static double screenHeight;
         public static double screenWidth;
+        public static double screenDensity;
 
         public App()
         {
             deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = deviceSpec.ScreenHeight;
             screenWidth = deviceSpec.ScreenWidth;
+            screenDensity = deviceSpec.ScreenDensity;
             MediaArray = new List<MediaItem>();
             ContactsArray = new List<string>();
             ExtentionArray = new List<string>();

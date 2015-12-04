@@ -23,7 +23,6 @@ namespace PurposeColor
         CustomSlider slider;
         CustomPicker ePicker;
         CustomLayout masterLayout;
-        //IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
         PurposeColor.interfaces.CustomImageButton eventPickerButton;
         CustomListViewItem selectedEmotionItem;
@@ -32,15 +31,15 @@ namespace PurposeColor
         public static int sliderValue;
         double screenHeight;
         double screenWidth;
+        IProgressBar progressBar;
         public FeelingNowPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
-            //deviceSpec = DependencyService.Get<IDeviceSpec>();
-
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
+            progressBar = DependencyService.Get<IProgressBar>();
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
@@ -161,33 +160,39 @@ namespace PurposeColor
             sliderValue = slider.CurrentValue;
             if( slider.CurrentValue == 0 )
             {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowToast( "slider is in neutral" );
+                
+                progressBar.ShowToast( "slider is in neutral" );
             }
             else
             {
                 OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
             }
-
-
         }
 
         void slider_ValueChanged(object sender, ValueChangedEventArgs e)
         {
-            if( slider.Value != 0 )
+            try
             {
-                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-                if (pickView != null)
-                    return;
-  
-                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                ePicker.WidthRequest = screenWidth;
-                ePicker.HeightRequest = screenHeight;
-                ePicker.ClassId = "ePicker";
-                ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
-            }
 
+                if (slider.Value != 0)
+                {
+                    View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                    if (pickView != null)
+                        return;
+
+                    CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
+                    ePicker.WidthRequest = screenWidth;
+                    ePicker.HeightRequest = screenHeight;
+                    ePicker.ClassId = "ePicker";
+                    ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+                    masterLayout.AddChildToLayout(ePicker, 0, 0);
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -210,27 +215,39 @@ namespace PurposeColor
 
         async void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
+
             if(  emotionalPickerButton.Text == "Select Emotion")
             {
-                DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
+                await DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
             }
             else if (eventPickerButton.Text == "Events, Situation & Thoughts")
             {
-                DisplayAlert("Purpose Color", "Event not selected.", "Ok");
+                await DisplayAlert("Purpose Color", "Event not selected.", "Ok");
             }
             else if( slider.Value == 0 )
             {
-                DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
+                await DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
             }
             else
             {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowProgressbar("Saving Details..");
-                await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
-                progress.HideProgressbar();
-                Navigation.PushAsync(new FeelingsSecondPage());
+                try
+                {
+                    progressBar.ShowProgressbar("Saving details..");
+                    bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
+                    
+                    if (!isDataSaved)
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
+                    }
+                    progressBar.HideProgressbar();
+                    await Navigation.PushAsync(new FeelingsSecondPage());
+                }
+                catch (System.Exception ex)
+                {
+                    progressBar.HideProgressbar();
+                    DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
+                }
             }
-            
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -240,72 +257,109 @@ namespace PurposeColor
 
         void backButton_Clicked(object sender, System.EventArgs e)
         {
-            Navigation.PushAsync( new GraphPage() );
+            
+            try
+            {
+                Navigation.PushAsync(new GraphPage());
+            }
+            catch (System.Exception)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
+            }
         }
 
         void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
-            if( App.emotionsListSource == null || App.emotionsListSource.Count <= 0 )
+            try
             {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowToast("emotions empty");
-                return;
+
+                //if (App.emotionsListSource == null || App.emotionsListSource.Count <= 0)
+                //{
+                //    progressBar.ShowToast("emotions empty");
+                //    return;
+                //}
+                List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
+                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.FeelingsPage = this;
+                ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
+                //ePicker.FadeTo(1, 1000, Easing.CubicOut);
+                //double yPos = 60 * screenHeight / 100;
+                //ePicker.TranslateTo(0, 65, 3000, Easing.Linear);
+                // ePicker.FadeTo(1, 750, Easing.Linear); 
+
             }
-            List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
-            CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65
-            ePicker.WidthRequest = screenWidth;
-            ePicker.HeightRequest = screenHeight;
-            ePicker.ClassId = "ePicker";
-            ePicker.FeelingsPage = this;
-            ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
-            //ePicker.FadeTo(1, 1000, Easing.CubicOut);
-            //double yPos = 60 * screenHeight / 100;
-            //ePicker.TranslateTo(0, 65, 3000, Easing.Linear);
-           // ePicker.FadeTo(1, 750, Easing.Linear); 
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
+            }
         }
 
         void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
+            try
+            {
+                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEventsList(), 45, Constants.ADD_EVENTS, true, true);
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.listView.ItemSelected += OnEventPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
+                //double yPos = 60 * screenHeight / 100;
+                //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
+                // ePicker.FadeTo(1, 750, Easing.Linear); 
 
-            CustomPicker ePicker = new CustomPicker(masterLayout,App.GetEventsList(), 65, Constants.ADD_EVENTS, true, true);
-            ePicker.WidthRequest = screenWidth;
-            ePicker.HeightRequest = screenHeight;
-            ePicker.ClassId = "ePicker";
-            ePicker.listView.ItemSelected += OnEventPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
-            //double yPos = 60 * screenHeight / 100;
-            //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
-           // ePicker.FadeTo(1, 750, Easing.Linear); 
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
+            }
         }
 
         void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-           CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-           emotionalPickerButton.Text = item.Name;
-           selectedEmotionItem = item;
-           emotionalPickerButton.TextColor = Color.Black;
-           App.SelectedEmotion = item.Name;
-           View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-           masterLayout.Children.Remove( pickView );
-           pickView = null;
-           eventPickerButton.IsVisible = true;
-           about.IsVisible = true;
+            try
+            {
+                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+                emotionalPickerButton.Text = item.Name;
+                selectedEmotionItem = item;
+                emotionalPickerButton.TextColor = Color.Black;
+                App.SelectedEmotion = item.Name;
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+                eventPickerButton.IsVisible = true;
+                about.IsVisible = true;
+                OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
 
-
-           OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
-     
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
+            }
         }
 
         void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            eventPickerButton.Text = item.Name;
-            eventPickerButton.TextColor = Color.Black;
-            selectedEventItem = item;
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
-            pickView = null;
+            try
+            {
+
+                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+                eventPickerButton.Text = item.Name;
+                eventPickerButton.TextColor = Color.Black;
+                selectedEventItem = item;
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
+            }
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -317,8 +371,6 @@ namespace PurposeColor
             try
             {
                 base.OnAppearing();
-
-                IProgressBar progressBar = DependencyService.Get<IProgressBar>();
                 if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {
                     progressBar.ShowProgressbar("Loading emotions...");
@@ -329,37 +381,48 @@ namespace PurposeColor
                         progressBar.HideProgressbar();
                         return;
                     }
-                    App.Settings.SaveEmotions(App.emotionsListSource);
+                    
+                    if (App.emotionsListSource != null)
+                    {
+                        App.Settings.SaveEmotions(App.emotionsListSource);
+                    }
                     progressBar.HideProgressbar();
-
-                    // for testing
-                  //  var testEmotions = App.Settings.GetAllEmotions();
                 }
 
                 if (App.eventsListSource == null || App.eventsListSource.Count < 1)
                 {
                     await DownloadAllEvents();
-                    App.Settings.SaveEvents(App.eventsListSource);
-
-                    // for testing
-                   // var testEvents = App.Settings.GetAllEvents();
+                    if (App.eventsListSource != null)
+                    {
+                        App.Settings.SaveEvents(App.eventsListSource);
+                    }
                 }
 
             }
             catch (System.Exception ex)
             {
-                DisplayAlert(Constants.ALERT_TITLE, "somthing went wrong, please try again", Constants.ALERT_OK);
+                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
             }
         }
 
         public async Task<bool> DownloadAllEmotions()
         {
-            var emotionsReult = await ServiceHelper.GetAllEmotions(2);
-            if( emotionsReult != null )
+            try
             {
-                App.emotionsListSource = null;
-                App.emotionsListSource = emotionsReult;
-                return true;
+
+                var emotionsReult = await ServiceHelper.GetAllEmotions(2);
+                if (emotionsReult != null)
+                {
+                    App.emotionsListSource = null;
+                    App.emotionsListSource = emotionsReult;
+                    emotionsReult = null;
+                    return true;
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the emotions.", Constants.ALERT_OK);
             }
             return false;
 
@@ -378,27 +441,35 @@ namespace PurposeColor
                     {
                         App.eventsListSource.Add(item);
                     }
+                    eventList = null;
                 }
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+               //await DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the events", Constants.ALERT_OK);
                 return false;
             }
-            
 
             return true;
         }
 
-       
-
         public void Dispose()
         {
+            eventPickerButton = null;
+            eventPickerButton.Clicked -= OnEventPickerButtonClicked;
+            emotionalPickerButton = null;
+            emotionalPickerButton.Clicked -= OnEmotionalPickerButtonClicked;
             slider = null;
             ePicker = null;
             masterLayout = null;
-            //deviceSpec = null;
-            emotionalPickerButton = null;
-            eventPickerButton = null;
+            progressBar = null;
+            selectedEmotionItem = null;
+            selectedEventItem = null;
+            about = null;
+
+            this.Appearing -= OnFeelingNowPageAppearing;
+
+            GC.Collect();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace PurposeColor.WinPhone.Dependency
 {
     public class WinReminderImpl : IReminderService
     {
-        public void Remind(DateTime dateTime, string title, string message)
+        public void Remind(DateTime dateTime, DateTime dateTime2, string title, string message)
         {
 
             string param1Value = title;

@@ -137,7 +137,6 @@ namespace PurposeColor.Service
             catch (Exception ex)
             {
                 return null;
-                throw;
             }
 
         }
@@ -518,11 +517,6 @@ namespace PurposeColor.Service
                         return true;
                     }
                 }
-                else
-                {
-                    client.Dispose();
-                    return false;
-                }
 
                 client.Dispose();
                 return false;
@@ -655,13 +649,28 @@ namespace PurposeColor.Service
                                   new KeyValuePair<string, string>("event_id",  eventID )
                             });
 
-                    using (var response = await client.PostAsync(url, content))
+                    HttpResponseMessage response = await client.PostAsync(url, content);
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
                     {
-                        using (var responseContent = response.Content)
+                        var eventsJson = response.Content.ReadAsStringAsync().Result;
+                        var rootobject = JsonConvert.DeserializeObject<SaveEmotionsResult>(eventsJson);
+                        if (rootobject != null)
                         {
-
-
+                            if (rootobject.resultarray != null)
+                            {
+                                App.newEmotionId = rootobject.resultarray;
+                            }
+                            if (rootobject.code == "200")
+                            {
+                                client.Dispose();
+                                return true;
+                            }
                         }
+                    }
+                    else
+                    {
+                        client.Dispose();
+                        return false;
                     }
                 }
                 return true;
@@ -669,7 +678,76 @@ namespace PurposeColor.Service
             catch (Exception ex)
             {
 
-                throw;
+                return false;
+            }
+        }
+
+        public static async Task<bool> SaveGoalsAndActions(string supportValue, string relatedEmotionId,string goalId, List<CustomListViewItem> actions)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return false;
+            }
+            User user = App.Settings.GetUser();
+            user = new User { UserId = 2 }; // for testing only // test
+            if (user == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=saveusergoal";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+
+                if (actions != null && actions.Count > 0)
+                {
+                    for (int index = 0; index < actions.Count; index++)
+                    {
+                        int contactsindex = index + 1;
+                        content.Add(new StringContent(actions[index].EventID, Encoding.UTF8), "goalaction_id" + contactsindex.ToString());
+                    }
+                    content.Add(new StringContent(actions.Count.ToString(), Encoding.UTF8), "action_count");
+                }
+
+                if (!string.IsNullOrEmpty(relatedEmotionId))
+                {
+                    content.Add(new StringContent(relatedEmotionId, Encoding.UTF8), "useremotion_id");
+                }
+                content.Add(new StringContent(supportValue.ToString(), Encoding.UTF8), "emotion_value");
+                content.Add(new StringContent(goalId.ToString(), Encoding.UTF8), "goal_id");
+                content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
+                
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code == "200")
+                    {
+                        client.Dispose();
+                        
+                        return true;
+                    }
+                }
+                
+
+                client.Dispose();
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
             }
         }
     }

@@ -34,4 +34,10 @@ namespace PurposeColor.Model
         public string text { get; set; }
         public List<EmotionDetails> resultarray { get; set; }
     }
+    public class SaveEmotionsResult
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+        public string resultarray { get; set; }
+    }
 }

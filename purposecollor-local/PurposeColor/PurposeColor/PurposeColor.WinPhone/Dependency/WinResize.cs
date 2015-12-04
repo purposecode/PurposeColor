@@ -15,9 +15,10 @@ namespace PurposeColor.WinPhone.Dependency
 {
     public class WinResize : IResize
     {
-        public void Resize(byte[] imageData, float width, float height)
+        public byte[] Resize(byte[] imageData, float width, float height)
         {
             ResizeImageWinPhone(imageData, width, height);
+            return null; //for testing only
         }
 
         public static byte[] ResizeImageWinPhone(byte[] imageData, float width, float height)
@@ -36,5 +37,11 @@ namespace PurposeColor.WinPhone.Dependency
             }
             return resizedData;
         }
+
+        public MemoryStream CompessImage(int ratio, MemoryStream ms)
+        {
+            return null; //for testing only
+        }
+
     }
 }

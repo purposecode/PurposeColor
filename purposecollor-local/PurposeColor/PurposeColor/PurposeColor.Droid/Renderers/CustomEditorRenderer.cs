@@ -10,6 +10,7 @@ namespace PurposeColor.Droid.Renderers
     {
         private static global::Android.Graphics.Color _textColor;
         private static global::Android.Graphics.Color _bgColor;
+        PurposeColor.CustomControls.CustomEditor editor;
 
         static CustomEditorRenderer()
         {
@@ -26,11 +27,15 @@ namespace PurposeColor.Droid.Renderers
             {
                 var element = e.NewElement as PurposeColor.CustomControls.CustomEditor;
                 this.Control.Hint = element.Placeholder;
+                if (element.Text != null && element.Text != element.Placeholder)
+                {
+                    _textColor = global::Android.Graphics.Color.Black;
+                }
+                this.Control.TextSize = 16;
             }
         }
-        protected override void OnElementPropertyChanged(
-        object sender,
-        PropertyChangedEventArgs e)
+        
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
 
@@ -39,6 +44,7 @@ namespace PurposeColor.Droid.Renderers
                 var element = this.Element as PurposeColor.CustomControls.CustomEditor;
                 this.Control.Hint = element.Placeholder;
             }
+            
         }
     }
 }

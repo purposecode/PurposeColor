@@ -8,6 +8,6 @@ namespace PurposeColor.interfaces
 {
     public interface IReminderService
     {
-        void Remind(DateTime startDate, DateTime endtDate, string title, string message);
+        bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder);
     }
 }

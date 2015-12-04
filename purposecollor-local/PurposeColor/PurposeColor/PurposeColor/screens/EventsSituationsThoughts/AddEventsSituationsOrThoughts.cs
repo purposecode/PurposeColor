@@ -467,13 +467,24 @@ namespace PurposeColor.screens
                 iconContainer.Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 5 / 100), (screenWidth * 3.8 / 100));//4.6
             }
 
+            Button createEvent = new Button();
+            if (pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
+            {
+                createEvent.BackgroundColor = Color.Transparent;
+                createEvent.TextColor = Constants.BLUE_BG_COLOR;
+                createEvent.Text = "Create Reminder";
+                createEvent.FontSize = 12;
+                createEvent.Clicked += createEvent_Clicked;
+
+            }
+
             textinputAndIconsHolder = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
                 Padding = 0,
-                Children = { textInputContainer, iconContainer }
+                Children = { textInputContainer, iconContainer, createEvent }
             };
 
             int iconY = (int)eventDescription.Y + (int)eventDescription.Height + 5;
@@ -499,38 +510,12 @@ namespace PurposeColor.screens
 
             #endregion
 
-
-            if (pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
-            {
-                CustomImageButton startDateCalander = new CustomImageButton();
-                startDateCalander.ImageName = "icn_calander.png";
-                startDateCalander.WidthRequest = screenWidth * 8 / 100;
-                startDateCalander.HeightRequest = screenWidth * 8 / 100;
-                startDateCalander.Clicked += OnStartDateCalanderClicked;
-
-                startDateLabel = new Label();
-                startDateLabel.XAlign = TextAlignment.Start;
-                startDateLabel.YAlign = TextAlignment.Center;
-                startDateLabel.FontSize = 10;
-
-                CustomImageButton endDateCalander = new CustomImageButton();
-                endDateCalander.ImageName = "icn_calander.png";
-                endDateCalander.WidthRequest = screenWidth * 8 / 100;
-                endDateCalander.HeightRequest = screenWidth * 8 / 100;
-                endDateCalander.Clicked += OnEndDateCalanderClicked;
-
-                endDateLabel = new Label();
-                endDateLabel.XAlign = TextAlignment.Start;
-                endDateLabel.YAlign = TextAlignment.Center;
-                endDateLabel.FontSize = 10;
-
-                masterLayout.AddChildToLayout(startDateCalander, 5, 55);
-                masterLayout.AddChildToLayout(startDateLabel, 15, 57);
-
-                masterLayout.AddChildToLayout(endDateCalander, 60, 55);
-                masterLayout.AddChildToLayout(endDateLabel, 70, 57);
-            }
             Content = masterLayout;
+        }
+
+        void createEvent_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new CreateEventPage());
         }
 
         void OnEndDateCalanderClicked(object sender, EventArgs e)
@@ -720,8 +705,6 @@ namespace PurposeColor.screens
                     try
                     {
 
-                        IReminderService reminder = DependencyService.Get<IReminderService>();
-                        reminder.Remind(DateTime.UtcNow.AddMinutes(1), DateTime.UtcNow.AddMinutes(2), "Purpose Color Event", eventTitle.Text);
 
                         ActionModel details = new ActionModel();
                         details.action_title = eventTitle.Text;

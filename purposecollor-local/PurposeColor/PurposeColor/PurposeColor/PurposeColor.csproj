@@ -39,6 +39,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="CustomControls\AddContentSubTitlebar.cs" />
+    <Compile Include="CustomControls\CreateEventPage.cs" />
     <Compile Include="CustomControls\CustomEditor.cs" />
     <Compile Include="CustomControls\CustomEntry.cs" />
     <Compile Include="CustomControls\CustomEventView.cs" />

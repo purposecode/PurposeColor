@@ -51,7 +51,7 @@ namespace PurposeColor.iOS.Dependency
 
 			return true;*/
 
-			eventController.EventStore = EKEvent.FromStore ( this.EventStore );
+
 
 			EKEvent newEvent = EKEvent.FromStore ( this.EventStore );
 			// set the alarm for 10 minutes from now
@@ -66,7 +66,7 @@ namespace PurposeColor.iOS.Dependency
 			this.EventStore.SaveEvent ( newEvent, EKSpan.ThisEvent, out e );
 
 
-			EKReminder ekReminder = EKEvent.FromStore ( this.EventStore );
+			EKReminder ekReminder = EKReminder.Create( this.EventStore );
 			ekReminder.Title = title;
 			ekReminder.Calendar = this.EventStore.DefaultCalendarForNewEvents;
 			this.EventStore.SaveReminder ( ekReminder, true, out e );

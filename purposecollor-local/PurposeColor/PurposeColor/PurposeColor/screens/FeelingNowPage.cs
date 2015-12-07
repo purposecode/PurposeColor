@@ -273,11 +273,6 @@ namespace PurposeColor
             try
             {
 
-                //if (App.emotionsListSource == null || App.emotionsListSource.Count <= 0)
-                //{
-                //    progressBar.ShowToast("emotions empty");
-                //    return;
-                //}
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
                 CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65
                 ePicker.WidthRequest = screenWidth;
@@ -373,7 +368,7 @@ namespace PurposeColor
                 base.OnAppearing();
                 if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {
-                 //   progressBar.ShowProgressbar("Loading emotions...");
+                    progressBar.ShowProgressbar("Loading emotions...");
                     var downloadEmotionStatus = await DownloadAllEmotions();
                     if (!downloadEmotionStatus)
                     {
@@ -386,7 +381,7 @@ namespace PurposeColor
                     {
                         App.Settings.SaveEmotions(App.emotionsListSource);
                     }
-                  //  progressBar.HideProgressbar();
+                    progressBar.HideProgressbar();
                 }
 
                 if (App.eventsListSource == null || App.eventsListSource.Count < 1)

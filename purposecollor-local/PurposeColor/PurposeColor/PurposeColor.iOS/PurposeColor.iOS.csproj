@@ -121,6 +121,7 @@
     <Compile Include="Dependency\GoogleAuthenticator.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <None Include="PluginsHelp\ConnectivityReadme.txt" />
+    <Compile Include="Dependency\ProgressBarImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -309,6 +310,12 @@
     <Reference Include="Plugin.Connectivity.Abstractions">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.0.0\lib\Xamarin.iOS10\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="AlertView">
+      <HintPath>..\..\Components\mbalertview-1.3.0.2\lib\ios-unified\AlertView.dll</HintPath>
+    </Reference>
+    <Reference Include="ToastIOS">
+      <HintPath>..\..\Components\ToastIOS-1.5\lib\ios-unified\ToastIOS.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PushNotificationApplicationDelegate.txt" />
@@ -337,6 +344,14 @@
     </XamarinComponentReference>
     <XamarinComponentReference Include="json.net">
       <Version>7.0.1</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="mbalertview">
+      <Version>1.3.0.2</Version>
+      <Visible>False</Visible>
+    </XamarinComponentReference>
+    <XamarinComponentReference Include="ToastIOS">
+      <Version>1.5</Version>
       <Visible>False</Visible>
     </XamarinComponentReference>
   </ItemGroup>

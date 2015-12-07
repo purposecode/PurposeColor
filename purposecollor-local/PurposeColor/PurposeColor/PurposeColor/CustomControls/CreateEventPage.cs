@@ -195,7 +195,14 @@ namespace PurposeColor.screens
 			createReminderButton.Clicked += (object sender, EventArgs e) =>
 			{
 				IReminderService reminder = DependencyService.Get<IReminderService>();
-                if( !reminder.Remind(startDatePicker.Date, endDatePicker.Date, title.Text, messege.Text, Convert.ToInt32(reminderPickerButton.Text)))
+
+                int reminderValue = 0;
+                if (reminderPickerButton.Text != null && reminderPickerButton.Text.Length > 0 &&  reminderPicker.SelectedIndex >= 0)
+                {
+                    reminderValue = Convert.ToInt32(reminderPickerButton.Text);
+                }
+
+                if (!reminder.Remind(startDatePicker.Date, endDatePicker.Date, title.Text, messege.Text, reminderValue))
                 {
                     DisplayAlert("Purpose Color", "Error in creating calander event", Constants.ALERT_OK);
                 }

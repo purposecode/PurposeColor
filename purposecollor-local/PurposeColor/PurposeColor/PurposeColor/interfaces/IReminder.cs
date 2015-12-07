@@ -9,5 +9,7 @@ namespace PurposeColor.interfaces
     public interface IReminderService
     {
         bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder);
+
+		Task<bool> RequestAccessAsync ();
     }
 }

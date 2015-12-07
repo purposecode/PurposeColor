@@ -13,6 +13,11 @@ namespace PurposeColor.WinPhone.Dependency
 {
     public class WinReminderImpl : IReminderService
     {
+		public Task<bool> RequestAccessAsync ()
+		{
+			return true;
+		}
+
         public void Remind(DateTime dateTime, DateTime dateTime2, string title, string message)
         {
 

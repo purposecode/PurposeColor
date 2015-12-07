@@ -30,7 +30,7 @@ namespace PurposeColor.iOS
 
 		public void ShowToast(string messege)
 		{
-			Toast.MakeText(messege).Show(ToastType.Notice);
+			Toast.MakeText(messege).Show(ToastType.None);
 		}
 	}
 }

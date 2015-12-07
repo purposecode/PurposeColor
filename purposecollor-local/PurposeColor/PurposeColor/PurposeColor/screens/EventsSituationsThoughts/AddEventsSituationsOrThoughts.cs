@@ -467,6 +467,18 @@ namespace PurposeColor.screens
                 iconContainer.Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 5 / 100), (screenWidth * 3.8 / 100));//4.6
             }
 
+
+
+            textinputAndIconsHolder = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                HorizontalOptions = LayoutOptions.Center,
+                Spacing = 0,
+                Padding = 0,
+                Children = { textInputContainer, iconContainer }
+            };
+
+
             Button createEvent = new Button();
             if (pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
             {
@@ -475,18 +487,9 @@ namespace PurposeColor.screens
                 createEvent.Text = "Create Reminder";
                 createEvent.FontSize = 12;
                 createEvent.Clicked += createEvent_Clicked;
+                textinputAndIconsHolder.Children.Add( createEvent );
 
             }
-
-            textinputAndIconsHolder = new StackLayout
-            {
-                Orientation = StackOrientation.Vertical,
-                HorizontalOptions = LayoutOptions.Center,
-                Spacing = 0,
-                Padding = 0,
-                Children = { textInputContainer, iconContainer, createEvent }
-            };
-
             int iconY = (int)eventDescription.Y + (int)eventDescription.Height + 5;
             masterLayout.AddChildToLayout(textinputAndIconsHolder, 3, 21);
 

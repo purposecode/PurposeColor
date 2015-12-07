@@ -76,7 +76,6 @@ namespace PurposeColor.screens
 				{
 				//	string tie = startTimePicker.Time.ToString("hh:mm tt");
 					string amPM = ( startTimePicker.Time.Hours  > 12 ) ? "PM" : "AM";
-
 					startTimePickerButton.Text =  startTimePicker.Time.ToString(); //startTimePicker.Time.Hours.ToString () + " : " + startTimePicker.Time.Minutes.ToString() + "  " + amPM;
 				
 				}
@@ -202,9 +201,12 @@ namespace PurposeColor.screens
                     reminderValue = Convert.ToInt32(reminderPickerButton.Text);
                 }
 
-                if (!reminder.Remind(startDatePicker.Date, endDatePicker.Date, title.Text, messege.Text, reminderValue))
+                DateTime startDateAndTime = new DateTime(startDatePicker.Date.Year, startDatePicker.Date.Month, startDatePicker.Date.Day, startTimePicker.Time.Hours, startTimePicker.Time.Minutes, 0);
+                DateTime endDateAndTime = new DateTime(endDatePicker.Date.Year, endDatePicker.Date.Month, endDatePicker.Date.Day, endTimePicker.Time.Hours, endTimePicker.Time.Minutes, 0);
+
+                if (!reminder.Remind(startDateAndTime, endDateAndTime, title.Text, messege.Text, reminderValue))
                 {
-                    DisplayAlert("Purpose Color", "Error in creating calander event", Constants.ALERT_OK);
+                    DisplayAlert("Purpose Color", "Error in creating calendar event", Constants.ALERT_OK);
                 }
                 else
                 {

@@ -8,7 +8,8 @@ using Newtonsoft.Json;
 using PurposeColor.Model;
 using PurposeColor.CustomControls;
 using System.Net.Http;
-using Connectivity.Plugin;
+using Plugin.Connectivity;
+
 
 namespace PurposeColor.Service
 {
@@ -62,6 +63,7 @@ namespace PurposeColor.Service
         {
             try
             {
+				
                 if (!CrossConnectivity.Current.IsConnected)
                 {
                     return null;

@@ -373,7 +373,7 @@ namespace PurposeColor
                 base.OnAppearing();
                 if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {
-                    progressBar.ShowProgressbar("Loading emotions...");
+                 //   progressBar.ShowProgressbar("Loading emotions...");
                     var downloadEmotionStatus = await DownloadAllEmotions();
                     if (!downloadEmotionStatus)
                     {
@@ -386,7 +386,7 @@ namespace PurposeColor
                     {
                         App.Settings.SaveEmotions(App.emotionsListSource);
                     }
-                    progressBar.HideProgressbar();
+                  //  progressBar.HideProgressbar();
                 }
 
                 if (App.eventsListSource == null || App.eventsListSource.Count < 1)

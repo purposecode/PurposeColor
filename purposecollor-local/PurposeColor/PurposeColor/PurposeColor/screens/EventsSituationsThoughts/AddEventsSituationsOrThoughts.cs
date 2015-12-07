@@ -1,5 +1,4 @@
-﻿using Contacts.Plugin;
-using Contacts.Plugin.Abstractions;
+﻿
 using Cross;
 using CustomControls;
 using Media.Plugin;

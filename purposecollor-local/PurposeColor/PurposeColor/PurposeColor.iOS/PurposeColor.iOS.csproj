@@ -23,8 +23,13 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>i386, x86_64</MtouchArch>
-    <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchUseRefCounting>true</MtouchUseRefCounting>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchSdkVersion>9.1</MtouchSdkVersion>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -54,6 +59,8 @@
     </IpaPackageName>
     <MtouchI18n>
     </MtouchI18n>
+    <MtouchLink>None</MtouchLink>
+    <MtouchSdkVersion>9.1</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -113,6 +120,7 @@
     <Compile Include="Renderers\LoginPageRenderer.cs" />
     <Compile Include="Dependency\GoogleAuthenticator.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
+    <None Include="PluginsHelp\ConnectivityReadme.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -288,6 +296,12 @@
     </Reference>
     <Reference Include="EZCompress1.Plugin.Abstractions">
       <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.0.0\lib\Xamarin.iOS10\Plugin.Connectivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity.Abstractions">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.0.0\lib\Xamarin.iOS10\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

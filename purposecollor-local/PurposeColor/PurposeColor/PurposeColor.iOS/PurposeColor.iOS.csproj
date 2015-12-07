@@ -156,9 +156,6 @@
     <BundleResource Include="Resources\tick_blue%402x.png" />
     <BundleResource Include="Resources\tick_blue%403x.png" />
     <BundleResource Include="Resources\app_icon.png" />
-    <BundleResource Include="Resources\back_arow.png" />
-    <BundleResource Include="Resources\back_arow%402x.png" />
-    <BundleResource Include="Resources\back_arow%403x.png" />
     <BundleResource Include="Resources\blue_bg.png" />
     <BundleResource Include="Resources\blue_bg%402x.png" />
     <BundleResource Include="Resources\blue_bg%403x.png" />
@@ -194,9 +191,6 @@
     <BundleResource Include="Resources\mic%402.png" />
     <BundleResource Include="Resources\mic%402x6.png" />
     <BundleResource Include="Resources\mic%403x.png" />
-    <BundleResource Include="Resources\tick%401x.png" />
-    <BundleResource Include="Resources\tick%402x.png" />
-    <BundleResource Include="Resources\tick%402x6.png" />
     <BundleResource Include="Resources\drag_btn_no.png" />
     <BundleResource Include="Resources\drag_btn_no%402x.png" />
     <BundleResource Include="Resources\drag_btn_no%403x.png" />
@@ -206,6 +200,15 @@
     <BundleResource Include="Resources\select_box_whitebg.png" />
     <BundleResource Include="Resources\select_box_whitebg%402x.png" />
     <BundleResource Include="Resources\select_box_whitebg%403x.png" />
+    <BundleResource Include="Resources\icon_tick.png" />
+    <BundleResource Include="Resources\icon_tick%402x.png" />
+    <BundleResource Include="Resources\icon_tick%403x.png" />
+    <BundleResource Include="Resources\icn_seperate.png" />
+    <BundleResource Include="Resources\icn_seperate%40 2x.png" />
+    <BundleResource Include="Resources\icn_seperate%40 3x.png" />
+    <BundleResource Include="Resources\bckarow%402x.png" />
+    <BundleResource Include="Resources\bckarow%403x.png" />
+    <BundleResource Include="Resources\bckarow.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">
@@ -313,7 +316,6 @@
     <BundleResource Include="Resources\settings.png" />
     <BundleResource Include="Resources\attachicon.png" />
     <BundleResource Include="Resources\avatar.jpg" />
-    <BundleResource Include="Resources\back_arrow.png" />
     <BundleResource Include="Resources\top_bg.png" />
     <BundleResource Include="Resources\top_seperate.png" />
     <BundleResource Include="Resources\txtbox_bg.png" />

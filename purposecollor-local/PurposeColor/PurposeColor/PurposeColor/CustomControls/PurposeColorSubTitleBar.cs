@@ -44,7 +44,7 @@ namespace PurposeColor.CustomControls
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
             Image imgDivider = new Image();
-            imgDivider.Source = Device.OnPlatform("top_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
+			imgDivider.Source = Device.OnPlatform("icn_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
            // imgDivider.HeightRequest = spec.ScreenHeight * 4 / 100;
 
             title = new Label();

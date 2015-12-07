@@ -17,7 +17,9 @@ namespace PurposeColor.iOS.Dependency
 		{
 			get { return eventStore; }
 		}
-		protected static EKEventStore eventStore;
+		protected static EKEventStore eventStore = new EKEventStore();
+
+		EventKitUI.EKEventEditViewController eventController = 	new EventKitUI.EKEventEditViewController ();
 
 		public Task<bool> RequestAccessAsync()
 		{
@@ -37,16 +39,51 @@ namespace PurposeColor.iOS.Dependency
 
 		public bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder)
         {
-			EKEvent newEvent = EKEvent.FromStore(this.EventStore);
+			/*EKEvent newEvent = EKEvent.FromStore(this.EventStore);
 			newEvent.StartDate = (NSDate)DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
 			newEvent.EndDate = (NSDate)DateTime.SpecifyKind(endtDate, DateTimeKind.Utc);
 			newEvent.Title = title;
 			newEvent.Notes = message;
 			newEvent.AllDay = false;
-			//newEvent.AddAlarm(ConvertReminder(reminder, startDate));
+			//newEvent.AddAlarm(EKAlarm.FromDate((NSDate)startDate.AddMinutes(-10)));
+			NSError error;
+			this.EventStore.SaveEvent(newEvent, EKSpan.ThisEvent, out error);
+
+			return true;*/
+
+			eventController.EventStore = EKEvent.FromStore ( this.EventStore );
+
+			EKEvent newEvent = EKEvent.FromStore ( this.EventStore );
+			// set the alarm for 10 minutes from now
+			//newEvent.AddAlarm ( EKAlarm.FromDate ( DateTimeToNSDate( startDate.AddMinutes( -15 ) )));
+			// make the event start 20 minutes from now and last 30 minutes
+			newEvent.StartDate = DateTimeToNSDate( startDate );
+			newEvent.EndDate = DateTimeToNSDate( endtDate );
+			newEvent.Title = title;
+			newEvent.Notes = message;
+			newEvent.Calendar = this.EventStore.DefaultCalendarForNewEvents;
+			NSError e;
+			this.EventStore.SaveEvent ( newEvent, EKSpan.ThisEvent, out e );
+
+
+			EKReminder ekReminder = EKEvent.FromStore ( this.EventStore );
+			ekReminder.Title = title;
+			ekReminder.Calendar = this.EventStore.DefaultCalendarForNewEvents;
+			this.EventStore.SaveReminder ( ekReminder, true, out e );
 
 			return true;
+
         }
+
+
+		public static NSDate DateTimeToNSDate( DateTime date)
+		{
+			if (date.Kind == DateTimeKind.Unspecified)
+			{
+				date = DateTime.SpecifyKind (date, DateTimeKind.Utc);
+			}
+			return (NSDate) date;
+		}
 
 		/*private EKAlarm ConvertReminder(AppointmentReminder reminder, DateTime startTime)
 		{

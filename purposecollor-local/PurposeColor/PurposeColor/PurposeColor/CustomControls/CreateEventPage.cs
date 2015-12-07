@@ -191,7 +191,7 @@ namespace PurposeColor.screens
 			createReminderButton.TextColor = Color.White;
 			createReminderButton.BackgroundColor = Color.FromRgb( 30, 126, 210 );
 			createReminderButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-			createReminderButton.Clicked += (object sender, EventArgs e) =>
+			createReminderButton.Clicked += async (object sender, EventArgs e) =>
 			{
 
                 if( startDatePickerButton.Text == "Start Date" || endDatePickerButton.Text == "End Date")
@@ -200,6 +200,13 @@ namespace PurposeColor.screens
                     return;
                 }
 				IReminderService reminder = DependencyService.Get<IReminderService>();
+
+				if( Device.OS == TargetPlatform.iOS  )
+				{
+					var access = await reminder.RequestAccessAsync();
+					if( !access )
+						return;
+				}
 
                 int reminderValue = 0;
                 if (reminderPickerButton.Text != null && reminderPickerButton.Text.Length > 0 &&  reminderPicker.SelectedIndex >= 0)

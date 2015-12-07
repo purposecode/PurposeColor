@@ -24,8 +24,13 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
             nativeTextView = Control;
+            if (nativeTextView  == null)
+            {
+                return;
+            }
 			nativeTextView.SetBackgroundColor( Android.Graphics.Color.White );
-			//nativeTextView.TextSize = 15;
+            nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 10);
+           
         }
     }
 }

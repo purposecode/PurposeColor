@@ -118,8 +118,8 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White,
                 Placeholder = "Title",
                 TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(devWidth * .92) // 92% of screen
-                //  FontSize = Device.OnPlatform( 20, 22, 30 ),
+                WidthRequest = (int)(devWidth * .92), // 92% of screen
+                  //FontSize = Device.OnPlatform( 20, 22, 30 ),
                 //  FontFamily = Constants.HELVERTICA_NEUE_LT_STD
             };
 
@@ -132,7 +132,7 @@ namespace PurposeColor.screens
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 HeightRequest = 100,
-                Placeholder = pageTitle
+                Placeholder = pageTitle                
             };
 
             //string input = pageTitle;

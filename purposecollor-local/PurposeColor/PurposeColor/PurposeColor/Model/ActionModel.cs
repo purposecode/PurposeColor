@@ -22,6 +22,8 @@ namespace PurposeColor.Model
         public string end_time { get; set; }
         public string action_repeat { get; set; }
         public string action_alert { get; set; }
+        public string goalaction_id { get; set; }
+        public string status { get; set; }
     }
 
     public class SupportingActions

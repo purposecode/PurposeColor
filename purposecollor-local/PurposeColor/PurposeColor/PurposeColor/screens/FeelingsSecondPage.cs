@@ -34,10 +34,11 @@ namespace PurposeColor
         CustomSlider slider = null;
         CustomListViewItem selectedGoal = null;
         List<CustomListViewItem> selectedActions = null;
+        IProgressBar progressBar;
 
         public FeelingsSecondPage()
         {
-
+            progressBar = DependencyService.Get<IProgressBar>();
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
@@ -107,7 +108,7 @@ namespace PurposeColor
             actionPickerButton = new CustomImageButton();
             actionPickerButton.IsVisible = false;
             actionPickerButton.BackgroundColor = Color.FromRgb(30, 126, 210);
-            actionPickerButton.Text = "Add Supporting Action";
+            actionPickerButton.Text = "Add Supporting Actions";
             actionPickerButton.TextColor = Color.White;
             actionPickerButton.FontSize = 17;
             actionPickerButton.TextOrientation = TextOrientation.Middle;
@@ -180,28 +181,56 @@ namespace PurposeColor
         {
             try
             {
-
-                ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                notfiy.ShowNotification("Purpose Color", "Emotional awareness created");
-
                 if (goalsAndDreamsPickerButton.Text == "Goals & Dreams")
                 {
-                    //
+                    await DisplayAlert(Constants.ALERT_TITLE, "Plese select Goals & Dreams.", Constants.ALERT_OK);
+                }
+                else if (selectedActions == null || selectedActions.Count == 0)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Plese Supporting Actions.", Constants.ALERT_OK);
+                }
+                else if (slider.Value == 0)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please select a supporting value using the slider", Constants.ALERT_OK);
+                }
+                else
+                {
+                    bool isValueSaved = await ServiceHelper.SaveGoalsAndActions(slider.Value.ToString(), App.newEmotionId, selectedGoal.EventID, selectedActions);
+                    if (!isValueSaved)
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
+                    }
+                    else
+                    {
+                        ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                        notfiy.ShowNotification(Constants.ALERT_TITLE, "Emotional awareness created");
+                        progressBar.ShowToast("slider is in neutral");
+                        await Navigation.PushAsync(new FeelingNowPage());
+                    }
                 }
 
             }
             catch (System.Exception ex)
             {
                 var test = ex.Message;
-                DisplayAlert(Constants.ALERT_TITLE, "Could not save the data, please try again", Constants.ALERT_OK);
+                DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais, please try again", Constants.ALERT_OK);
             }
         }
         
         public async void GetstopGetsture(bool pressed)
         {
-            var goalsList = await DownloadAllGoals();
+            try
+            {
 
-            OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
+                var goalsList = await DownloadAllGoals();
+
+                OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
+
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Could not update the goals", Constants.ALERT_OK);
+            }
         }
 
         public static async Task<bool> DownloadAllGoals()
@@ -322,78 +351,116 @@ namespace PurposeColor
 
         void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
+            try
+            {
 
-            //App.actionsListSource = new List<CustomListViewItem>();
-            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Go to gym", SliderValue = 2 });
-            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Make reservations", SliderValue = 2 });
-            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "book flight", SliderValue = 2 });
-            //App.actionsListSource.Add(new CustomListViewItem { EmotionID = "22", EventID = "12", Name = "Acquire Money", SliderValue = 2 });
-           
+                CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
+                ePicker.WidthRequest = deviceSpec.ScreenWidth;
+                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.listView.ItemSelected += OnActionPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
 
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
-            ePicker.WidthRequest = deviceSpec.ScreenWidth;
-            ePicker.HeightRequest = deviceSpec.ScreenHeight;
-            ePicker.ClassId = "ePicker";
-            ePicker.listView.ItemSelected += OnActionPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
+                //double yPos = 60 * deviceSpec.ScreenHeight / 100;
+                // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
+                // ePicker.FadeTo(1, 750, Easing.Linear); 
 
-            //double yPos = 60 * deviceSpec.ScreenHeight / 100;
-            // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
-            // ePicker.FadeTo(1, 750, Easing.Linear); 
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+                //DisplayAlert(Constants.ALERT_TITLE, "please try again", Constants.ALERT_OK);
+            }
+
         }
 
         void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
-            CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
-            ePicker.WidthRequest = deviceSpec.ScreenWidth;
-            ePicker.HeightRequest = deviceSpec.ScreenHeight;
-            ePicker.ClassId = "ePicker";
-            ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
-            masterLayout.AddChildToLayout(ePicker, 0, 0);
-            //double yPos = 60 * deviceSpec.ScreenHeight / 100;
-            //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
-            // ePicker.FadeTo(1, 750, Easing.Linear); 
+            try
+            {
+
+                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
+                ePicker.WidthRequest = deviceSpec.ScreenWidth;
+                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.ClassId = "ePicker";
+                ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
+                masterLayout.AddChildToLayout(ePicker, 0, 0);
+                //double yPos = 60 * deviceSpec.ScreenHeight / 100;
+                //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
+                // ePicker.FadeTo(1, 750, Easing.Linear); 
+
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         protected override bool OnBackButtonPressed()
         {
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            if (pickView != null)
+            try
             {
-                masterLayout.Children.Remove(pickView);
-                pickView = null;
-                return true;
-            }
 
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                if (pickView != null)
+                {
+                    masterLayout.Children.Remove(pickView);
+                    pickView = null;
+                    return true;
+                }
+
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+            }
             return base.OnBackButtonPressed();
         }
 
         void OnActionPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
-            pickView = null;
-            actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
-            if (selectedActions == null)
+            try
             {
-                selectedActions = new List<CustomListViewItem>();
+
+                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+                actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
+                if (selectedActions == null)
+                {
+                    selectedActions = new List<CustomListViewItem>();
+                }
+                selectedActions.Add(item);
+
             }
-            selectedActions.Add(item);
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-            goalsAndDreamsPickerButton.Text = item.Name;
-            goalsAndDreamsPickerButton.TextColor = Color.Black;
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
-            pickView = null;
-            actionPickerButton.IsVisible = true;
-            selectedGoal = item;
-            
-            OnActionPickerButtonClicked( actionPickerButton, EventArgs.Empty );
+            try
+            {
+
+                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+                goalsAndDreamsPickerButton.Text = item.Name;
+                goalsAndDreamsPickerButton.TextColor = Color.Black;
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+                actionPickerButton.IsVisible = true;
+                selectedGoal = item;
+
+                OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
+
+            }
+            catch (System.Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)

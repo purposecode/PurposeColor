@@ -274,7 +274,7 @@ namespace PurposeColor.Service
                     {
                         CustomListViewItem listItem = new CustomListViewItem();
                         listItem.Name = item.action_title;
-                        listItem.EventID = item.action_id;
+                        listItem.EventID = item.goalaction_id;
                         actionsList.Add(listItem);
                     }
                 }

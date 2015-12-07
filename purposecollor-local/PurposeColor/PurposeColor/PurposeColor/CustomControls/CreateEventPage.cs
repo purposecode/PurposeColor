@@ -97,7 +97,7 @@ namespace PurposeColor.screens
 
             //startDatePickerButton = new CustomImageButton();
             startDatePickerButton.ImageName = "select_box_whitebg.png";
-            startDatePickerButton.Text = " Start Date";
+            startDatePickerButton.Text = "Start Date";
             startDatePickerButton.FontSize = 17;
             startDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             startDatePickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -129,7 +129,7 @@ namespace PurposeColor.screens
 		
 		   // endDatePickerButton = new CustomImageButton();
 			endDatePickerButton.ImageName = "select_box_whitebg.png";
-			endDatePickerButton.Text = " End Date";
+			endDatePickerButton.Text = "End Date";
 			endDatePickerButton.FontSize = 17;
 			endDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 			endDatePickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -193,6 +193,12 @@ namespace PurposeColor.screens
 			createReminderButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 			createReminderButton.Clicked += (object sender, EventArgs e) =>
 			{
+
+                if( startDatePickerButton.Text == "Start Date" || endDatePickerButton.Text == "End Date")
+                {
+                    DisplayAlert(Constants.ALERT_TITLE, "Please select start date and end date to proceed", Constants.ALERT_OK);
+                    return;
+                }
 				IReminderService reminder = DependencyService.Get<IReminderService>();
 
                 int reminderValue = 0;

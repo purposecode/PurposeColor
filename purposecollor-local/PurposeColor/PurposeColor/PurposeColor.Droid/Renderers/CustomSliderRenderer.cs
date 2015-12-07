@@ -14,6 +14,7 @@ using Xamarin.Forms.Platform.Android;
 using PurposeColor.CustomControls;
 using PurposeColor.Droid.Renderers;
 
+
 [assembly: ExportRenderer(typeof(CustomSlider), typeof(CustomSliderRenderer))]
 namespace PurposeColor.Droid.Renderers
 {

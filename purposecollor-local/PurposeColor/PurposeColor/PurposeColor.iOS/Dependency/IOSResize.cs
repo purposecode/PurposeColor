@@ -6,15 +6,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using UIKit;
+using System.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOSResize))]
 namespace PurposeColor.iOS.Dependency
 {
     public class IOSResize : IResize
     {
-        public void Resize(byte[] imageData, float width, float height)
+		public byte[] Resize(byte[] imageData, float width, float height)
         {
-            ResizeImageIOS(imageData, width, height);
+            return ResizeImageIOS(imageData, width, height);
         }
 
         public static byte[] ResizeImageIOS(byte[] imageData, float width, float height)
@@ -39,6 +40,15 @@ namespace PurposeColor.iOS.Dependency
                 return resizedImage.AsJPEG().ToArray();
             }
         }
+
+
+		public MemoryStream CompessImage(int ratio, MemoryStream ms)
+		{
+			MemoryStream compressedStream = new MemoryStream();
+			compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, 50);
+			return compressedStream;
+		}
+
 
         public static UIKit.UIImage ImageFromByteArray(byte[] data)
         {

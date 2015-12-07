@@ -10,7 +10,7 @@ namespace PurposeColor.iOS.Dependency
 {
     public class IOSReminderImpl : IReminderService
     {
-        public void Remind(DateTime dateTime, string title, string message)
+		public bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder)
         {
             var notification = new UILocalNotification();
 
@@ -29,6 +29,7 @@ namespace PurposeColor.iOS.Dependency
 
             //---- schedule it
             UIApplication.SharedApplication.ScheduleLocalNotification(notification);
+			return true;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Foundation;
 using AVFoundation;
+using System.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(PurposeColor.iOS.Dependency.AudioRecorder))]
 namespace PurposeColor.iOS.Dependency
@@ -11,6 +12,7 @@ namespace PurposeColor.iOS.Dependency
 		Foundation.NSError error;
 		Foundation.NSUrl url;
 		Foundation.NSDictionary settings;
+		string audioFilePath;
 		public AVAudioPlayer player;
 
 		public AudioRecorder ()
@@ -50,7 +52,7 @@ namespace PurposeColor.iOS.Dependency
 				}
 
 				string fileName = string.Format ("Audio{0}.wav", DateTime.Now.ToString ("yyyyMMddHHmmss"));
-				string audioFilePath = System.IO.Path.Combine (directoryname, fileName);
+			    audioFilePath = System.IO.Path.Combine (directoryname, fileName);
 
 				url = Foundation.NSUrl.FromFilename (audioFilePath);
 
@@ -88,9 +90,15 @@ namespace PurposeColor.iOS.Dependency
 
 		}
 
-		public void StopRecording()
+		public MemoryStream StopRecording()
 		{
 			recorder.Stop ();
+			MemoryStream memStream = new MemoryStream();
+			using (FileStream fs = File.OpenRead( audioFilePath ))
+			{
+				fs.CopyTo(memStream);
+			}
+			return memStream;
 		}
 
 		public void PlayAudio()

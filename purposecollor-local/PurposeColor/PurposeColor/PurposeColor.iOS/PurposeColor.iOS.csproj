@@ -138,6 +138,66 @@
     <BundleResource Include="Resources\Icon-Small%403x.png" />
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <BundleResource Include="Resources\logo.png" />
+    <BundleResource Include="Resources\icn_plus.png" />
+    <BundleResource Include="Resources\icn_plus%402x.png" />
+    <BundleResource Include="Resources\icn_plus%403x.png" />
+    <BundleResource Include="Resources\arrow_blue.png" />
+    <BundleResource Include="Resources\arrow_blue%402x.png" />
+    <BundleResource Include="Resources\arrow_blue%403x.png" />
+    <BundleResource Include="Resources\tick_blue.png" />
+    <BundleResource Include="Resources\tick_blue%402x.png" />
+    <BundleResource Include="Resources\tick_blue%403x.png" />
+    <BundleResource Include="Resources\app_icon.png" />
+    <BundleResource Include="Resources\back_arow.png" />
+    <BundleResource Include="Resources\back_arow%402x.png" />
+    <BundleResource Include="Resources\back_arow%403x.png" />
+    <BundleResource Include="Resources\blue_bg.png" />
+    <BundleResource Include="Resources\blue_bg%402x.png" />
+    <BundleResource Include="Resources\blue_bg%403x.png" />
+    <BundleResource Include="Resources\ic_music.png" />
+    <BundleResource Include="Resources\ic_music%402x.png" />
+    <BundleResource Include="Resources\ic_music%403x.png" />
+    <BundleResource Include="Resources\icn_attach.png" />
+    <BundleResource Include="Resources\icn_attach%402x.png" />
+    <BundleResource Include="Resources\icn_attach%403x.png" />
+    <BundleResource Include="Resources\icn_camera.png" />
+    <BundleResource Include="Resources\icn_camera%402x.png" />
+    <BundleResource Include="Resources\icn_camera%403x.png" />
+    <BundleResource Include="Resources\icn_contact.png" />
+    <BundleResource Include="Resources\icn_contact%402x.png" />
+    <BundleResource Include="Resources\icn_contact%403x.png" />
+    <BundleResource Include="Resources\icn_gallery.png" />
+    <BundleResource Include="Resources\icn_gallery%402x.png" />
+    <BundleResource Include="Resources\icn_gallery%403x.png" />
+    <BundleResource Include="Resources\icn_location.png" />
+    <BundleResource Include="Resources\icn_location%402x.png" />
+    <BundleResource Include="Resources\icn_location%403x.png" />
+    <BundleResource Include="Resources\light_blue_bg.png" />
+    <BundleResource Include="Resources\light_blue_bg%402x.png" />
+    <BundleResource Include="Resources\light_blue_bg%403x.png" />
+    <BundleResource Include="Resources\log.png" />
+    <BundleResource Include="Resources\log%402x.png" />
+    <BundleResource Include="Resources\log%403x.png" />
+    <BundleResource Include="Resources\menu_icn.png" />
+    <BundleResource Include="Resources\menu_icn%402x.png" />
+    <BundleResource Include="Resources\menu_icn%402x6.png" />
+    <BundleResource Include="Resources\menu_icn%403x.png" />
+    <BundleResource Include="Resources\mic%401x.png" />
+    <BundleResource Include="Resources\mic%402.png" />
+    <BundleResource Include="Resources\mic%402x6.png" />
+    <BundleResource Include="Resources\mic%403x.png" />
+    <BundleResource Include="Resources\tick%401x.png" />
+    <BundleResource Include="Resources\tick%402x.png" />
+    <BundleResource Include="Resources\tick%402x6.png" />
+    <BundleResource Include="Resources\drag_btn_no.png" />
+    <BundleResource Include="Resources\drag_btn_no%402x.png" />
+    <BundleResource Include="Resources\drag_btn_no%403x.png" />
+    <BundleResource Include="Resources\drag_btn.png" />
+    <BundleResource Include="Resources\drag_btn%402x.png" />
+    <BundleResource Include="Resources\drag_btn%403x.png" />
+    <BundleResource Include="Resources\select_box_whitebg.png" />
+    <BundleResource Include="Resources\select_box_whitebg%402x.png" />
+    <BundleResource Include="Resources\select_box_whitebg%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">
@@ -147,14 +207,6 @@
       <HintPath>..\..\packages\MediaPlugin-1.0.1\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Media.Plugin.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="MonoTouch.Dialog-1" />
-    <Reference Include="OxyPlot, Version=2015.1.744.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OxyPlot.Core.2015.1.744-alpha\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\OxyPlot.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="OxyPlot.Xamarin.iOS, Version=2015.1.741.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\OxyPlot.Mobile.2015.1.744-alpha\lib\Xamarin.iOS10\OxyPlot.Xamarin.iOS.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SolTech.Xamarin.Forms">
       <HintPath>..\..\packages\SolTech.Xamarin.Forms.1.0.25\lib\MonoTouch\SolTech.Xamarin.Forms.dll</HintPath>
     </Reference>
@@ -200,6 +252,42 @@
     </Reference>
     <Reference Include="ImageCircle.Forms.Plugin.iOS, Version=1.1.6.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Xam.Plugins.Forms.ImageCircle.1.1.6\lib\Xamarin.iOS10\ImageCircle.Forms.Plugin.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot, Version=2015.1.744.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9">
+      <HintPath>..\..\packages\OxyPlot.Core.2015.1.744-alpha\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\OxyPlot.dll</HintPath>
+    </Reference>
+    <Reference Include="OxyPlot.Xamarin.iOS, Version=2015.1.741.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\packages\OxyPlot.Mobile.2015.1.744-alpha\lib\Xamarin.iOS10\OxyPlot.Xamarin.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Ioc">
+      <HintPath>..\..\packages\XLabs.IoC.2.0.5782\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\XLabs.Ioc.dll</HintPath>
+    </Reference>
+    <Reference Include="ExifLib">
+      <HintPath>..\..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Core">
+      <HintPath>..\..\packages\XLabs.Core.2.0.5782\lib\Xamarin.iOS10\XLabs.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Platform.iOS">
+      <HintPath>..\..\packages\XLabs.Platform.2.0.5782\lib\Xamarin.iOS10\XLabs.Platform.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Platform">
+      <HintPath>..\..\packages\XLabs.Platform.2.0.5782\lib\Xamarin.iOS10\XLabs.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Serialization">
+      <HintPath>..\..\packages\XLabs.Serialization.2.0.5782\lib\Xamarin.iOS10\XLabs.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Forms.iOS">
+      <HintPath>..\..\packages\XLabs.Forms.2.0.5782\lib\Xamarin.iOS10\XLabs.Forms.iOS.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Forms">
+      <HintPath>..\..\packages\XLabs.Forms.2.0.5782\lib\Xamarin.iOS10\XLabs.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="EZCompress1.Plugin">
+      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="EZCompress1.Plugin.Abstractions">
+      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

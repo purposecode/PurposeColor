@@ -66,7 +66,7 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(10, 10, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(30, 10, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
                 masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 85), Device.OnPlatform(10, 2, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 

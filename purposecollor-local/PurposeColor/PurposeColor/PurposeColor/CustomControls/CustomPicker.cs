@@ -163,7 +163,7 @@ namespace PurposeColor.CustomControls
 
             if (App.screenDensity > 1.5)
             {
-                listTitle.FontSize = 17;
+				listTitle.FontSize = Device.OnPlatform( 15, 17, 17 );
             }
             else
             {

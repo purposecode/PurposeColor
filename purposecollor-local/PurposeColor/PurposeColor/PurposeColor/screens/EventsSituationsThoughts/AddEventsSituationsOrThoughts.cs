@@ -455,8 +455,7 @@ namespace PurposeColor.screens
                 Orientation = StackOrientation.Horizontal,
                 //BackgroundColor = Constants.STACK_BG_COLOR_GRAY,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                WidthRequest = (int)(devWidth * .92),
-               
+				WidthRequest = (int) Device.OnPlatform( (devWidth * .50), (devWidth * .92), (devWidth * .92) ) ,
                 Padding = 0,
                 Children = { galleryInputStack, cameraInputStack, audioInputStack, locationInputStack, contactInputStack }
             };

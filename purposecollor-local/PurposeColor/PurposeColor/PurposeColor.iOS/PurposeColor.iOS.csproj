@@ -209,6 +209,9 @@
     <BundleResource Include="Resources\bckarow%402x.png" />
     <BundleResource Include="Resources\bckarow%403x.png" />
     <BundleResource Include="Resources\bckarow.png" />
+    <BundleResource Include="delete_button.png" />
+    <BundleResource Include="image.png" />
+    <BundleResource Include="video.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Media.Plugin">

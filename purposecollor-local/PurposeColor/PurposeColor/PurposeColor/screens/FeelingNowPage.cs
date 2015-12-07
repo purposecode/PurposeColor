@@ -101,7 +101,7 @@ namespace PurposeColor
             about.Text = "About";
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             about.TextColor = Color.Gray;
-            about.FontSize = Device.OnPlatform(20, 16, 30);
+            about.FontSize = Device.OnPlatform(16, 16, 30);
             about.WidthRequest = screenWidth * 50 / 100;
             about.HeightRequest = screenHeight * 15 / 100;
             about.HorizontalOptions = LayoutOptions.Center;

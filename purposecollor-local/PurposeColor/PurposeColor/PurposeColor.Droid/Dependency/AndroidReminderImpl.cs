@@ -15,6 +15,7 @@ using Android.Provider;
 using Java.Util;
 using MonoDroid;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidReminderImpl))]
@@ -24,7 +25,8 @@ namespace PurposeColor.Droid.Renderers
     {
 		public System.Threading.Tasks.Task<bool> RequestAccessAsync ()
 		{
-			return null;
+            return Task.Delay(10)
+                .ContinueWith(t => true);
 		}
 
         public bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder)

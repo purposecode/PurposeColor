@@ -41,13 +41,12 @@ namespace PurposeColor.screens
         StackLayout locationInputStack;
         Image contactInput;
         StackLayout contactInputStack;
-        StackLayout iconContainer;
         StackLayout textinputAndIconsHolder;
         TapGestureRecognizer CameraTapRecognizer;
         string pageTitle;
         bool isAudioRecording = false;
         PurposeColor.interfaces.IAudioRecorder audioRecorder;
-
+       
         IDeviceSpec deviceSpec;
         string lattitude;
         string longitude;
@@ -234,7 +233,7 @@ namespace PurposeColor.screens
                 HeightRequest = 125,
                 WidthRequest = (int)(devWidth * .10),
                 Children = {
-                    
+
                     pinButton, audioRecodeOnButton, audioRecodeOffButton
                 }
             };
@@ -416,7 +415,7 @@ namespace PurposeColor.screens
                     //new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) }
                      }
             };
-
+ 
             #region CONTACTS TAP RECOGNIZER
 
             TapGestureRecognizer contactsInputTapRecognizer = new TapGestureRecognizer();
@@ -513,7 +512,7 @@ namespace PurposeColor.screens
                         {
                             DisplayAlert("contacts access permission ", "Please add permission to access contacts", "ok");
                         }*/
-
+                    
                     #endregion
                 }
                 catch (Exception ex)
@@ -528,24 +527,24 @@ namespace PurposeColor.screens
             #endregion
 
             #region ICON CONTAINER GRID
-
+            
             iconContainerGrid = new Grid
             {
                 IsVisible = false,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 RowDefinitions = 
-                {
+            {
                     new RowDefinition { Height = GridLength.Auto }
                 },
                 ColumnDefinitions = 
-                {
+            {
                     new ColumnDefinition { Width = new GridLength(((screenWidth * .80) )/5, GridUnitType.Absolute) }, // icon container x = 3 //new ColumnDefinition { Width = GridLength.Auto },
                     new ColumnDefinition { Width = new GridLength(((screenWidth * .80)) /5, GridUnitType.Absolute) },
                     new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
                     new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
                     new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
-                }
+            }
             };
 
             iconContainerGrid.Children.Add(galleryInputStack, 0, 0);
@@ -1043,7 +1042,6 @@ namespace PurposeColor.screens
             this.locationInputStack = null;
             this.contactInput = null;
             this.contactInputStack = null;
-            this.iconContainer = null;
             this.textinputAndIconsHolder = null;
             this.audioRecorder = null;
             this.eventTitle = null;
@@ -1058,7 +1056,7 @@ namespace PurposeColor.screens
         AddEventsSituationsOrThoughts MasterObject;
         public MediaSourceChooser(AddEventsSituationsOrThoughts masterObject, CustomLayout pageContainer, string type)
         {
-
+            
             MasterObject = masterObject;
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;

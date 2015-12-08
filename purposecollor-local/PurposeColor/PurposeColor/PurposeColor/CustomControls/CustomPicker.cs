@@ -180,7 +180,7 @@ namespace PurposeColor.CustomControls
             {
                 addButton.ImageName = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
             }
-
+            
             addButton.WidthRequest = 15;
             addButton.HeightRequest = 15;
 
@@ -230,7 +230,7 @@ namespace PurposeColor.CustomControls
                 {
 
                     masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
-                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8));
+                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
                 }
 
             }
@@ -256,7 +256,7 @@ namespace PurposeColor.CustomControls
                 addEmotionButton = new CustomImageButton();
                 if (Device.OS == TargetPlatform.WinPhone)
                 {
-                    addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
+					addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
                 }
                 else
                 {
@@ -266,29 +266,35 @@ namespace PurposeColor.CustomControls
                 addEmotionButton.WidthRequest = 25;
                 addEmotionButton.HeightRequest = 25;
 
-                StackLayout addEmotionButtonLayout = new StackLayout();
-                addEmotionButtonLayout.HeightRequest = 50;
-                addEmotionButtonLayout.WidthRequest = 50;
-                addEmotionButtonLayout.BackgroundColor = Color.Transparent;
+				StackLayout addEmotionButtonLayout = new StackLayout();
+				addEmotionButtonLayout.HeightRequest = 50;
+				addEmotionButtonLayout.WidthRequest = 50;
+				addEmotionButtonLayout.BackgroundColor = Color.Transparent;
 
-                TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
-                addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
-                    object addsender, EventArgs adde) =>
-                {
+				TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
+				addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
+					object addsender, EventArgs adde) => 
+				{
 
                     IProgressBar progressBar = DependencyService.Get<IProgressBar>();
 
                     progressBar.ShowProgressbar("sending new emotion");
 
 
-                    listTitle.IsVisible = true;
-                    addButton.IsVisible = true;
+					listTitle.IsVisible = true;
+					addButton.IsVisible = true;
                     addEmotionButton.IsVisible = false;
                     emotionsEntry.IsVisible = false;
                     addEmotionButtonLayout.IsVisible = false;
 
-                    string emotionValue = emotionsEntry.Text.Trim();
-                    if (emotionValue != null && emotionValue.Length == 0)
+                    if( emotionsEntry.Text == null )
+                    {
+                        progressBar.ShowToast("emotion is empty");
+                        progressBar.HideProgressbar();
+                        return;
+                    }
+
+                    if (emotionsEntry.Text != null && emotionsEntry.Text.Trim().Length == 0)
                     {
                         progressBar.ShowToast("emotion is empty");
                         progressBar.HideProgressbar();
@@ -304,12 +310,12 @@ namespace PurposeColor.CustomControls
 
                     progressBar.HideProgressbar();
 
-                };
-                addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
+				};
+				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
-                masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
+				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
                 masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - 7);
-                masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8));
+				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
             }
             else
             {

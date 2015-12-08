@@ -44,6 +44,7 @@ namespace PurposeColor.Droid.Renderers
 			{
 				if( formsSlider.StopGesture != null )
 				{
+					formsSlider.CurrentValue = (int)formsSlider.Value;
 					formsSlider.StopGesture(false);
 				}
 			};

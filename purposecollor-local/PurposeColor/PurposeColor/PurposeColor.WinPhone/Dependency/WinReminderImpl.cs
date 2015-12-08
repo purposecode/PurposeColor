@@ -1,4 +1,5 @@
 ﻿using Microsoft.Phone.Scheduler;
+using Microsoft.Phone.Tasks;
 using PurposeColor.interfaces;
 using PurposeColor.WinPhone.Dependency;
 using System;
@@ -15,35 +16,43 @@ namespace PurposeColor.WinPhone.Dependency
     {
 		public Task<bool> RequestAccessAsync ()
 		{
-			return true;
+            return Task.Delay(10)
+          .ContinueWith(t => true);
 		}
 
-        public void Remind(DateTime dateTime, DateTime dateTime2, string title, string message)
+        public  bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminderVal)
         {
 
-            string param1Value = title;
-            string param2Value = message;
-            string queryString = "";
-            if (param1Value != "" && param2Value != "")
-            {
-                queryString = "?param1=" + param1Value + "¶m2=" + param2Value;
-            }
-            else if (param1Value != "" || param2Value != "")
-            {
-                queryString = (param1Value != null) ? "?param1=" + param1Value : "?param2=" + param2Value;
-            }
-            Microsoft.Phone.Scheduler.Reminder reminder = new Microsoft.Phone.Scheduler.Reminder("ServiceReminder");
-            reminder.Title = title;
-            reminder.Content = message;
-            reminder.BeginTime = dateTime;
-            reminder.ExpirationTime = dateTime.AddDays(1);
-            reminder.RecurrenceType = RecurrenceInterval.None;
-            reminder.NavigationUri = new Uri("/MainPage.xaml" + queryString, UriKind.Relative);
-            ;
+            SaveAppointmentTask saveAppointmentTask = new SaveAppointmentTask();
 
-            // Register the reminder with the system.
-            ScheduledActionService.Add(reminder);
+            saveAppointmentTask.StartTime = startDate;
+            saveAppointmentTask.EndTime = endtDate;
+            saveAppointmentTask.Subject = title;
+            saveAppointmentTask.Details = message;
+            saveAppointmentTask.IsAllDayEvent = false;
+            saveAppointmentTask.Reminder = ConvertReminder(reminderVal);
 
+            saveAppointmentTask.Show();
+
+            return true;
+        }
+
+        private Microsoft.Phone.Tasks.Reminder ConvertReminder(int reminder)
+        {
+            switch (reminder)
+            {
+                case 0:
+                    return Microsoft.Phone.Tasks.Reminder.None;
+                case 15:
+                    return Microsoft.Phone.Tasks.Reminder.FifteenMinutes;
+                case 30 :
+                    return Microsoft.Phone.Tasks.Reminder.ThirtyMinutes;
+                case 45:
+                    return Microsoft.Phone.Tasks.Reminder.ThirtyMinutes;
+                case 60:
+                    return Microsoft.Phone.Tasks.Reminder.OneHour;
+            }
+            return Microsoft.Phone.Tasks.Reminder.AtStartTime;
         }
     }
 }

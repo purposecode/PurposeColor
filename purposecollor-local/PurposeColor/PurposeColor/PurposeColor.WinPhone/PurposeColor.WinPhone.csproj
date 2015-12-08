@@ -169,6 +169,7 @@
     <Content Include="Assets\goals.png" />
     <Content Include="Assets\goals_drms_menu_icon.png" />
     <Content Include="Assets\icn_attach.png" />
+    <Content Include="Assets\icn_attch.png" />
     <Content Include="Assets\icn_camera.png" />
     <Content Include="Assets\icn_contact.png" />
     <Content Include="Assets\icn_gallery.png" />
@@ -186,13 +187,16 @@
     <Content Include="Assets\manali.jpg" />
     <Content Include="Assets\menu.png" />
     <Content Include="Assets\menu_icn.png" />
+    <Content Include="Assets\mic.png" />
     <Content Include="Assets\select_box_whitebg.png" />
     <Content Include="Assets\setings_menu_icon.png" />
     <Content Include="Assets\settings.png" />
     <Content Include="Assets\text_box.png" />
     <Content Include="Assets\tick_blue.png" />
+    <Content Include="Assets\tick_with_bg.png" />
     <Content Include="Assets\top_bg.png" />
     <Content Include="Assets\top_seperate.png" />
+    <Content Include="Assets\turn_off_mic.png" />
     <Content Include="Assets\txtbox_bg.png" />
     <Content Include="Assets\welldone.jpg" />
     <Content Include="README_FIRST.txt" />

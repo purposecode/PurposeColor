@@ -77,7 +77,7 @@ namespace PurposeColor.CustomControls
 
 
             startDatePickerButton = new PurposeColor.interfaces.CustomImageButton();
-            startDatePickerButton.ImageName = "select_box_whitebg.png";
+            startDatePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             if (App.SelectedActionStartDate != null && App.SelectedActionStartDate.Trim().Length > 0)
             {
                 startDatePickerButton.Text = App.SelectedActionStartDate;
@@ -96,7 +96,7 @@ namespace PurposeColor.CustomControls
             startDatePickerButton.Clicked += startDatePickerButton_Clicked;
 
             endDatePickerButton = new PurposeColor.interfaces.CustomImageButton();
-            endDatePickerButton.ImageName = "select_box_whitebg.png";
+            endDatePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             if (App.SelectedActionStartDate != null && App.SelectedActionStartDate.Trim().Length > 0)
             {
                 endDatePickerButton.Text = App.SelectedActionEndDate;

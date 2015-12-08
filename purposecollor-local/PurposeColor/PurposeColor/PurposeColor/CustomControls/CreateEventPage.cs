@@ -96,7 +96,7 @@ namespace PurposeColor.screens
 			};
 
             //startDatePickerButton = new CustomImageButton();
-            startDatePickerButton.ImageName = "select_box_whitebg.png";
+            startDatePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             startDatePickerButton.Text = "Start Date";
             startDatePickerButton.FontSize = 17;
             startDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -112,7 +112,7 @@ namespace PurposeColor.screens
 
 
            // startTimePickerButton = new CustomImageButton();
-            startTimePickerButton.ImageName = "select_box_whitebg.png";
+            startTimePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             startTimePickerButton.Text = " Start Time";
             startTimePickerButton.TextOrientation = TextOrientation.Middle;         
             startTimePickerButton.FontSize = 17;
@@ -128,7 +128,7 @@ namespace PurposeColor.screens
 		
 		
 		   // endDatePickerButton = new CustomImageButton();
-			endDatePickerButton.ImageName = "select_box_whitebg.png";
+            endDatePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
 			endDatePickerButton.Text = "End Date";
 			endDatePickerButton.FontSize = 17;
 			endDatePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -143,7 +143,7 @@ namespace PurposeColor.screens
 
 
 		   // endTimePickerButton = new CustomImageButton();
-			endTimePickerButton.ImageName = "select_box_whitebg.png";
+            endTimePickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
 			endTimePickerButton.Text = " End Time";
 			endTimePickerButton.FontSize = 17;
 			endTimePickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -170,7 +170,7 @@ namespace PurposeColor.screens
 			};
 
 
-			reminderPickerButton.ImageName = "select_box_whitebg.png";
+            reminderPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
 			reminderPickerButton.Text = " Reminder";
 			reminderPickerButton.TextOrientation = TextOrientation.Middle;         
 			reminderPickerButton.FontSize = 17;

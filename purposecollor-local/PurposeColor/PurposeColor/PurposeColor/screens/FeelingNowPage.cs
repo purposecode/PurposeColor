@@ -74,7 +74,7 @@ namespace PurposeColor
             howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
 
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            emotionalPickerButton.ImageName = "select_box_whitebg.png";
+            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             emotionalPickerButton.Text = "Select Emotion";
             emotionalPickerButton.FontSize = 17;
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -86,7 +86,7 @@ namespace PurposeColor
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
             eventPickerButton.IsVisible = false;
-            eventPickerButton.ImageName = "select_box_whitebg.png";
+            eventPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             eventPickerButton.Text = "Events, Situation & Thoughts";
             eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -107,17 +107,17 @@ namespace PurposeColor
             about.HorizontalOptions = LayoutOptions.Center;
 
             Image sliderDivider1 = new Image();
-            sliderDivider1.Source = "drag_sepeate.png";
+            sliderDivider1.Source = Device.OnPlatform("drag_sepeate.png", "drag_sepeate.png", "//Assets//drag_sepeate.png");
             //bgImage.Source = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//light_blue_bg.png");
 
-            Image sliderDivider2 = new Image();
-            sliderDivider2.Source = "drag_sepeate.png";
+            //Image sliderDivider2 = new Image();
+            //sliderDivider2.Source = "drag_sepeate.png";
 
-            Image sliderDivider3 = new Image();
-            sliderDivider3.Source = "drag_sepeate.png";
+            //Image sliderDivider3 = new Image();
+            //sliderDivider3.Source = "drag_sepeate.png";
 
-            Image sliderBG = new Image();
-            sliderBG.Source = "drag_bg.png";
+            //Image sliderBG = new Image();
+            //sliderBG.Source = "drag_bg.png";
 
             this.Appearing += OnFeelingNowPageAppearing;
 

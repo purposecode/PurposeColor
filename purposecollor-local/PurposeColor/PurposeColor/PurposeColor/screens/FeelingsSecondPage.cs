@@ -94,7 +94,7 @@ namespace PurposeColor
             }
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            goalsAndDreamsPickerButton.ImageName = "select_box_whitebg.png";
+            goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("drag_sepeselect_box_whitebgate.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -128,19 +128,19 @@ namespace PurposeColor
             slider.StopGesture = GetstopGetsture;
 
 
-            Image sliderDivider1 = new Image();
-            sliderDivider1.Source = "drag_sepeate.png";
+            //Image sliderDivider1 = new Image();
+            //sliderDivider1.Source = "drag_sepeate.png";
 
 
-            Image sliderDivider2 = new Image();
-            sliderDivider2.Source = "drag_sepeate.png";
+            //Image sliderDivider2 = new Image();
+            //sliderDivider2.Source = "drag_sepeate.png";
 
 
-            Image sliderDivider3 = new Image();
-            sliderDivider3.Source = "drag_sepeate.png";
+            //Image sliderDivider3 = new Image();
+            //sliderDivider3.Source = "drag_sepeate.png";
 
-            Image sliderBG = new Image();
-            sliderBG.Source = "drag_bg.png";
+            //Image sliderBG = new Image();
+            //sliderBG.Source = "drag_bg.png";
 
             this.Appearing += FeelingNowPage_Appearing;
 
@@ -534,7 +534,7 @@ namespace PurposeColor
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
             deleteButton = new CustomImageButton();
-            deleteButton.ImageName = "delete_button.png";
+            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
             deleteButton.WidthRequest = 20;
             deleteButton.HeightRequest = 20;
             deleteButton.SetBinding(CustomImageButton.ClassIdProperty, "Name");

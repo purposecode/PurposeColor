@@ -32,9 +32,7 @@ namespace PurposeColor.screens
             lstView.RowHeight = 60;
             lstView.ItemsSource = veggies;
             lstView.ItemTemplate = new DataTemplate(typeof(CustomVeggieCell));
-            veggies.Add(new VeggieViewModel { Name = "Tomato", Type = "Fruit", Image = "tomato.png" });
-            veggies.Add(new VeggieViewModel { Name = "Romaine Lettuce", Type = "Vegetable", Image = "lettuce.png" });
-            veggies.Add(new VeggieViewModel { Name = "Zucchini", Type = "Vegetable", Image = "zucchini.png" });
+            
             Content = lstView;
         }
     }

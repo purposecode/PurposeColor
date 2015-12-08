@@ -952,15 +952,15 @@ namespace PurposeColor.screens
 
                 if (mediaType == Constants.MediaType.Image)
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "image.png" });
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("image.png", "image.png", "//Assets//image.png") });//Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
                 }
                 else if (mediaType == Constants.MediaType.Video)
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "video.png" });
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png")});
                 }
                 else
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = "mic.png" });
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
                 }
 
 
@@ -1083,14 +1083,14 @@ namespace PurposeColor.screens
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
             CustomImageButton imageButton = new CustomImageButton();
-            imageButton.ImageName = "image.png";
+            imageButton.ImageName = Device.OnPlatform("image.png", "image.png", "//Assets//image.png");
             imageButton.WidthRequest = screenWidth * 20 / 100;
             imageButton.HeightRequest = screenHeight * 10 / 100;
             imageButton.ClassId = type;
             imageButton.Clicked += OnImageButtonClicked;
 
             CustomImageButton videoButton = new CustomImageButton();
-            videoButton.ImageName = "video.png";
+            videoButton.ImageName = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
             videoButton.WidthRequest = screenWidth * 20 / 100;
             videoButton.HeightRequest = screenHeight * 10 / 100;
             videoButton.ClassId = type;
@@ -1302,7 +1302,7 @@ namespace PurposeColor.screens
             sideImage.Aspect = Aspect.Fill;
 
             CustomImageButton deleteButton = new CustomImageButton();
-            deleteButton.ImageName = "delete_button.png";
+            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
             deleteButton.WidthRequest = 20;
             deleteButton.HeightRequest = 20;
             deleteButton.SetBinding(CustomImageButton.ClassIdProperty, "Name");

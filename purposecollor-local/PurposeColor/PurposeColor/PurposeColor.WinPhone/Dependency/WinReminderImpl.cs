@@ -15,7 +15,8 @@ namespace PurposeColor.WinPhone.Dependency
     {
 		public Task<bool> RequestAccessAsync ()
 		{
-			return true;
+            return Task.Delay(10)
+          .ContinueWith(t => true);
 		}
 
         public void Remind(DateTime dateTime, DateTime dateTime2, string title, string message)

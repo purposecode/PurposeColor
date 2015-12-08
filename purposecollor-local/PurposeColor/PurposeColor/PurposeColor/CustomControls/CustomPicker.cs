@@ -286,8 +286,14 @@ namespace PurposeColor.CustomControls
 					emotionsEntry.IsVisible  = false;
 					addEmotionButtonLayout.IsVisible  = false;
 
-                    string emotionValue = emotionsEntry.Text.Trim();
-                    if( emotionValue != null && emotionValue.Length == 0 )
+                    if( emotionsEntry.Text == null )
+                    {
+                        progressBar.ShowToast("emotion is empty");
+                        progressBar.HideProgressbar();
+                        return;
+                    }
+
+                    if (emotionsEntry.Text != null && emotionsEntry.Text.Trim().Length == 0)
                     {
                         progressBar.ShowToast("emotion is empty");
                         progressBar.HideProgressbar();

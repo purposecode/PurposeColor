@@ -76,11 +76,11 @@ namespace PurposeColor.screens
 
             List<MenuItems> menuItems = new List<MenuItems>();
             menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_AWARENESS, ImageName = Device.OnPlatform("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotion.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GEM, ImageName = Device.OnPlatform("settings.png", "gem_menu_icon.png", "//Assets//settings.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GOALS_AND_DREAMS, ImageName = Device.OnPlatform("goals.png", "goals_drms_menu_icon.png", "//Assets//goals.png") });
-            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion.png") });
-            menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("Intel.png", "comunity_menu_icon.png", "//Assets//Intel.png") });
-            menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("goals.png", "setings_menu_icon.png", "//Assets//goals.png") });
+			menuItems.Add(new MenuItems { Name = Constants.GEM, ImageName = Device.OnPlatform("gem_menu_icon.png", "gem_menu_icon.png", "//Assets//settings.png") });
+			menuItems.Add(new MenuItems { Name = Constants.GOALS_AND_DREAMS, ImageName = Device.OnPlatform("goals_drms_menu_icon.png", "goals_drms_menu_icon.png", "//Assets//goals.png") });
+			menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion.png") });
+			menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//Intel.png") });
+			menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//goals.png") });
       
 
             listView = new ListView();
@@ -89,7 +89,7 @@ namespace PurposeColor.screens
             listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
-            listView.RowHeight =(int) screenHeight * 8 / 100;
+            listView.RowHeight =(int) screenHeight * 10 / 100;
             
 
             Icon = "icon.png";
@@ -101,7 +101,7 @@ namespace PurposeColor.screens
 
 
            // masterLayout.AddChildToLayout(titleBar, 0, 0);
-            masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 30,15, 10 ));
+            masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 15,15, 10 ));
             this.TranslationY = screenHeight * 10 / 100;
             Content = masterLayout;
         }

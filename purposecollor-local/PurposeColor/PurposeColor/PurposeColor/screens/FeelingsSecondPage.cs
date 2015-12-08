@@ -150,7 +150,7 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(secondLine, 0, 25);
             masterLayout.AddChildToLayout(thirdLine, 0, 30);
             //masterLayout.AddChildToLayout(sliderBG, 7, 45);
-            masterLayout.AddChildToLayout(slider, 5, 34);
+			masterLayout.AddChildToLayout(slider, 5, Device.OnPlatform( 37, 34, 34 ));
             /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/

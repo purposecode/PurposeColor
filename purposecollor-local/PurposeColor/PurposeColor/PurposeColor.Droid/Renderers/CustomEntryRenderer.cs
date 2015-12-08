@@ -28,6 +28,7 @@ namespace PurposeColor.Droid.Renderers
             {
                 return;
             }
+            nativeTextView.SetPadding(5, 0, 5, 0);
 			nativeTextView.SetBackgroundColor( Android.Graphics.Color.White );
             nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 10);
            

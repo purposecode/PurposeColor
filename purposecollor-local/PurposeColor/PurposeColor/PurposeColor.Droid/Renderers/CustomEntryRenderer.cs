@@ -24,13 +24,20 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
             nativeTextView = Control;
-            if (nativeTextView  == null)
+            if (nativeTextView == null)
             {
                 return;
             }
-			nativeTextView.SetBackgroundColor( Android.Graphics.Color.White );
-            nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 10);
-           
+            nativeTextView.SetBackgroundColor(Android.Graphics.Color.White);
+            nativeTextView.SetTextColor(Android.Graphics.Color.Gray);
+            if (App.screenDensity > 1.5)
+            {
+                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 9);
+            }
+            else
+            {
+                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 9);
+            }
         }
     }
 }

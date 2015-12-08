@@ -18,7 +18,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -296,7 +296,6 @@
     <Content Include="PushNotificationStarted.txt" />
     <AndroidResource Include="Resources\drawable\menu.png" />
     <AndroidResource Include="Resources\drawable\logo.png" />
-    <AndroidResource Include="Resources\drawable\attachicon.png" />
     <AndroidResource Include="Resources\drawable\back_arrow.png" />
     <AndroidResource Include="Resources\drawable\top_bg.png" />
     <AndroidResource Include="Resources\drawable\top_seperate.png" />
@@ -326,7 +325,6 @@
     <AndroidResource Include="Resources\drawable\setings_menu_icon.png" />
     <AndroidResource Include="Resources\drawable\comunity_menu_icon.png" />
     <AndroidResource Include="Resources\drawable\bckarow.png" />
-    <AndroidResource Include="Resources\drawable\icn_attach.png" />
     <AndroidResource Include="Resources\drawable\icn_seperate.png" />
     <AndroidResource Include="Resources\drawable\icon_tick.png" />
     <AndroidResource Include="Resources\drawable\light_blue_bg.png" />
@@ -419,6 +417,43 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\setings.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\text_box.png" />
+    <AndroidResource Include="Resources\drawable\icn_attach.png" />
+    <AndroidResource Include="Resources\drawable\mic.png" />
+    <AndroidResource Include="Resources\drawable\turn_off_mic.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\mic.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\mic.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\mic.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\emotion_intellegene_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\turn_off_mic.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\emotional_awrness_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\gem_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\goals_drms_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\ic_music.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_attch.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_calander.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_camera.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_contact.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_gallery.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_location.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_plus.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tick_blue.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\setings_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\comunity_menu_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bg_top.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_blue.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_right.png" />
+    <AndroidResource Include="Resources\drawable\arrow_right.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icn_attch.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\turn_off_mic.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_right.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\comunity.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\drag_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\drag_btn_no.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\emotion_inte.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icn_attch.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\turn_off_mic.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icn_attch.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\turn_off_mic.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

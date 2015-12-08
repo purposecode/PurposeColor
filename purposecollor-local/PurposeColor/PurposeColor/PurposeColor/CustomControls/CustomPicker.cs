@@ -22,7 +22,8 @@ namespace PurposeColor.CustomControls
         public string Name
         {
             get { return name; }
-            set {
+            set
+            {
                 string trimmedName = string.Empty;
                 if (value.Length > 28)
                 {
@@ -154,7 +155,7 @@ namespace PurposeColor.CustomControls
             StackLayout listHeader = new StackLayout();
             listHeader.WidthRequest = screenWidth * 96 / 100;
             listHeader.HeightRequest = screenHeight * 10 / 100;
-            listHeader.BackgroundColor = Color.FromRgb( 30, 126, 210 );
+            listHeader.BackgroundColor = Color.FromRgb(30, 126, 210);
 
             listTitle = new Label();
             listTitle.Text = trimmedPageTitle;
@@ -163,7 +164,7 @@ namespace PurposeColor.CustomControls
 
             if (App.screenDensity > 1.5)
             {
-				listTitle.FontSize = Device.OnPlatform( 15, 17, 17 );
+                listTitle.FontSize = Device.OnPlatform(15, 17, 17);
             }
             else
             {
@@ -177,9 +178,9 @@ namespace PurposeColor.CustomControls
             }
             else
             {
-                addButton.ImageName = "icn_plus.png";
+                addButton.ImageName = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
             }
-            
+
             addButton.WidthRequest = 15;
             addButton.HeightRequest = 15;
 
@@ -204,15 +205,15 @@ namespace PurposeColor.CustomControls
             StackLayout listViewSpacer = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
-                Padding = new Thickness(5,0,5,5),
+                Padding = new Thickness(5, 0, 5, 5),
                 BackgroundColor = Constants.LIST_BG_COLOR,//Color.White,
                 Children = { listView }
             };
             listViewSpacer.WidthRequest = screenWidth * 95 / 100;
-            listViewSpacer.HeightRequest = (screenHeight * topY / 100)-20;
+            listViewSpacer.HeightRequest = (screenHeight * topY / 100) - 20;
 
 
-            listContainer.Children.Add( listViewSpacer );
+            listContainer.Children.Add(listViewSpacer);
 
 
 
@@ -224,12 +225,12 @@ namespace PurposeColor.CustomControls
             if (titelBarRequired)
             {
                 masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
-                masterLayout.AddChildToLayout(listTitle, 7, (100 - topY - 1) - 7 );
+                masterLayout.AddChildToLayout(listTitle, 7, (100 - topY - 1) - 7);
                 if (addButtonRequired)
                 {
 
                     masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
-                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
+                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8));
                 }
 
             }
@@ -247,7 +248,7 @@ namespace PurposeColor.CustomControls
                 CustomEntry emotionsEntry = new CustomEntry();
                 emotionsEntry.BackgroundColor = Color.White;
                 emotionsEntry.Placeholder = "Enter emotion";
-                emotionsEntry.WidthRequest =  screenWidth * 75 / 100;
+                emotionsEntry.WidthRequest = screenWidth * 75 / 100;
                 emotionsEntry.TextColor = Color.Black;
                 listTitle.IsVisible = false;
                 addButton.IsVisible = false;
@@ -255,39 +256,39 @@ namespace PurposeColor.CustomControls
                 addEmotionButton = new CustomImageButton();
                 if (Device.OS == TargetPlatform.WinPhone)
                 {
-					addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
+                    addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
                 }
                 else
                 {
-					addEmotionButton.ImageName = "tick_with_bg.png";
+                    addEmotionButton.ImageName = Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png");
                 }
 
                 addEmotionButton.WidthRequest = 25;
                 addEmotionButton.HeightRequest = 25;
 
-				StackLayout addEmotionButtonLayout = new StackLayout();
-				addEmotionButtonLayout.HeightRequest = 50;
-				addEmotionButtonLayout.WidthRequest = 50;
-				addEmotionButtonLayout.BackgroundColor = Color.Transparent;
+                StackLayout addEmotionButtonLayout = new StackLayout();
+                addEmotionButtonLayout.HeightRequest = 50;
+                addEmotionButtonLayout.WidthRequest = 50;
+                addEmotionButtonLayout.BackgroundColor = Color.Transparent;
 
-				TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
-				addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
-					object addsender, EventArgs adde) => 
-				{
+                TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
+                addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
+                    object addsender, EventArgs adde) =>
+                {
 
                     IProgressBar progressBar = DependencyService.Get<IProgressBar>();
 
                     progressBar.ShowProgressbar("sending new emotion");
 
 
-					listTitle.IsVisible = true;
-					addButton.IsVisible = true;
-					addEmotionButton.IsVisible  = false;
-					emotionsEntry.IsVisible  = false;
-					addEmotionButtonLayout.IsVisible  = false;
+                    listTitle.IsVisible = true;
+                    addButton.IsVisible = true;
+                    addEmotionButton.IsVisible = false;
+                    emotionsEntry.IsVisible = false;
+                    addEmotionButtonLayout.IsVisible = false;
 
                     string emotionValue = emotionsEntry.Text.Trim();
-                    if( emotionValue != null && emotionValue.Length == 0 )
+                    if (emotionValue != null && emotionValue.Length == 0)
                     {
                         progressBar.ShowToast("emotion is empty");
                         progressBar.HideProgressbar();
@@ -303,12 +304,12 @@ namespace PurposeColor.CustomControls
 
                     progressBar.HideProgressbar();
 
-				};
-				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
+                };
+                addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
-				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
-                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos  - 2 ) - 7);
-				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
+                masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
+                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - 7);
+                masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8));
             }
             else
             {

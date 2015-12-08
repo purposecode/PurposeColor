@@ -22,9 +22,9 @@ namespace PurposeColor.Droid.Renderers
 {
     public class AndroidReminderImpl : IReminderService
     {
-		public Task<bool> RequestAccessAsync ()
+		public System.Threading.Tasks.Task<bool> RequestAccessAsync ()
 		{
-			return true;
+			return null;
 		}
 
         public bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder)

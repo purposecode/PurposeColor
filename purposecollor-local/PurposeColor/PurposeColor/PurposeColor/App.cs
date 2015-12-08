@@ -50,13 +50,17 @@ namespace PurposeColor
         {
             get { return token; }
         }
+
+
         IDeviceSpec deviceSpec;
         public static double screenHeight;
         public static double screenWidth;
         public static double screenDensity;
+		public static CreateEventPage CalPage{ get; set; }
 
         public App()
         {
+			
             deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = deviceSpec.ScreenHeight;
             screenWidth = deviceSpec.ScreenWidth;

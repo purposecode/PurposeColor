@@ -7,6 +7,9 @@ using UIKit;
 using EventKit;
 using Foundation;
 using System.Threading.Tasks;
+using EventKitUI;
+using Xamarin.Forms;
+using System.Linq;
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOSReminderImpl))]
 namespace PurposeColor.iOS.Dependency
@@ -17,9 +20,12 @@ namespace PurposeColor.iOS.Dependency
 		{
 			get { return eventStore; }
 		}
+
+		CreateEventEditViewDelegate eventControllerDelegate;
 		protected static EKEventStore eventStore = new EKEventStore();
 
 		EventKitUI.EKEventEditViewController eventController = 	new EventKitUI.EKEventEditViewController ();
+
 
 		public Task<bool> RequestAccessAsync()
 		{
@@ -39,39 +45,38 @@ namespace PurposeColor.iOS.Dependency
 
 		public bool Remind(DateTime startDate, DateTime endtDate, string title, string message, int reminder)
         {
-			/*EKEvent newEvent = EKEvent.FromStore(this.EventStore);
-			newEvent.StartDate = (NSDate)DateTime.SpecifyKind(startDate, DateTimeKind.Utc);
-			newEvent.EndDate = (NSDate)DateTime.SpecifyKind(endtDate, DateTimeKind.Utc);
-			newEvent.Title = title;
-			newEvent.Notes = message;
-			newEvent.AllDay = false;
-			//newEvent.AddAlarm(EKAlarm.FromDate((NSDate)startDate.AddMinutes(-10)));
-			NSError error;
-			this.EventStore.SaveEvent(newEvent, EKSpan.ThisEvent, out error);
 
-			return true;*/
+			 Device.BeginInvokeOnMainThread(() =>
+			{
+				TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+				try
+				{
+						EKEvent newEvent = EKEvent.FromStore ( this.EventStore );
+						// make the event start 20 minutes from now and last 30 minutes
+						newEvent.StartDate = DateTimeToNSDate( startDate.ToUniversalTime() );
+						newEvent.EndDate = DateTimeToNSDate( endtDate.ToUniversalTime() );
+						newEvent.Title = title;
+						newEvent.Notes = message;
+						newEvent.Calendar = this.EventStore.DefaultCalendarForNewEvents;
 
+						EventKitUI.EKEventEditViewController eventController = new EventKitUI.EKEventEditViewController();
+						eventController.EventStore = eventStore;
+						eventControllerDelegate = new CreateEventEditViewDelegate (eventController);
+						eventController.EditViewDelegate = eventControllerDelegate;
+						eventController.Event = newEvent;
 
-
-			EKEvent newEvent = EKEvent.FromStore ( this.EventStore );
-			// set the alarm for 10 minutes from now
-			//newEvent.AddAlarm ( EKAlarm.FromDate ( DateTimeToNSDate( startDate.AddMinutes( -15 ) )));
-			// make the event start 20 minutes from now and last 30 minutes
-			newEvent.StartDate = DateTimeToNSDate( startDate );
-			newEvent.EndDate = DateTimeToNSDate( endtDate );
-			newEvent.Title = title;
-			newEvent.Notes = message;
-			newEvent.Calendar = this.EventStore.DefaultCalendarForNewEvents;
-			NSError e;
-			this.EventStore.SaveEvent ( newEvent, EKSpan.ThisEvent, out e );
-
-
-			EKReminder ekReminder = EKReminder.Create( this.EventStore );
-			ekReminder.Title = title;
-			ekReminder.Calendar = this.EventStore.DefaultCalendarForNewEvents;
-			this.EventStore.SaveReminder ( ekReminder, true, out e );
+						var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First().ChildViewControllers.Last().ChildViewControllers.First();
+		
+						firstController.PresentViewController (eventController, true, null);
+				}
+				catch (Exception ex)
+				{
+					tcs.SetException(ex);
+				}
+			});
 
 			return true;
+
 
         }
 
@@ -85,23 +90,42 @@ namespace PurposeColor.iOS.Dependency
 			return (NSDate) date;
 		}
 
-		/*private EKAlarm ConvertReminder(AppointmentReminder reminder, DateTime startTime)
-		{
-			switch (reminder)
-			{
-			case AppointmentReminder.none:
-				return EKAlarm.FromDate((NSDate)startTime); ///todo should this be null?
-			case AppointmentReminder.five:
-				return EKAlarm.FromDate((NSDate)startTime.AddMinutes(-5));
-			case AppointmentReminder.fifteen:
-				return EKAlarm.FromDate((NSDate)startTime.AddMinutes(-15));
-			case AppointmentReminder.thirty:
-				return EKAlarm.FromDate((NSDate)startTime.AddMinutes(-30));
-			}
-			return EKAlarm.FromDate((NSDate)startTime);
-		}*/
-
 
 
     }
+
+
+	// our delegate for the create new event controller.
+	public class CreateEventEditViewDelegate : EventKitUI.EKEventEditViewDelegate
+	{
+		// we need to keep a reference to the controller so we can dismiss it
+		protected EventKitUI.EKEventEditViewController eventController;
+
+		public CreateEventEditViewDelegate (EventKitUI.EKEventEditViewController eventController)
+		{
+			// save our controller reference
+			this.eventController = eventController;
+		}
+
+		// completed is called when a user eith
+		public override void Completed (EventKitUI.EKEventEditViewController controller, EventKitUI.EKEventEditViewAction action)
+		{
+			eventController.DismissViewController (true, null);
+
+			// action tells you what the user did in the dialog, so you can optionally
+			// do things based on what their action was. additionally, you can get the
+			// Event from the controller.Event property, so for instance, you could
+			// modify the event and then resave if you'd like.
+			switch (action) {
+
+			case EventKitUI.EKEventEditViewAction.Canceled:
+				break;
+			case EventKitUI.EKEventEditViewAction.Deleted:
+				break;
+			case EventKitUI.EKEventEditViewAction.Saved:
+				App.CalPage.Navigation.PopAsync ();
+				break;
+			}
+		}
+	}
 }

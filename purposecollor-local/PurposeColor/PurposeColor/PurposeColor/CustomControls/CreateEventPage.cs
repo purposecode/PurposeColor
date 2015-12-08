@@ -11,7 +11,7 @@ using Xamarin.Forms;
 
 namespace PurposeColor.screens
 {
-    class CreateEventPage : ContentPage, IDisposable
+    public class CreateEventPage : ContentPage, IDisposable
     {
         CustomLayout masterLayout;
         IDeviceSpec deviceSpec;
@@ -193,7 +193,7 @@ namespace PurposeColor.screens
 			createReminderButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 			createReminderButton.Clicked += async (object sender, EventArgs e) =>
 			{
-
+				App.CalPage = this;
                 if( startDatePickerButton.Text == "Start Date" || endDatePickerButton.Text == "End Date")
                 {
                     DisplayAlert(Constants.ALERT_TITLE, "Please select start date and end date to proceed", Constants.ALERT_OK);
@@ -207,7 +207,7 @@ namespace PurposeColor.screens
 					if( !access )
 						return;
 				}
-
+					
                 int reminderValue = 0;
                 if (reminderPickerButton.Text != null && reminderPickerButton.Text.Length > 0 &&  reminderPicker.SelectedIndex >= 0)
                 {
@@ -225,7 +225,9 @@ namespace PurposeColor.screens
                 {
                     IProgressBar progress = DependencyService.Get<IProgressBar>();
                     progress.ShowToast( "Calander event created" );
-                    Navigation.PopAsync();
+					if( Device.OS != TargetPlatform.iOS )
+						Navigation.PopAsync();
+                   
                 }
 
 			};
@@ -269,6 +271,7 @@ namespace PurposeColor.screens
         {
             App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
+			
 
         public void Dispose()
         {

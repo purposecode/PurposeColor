@@ -462,7 +462,7 @@ namespace PurposeColor.screens
 
             if (deviceSpec.ScreenDensity > 1.5)
             {
-                iconContainer.Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 5 / 100), (screenWidth * 3.8 / 100));//4.6
+                iconContainer.Spacing = Device.OnPlatform((screenWidth * 4.5 / 100), (screenWidth * 4.6 / 100), (screenWidth * 3.8 / 100));//4.6
             }
 
 

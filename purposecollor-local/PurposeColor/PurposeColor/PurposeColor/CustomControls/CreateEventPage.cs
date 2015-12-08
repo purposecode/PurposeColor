@@ -33,14 +33,14 @@ namespace PurposeColor.screens
 			CustomImageButton endTimePickerButton = new CustomImageButton();
 
 
-			Entry title = new Entry ();
+            CustomEntry title = new CustomEntry();
 			title.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 			title.Placeholder = " Title";
 			title.TextColor = Color.Black;
 			title.BackgroundColor = Color.White;
 
 
-			Entry messege = new Entry ();
+            CustomEntry messege = new CustomEntry();
 			messege.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 			messege.Placeholder = " Description";
 			messege.TextColor = Color.Black;

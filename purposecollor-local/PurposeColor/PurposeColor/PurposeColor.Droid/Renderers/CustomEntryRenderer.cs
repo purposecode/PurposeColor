@@ -30,13 +30,21 @@ namespace PurposeColor.Droid.Renderers
             }
             nativeTextView.SetBackgroundColor(Android.Graphics.Color.White);
             nativeTextView.SetTextColor(Android.Graphics.Color.Gray);
+            if (nativeTextView != null)
+            {
+                if (nativeTextView.Text != null)
+                {
+                   // nativeTextView.SetTextColor(Android.Graphics.Color.Black);
+                }
+                
+            }
             if (App.screenDensity > 1.5)
             {
-                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 9);
+                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 8);
             }
             else
             {
-                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 9);
+                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 5);
             }
         }
     }

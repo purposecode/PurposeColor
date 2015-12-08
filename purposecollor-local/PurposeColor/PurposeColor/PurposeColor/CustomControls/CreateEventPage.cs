@@ -226,7 +226,7 @@ namespace PurposeColor.screens
                     IProgressBar progress = DependencyService.Get<IProgressBar>();
                     progress.ShowToast( "Calander event created" );
 					if( Device.OS != TargetPlatform.iOS )
-						Navigation.PopAsync();
+						Navigation.PopAsync(); 
                    
                 }
 

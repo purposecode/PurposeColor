@@ -159,91 +159,124 @@ namespace PurposeColor.screens
 
             #endregion
 
-            ImageButton pinButton = new ImageButton
+            //ImageButton pinButton = new ImageButton
+            //{
+            //    BackgroundColor = Color.Transparent,
+            //    VerticalOptions = LayoutOptions.Start,
+            //    HorizontalOptions = LayoutOptions.Center,
+            //    Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"),
+            //    WidthRequest = devWidth * .1,
+            //};
+
+            Image pinButton = new Image
             {
                 BackgroundColor = Color.Transparent,
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
-                Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"), //icn_plus
-                WidthRequest = devWidth * .1,
+                Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"),
+                
             };
-
-            pinButton.Clicked += (s, e) =>
+            StackLayout pinButtonHolder = new StackLayout
+            {
+                Padding = 10,
+                VerticalOptions = LayoutOptions.Start,
+                Children = { pinButton }
+            };
+            TapGestureRecognizer pinButtonTapRecognizer = new TapGestureRecognizer();
+            pinButtonHolder.GestureRecognizers.Add(pinButtonTapRecognizer);
+            pinButtonTapRecognizer.Tapped += (s,e) =>
             {
                 iconContainerGrid.IsVisible = !iconContainerGrid.IsVisible;
             };
 
-            ImageButton audioRecodeOnButton = new ImageButton
+            Image audioRecodeOnButton = new Image
             {
                 BackgroundColor = Color.Transparent,
-                VerticalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Center,
                 Source = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png"),
-                WidthRequest = devWidth * .01
+                //WidthRequest = devWidth * .01
             };
-            ImageButton audioRecodeOffButton = new ImageButton
+            StackLayout audioRecodeOnHolder = new StackLayout
+            {
+                Padding = 10,
+                VerticalOptions = LayoutOptions.End,
+                Children = { audioRecodeOnButton }
+            };
+            TapGestureRecognizer RecodeOnTapRecognizer = new TapGestureRecognizer();
+            audioRecodeOnHolder.GestureRecognizers.Add(RecodeOnTapRecognizer);
+            
+            Image audioRecodeOffButton = new Image
             {
                 BackgroundColor = Color.Transparent,
+                VerticalOptions = LayoutOptions.Center,
+                Source = Device.OnPlatform("turn_off_mic.png", "turn_off_mic.png", "//Assets//turn_off_mic.png"),
+                //WidthRequest = devWidth * .01
+            };
+            StackLayout audioRecodeOffHolder = new StackLayout
+            {
+                BackgroundColor = Color.Transparent,
+                Padding = 10,
                 VerticalOptions = LayoutOptions.End,
                 IsVisible = false,
-                Source = Device.OnPlatform("turn_off_mic.png", "turn_off_mic.png", "//Assets//turn_off_mic.png"),
-                WidthRequest = devWidth * .01
+                Children = { audioRecodeOffButton }
             };
+            TapGestureRecognizer RecodeOffTapRecognizer = new TapGestureRecognizer();
+            audioRecodeOffHolder.GestureRecognizers.Add(RecodeOffTapRecognizer);
 
-            audioRecodeOffButton.TranslateTo(0, audioRecodeOffButton.Y + 25, 5, null);
-            audioRecodeOnButton.TranslateTo(0, audioRecodeOffButton.Y + 25, 5, null);
+            audioRecodeOffHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
+            audioRecodeOnHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
 
             #region AUDIO RECODING
-
-            audioRecodeOnButton.Clicked += (s, e) =>
+            RecodeOnTapRecognizer.Tapped += (s, e) =>
             {
                 try
                 {
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
                     if (!isAudioRecording)
                     {
-                        audioRecodeOffButton.IsVisible = true;
-                        audioRecodeOnButton.IsVisible = false;
+                        audioRecodeOffHolder.IsVisible = true;
+                        audioRecodeOnHolder.IsVisible = false;
                         isAudioRecording = true;
                         if (!audioRecorder.RecordAudio())
                         {
-                            DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
+                            progress.ShowToast( "Audio cannot be recorded, please try again later.");
                         }
                         else
                         {
-                            DisplayAlert("Audio recording", "Audio recording started.", "ok");
+                            progress.ShowToast("Audio recording started.");
                         }
                     }
                 }
                 catch (System.Exception)
                 {
-                    DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
+                    DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
                 }
             };
 
-
-            audioRecodeOffButton.Clicked += (s, e) =>
+            RecodeOffTapRecognizer.Tapped += (s, e) =>
             {
                 try
                 {
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
                     if (isAudioRecording)
                     {
-                        audioRecodeOnButton.IsVisible = true;
-                        audioRecodeOffButton.IsVisible = false;
+                        audioRecodeOnHolder.IsVisible = true;
+                        audioRecodeOffHolder.IsVisible = false;
                         isAudioRecording = false;
                         MemoryStream stream = audioRecorder.StopRecording();
                         if (stream == null)
                         {
-                            DisplayAlert("Audio recording", "Could not save audio, please try again later.", "ok");
+                            progress.ShowToast("Could not save audio, please try again later.");
                         }
                         else
                         {
                             AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
                         }
-
                     }
                 }
                 catch (System.Exception)
                 {
-                    DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
+                    DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
                 }
             };
             #endregion
@@ -255,8 +288,9 @@ namespace PurposeColor.screens
                 HeightRequest = 125,
                 WidthRequest = (int)(devWidth * .10),
                 Children = {
-
-                    pinButton, audioRecodeOnButton, audioRecodeOffButton
+                    pinButtonHolder, 
+                    audioRecodeOnHolder, 
+                    audioRecodeOffHolder
                 }
             };
 
@@ -1323,7 +1357,7 @@ namespace PurposeColor.screens
             sideImage.WidthRequest = 15;
             sideImage.HeightRequest = 15;
             sideImage.SetBinding(Image.SourceProperty, "Image");
-            sideImage.Aspect = Aspect.Fill;
+            sideImage.Aspect = Aspect.AspectFit;
 
             CustomImageButton deleteButton = new CustomImageButton();
             deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");

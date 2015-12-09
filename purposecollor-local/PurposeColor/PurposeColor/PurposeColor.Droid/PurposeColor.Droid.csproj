@@ -429,7 +429,6 @@
     <AndroidResource Include="Resources\drawable-hdpi\gem_menu_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\goals_drms_menu_icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\ic_music.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\icn_attch.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icn_calander.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icn_camera.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icn_contact.png" />
@@ -454,6 +453,8 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\turn_off_mic.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_attch.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\turn_off_mic.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\mic.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icn_attach.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -86,7 +86,7 @@ namespace PurposeColor
 
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("drag_sepeselect_box_whitebgate.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
+			goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;

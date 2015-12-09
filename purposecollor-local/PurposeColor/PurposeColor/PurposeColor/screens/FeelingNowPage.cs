@@ -76,7 +76,7 @@ namespace PurposeColor
             //howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
 
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
+            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//circle.png");
             emotionalPickerButton.Text = "Select Emotion";
 
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;

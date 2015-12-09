@@ -16,7 +16,19 @@ namespace PurposeColor.WinPhone.Dependency
 
         public ProgressBarImpl()
         {
-            SystemTray.ProgressIndicator = new ProgressIndicator();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                try
+                {
+                    SystemTray.ProgressIndicator = new ProgressIndicator();
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });
+
         }
 
         public void ShowProgressbar(string text)

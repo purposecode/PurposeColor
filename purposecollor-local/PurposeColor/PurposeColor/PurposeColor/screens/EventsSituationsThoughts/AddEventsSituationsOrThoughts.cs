@@ -46,8 +46,8 @@ namespace PurposeColor.screens
         string pageTitle;
         bool isAudioRecording = false;
         PurposeColor.interfaces.IAudioRecorder audioRecorder;
-       
-        IDeviceSpec deviceSpec;
+
+        //IDeviceSpec deviceSpec;
         string lattitude;
         string longitude;
         string currentAddress;
@@ -66,7 +66,7 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             audioRecorder = DependencyService.Get<PurposeColor.interfaces.IAudioRecorder>();
-            deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
 
@@ -94,9 +94,19 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(TopTitleBar, 0, 0);
 
             string trimmedPageTitle = string.Empty;
-            if (title.Length > 24)
+
+            int titleMaxLength = 24;
+            if (App.screenDensity > 1.5 )
             {
-                trimmedPageTitle = title.Substring(0, 24);
+                titleMaxLength = 24;
+            }else
+            {
+                titleMaxLength = 22;
+            }
+
+            if (title.Length > titleMaxLength)
+            {
+                trimmedPageTitle = title.Substring(0, titleMaxLength);
                 trimmedPageTitle += "...";
             }
             else
@@ -110,6 +120,8 @@ namespace PurposeColor.screens
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
             #endregion
 
+            #region EVENT TITLE - CUSTOM ENTRY
+
             eventTitle = new CustomEntry
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -117,10 +129,20 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White,
                 Placeholder = "Title",
                 TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(devWidth * .90) // 80% of screen,
+                WidthRequest = (int)(devWidth * .90) // 90% of screen,
             };
 
+            //if (App.screenDensity > 1.5)
+            //{
+            //    eventTitle.HeightRequest = screenHeight * 6 / 100;
+            //}
+            //else
+            //{
+            //    eventTitle.HeightRequest = screenHeight * 9 / 100;
+            //}
             masterLayout.AddChildToLayout(eventTitle, 5, 11);
+
+            #endregion
 
             #region EVENT DESCRIPTION
 
@@ -133,17 +155,17 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White
             };
 
-            
             eventDescription.WidthRequest = textInputWidth;
 
             #endregion
 
             ImageButton pinButton = new ImageButton
             {
-                BackgroundColor = Color.Transparent,
+                BackgroundColor = Color.Red,
                 VerticalOptions = LayoutOptions.Start,
-                Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"),
-                WidthRequest = devWidth * .01
+                HorizontalOptions = LayoutOptions.Center,
+                Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"), //icn_plus
+                WidthRequest = devWidth * .1,
             };
 
             pinButton.Clicked += (s, e) =>
@@ -167,7 +189,7 @@ namespace PurposeColor.screens
                 WidthRequest = devWidth * .01
             };
 
-            audioRecodeOffButton.TranslateTo(0, audioRecodeOffButton.Y + 25, 5,null);
+            audioRecodeOffButton.TranslateTo(0, audioRecodeOffButton.Y + 25, 5, null);
             audioRecodeOnButton.TranslateTo(0, audioRecodeOffButton.Y + 25, 5, null);
 
             #region AUDIO RECODING
@@ -308,40 +330,41 @@ namespace PurposeColor.screens
 
             #region AUDIO TAP RECOGNIZER
 
-            TapGestureRecognizer audioTapGestureRecognizer = new TapGestureRecognizer();
+            //TapGestureRecognizer audioTapGestureRecognizer = new TapGestureRecognizer();
 
-            audioTapGestureRecognizer.Tapped += (s, e) =>
-            {
-                try
-                {
-                    if (!isAudioRecording)
-                    {
-                        isAudioRecording = true;
-                        if (!audioRecorder.RecordAudio())
-                        {
-                            DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
-                        }
-                        else
-                        {
-                            DisplayAlert("Audio recording", "Audio recording started, Tap the audio icon again to end.", "ok");
-                        }
-                    }
-                    else
-                    {
-                        isAudioRecording = false;
-                        MemoryStream stream = audioRecorder.StopRecording();
+            //audioTapGestureRecognizer.Tapped += (s, e) =>
+            //{
+            //    try
+            //    {
+            //        if (!isAudioRecording)
+            //        {
+            //            isAudioRecording = true;
+            //            if (!audioRecorder.RecordAudio())
+            //            {
+            //                DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
+            //            }
+            //            else
+            //            {
+            //                DisplayAlert("Audio recording", "Audio recording started, Tap the audio icon again to end.", "ok");
+            //            }
+            //        }
+            //        else
+            //        {
+            //            isAudioRecording = false;
+            //            MemoryStream stream = audioRecorder.StopRecording();
 
 
-                        AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
+            //            AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
 
-                    }
-                }
-                catch (System.Exception)
-                {
-                    DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
-                }
-            };
-            audioInputStack.GestureRecognizers.Add(audioTapGestureRecognizer);
+            //        }
+            //    }
+            //    catch (System.Exception)
+            //    {
+            //        DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
+            //    }
+            //};
+
+            //audioInputStack.GestureRecognizers.Add(audioTapGestureRecognizer);
 
             #endregion
 
@@ -415,7 +438,7 @@ namespace PurposeColor.screens
                     //new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) }
                      }
             };
- 
+
             #region CONTACTS TAP RECOGNIZER
 
             TapGestureRecognizer contactsInputTapRecognizer = new TapGestureRecognizer();
@@ -512,7 +535,7 @@ namespace PurposeColor.screens
                         {
                             DisplayAlert("contacts access permission ", "Please add permission to access contacts", "ok");
                         }*/
-                    
+
                     #endregion
                 }
                 catch (Exception ex)
@@ -527,7 +550,7 @@ namespace PurposeColor.screens
             #endregion
 
             #region ICON CONTAINER GRID
-            
+
             iconContainerGrid = new Grid
             {
                 IsVisible = false,
@@ -956,7 +979,7 @@ namespace PurposeColor.screens
                 }
                 else if (mediaType == Constants.MediaType.Video)
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png")});
+                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
                 }
                 else
                 {
@@ -1056,7 +1079,7 @@ namespace PurposeColor.screens
         AddEventsSituationsOrThoughts MasterObject;
         public MediaSourceChooser(AddEventsSituationsOrThoughts masterObject, CustomLayout pageContainer, string type)
         {
-            
+
             MasterObject = masterObject;
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.Transparent;
@@ -1101,6 +1124,8 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(videoButton, 40, 60);
 
             this.BackgroundColor = Color.Transparent;
+
+
 
             Content = masterLayout;
         }
@@ -1273,7 +1298,6 @@ namespace PurposeColor.screens
 
         }
     }
-
 
     public class PreviewListViewCellItem : ViewCell
     {

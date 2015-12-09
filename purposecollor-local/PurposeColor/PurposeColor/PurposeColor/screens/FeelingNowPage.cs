@@ -36,7 +36,7 @@ namespace PurposeColor
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb( 244, 244, 244 );
+            masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             progressBar = DependencyService.Get<IProgressBar>();
@@ -61,27 +61,28 @@ namespace PurposeColor
             howYouAreFeeling.Text = Constants.HOW_YOU_ARE_FEELING;
             howYouAreFeeling.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             howYouAreFeeling.TextColor = Color.FromRgb(40, 47, 50);
-            howYouAreFeeling.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling.WidthRequest = screenWidth * 70 / 100;
-            howYouAreFeeling.HeightRequest = screenHeight * 15 / 100;
+
+            //howYouAreFeeling.WidthRequest = screenWidth * 70 / 100;
+            //howYouAreFeeling.HeightRequest = screenHeight * 15 / 100;
+            howYouAreFeeling.HorizontalOptions = LayoutOptions.Center;
 
             Label howYouAreFeeling2 = new Label();
             howYouAreFeeling2.Text = "feeling now ?";
             howYouAreFeeling2.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            howYouAreFeeling2.TextColor = Color.FromRgb( 40, 47, 50 );
-            howYouAreFeeling2.FontSize = Device.OnPlatform( 20, 22, 30 );
-            howYouAreFeeling2.WidthRequest = screenWidth * 70 / 100;
-            howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
+            howYouAreFeeling2.TextColor = Color.FromRgb(40, 47, 50);
+
+            howYouAreFeeling2.HorizontalOptions = LayoutOptions.Center;
+            //howYouAreFeeling2.WidthRequest = screenWidth * 70 / 100;
+            //howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
 
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
             emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
             emotionalPickerButton.Text = "Select Emotion";
-            emotionalPickerButton.FontSize = 17;
+
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             emotionalPickerButton.TextColor = Color.Gray;
             emotionalPickerButton.WidthRequest = screenWidth * 90 / 100;
-            //emotionalPickerButton.HeightRequest = screenHeight * 8 / 100;
             emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
@@ -90,21 +91,48 @@ namespace PurposeColor
             eventPickerButton.Text = "Events, Situation & Thoughts";
             eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            eventPickerButton.FontSize = 17;
             eventPickerButton.TextColor = Color.Gray;
             eventPickerButton.WidthRequest = screenWidth * 90 / 100;
-            //eventPickerButton.HeightRequest = screenHeight * 8 / 100;
+
             eventPickerButton.Clicked += OnEventPickerButtonClicked;
 
             about = new Label();
             about.IsVisible = false;
             about.Text = "About";
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            about.TextColor = Color.Gray;
-            about.FontSize = Device.OnPlatform(16, 16, 30);
-            about.WidthRequest = screenWidth * 50 / 100;
-            about.HeightRequest = screenHeight * 15 / 100;
+            //about.TextColor = Color.Gray;
+            //about.FontSize = Device.OnPlatform(16, 16, 30);
+            //about.WidthRequest = screenWidth * 50 / 100;
+            //about.HeightRequest = screenHeight * 15 / 100;
             about.HorizontalOptions = LayoutOptions.Center;
+
+            about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            about.TextColor = Color.FromRgb(40, 47, 50);
+
+
+
+            if (App.screenDensity > 1.5)
+            {
+                howYouAreFeeling.FontSize = Device.OnPlatform(20, 22, 30);
+                howYouAreFeeling2.FontSize = Device.OnPlatform(20, 22, 30);
+                about.FontSize = Device.OnPlatform(20, 22, 30);
+
+                emotionalPickerButton.HeightRequest = screenHeight * 6 / 100;
+                emotionalPickerButton.FontSize = 17;
+                eventPickerButton.HeightRequest = screenHeight * 6 / 100;
+                eventPickerButton.FontSize = 17;
+            }
+            else
+            {
+                howYouAreFeeling.FontSize = Device.OnPlatform(16, 20, 26);
+                howYouAreFeeling2.FontSize = Device.OnPlatform(16, 20, 26);
+                about.FontSize = Device.OnPlatform(16, 20, 26);
+
+                emotionalPickerButton.HeightRequest = screenHeight * 9 / 100;
+                emotionalPickerButton.FontSize = 15;
+                eventPickerButton.HeightRequest = screenHeight * 9 / 100;
+                eventPickerButton.FontSize = 15;
+            }
 
             Image sliderDivider1 = new Image();
             sliderDivider1.Source = Device.OnPlatform("drag_sepeate.png", "drag_sepeate.png", "//Assets//drag_sepeate.png");
@@ -124,44 +152,44 @@ namespace PurposeColor
             sliderValue = slider.CurrentValue;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(howYouAreFeeling, 15, 22);
-            masterLayout.AddChildToLayout(howYouAreFeeling2, 28, 27);
-          //  masterLayout.AddChildToLayout(sliderBG, 7, 40);
+            masterLayout.AddChildToLayout(howYouAreFeeling, 16, 22);
+            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, 27);
+            //  masterLayout.AddChildToLayout(sliderBG, 7, 40);
             masterLayout.AddChildToLayout(slider, 5, 34);
 
-           /* masterLayout.AddChildToLayout(sliderDivider1, 30, 40.5f);
-            masterLayout.AddChildToLayout(sliderDivider2, 50, 40.5f);
-            masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);*/
+            /* masterLayout.AddChildToLayout(sliderDivider1, 30, 40.5f);
+             masterLayout.AddChildToLayout(sliderDivider2, 50, 40.5f);
+             masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);*/
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
-            masterLayout.AddChildToLayout(about, 5, 65);
+            masterLayout.AddChildToLayout(about, 41, 62);
             masterLayout.AddChildToLayout(eventPickerButton, 5, 70);
 
             Content = masterLayout;
 
         }
 
-        public async void GetstopGetsture( bool pressed )
+        public async void GetstopGetsture(bool pressed)
         {
-           /* if (slider.Value != 0)
-            {
-                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-                if (pickView != null)
-                    return;
+            /* if (slider.Value != 0)
+             {
+                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                 if (pickView != null)
+                     return;
 
-                CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                ePicker.WidthRequest = screenWidth;
-                ePicker.HeightRequest = screenHeight;
-                ePicker.ClassId = "ePicker";
-                ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
-            }*/
+                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
+                 ePicker.WidthRequest = screenWidth;
+                 ePicker.HeightRequest = screenHeight;
+                 ePicker.ClassId = "ePicker";
+                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
+                 masterLayout.AddChildToLayout(ePicker, 0, 0);
+             }*/
 
             sliderValue = slider.CurrentValue;
-            if( slider.CurrentValue == 0 )
+            if (slider.CurrentValue == 0)
             {
-                
-                progressBar.ShowToast( "slider is in neutral" );
+
+                progressBar.ShowToast("slider is in neutral");
             }
             else
             {
@@ -198,7 +226,7 @@ namespace PurposeColor
         protected override bool OnBackButtonPressed()
         {
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            if( pickView != null )
+            if (pickView != null)
             {
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
@@ -216,7 +244,7 @@ namespace PurposeColor
         async void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
 
-            if(  emotionalPickerButton.Text == "Select Emotion")
+            if (emotionalPickerButton.Text == "Select Emotion")
             {
                 await DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
             }
@@ -224,7 +252,7 @@ namespace PurposeColor
             {
                 await DisplayAlert("Purpose Color", "Event not selected.", "Ok");
             }
-            else if( slider.Value == 0 )
+            else if (slider.Value == 0)
             {
                 await DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
             }
@@ -234,7 +262,7 @@ namespace PurposeColor
                 {
                     progressBar.ShowProgressbar("Saving details..");
                     bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
-                    
+
                     if (!isDataSaved)
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
@@ -257,7 +285,7 @@ namespace PurposeColor
 
         void backButton_Clicked(object sender, System.EventArgs e)
         {
-            
+
             try
             {
                 Navigation.PushAsync(new GraphPage());
@@ -361,7 +389,7 @@ namespace PurposeColor
         {
         }
 
-        async  void OnFeelingNowPageAppearing(object sender, System.EventArgs e)
+        async void OnFeelingNowPageAppearing(object sender, System.EventArgs e)
         {
             try
             {
@@ -376,7 +404,7 @@ namespace PurposeColor
                         progressBar.HideProgressbar();
                         return;
                     }
-                    
+
                     if (App.emotionsListSource != null)
                     {
                         App.Settings.SaveEmotions(App.emotionsListSource);
@@ -441,7 +469,7 @@ namespace PurposeColor
             }
             catch (System.Exception ex)
             {
-               //await DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the events", Constants.ALERT_OK);
+                //await DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the events", Constants.ALERT_OK);
                 return false;
             }
 

@@ -23,7 +23,7 @@ namespace PurposeColor
     {
         CustomPicker ePicker;
         CustomLayout masterLayout;
-        IDeviceSpec deviceSpec;
+        //IDeviceSpec deviceSpec;
         PurposeColor.interfaces.CustomImageButton actionPickerButton;
         PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton;
         public static ObservableCollection<PreviewItem> actionPreviewListSource = null;
@@ -35,6 +35,8 @@ namespace PurposeColor
         CustomListViewItem selectedGoal = null;
         List<CustomListViewItem> selectedActions = null;
         IProgressBar progressBar;
+        double screenHeight;
+        double screenWidth;
 
         public FeelingsSecondPage()
         {
@@ -42,7 +44,7 @@ namespace PurposeColor
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-            deviceSpec = DependencyService.Get<IDeviceSpec>();
+            //deviceSpec = DependencyService.Get<IDeviceSpec>();
             this.Appearing += FeelingsSecondPage_Appearing;
             actionPreviewListSource = new ObservableCollection<PreviewItem>();
 
@@ -52,46 +54,36 @@ namespace PurposeColor
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
 
             Label firstLine = new Label();
             firstLine.Text = "Does being";
             firstLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             firstLine.TextColor = Color.FromRgb(40, 47, 50);
-            firstLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            firstLine.HeightRequest = screenHeight * 15 / 100;
             firstLine.HorizontalOptions = LayoutOptions.Center;
-            firstLine.WidthRequest = deviceSpec.ScreenWidth;
+            firstLine.WidthRequest = screenWidth;
             firstLine.XAlign = TextAlignment.Center;
 
             Label secondLine = new Label();
             secondLine.Text = App.SelectedEmotion;
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             secondLine.TextColor = Color.FromRgb(40, 47, 50);
-            secondLine.HeightRequest = deviceSpec.ScreenHeight * 15 / 100;
+            secondLine.HeightRequest = screenHeight * 15 / 100;
             secondLine.HorizontalOptions = LayoutOptions.Center;
-            secondLine.WidthRequest = deviceSpec.ScreenWidth;
+            secondLine.WidthRequest = screenWidth;
             secondLine.XAlign = TextAlignment.Center;
 
             Label thirdLine = new Label();
             thirdLine.Text = "support your goals and dreams?";
             thirdLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             thirdLine.TextColor = Color.FromRgb(40, 47, 50);
-            thirdLine.HeightRequest = deviceSpec.ScreenHeight * 10 / 100;
+            thirdLine.HeightRequest = screenHeight * 10 / 100;
             thirdLine.HorizontalOptions = LayoutOptions.Center;
-            thirdLine.WidthRequest = deviceSpec.ScreenWidth;
+            thirdLine.WidthRequest = screenWidth;
             thirdLine.XAlign = TextAlignment.Center;
 
-            if (App.screenDensity > 1.5)
-            {
-                firstLine.FontSize = Device.OnPlatform(20, 22, 30);
-                secondLine.FontSize = Device.OnPlatform(20, 22, 30);
-                thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
-            }
-            else
-            {
-                firstLine.FontSize = Device.OnPlatform(16, 18, 26);
-                secondLine.FontSize = Device.OnPlatform(16, 18, 26);
-                thirdLine.FontSize = Device.OnPlatform(16, 18, 26);
-            }
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
             goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("drag_sepeselect_box_whitebgate.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
@@ -100,8 +92,8 @@ namespace PurposeColor
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
             goalsAndDreamsPickerButton.FontSize = 17;
             goalsAndDreamsPickerButton.TextColor = Color.Gray;
-            goalsAndDreamsPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //goalsAndDreamsPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            goalsAndDreamsPickerButton.WidthRequest = screenWidth * 90 / 100;
+
             goalsAndDreamsPickerButton.Clicked += OnGoalsPickerButtonClicked;
 
 
@@ -110,20 +102,39 @@ namespace PurposeColor
             actionPickerButton.BackgroundColor = Color.FromRgb(30, 126, 210);
             actionPickerButton.Text = "Add Supporting Actions";
             actionPickerButton.TextColor = Color.White;
-            actionPickerButton.FontSize = 17;
+
             actionPickerButton.TextOrientation = TextOrientation.Middle;
             actionPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             // actionPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            actionPickerButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            //actionPickerButton.HeightRequest = deviceSpec.ScreenHeight * 8 / 100;
+            actionPickerButton.WidthRequest = screenWidth * 90 / 100;
+
             actionPickerButton.Clicked += OnActionPickerButtonClicked;
 
+
+            if (App.screenDensity > 1.5)
+            {
+                firstLine.FontSize = Device.OnPlatform(20, 22, 30);
+                secondLine.FontSize = Device.OnPlatform(20, 22, 30);
+                thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
+                actionPickerButton.FontSize = 17;
+                actionPickerButton.HeightRequest = screenHeight * 6 / 100;
+                goalsAndDreamsPickerButton.HeightRequest = screenHeight * 6 / 100;
+            }
+            else
+            {
+                firstLine.FontSize = Device.OnPlatform(16, 20, 26);
+                secondLine.FontSize = Device.OnPlatform(16, 20, 26);
+                thirdLine.FontSize = Device.OnPlatform(16, 20, 26);
+                actionPickerButton.FontSize = 15;
+                actionPickerButton.HeightRequest = screenHeight * 9 / 100;
+                goalsAndDreamsPickerButton.HeightRequest = screenHeight * 9 / 100;
+            }
 
             slider = new CustomSlider
             {
                 Minimum = -2,
                 Maximum = 2,
-                WidthRequest = deviceSpec.ScreenWidth * 90 / 100
+                WidthRequest = screenWidth * 90 / 100
             };
             slider.StopGesture = GetstopGetsture;
 
@@ -150,7 +161,7 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(secondLine, 0, 25);
             masterLayout.AddChildToLayout(thirdLine, 0, 30);
             //masterLayout.AddChildToLayout(sliderBG, 7, 45);
-			masterLayout.AddChildToLayout(slider, 5, Device.OnPlatform( 37, 34, 34 ));
+            masterLayout.AddChildToLayout(slider, 5, Device.OnPlatform(37, 35, 34));
             /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/
@@ -160,8 +171,8 @@ namespace PurposeColor
 
             listContainer = new StackLayout();
             listContainer.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
-            listContainer.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
-            listContainer.HeightRequest = deviceSpec.ScreenHeight * 20 / 100;
+            listContainer.WidthRequest = screenWidth * 90 / 100;
+            listContainer.HeightRequest = screenHeight * 20 / 100;
             listContainer.ClassId = "preview";
 
             actionPreviewListView = new ListView();
@@ -216,7 +227,7 @@ namespace PurposeColor
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais, please try again", Constants.ALERT_OK);
             }
         }
-        
+
         public async void GetstopGetsture(bool pressed)
         {
             try
@@ -291,10 +302,10 @@ namespace PurposeColor
             try
             {
                 base.OnAppearing();
-               
+
                 if (App.goalsListSource == null || App.goalsListSource.Count < 1)
                 {
-                    
+
                     bool isGoalsAvailable = await DownloadAllGoals();
                     if (!isGoalsAvailable)
                     {
@@ -333,10 +344,10 @@ namespace PurposeColor
             }
             progressBar.HideProgressbar();
 
-           // this.Animate("", (s) => Layout(new Rectangle(((1 - s) * Width), Y, Width, Height)), 0, 600, Easing.SpringIn, null, null);
-          //  this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); //slide down
+            // this.Animate("", (s) => Layout(new Rectangle(((1 - s) * Width), Y, Width, Height)), 0, 600, Easing.SpringIn, null, null);
+            //  this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); //slide down
 
-           // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); // slide up
+            // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 600, Easing.SpringIn, null, null); // slide up
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -355,13 +366,13 @@ namespace PurposeColor
             {
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
-                ePicker.WidthRequest = deviceSpec.ScreenWidth;
-                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnActionPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
 
-                //double yPos = 60 * deviceSpec.ScreenHeight / 100;
+                //double yPos = 60 * screenHeight / 100;
                 // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
                 // ePicker.FadeTo(1, 750, Easing.Linear); 
 
@@ -380,12 +391,12 @@ namespace PurposeColor
             {
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
-                ePicker.WidthRequest = deviceSpec.ScreenWidth;
-                ePicker.HeightRequest = deviceSpec.ScreenHeight;
+                ePicker.WidthRequest = screenWidth;
+                ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
-                //double yPos = 60 * deviceSpec.ScreenHeight / 100;
+                //double yPos = 60 * screenHeight / 100;
                 //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
                 // ePicker.FadeTo(1, 750, Easing.Linear); 
 
@@ -497,7 +508,7 @@ namespace PurposeColor
             this.subTitleBar = null;
             this.ePicker = null;
             this.masterLayout = null;
-            this.deviceSpec = null;
+            // this.deviceSpec = null;
             actionPreviewListSource.Clear();
             actionPreviewListSource = null;
             this.actionPreviewListView = null;
@@ -505,7 +516,7 @@ namespace PurposeColor
             this.slider = null;
             this.selectedGoal = null;
             this.selectedActions = null;
-            
+
             GC.Collect();
         }
     }
@@ -521,15 +532,15 @@ namespace PurposeColor
         {
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            // IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Gray;
             name.FontSize = Device.OnPlatform(12, 15, 18);
-            name.WidthRequest = deviceSpec.ScreenWidth * 50 / 100;
+            name.WidthRequest = App.screenWidth * 50 / 100;
 
             divider = new StackLayout();
-            divider.WidthRequest = deviceSpec.ScreenWidth;
+            divider.WidthRequest = App.screenWidth;
             divider.HeightRequest = .75;
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
@@ -550,8 +561,8 @@ namespace PurposeColor
 
             };
 
-            masterLayout.WidthRequest = deviceSpec.ScreenWidth;
-            masterLayout.HeightRequest = deviceSpec.ScreenHeight * Device.OnPlatform(30, 50, 10) / 100;
+            masterLayout.WidthRequest = App.screenWidth;
+            masterLayout.HeightRequest = App.screenHeight * Device.OnPlatform(30, 50, 10) / 100;
             masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(5, 5, 5), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);

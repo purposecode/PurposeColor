@@ -44,7 +44,7 @@ namespace PurposeColor.Droid.Renderers
             }
             else
             {
-                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 5);
+                nativeTextView.SetTextSize(Android.Util.ComplexUnitType.Pt, 9);
             }
         }
     }

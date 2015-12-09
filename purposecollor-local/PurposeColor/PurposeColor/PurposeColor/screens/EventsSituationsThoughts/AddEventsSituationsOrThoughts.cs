@@ -161,7 +161,7 @@ namespace PurposeColor.screens
 
             ImageButton pinButton = new ImageButton
             {
-                BackgroundColor = Color.Red,
+                BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"), //icn_plus

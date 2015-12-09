@@ -35,8 +35,9 @@ namespace PurposeColor.screens
             double screenHeight = App.screenHeight;
             Label name = new Label();
             name.SetBinding(Label.TextProperty, "Name");
-            name.TextColor = Color.Black;
-            name.FontSize = Device.OnPlatform(12, 18, 18);
+            name.TextColor = Constants.MAIN_MENU_TEXT_COLOR;//Color.Black;
+            name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            name.FontSize = Device.OnPlatform(12, 17, 18);
 
             StackLayout divider = new StackLayout();
             divider.WidthRequest = screenWidth;

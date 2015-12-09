@@ -50,6 +50,8 @@ namespace PurposeColor
         
         public static Color PAGE_BG_COLOR_LIGHT_GRAY = Color.FromHex("#f4f4f4");
 
+        public static Color MAIN_MENU_TEXT_COLOR = Color.FromHex("#42464d");
+
         #region SERVICE
         public const string SERVICE_BASE_URL = "http://purposecodes.com/pc/";
         #endregion

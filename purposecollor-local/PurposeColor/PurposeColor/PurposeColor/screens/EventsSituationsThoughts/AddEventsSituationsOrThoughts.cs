@@ -59,6 +59,8 @@ namespace PurposeColor.screens
         double screenHeight;
         double screenWidth;
         Grid iconContainerGrid = null;
+        StackLayout audioRecodeOnHolder = null;
+        StackLayout audioRecodeOffHolder = null;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -96,10 +98,11 @@ namespace PurposeColor.screens
             string trimmedPageTitle = string.Empty;
 
             int titleMaxLength = 24;
-            if (App.screenDensity > 1.5 )
+            if (App.screenDensity > 1.5)
             {
                 titleMaxLength = 24;
-            }else
+            }
+            else
             {
                 titleMaxLength = 22;
             }
@@ -159,22 +162,13 @@ namespace PurposeColor.screens
 
             #endregion
 
-            //ImageButton pinButton = new ImageButton
-            //{
-            //    BackgroundColor = Color.Transparent,
-            //    VerticalOptions = LayoutOptions.Start,
-            //    HorizontalOptions = LayoutOptions.Center,
-            //    Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"),
-            //    WidthRequest = devWidth * .1,
-            //};
-
             Image pinButton = new Image
             {
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center,
                 HorizontalOptions = LayoutOptions.Center,
                 Source = Device.OnPlatform("icn_attach.png", "icn_attach.png", "//Assets//icn_attach.png"),
-                
+
             };
             StackLayout pinButtonHolder = new StackLayout
             {
@@ -184,7 +178,7 @@ namespace PurposeColor.screens
             };
             TapGestureRecognizer pinButtonTapRecognizer = new TapGestureRecognizer();
             pinButtonHolder.GestureRecognizers.Add(pinButtonTapRecognizer);
-            pinButtonTapRecognizer.Tapped += (s,e) =>
+            pinButtonTapRecognizer.Tapped += (s, e) =>
             {
                 iconContainerGrid.IsVisible = !iconContainerGrid.IsVisible;
             };
@@ -194,9 +188,8 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center,
                 Source = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png"),
-                //WidthRequest = devWidth * .01
             };
-            StackLayout audioRecodeOnHolder = new StackLayout
+            audioRecodeOnHolder = new StackLayout
             {
                 Padding = 10,
                 VerticalOptions = LayoutOptions.End,
@@ -204,15 +197,14 @@ namespace PurposeColor.screens
             };
             TapGestureRecognizer RecodeOnTapRecognizer = new TapGestureRecognizer();
             audioRecodeOnHolder.GestureRecognizers.Add(RecodeOnTapRecognizer);
-            
+
             Image audioRecodeOffButton = new Image
             {
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center,
                 Source = Device.OnPlatform("turn_off_mic.png", "turn_off_mic.png", "//Assets//turn_off_mic.png"),
-                //WidthRequest = devWidth * .01
             };
-            StackLayout audioRecodeOffHolder = new StackLayout
+            audioRecodeOffHolder = new StackLayout
             {
                 BackgroundColor = Color.Transparent,
                 Padding = 10,
@@ -226,60 +218,8 @@ namespace PurposeColor.screens
             audioRecodeOffHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
             audioRecodeOnHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
 
-            #region AUDIO RECODING
-            RecodeOnTapRecognizer.Tapped += (s, e) =>
-            {
-                try
-                {
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
-                    if (!isAudioRecording)
-                    {
-                        audioRecodeOffHolder.IsVisible = true;
-                        audioRecodeOnHolder.IsVisible = false;
-                        isAudioRecording = true;
-                        if (!audioRecorder.RecordAudio())
-                        {
-                            progress.ShowToast( "Audio cannot be recorded, please try again later.");
-                        }
-                        else
-                        {
-                            progress.ShowToast("Audio recording started.");
-                        }
-                    }
-                }
-                catch (System.Exception)
-                {
-                    DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
-                }
-            };
-
-            RecodeOffTapRecognizer.Tapped += (s, e) =>
-            {
-                try
-                {
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
-                    if (isAudioRecording)
-                    {
-                        audioRecodeOnHolder.IsVisible = true;
-                        audioRecodeOffHolder.IsVisible = false;
-                        isAudioRecording = false;
-                        MemoryStream stream = audioRecorder.StopRecording();
-                        if (stream == null)
-                        {
-                            progress.ShowToast("Could not save audio, please try again later.");
-                        }
-                        else
-                        {
-                            AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
-                        }
-                    }
-                }
-                catch (System.Exception)
-                {
-                    DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
-                }
-            };
-            #endregion
+            RecodeOnTapRecognizer.Tapped += RecodeOnTapRecognizer_Tapped;
+            RecodeOffTapRecognizer.Tapped += RecodeOffTapRecognizer_Tapped;
 
             StackLayout menuPinContainer = new StackLayout
             {
@@ -301,9 +241,6 @@ namespace PurposeColor.screens
                 Padding = 0,
                 Children = { eventDescription, menuPinContainer }
             };
-
-
-
 
             #region ICONS
 
@@ -653,6 +590,66 @@ namespace PurposeColor.screens
             #endregion
 
             Content = masterLayout;
+        }
+
+        void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                if (!isAudioRecording)
+                {
+                    audioRecodeOffHolder.IsVisible = true;
+                    audioRecodeOnHolder.IsVisible = false;
+                    isAudioRecording = true;
+                    Device.StartTimer(TimeSpan.FromSeconds(60), () =>
+                    {
+                        RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
+                        progress.ShowToast("Maximum duration has reached.");
+                        return false;
+                    });
+
+                    if (!audioRecorder.RecordAudio())
+                    {
+                        progress.ShowToast("Audio cannot be recorded, please try again later.");
+                    }
+                    else
+                    {
+                        progress.ShowToast("Audio recording started.");
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
+            }
+        }
+
+        void RecodeOffTapRecognizer_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                if (isAudioRecording)
+                {
+                    audioRecodeOnHolder.IsVisible = true;
+                    audioRecodeOffHolder.IsVisible = false;
+                    isAudioRecording = false;
+                    MemoryStream stream = audioRecorder.StopRecording();
+                    if (stream == null)
+                    {
+                        progress.ShowToast("Could not save audio, please try again later.");
+                    }
+                    else
+                    {
+                        AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
+            }
         }
 
         void createEvent_Clicked(object sender, EventArgs e)

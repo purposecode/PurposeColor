@@ -21,9 +21,20 @@ namespace PurposeColor.WinPhone.Dependency
 
         public void ShowProgressbar(string text)
         {
-            SystemTray.ProgressIndicator.Text = text;
-            SystemTray.ProgressIndicator.IsIndeterminate = true;
-            SystemTray.ProgressIndicator.IsVisible = true;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                try
+                {
+                    SystemTray.ProgressIndicator.Text = text;
+                    SystemTray.ProgressIndicator.IsIndeterminate = true;
+                    SystemTray.ProgressIndicator.IsVisible = true;
+                }
+                catch (Exception ex)
+                {
+                    tcs.SetException(ex);
+                }
+            });
         }
 
 
@@ -31,8 +42,19 @@ namespace PurposeColor.WinPhone.Dependency
         {
             if (SystemTray.ProgressIndicator != null && SystemTray.ProgressIndicator.IsVisible)
             {
-                SystemTray.ProgressIndicator.IsIndeterminate = false;
-                SystemTray.ProgressIndicator.IsVisible = false;
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                    try
+                    {
+                        SystemTray.ProgressIndicator.IsIndeterminate = false;
+                        SystemTray.ProgressIndicator.IsVisible = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        tcs.SetException(ex);
+                    }
+                });
             }
         }
         public void ShowToast(string messege)

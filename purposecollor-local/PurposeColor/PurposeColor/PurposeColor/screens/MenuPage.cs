@@ -101,7 +101,7 @@ namespace PurposeColor.screens
 
 
            // masterLayout.AddChildToLayout(titleBar, 0, 0);
-            masterLayout.AddChildToLayout(listView, 0, Device.OnPlatform( 15,15, 10 ));
+            masterLayout.AddChildToLayout(listView, 0, 6);
             this.TranslationY = screenHeight * 10 / 100;
             Content = masterLayout;
         }

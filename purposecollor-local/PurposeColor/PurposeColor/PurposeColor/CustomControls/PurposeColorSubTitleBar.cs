@@ -91,7 +91,7 @@ namespace PurposeColor.CustomControls
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
                 masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(87, 89, 85), Device.OnPlatform(10, 40, 25), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 85), Device.OnPlatform(10, 2, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 75), Device.OnPlatform(10, 2, 15), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             if (backButtonVisible)

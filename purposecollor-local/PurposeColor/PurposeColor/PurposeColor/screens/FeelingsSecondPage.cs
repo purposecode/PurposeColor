@@ -86,7 +86,7 @@ namespace PurposeColor
 
 
             goalsAndDreamsPickerButton = new PurposeColor.interfaces.CustomImageButton();
-			goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
+            goalsAndDreamsPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", @"/Assets/select_box_whitebg.png");
             goalsAndDreamsPickerButton.Text = "Goals & Dreams";
             goalsAndDreamsPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             goalsAndDreamsPickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -165,8 +165,8 @@ namespace PurposeColor
             /*  masterLayout.AddChildToLayout(sliderDivider1, 30, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider2, 50, 45.5f);
               masterLayout.AddChildToLayout(sliderDivider3, 70, 45.5f);*/
-            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, 50);
-            masterLayout.AddChildToLayout(actionPickerButton, 5, 65);
+            masterLayout.AddChildToLayout(goalsAndDreamsPickerButton, 5, Device.OnPlatform(50, 50, 45));
+            masterLayout.AddChildToLayout(actionPickerButton, 5, Device.OnPlatform(65, 65, 55));
 
 
             listContainer = new StackLayout();
@@ -182,7 +182,7 @@ namespace PurposeColor
             actionPreviewListView.Opacity = 1;
             actionPreviewListView.ItemsSource = actionPreviewListSource;
             listContainer.Children.Add(actionPreviewListView);
-            masterLayout.AddChildToLayout(listContainer, 5, 73);
+            masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform(73, 73, 64));
 
             Content = masterLayout;
 
@@ -545,7 +545,7 @@ namespace PurposeColor
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
             deleteButton = new CustomImageButton();
-            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
+            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", " @/Assets/delete_button.png");
             deleteButton.WidthRequest = 20;
             deleteButton.HeightRequest = 20;
             deleteButton.SetBinding(CustomImageButton.ClassIdProperty, "Name");
@@ -562,7 +562,7 @@ namespace PurposeColor
             };
 
             masterLayout.WidthRequest = App.screenWidth;
-            masterLayout.HeightRequest = App.screenHeight * Device.OnPlatform(30, 50, 10) / 100;
+            masterLayout.HeightRequest = App.screenHeight * Device.OnPlatform(30, 50, 8) / 100;
             masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(5, 5, 5), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);

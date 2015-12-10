@@ -152,7 +152,7 @@ namespace PurposeColor.CustomControls
 
             StackLayout listContainer = new StackLayout();
             listContainer.WidthRequest = screenWidth * 96 / 100;
-            listContainer.HeightRequest = (screenHeight * topY / 100) - 20;
+            listContainer.HeightRequest =  (screenHeight * topY / 100) - Device.OnPlatform( 20, 20, 100 );
 
 
             StackLayout listHeader = new StackLayout();
@@ -204,7 +204,7 @@ namespace PurposeColor.CustomControls
             listView = new ListView();
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
-            listView.HeightRequest = screenHeight * 42 / 100;
+           // listView.HeightRequest = screenHeight * 42 / 100;
             listView.Opacity = 1;
             listView.BackgroundColor = Constants.LIST_BG_COLOR;
             listView.WidthRequest = screenWidth * 60;
@@ -240,9 +240,13 @@ namespace PurposeColor.CustomControls
                 }
 
             }
-            masterLayout.AddChildToLayout(listContainer, 2, 100 - topY - 1);
+            masterLayout.AddChildToLayout(listContainer, 2, 100 - topY - Device.OnPlatform( 1, 1, 1 ));
             this.BackgroundColor = Color.Transparent;
 
+            if( Device.OS == TargetPlatform.WinPhone )
+            {
+                masterLayout.TranslationY = -70;
+            }
 
             Content = masterLayout;
         }

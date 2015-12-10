@@ -159,6 +159,7 @@
     <Content Include="Assets\bg_top.png" />
     <Content Include="Assets\circle.png" />
     <Content Include="Assets\comunity_menu_icon.png" />
+    <Content Include="Assets\delete_button.png" />
     <Content Include="Assets\drag_bg.png" />
     <Content Include="Assets\drag_blue.png" />
     <Content Include="Assets\drag_btn.png" />

@@ -153,8 +153,8 @@ namespace PurposeColor
             sliderValue = slider.CurrentValue;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(howYouAreFeeling, 16, 22);
-            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, 27);
+            masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform( 22,22,22 ));
+            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(27,27,27));
             //  masterLayout.AddChildToLayout(sliderBG, 7, 40);
             masterLayout.AddChildToLayout(slider, 5, 34);
 
@@ -162,9 +162,9 @@ namespace PurposeColor
              masterLayout.AddChildToLayout(sliderDivider2, 50, 40.5f);
              masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);*/
 
-            masterLayout.AddChildToLayout(emotionalPickerButton, 5, 50);
-            masterLayout.AddChildToLayout(about, 41, 62);
-            masterLayout.AddChildToLayout(eventPickerButton, 5, 70);
+            masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform( 50,50,47 ));
+            masterLayout.AddChildToLayout(about, 41, Device.OnPlatform(62, 62, 59));
+            masterLayout.AddChildToLayout(eventPickerButton, 5, Device.OnPlatform(70, 70,67));
 
             Content = masterLayout;
 
@@ -306,7 +306,7 @@ namespace PurposeColor
                 return;*/
 
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
-                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 65 ), Constants.SELECT_EMOTIONS, true, true);// 65
+                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 55 ), Constants.SELECT_EMOTIONS, true, true);// 65
                 ePicker.WidthRequest = screenWidth;
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";

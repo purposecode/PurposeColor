@@ -15,12 +15,29 @@ namespace PurposeColor.WinPhone.Renderers
 
     class MySliderRenderer : SliderRenderer
     {
+        CustomSlider formsSlider;
+        System.Windows.Controls.Slider winSlider;
+
         protected override void OnElementChanged(ElementChangedEventArgs<Slider> e)
         {
             base.OnElementChanged(e);
-            System.Windows.Controls.Slider slider = (System.Windows.Controls.Slider)Control;
-           // slider.Background = new SolidColorBrush(System.Windows.Media.Colors.Red);
-            slider.Style = (System.Windows.Style)App.Current.Resources["newtheme"];
+            formsSlider = (CustomSlider)this.Element;
+            formsSlider.Value = 1;
+            formsSlider.CurrentValue = 1;
+            FeelingNowPage.sliderValue = 1;
+            winSlider = (System.Windows.Controls.Slider)Control;
+            winSlider.Style = (System.Windows.Style)App.Current.Resources["newtheme"];
+            winSlider.LostMouseCapture += slider_LostMouseCapture;
+        }
+
+        void slider_LostMouseCapture(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            formsSlider.Value =(int) winSlider.Value;
+            formsSlider.CurrentValue = (int)winSlider.Value;
+            if (formsSlider.StopGesture != null)
+            {
+                formsSlider.StopGesture(false);
+            }
         }
     }
 }

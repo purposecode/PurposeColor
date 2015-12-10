@@ -49,7 +49,7 @@ namespace PurposeColor.Droid.Dependency
 
                 foreach (Xamarin.Contacts.Contact contact in book)
                 {
-                    if (contact.FirstName != null && contact.FirstName.Trim().Length > 0)
+					if (contact.FirstName != null && contact.FirstName.Trim().Length > 0 && contact.Phones != null && contact.Phones.Count() > 0)
                         contactList.Add(contact.FirstName);
                 }
 

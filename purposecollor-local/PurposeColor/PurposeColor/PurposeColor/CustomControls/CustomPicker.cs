@@ -64,22 +64,25 @@ namespace PurposeColor.CustomControls
             name.SetBinding(Label.TextProperty, "Name");
             name.TextColor = Color.Black;
             name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            int fontSize = 15;
             //name.FontSize = 18;
             if (App.screenDensity > 1.5)
             {
-                name.FontSize = 17;
+                fontSize = 17;
             }
             else
             {
-                name.FontSize = 15;
+                fontSize = 15;
             }
+            name.FontSize = Device.OnPlatform( fontSize, fontSize, 22 );
+
             StackLayout divider = new StackLayout();
-            divider.WidthRequest = screenWidth * 60 * 100;
+            divider.WidthRequest = screenWidth;
             divider.HeightRequest = 1;
-            divider.BackgroundColor = Color.FromRgb(220, 220, 220);
+            divider.BackgroundColor =  Color.FromRgb(220, 220, 220);
 
             masterLayout.WidthRequest = screenWidth * 60 / 100;
-            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 10) / 100;
+            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 7) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -162,14 +165,17 @@ namespace PurposeColor.CustomControls
             listTitle.TextColor = Color.White;
             listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
+            int fontSize = 15;
             if (App.screenDensity > 1.5)
             {
-                listTitle.FontSize = Device.OnPlatform(15, 17, 17);
+                fontSize = Device.OnPlatform(15, 17, 17);
             }
             else
             {
-                listTitle.FontSize = 15;
+                fontSize = 15;
             }
+
+            listTitle.FontSize = Device.OnPlatform( fontSize, fontSize, 24 );
 
             addButton = new CustomImageButton();
             if (Device.OS == TargetPlatform.WinPhone)
@@ -198,7 +204,6 @@ namespace PurposeColor.CustomControls
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
             listView.HeightRequest = screenHeight * 42 / 100;
-            listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.Opacity = 1;
             listView.BackgroundColor = Constants.LIST_BG_COLOR;
             listView.WidthRequest = screenWidth * 60;

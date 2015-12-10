@@ -103,7 +103,7 @@ namespace PurposeColor.CustomControls
         CustomLayout masterLayout;
         Label listTitle;
         Image addButton;
-        CustomImageButton addEmotionButton;
+        Image addEmotionButton;
         public FeelingNowPage FeelingsPage
         {
             get;
@@ -157,7 +157,7 @@ namespace PurposeColor.CustomControls
 
             StackLayout listHeader = new StackLayout();
             listHeader.WidthRequest = screenWidth * 96 / 100;
-            listHeader.HeightRequest = screenHeight * 10 / 100;
+            listHeader.HeightRequest = screenHeight * Device.OnPlatform( 10, 10, 12 ) / 100;
             listHeader.BackgroundColor = Color.FromRgb(30, 126, 210);
 
             listTitle = new Label();
@@ -230,7 +230,7 @@ namespace PurposeColor.CustomControls
             masterLayout.AddChildToLayout(layout, 0, 0);
             if (titelBarRequired)
             {
-                masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - 10);
+                masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - Device.OnPlatform( 10, 10, 11 ));
                 masterLayout.AddChildToLayout(listTitle, 7, (100 - topY - 1) - 7);
                 if (addButtonRequired)
                 {
@@ -258,21 +258,12 @@ namespace PurposeColor.CustomControls
                 emotionsEntry.TextColor = Color.Black;
                 listTitle.IsVisible = false;
                 addButton.IsVisible = false;
-                if (Device.OS == TargetPlatform.WinPhone)
-                    emotionsEntry.HeightRequest = 50;
 
-                addEmotionButton = new CustomImageButton();
-                if (Device.OS == TargetPlatform.WinPhone)
-                {
-					addEmotionButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
-                }
-                else
-                {
-                    addEmotionButton.ImageName = Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png");
-                }
+                addEmotionButton = new Image();
+                addEmotionButton.Source = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
 
-                addEmotionButton.WidthRequest = 25;
-                addEmotionButton.HeightRequest = 25;
+                addEmotionButton.WidthRequest = Device.OnPlatform( 25, 25, 30 );
+                addEmotionButton.HeightRequest = Device.OnPlatform(25, 25, 30);
 
 				StackLayout addEmotionButtonLayout = new StackLayout();
 				addEmotionButtonLayout.HeightRequest = 50;
@@ -322,7 +313,7 @@ namespace PurposeColor.CustomControls
 				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
 				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
-                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - 7);
+                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - Device.OnPlatform( 7,7,9 ));
 				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
             }
             else

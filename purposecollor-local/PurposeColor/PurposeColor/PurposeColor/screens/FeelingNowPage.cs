@@ -302,11 +302,11 @@ namespace PurposeColor
             try
             {
 
-              /*  await ServiceHelper.GetNearByLocations();
+           /*     await ServiceHelper.GetNearByLocations();
                 return;*/
 
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
-                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65
+                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 65 ), Constants.SELECT_EMOTIONS, true, true);// 65
                 ePicker.WidthRequest = screenWidth;
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";

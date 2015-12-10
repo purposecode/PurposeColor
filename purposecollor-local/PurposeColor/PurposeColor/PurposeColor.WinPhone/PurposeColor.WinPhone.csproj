@@ -117,6 +117,7 @@
     <Compile Include="Renderers\LoginPageRenderer.cs" />
     <Compile Include="Renderers\OxyPlotViewRenderer.cs" />
     <Compile Include="Renderers\RoundedButtonRenderer.cs" />
+    <Compile Include="Renderers\WinCustomEntryRenderer.cs" />
     <Compile Include="Renderers\WinImageButtonRenderer.cs" />
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>

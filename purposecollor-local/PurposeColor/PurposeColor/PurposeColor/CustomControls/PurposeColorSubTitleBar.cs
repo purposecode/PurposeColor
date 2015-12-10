@@ -20,7 +20,7 @@ namespace PurposeColor.CustomControls
 
         public PurposeColorSubTitleBar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true )
         {
-            //Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
+            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
             int titlebarHeight = (int)App.screenHeight * 7 / 100;
             int titlebarWidth = (int)App.screenWidth;
             this.BackgroundColor = backGroundColor;
@@ -38,10 +38,14 @@ namespace PurposeColor.CustomControls
 
             Image backArrow = new Image();
             backArrow.Source = Device.OnPlatform("bckarow.png", "bckarow.png", "//Assets//bckarow.png");
-           // backArrow.HeightRequest = spec.ScreenHeight * 4 / 100;
-           // backArrow.WidthRequest = spec.ScreenWidth * 5 / 100;
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
+
+            if( Device.OS == TargetPlatform.WinPhone )
+            {
+                backArrow.HeightRequest = spec.ScreenWidth * 6 / 100;
+                backArrow.WidthRequest = spec.ScreenWidth * 6 / 100;
+            }
 
             Image imgDivider = new Image();
 			imgDivider.Source = Device.OnPlatform("icn_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
@@ -65,8 +69,13 @@ namespace PurposeColor.CustomControls
             NextButtonTapRecognizer = new TapGestureRecognizer();
             nextImage.GestureRecognizers.Add(NextButtonTapRecognizer);
            // nextImage.Aspect = Aspect.Fill;
-           // nextImage.WidthRequest = spec.ScreenWidth * 8 / 100;
-           // nextImage.HeightRequest = spec.ScreenHeight * 4 / 100;
+
+            if( Device.OS == TargetPlatform.WinPhone )
+            {
+                nextImage.WidthRequest = spec.ScreenWidth * 6 / 100;
+                nextImage.HeightRequest = spec.ScreenWidth * 6 / 100;
+            }
+
 
            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             //masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -81,7 +90,7 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = App.screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(87, 89, 85), Device.OnPlatform(10, 40, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(87, 89, 85), Device.OnPlatform(10, 40, 25), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
                 masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 85), Device.OnPlatform(10, 2, 35), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 

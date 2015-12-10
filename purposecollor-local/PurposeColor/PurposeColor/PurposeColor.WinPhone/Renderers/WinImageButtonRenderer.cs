@@ -54,23 +54,13 @@ namespace PurposeColor.WinPhone.Renderers
                 {
                     winButton.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Right;
                 }
- 
-               /* ImageBrush bckImage = new ImageBrush();
-                bckImage.ImageSource = new System.Windows.Media.Imaging.BitmapImage(new Uri("//assets//circle.png"));
-                winButton.Background = bckImage;*/
 
+                formsElement.BorderColor = Xamarin.Forms.Color.Transparent;
+                formsElement.BorderWidth = 0;
+                if (formsElement.ImageName != null )
+                winButton.Background = new ImageBrush { Stretch = System.Windows.Media.Stretch.Fill, ImageSource = new BitmapImage(new Uri(formsElement.ImageName, UriKind.Relative)) };
 
-                ImageBrush brush1 = new ImageBrush();
-                brush1.ImageSource = new BitmapImage(new Uri("ms-appx:///assets//manali.jpg"));
-                winButton.Background = brush1;
-
-             //   if (formsElement.ImageName != null)
-
-
-
-                //winButton.Background = new SolidColorBrush(System.Windows.Media.Colors.Blue);
-
-               // SetNativeControl(winButton);
+      
                
             }
         }

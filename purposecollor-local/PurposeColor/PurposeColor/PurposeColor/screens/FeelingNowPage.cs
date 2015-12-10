@@ -76,7 +76,7 @@ namespace PurposeColor
             //howYouAreFeeling2.HeightRequest = screenHeight * 15 / 100;
 
             emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//circle.png");
+            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", @"/Assets/select_box_whitebg.png");
             emotionalPickerButton.Text = "Select Emotion";
 
             emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -87,7 +87,7 @@ namespace PurposeColor
 
             eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
             eventPickerButton.IsVisible = false;
-            eventPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
+            eventPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "/Assets/select_box_whitebg.png");
             eventPickerButton.Text = "Events, Situation & Thoughts";
             eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
@@ -110,7 +110,7 @@ namespace PurposeColor
             about.TextColor = Color.FromRgb(40, 47, 50);
 
 
-
+            int fontSize = 15;
             if (App.screenDensity > 1.5)
             {
                 howYouAreFeeling.FontSize = Device.OnPlatform(20, 22, 30);
@@ -118,9 +118,8 @@ namespace PurposeColor
                 about.FontSize = Device.OnPlatform(20, 22, 30);
 
                 emotionalPickerButton.HeightRequest = screenHeight * 6 / 100;
-                emotionalPickerButton.FontSize = 17;
+                fontSize = 17;
                 eventPickerButton.HeightRequest = screenHeight * 6 / 100;
-                eventPickerButton.FontSize = 17;
             }
             else
             {
@@ -129,10 +128,12 @@ namespace PurposeColor
                 about.FontSize = Device.OnPlatform(16, 20, 26);
 
                 emotionalPickerButton.HeightRequest = screenHeight * 9 / 100;
-                emotionalPickerButton.FontSize = 15;
+                fontSize = 15;
                 eventPickerButton.HeightRequest = screenHeight * 9 / 100;
-                eventPickerButton.FontSize = 15;
             }
+
+            emotionalPickerButton.FontSize = Device.OnPlatform( fontSize, fontSize, 22 );
+            eventPickerButton.FontSize = Device.OnPlatform(fontSize, fontSize, 22);
 
             Image sliderDivider1 = new Image();
             sliderDivider1.Source = Device.OnPlatform("drag_sepeate.png", "drag_sepeate.png", "//Assets//drag_sepeate.png");
@@ -296,10 +297,13 @@ namespace PurposeColor
             }
         }
 
-        void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
+       async  void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
+
+              /*  await ServiceHelper.GetNearByLocations();
+                return;*/
 
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
                 CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, Constants.SELECT_EMOTIONS, true, true);// 65

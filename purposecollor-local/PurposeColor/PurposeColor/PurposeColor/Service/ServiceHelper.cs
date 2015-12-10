@@ -181,6 +181,51 @@ namespace PurposeColor.Service
             }
         }
 
+        public static async Task<bool> GetNearByLocations()
+        {
+            try
+            {
+              if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return false;
+                }
+
+                var client = new System.Net.Http.HttpClient();
+                //User user = App.Settings.GetUser();
+
+                ///////// for testing
+
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    // show alert
+                    return false;
+                }
+                else
+                {
+                    client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                    string uriString = "locationapi.php?location_longitude=76.29988419999995&location_latitude=9.9816358";
+                    var response = await client.GetAsync(uriString);
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var eventsJson = response.Content.ReadAsStringAsync().Result;
+
+                        var rootobject = JsonConvert.DeserializeObject<Location>(eventsJson);
+
+                       return true;
+                    }
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+            return true;
+        }
+
         public static async Task<List<CustomListViewItem>> GetAllEvents()
         {
             try

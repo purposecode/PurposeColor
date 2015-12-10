@@ -102,7 +102,7 @@ namespace PurposeColor.CustomControls
         string pageTitle;
         CustomLayout masterLayout;
         Label listTitle;
-        CustomImageButton addButton;
+        Image addButton;
         CustomImageButton addEmotionButton;
         public FeelingNowPage FeelingsPage
         {
@@ -177,18 +177,19 @@ namespace PurposeColor.CustomControls
 
             listTitle.FontSize = Device.OnPlatform( fontSize, fontSize, 24 );
 
-            addButton = new CustomImageButton();
+            addButton = new Image();
             if (Device.OS == TargetPlatform.WinPhone)
             {
-                addButton.Image = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png"));
+              //  addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", @"/Assets/icn_plus.png");
+                addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
             }
             else
             {
-                addButton.ImageName = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
+                addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
             }
             
-            addButton.WidthRequest = 15;
-            addButton.HeightRequest = 15;
+            addButton.WidthRequest = Device.OnPlatform( 15, 15, 20 );
+            addButton.HeightRequest = Device.OnPlatform( 15, 15, 20 );
 
 
             StackLayout addButtonLayout = new StackLayout();
@@ -257,6 +258,8 @@ namespace PurposeColor.CustomControls
                 emotionsEntry.TextColor = Color.Black;
                 listTitle.IsVisible = false;
                 addButton.IsVisible = false;
+                if (Device.OS == TargetPlatform.WinPhone)
+                    emotionsEntry.HeightRequest = 50;
 
                 addEmotionButton = new CustomImageButton();
                 if (Device.OS == TargetPlatform.WinPhone)

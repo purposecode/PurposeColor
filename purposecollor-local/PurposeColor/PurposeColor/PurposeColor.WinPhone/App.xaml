@@ -76,6 +76,8 @@
                                         <TranslateTransform/>
                                     </Rectangle.RenderTransform>
                                 </Rectangle>
+
+                              
                             </Grid>
                         </Grid>
                     </ControlTemplate>
@@ -116,17 +118,22 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Grid x:Name="HorizontalTemplate" Margin="{StaticResource PhoneHorizontalMargin}">
-                                <Rectangle x:Name="HorizontalTrack" Fill="Gray" Height="5" IsHitTestVisible="False" Margin="0,22,0,50"/>
-                                <Rectangle x:Name="HorizontalFill" Fill="LightBlue" Height="5" IsHitTestVisible="False" Margin="0,22,0,50">
+                                <Rectangle x:Name="HorizontalTrack" Fill="LightGray" Height="3" IsHitTestVisible="False" Margin="0,22,0,50"/>
+                                <Rectangle x:Name="HorizontalFill" Fill="#1E7ED2" Height="5" IsHitTestVisible="False" Margin="0,22,0,50">
                                     <Rectangle.Clip>
                                         <RectangleGeometry Rect="0, 0, 6, 12"/>
                                     </Rectangle.Clip>
                                 </Rectangle>
-                                <Rectangle x:Name="HorizontalCenterElement" Fill ="Red"  HorizontalAlignment="Left" Height="30" Margin="0,16,0,44" Width="20">
+                                <Rectangle x:Name="HorizontalCenterElement" Fill ="#FF0238"  HorizontalAlignment="Left" Height="30" Margin="0,16,0,44" Width="20">
                                     <Rectangle.RenderTransform>
                                         <TranslateTransform/>
                                     </Rectangle.RenderTransform>
                                 </Rectangle>
+
+
+                                
+                                <!--<Ellipse x:Name="VerticalCenterElement" Fill="Green" Stretch="UniformToFill"/>-->
+
                             </Grid>
                             <Grid x:Name="VerticalTemplate" Margin="{StaticResource PhoneVerticalMargin}">
                                 <Rectangle x:Name="VerticalTrack" Fill="{TemplateBinding Background}" IsHitTestVisible="False" Margin="18,0,18,0" Width="12"/>

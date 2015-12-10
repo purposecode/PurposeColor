@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using PurposeColor.CustomControls;
 using Xamarin.Forms.Platform.WinPhone;
 using PurposeColor.WinPhone.Renderers;
+using System.Windows.Media;
 
 [assembly: ExportRenderer(typeof(CustomSlider), typeof(MySliderRenderer))]
 namespace PurposeColor.WinPhone.Renderers
@@ -17,7 +18,9 @@ namespace PurposeColor.WinPhone.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Slider> e)
         {
             base.OnElementChanged(e);
-            System.Windows.Controls.Slider slider = (System.Windows.Controls.Slider)Control;           
+            System.Windows.Controls.Slider slider = (System.Windows.Controls.Slider)Control;
+           // slider.Background = new SolidColorBrush(System.Windows.Media.Colors.Red);
+            slider.Style = (System.Windows.Style)App.Current.Resources["newtheme"];
         }
     }
 }

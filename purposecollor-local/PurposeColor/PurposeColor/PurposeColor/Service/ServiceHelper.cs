@@ -192,11 +192,11 @@ namespace PurposeColor.Service
                 }
 
                 var client = new System.Net.Http.HttpClient();
-                User user = App.Settings.GetUser();
+                //User user = App.Settings.GetUser();
 
                 ///////// for testing
 
-                user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = 2, UserName = "sam" };
 
                 if (user == null)
                 {

@@ -303,7 +303,6 @@ namespace PurposeColor.screens
                     MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                     chooser.ClassId = "mediachooser";
                     masterLayout.AddChildToLayout(chooser, 0, 0);
-
                 }
                 catch (System.Exception ex)
                 {
@@ -1178,14 +1177,14 @@ namespace PurposeColor.screens
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
             CustomImageButton imageButton = new CustomImageButton();
-            imageButton.ImageName = Device.OnPlatform("image.png", "image.png", "//Assets//image.png");
+            imageButton.ImageName = Device.OnPlatform("image.png", "image.png", @"/Assets/image.png");
             imageButton.WidthRequest = screenWidth * 20 / 100;
             imageButton.HeightRequest = screenHeight * 10 / 100;
             imageButton.ClassId = type;
             imageButton.Clicked += OnImageButtonClicked;
 
             CustomImageButton videoButton = new CustomImageButton();
-            videoButton.ImageName = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+            videoButton.ImageName = Device.OnPlatform("video.png", "video.png", @"/Assets/video.png");
             videoButton.WidthRequest = screenWidth * 20 / 100;
             videoButton.HeightRequest = screenHeight * 10 / 100;
             videoButton.ClassId = type;

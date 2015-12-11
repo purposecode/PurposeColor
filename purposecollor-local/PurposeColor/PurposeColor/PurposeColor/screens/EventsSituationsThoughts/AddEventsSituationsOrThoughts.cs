@@ -357,6 +357,8 @@ namespace PurposeColor.screens
                 Source = Device.OnPlatform("icn_gallery.png", "icn_gallery.png", "//Assets//icn_gallery.png"),
                 Aspect = Aspect.AspectFit
             };
+
+
             galleryInputStack = new StackLayout
             {
                 Padding = new Thickness(5, 10, 5, 10),
@@ -576,6 +578,8 @@ namespace PurposeColor.screens
                 createEvent.TextColor = Constants.BLUE_BG_COLOR;
                 createEvent.Text = "Create Reminder";
                 createEvent.FontSize = 12;
+                createEvent.BorderWidth = 0;
+                createEvent.BorderColor = Color.Transparent;
                 createEvent.Clicked += createEvent_Clicked;
                 textinputAndIconsHolder.Children.Add(createEvent);
 
@@ -597,7 +601,7 @@ namespace PurposeColor.screens
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
             listContainer.Children.Add(previewListView);
-            masterLayout.AddChildToLayout(listContainer, 5, 63);
+            masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 54 ));
             #endregion
 
             #endregion
@@ -1391,37 +1395,49 @@ namespace PurposeColor.screens
             divider.BackgroundColor = Color.FromRgb(255, 255, 255);
 
             Image sideImage = new Image();
-            sideImage.WidthRequest = 15;
-            sideImage.HeightRequest = 15;
+            sideImage.WidthRequest = Device.OnPlatform(15, 15, 20);
+            sideImage.HeightRequest = Device.OnPlatform(15, 15, 20);
             sideImage.SetBinding(Image.SourceProperty, "Image");
             sideImage.Aspect = Aspect.AspectFit;
 
             CustomImageButton deleteButton = new CustomImageButton();
-            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
-            deleteButton.WidthRequest = 20;
-            deleteButton.HeightRequest = 20;
+            deleteButton.ImageName = Device.OnPlatform("delete_button.png", "delete_button.png", @"/Assets/delete_button.png");
+            deleteButton.WidthRequest = Device.OnPlatform( 20, 20, 55 );
+            deleteButton.HeightRequest = Device.OnPlatform(20, 20, 55);
             deleteButton.SetBinding(CustomImageButton.ClassIdProperty, "Name");
 
             deleteButton.Clicked += (sender, e) =>
             {
-                CustomImageButton button = sender as CustomImageButton;
-                PreviewItem itemToDel = App.PreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
-                if (itemToDel != null)
+
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    App.PreviewListSource.Remove(itemToDel);
-                    MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == itemToDel.Name);
-                    if (media != null)
-                        App.MediaArray.Remove(media);
-                }
+                    try
+                    {
+                        CustomImageButton button = sender as CustomImageButton;
+                        PreviewItem itemToDel = App.PreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
+                        if (itemToDel != null)
+                        {
+                            App.PreviewListSource.Remove(itemToDel);
+                            MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == itemToDel.Name);
+                            if (media != null)
+                                App.MediaArray.Remove(media);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                });
+
 
             };
 
             masterLayout.WidthRequest = screenWidth;
-            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 50, 10) / 100;
+            masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 50, 6) / 100;
 
-            masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(15, 15, 15), (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(deleteButton, (float)80, (float)Device.OnPlatform(5, 3.5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(sideImage, (float)5, (float)Device.OnPlatform(5, 5, 25), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(name, (float)Device.OnPlatform(15, 15, 15), (float)Device.OnPlatform(5, 5, 25), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(deleteButton, (float)Device.OnPlatform( 80, 80, 75 ), (float)Device.OnPlatform(5, 3.5, 2), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             // masterLayout.AddChildToLayout(divider, (float)1, (float)20, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             this.View = masterLayout;
         }

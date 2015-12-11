@@ -46,6 +46,12 @@ namespace PurposeColor.CustomControls
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                backArrow.HeightRequest = screenWidth * 6 / 100;
+                backArrow.WidthRequest = screenWidth * 6 / 100;
+            }
+
             title = new Label();
             title.Text = titleValue;
             title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -57,6 +63,12 @@ namespace PurposeColor.CustomControls
             NextButtonTapRecognizer = new TapGestureRecognizer();
             nextImage.GestureRecognizers.Add(NextButtonTapRecognizer);
 
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                nextImage.WidthRequest = screenWidth * 10 / 100;
+                nextImage.HeightRequest = screenWidth * 10 / 100;
+            }
+
             //masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(18, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             if (nextButtonVisible)
@@ -66,8 +78,8 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(30, 10, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 85), Device.OnPlatform(10, 2, 10), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(83, 89, 85), Device.OnPlatform(30, 10, 8), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(83, 80, 75), Device.OnPlatform(10, 2, 8), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             if (backButtonVisible)

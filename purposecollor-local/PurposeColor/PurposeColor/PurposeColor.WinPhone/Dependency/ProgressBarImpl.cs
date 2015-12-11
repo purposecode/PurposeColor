@@ -52,22 +52,23 @@ namespace PurposeColor.WinPhone.Dependency
 
         public void HideProgressbar()
         {
-            if (SystemTray.ProgressIndicator != null && SystemTray.ProgressIndicator.IsVisible)
-            {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+ 
                     try
                     {
-                        SystemTray.ProgressIndicator.IsIndeterminate = false;
-                        SystemTray.ProgressIndicator.IsVisible = false;
+                        if (SystemTray.ProgressIndicator != null && SystemTray.ProgressIndicator.IsVisible)
+                        {
+                            SystemTray.ProgressIndicator.IsIndeterminate = false;
+                            SystemTray.ProgressIndicator.IsVisible = false;
+                        }
+
                     }
                     catch (Exception ex)
                     {
-                        tcs.SetException(ex);
+
                     }
                 });
-            }
         }
         public void ShowToast(string messege)
         {

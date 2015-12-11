@@ -9,7 +9,6 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Contacts.Plugin.Abstractions;
 using System.Threading.Tasks;
 using Xamarin.Contacts;
 using PurposeColor.Droid.Dependency;
@@ -27,31 +26,35 @@ namespace PurposeColor.Droid.Dependency
             try
             {
 
-                contactList = new List<string>();
-                var book = new AddressBook(MainActivity.GetMainActivity());
+                await  Task.Run(async () =>
+                {
+                    contactList = new List<string>();
+                    var book = new AddressBook(MainActivity.GetMainActivity());
 
 
-                if (!await book.RequestPermission())
-                {
-                    Toast.MakeText(MainActivity.GetMainActivity(), "Permission denied.", ToastLength.Short);
-                    return null;
-                }
+                    if (!await book.RequestPermission())
+                    {
+                        Toast.MakeText(MainActivity.GetMainActivity(), "Permission denied.", ToastLength.Short);
+                        return;
+                    }
 
-                //foreach (Xamarin.Contacts.Contact contact in book.OrderBy(c => c.LastName))
-                try
-                {
-                    book.OrderBy(c => c.DisplayName);
-                }
-                catch (Exception ex)
-                {
-                    var test = ex.Message;
-                }
+                    //foreach (Xamarin.Contacts.Contact contact in book.OrderBy(c => c.LastName))
+                    try
+                    {
+                        book.OrderBy(c => c.DisplayName);
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                    }
 
-                foreach (Xamarin.Contacts.Contact contact in book)
-                {
-					if (contact.FirstName != null && contact.FirstName.Trim().Length > 0 && contact.Phones != null && contact.Phones.Count() > 0)
-                        contactList.Add(contact.FirstName);
-                }
+                    foreach (Xamarin.Contacts.Contact contact in book)
+                    {
+                        if (contact.FirstName != null && contact.FirstName.Trim().Length > 0 && contact.Phones != null && contact.Phones.Count() > 0)
+                            contactList.Add(contact.FirstName);
+                    }
+                });
+              
 
             }
             catch (Exception ex)

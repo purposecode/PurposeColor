@@ -18,6 +18,8 @@ using System.Net.Http;
 using System.Text;
 using System.Net;
 using Newtonsoft.Json;
+using Plugin.Contacts;
+using Plugin.Contacts.Abstractions;
 
 namespace PurposeColor.screens
 {
@@ -384,6 +386,7 @@ namespace PurposeColor.screens
 
             galleryInputStack = new StackLayout
             {
+                Padding = new Thickness(5, 10, 5, 10),
                 Spacing = 0,
                 Children = { galleryInput 
                                 //new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } 
@@ -470,8 +473,33 @@ namespace PurposeColor.screens
                 {
                     progress.ShowProgressbar("Fetching contacts..");
                     List<string> conatctList = new List<string>();
-                    PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
-                    conatctList = await contacts.GetContacts();
+                    List<Contact> plugInContacts = new List<Contact>();
+
+                    if( Device.OS == TargetPlatform.Android )
+                    {
+                        PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
+                        conatctList = await contacts.GetContacts();
+                    }
+                    else
+                    {
+
+                        await Task.Run(() =>
+                        {
+                            CrossContacts.Current.PreferContactAggregation = false;
+
+                            if (CrossContacts.Current.Contacts == null)
+                                return;
+
+      
+                            plugInContacts = CrossContacts.Current.Contacts
+                              .Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.Phones.Count > 0)
+                              .ToList();
+
+                            conatctList = plugInContacts.Select(item => item.FirstName).ToList();
+                        });
+                      
+                    }
+
 
                     ////////////////////////// for testing only// test //////////////////////////
                     if (conatctList == null) // for testing only// test

@@ -61,6 +61,7 @@ namespace PurposeColor.screens
         Grid iconContainerGrid = null;
         StackLayout audioRecodeOnHolder = null;
         StackLayout audioRecodeOffHolder = null;
+        Label locationInfo;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -215,8 +216,8 @@ namespace PurposeColor.screens
             TapGestureRecognizer RecodeOffTapRecognizer = new TapGestureRecognizer();
             audioRecodeOffHolder.GestureRecognizers.Add(RecodeOffTapRecognizer);
 
-            audioRecodeOffHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
-            audioRecodeOnHolder.TranslateTo(0, audioRecodeOffButton.Y + 45, 5, null);
+            audioRecodeOffHolder.TranslateTo(0, audioRecodeOffButton.Y + 60, 5, null);
+            audioRecodeOnHolder.TranslateTo(0, audioRecodeOffButton.Y + 60, 5, null);
 
             RecodeOnTapRecognizer.Tapped += RecodeOnTapRecognizer_Tapped;
             RecodeOffTapRecognizer.Tapped += RecodeOffTapRecognizer_Tapped;
@@ -225,7 +226,7 @@ namespace PurposeColor.screens
             {
                 BackgroundColor = Color.White,
                 Orientation = StackOrientation.Vertical,
-                HeightRequest = 125,
+                HeightRequest = 140,
                 WidthRequest = (int)(devWidth * .10),
                 Children = {
                     pinButtonHolder, 
@@ -234,12 +235,25 @@ namespace PurposeColor.screens
                 }
             };
 
+            locationInfo = new Label();
+            locationInfo.TextColor = Constants.BLUE_BG_COLOR;
+            locationInfo.BackgroundColor = Color.Transparent;
+            locationInfo.FontSize = 12;
+            locationInfo.HeightRequest = 15;
+
+
+            StackLayout entryAndLocContainer = new StackLayout();
+            entryAndLocContainer.Orientation = StackOrientation.Vertical;
+            entryAndLocContainer.BackgroundColor = Color.White;
+            entryAndLocContainer.Children.Add( eventDescription );
+            entryAndLocContainer.Children.Add(locationInfo);
+
             textInputContainer = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 Spacing = 0,
                 Padding = 0,
-                Children = { eventDescription, menuPinContainer }
+                Children = { entryAndLocContainer, menuPinContainer }
             };
 
             #region ICONS
@@ -793,7 +807,7 @@ namespace PurposeColor.screens
         {
             CustomListViewItem item =(CustomListViewItem) e.SelectedItem;
 
-            if (item != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
+          /*  if (item != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
              {
                  eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
              }
@@ -805,7 +819,10 @@ namespace PurposeColor.screens
             }
             eventDescription.Text = formattedString + item.Name;
 
-             currentAddress =  item.Name;
+             currentAddress =  item.Name;*/
+
+            locationInfo.Text = "";
+            locationInfo.Text = "  @" + item.Name;
 
              View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
              masterLayout.Children.Remove(pickView);

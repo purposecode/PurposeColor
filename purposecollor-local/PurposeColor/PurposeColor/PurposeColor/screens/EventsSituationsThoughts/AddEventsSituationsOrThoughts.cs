@@ -263,6 +263,14 @@ namespace PurposeColor.screens
                 Source = Device.OnPlatform("ic_music.png", "ic_music.png", "//Assets//ic_music.png"),
                 Aspect = Aspect.AspectFit
             };
+
+            int ICON_SIZE = 8;
+
+            if( Device.OS == TargetPlatform.WinPhone )
+            {
+                audioInput.WidthRequest = screenWidth * ICON_SIZE / 100;
+                audioInput.HeightRequest = screenWidth * ICON_SIZE / 100;
+            }
             audioInputStack = new StackLayout
             {
                 Padding = new Thickness(5, 10, 5, 10),
@@ -279,6 +287,16 @@ namespace PurposeColor.screens
                 Source = Device.OnPlatform("icn_camera.png", "icn_camera.png", "//Assets//icn_camera.png"),
                 Aspect = Aspect.AspectFit
             };
+
+
+
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                cameraInput.WidthRequest = screenWidth * ICON_SIZE / 100;
+                cameraInput.HeightRequest = screenWidth * ICON_SIZE / 100;
+            }
+
+
             cameraInputStack = new StackLayout
             {
                 Padding = new Thickness(5, 10, 5, 10),
@@ -358,11 +376,14 @@ namespace PurposeColor.screens
                 Aspect = Aspect.AspectFit
             };
 
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                galleryInput.WidthRequest = screenWidth * ICON_SIZE / 100;
+                galleryInput.HeightRequest = screenWidth * ICON_SIZE / 100;
+            }
 
             galleryInputStack = new StackLayout
             {
-                Padding = new Thickness(5, 10, 5, 10),
-                HorizontalOptions = LayoutOptions.Start,
                 Spacing = 0,
                 Children = { galleryInput 
                                 //new Label { Text = "Gallery", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) } 
@@ -390,6 +411,14 @@ namespace PurposeColor.screens
                 Source = Device.OnPlatform("icn_location.png", "icn_location.png", "//Assets//icn_location.png"),
                 Aspect = Aspect.AspectFit
             };
+
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                locationInput.WidthRequest = screenWidth * ICON_SIZE / 100;
+                locationInput.HeightRequest = screenWidth * ICON_SIZE / 100;
+            }
+
+
             locationInputStack = new StackLayout
             {
                 Padding = new Thickness(5, 10, 5, 10),
@@ -415,11 +444,16 @@ namespace PurposeColor.screens
                 Aspect = Aspect.AspectFit
             };
 
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                contactInput.WidthRequest = screenWidth * ICON_SIZE / 100;
+                contactInput.HeightRequest = screenWidth * ICON_SIZE / 100;
+            }
+
             contactInputStack = new StackLayout
             {
                 Padding = new Thickness(5, 10, 0, 10),
                 Spacing = 0,
-                HorizontalOptions = LayoutOptions.End,
                 Children = { contactInput
                     //new Label { Text = "Contact", TextColor = Constants.TEXT_COLOR_GRAY, FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label)) }
                      }

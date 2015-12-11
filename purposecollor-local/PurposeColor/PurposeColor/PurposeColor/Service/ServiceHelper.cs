@@ -181,7 +181,10 @@ namespace PurposeColor.Service
             }
         }
 
-        public static async Task<bool> GetNearByLocations()
+
+
+
+        public static async Task<bool> GetCurrentAddressToList( double lattitude, double longitude )
         {
             try
             {
@@ -204,14 +207,85 @@ namespace PurposeColor.Service
                 }
                 else
                 {
-                    client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-                    string uriString = "locationapi.php?location_longitude=76.29988419999995&location_latitude=9.9816358";
+                    client.BaseAddress = new Uri("http://maps.googleapis.com/maps/api/geocode/");
+                    string lat = lattitude.ToString();
+                    string lon = longitude.ToString();
+                    string uriString = "json?latlng=" + lat + "," + lon + "&sensor=true";
                     var response = await client.GetAsync(uriString);
                     if (response != null && response.StatusCode == HttpStatusCode.OK)
                     {
                         var eventsJson = response.Content.ReadAsStringAsync().Result;
 
-                        var rootobject = JsonConvert.DeserializeObject<Location>(eventsJson);
+                        var rootobject = JsonConvert.DeserializeObject<AddressBase>(eventsJson);
+
+                        if( rootobject != null  && rootobject.results != null )
+                        {
+                            foreach (var item in rootobject.results )
+                            {
+                                CustomListViewItem listItem = new CustomListViewItem();
+                                listItem.Name = item.formatted_address;
+                                App.nearByLocationsSource.Add(listItem);
+                            }
+                        }
+
+                       return true;
+                    }
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+            return true;
+        }
+
+
+
+        public static async Task<bool> GetNearByLocations( double lattitude, double longitude )
+        {
+            try
+            {
+              if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return false;
+                }
+
+                var client = new System.Net.Http.HttpClient();
+                //User user = App.Settings.GetUser();
+
+                ///////// for testing
+
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    // show alert
+                    return false;
+                }
+                else
+                {
+                    client.BaseAddress = new Uri("https://maps.googleapis.com/maps/api/place/nearbysearch/");
+                    string lat = lattitude.ToString();
+                    string lon = longitude.ToString();
+                    string uriString = "json?location=" + lat + "," + lon + "&radius=500&key=AIzaSyAuqCJwc2K4wQeUvTcywvoR9WcsRI5AIn4";
+                    var response = await client.GetAsync(uriString);
+                    if (response != null && response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var eventsJson = response.Content.ReadAsStringAsync().Result;
+
+                        var rootobject = JsonConvert.DeserializeObject<LocationMasterObject>(eventsJson);
+
+                        if( rootobject != null  && rootobject.results != null )
+                        {
+                            foreach (var item in rootobject.results)
+                            {
+                                CustomListViewItem listItem = new CustomListViewItem();
+                                listItem.Name = item.name;
+                                App.nearByLocationsSource.Add( listItem );
+                            }
+                        }
 
                        return true;
                     }

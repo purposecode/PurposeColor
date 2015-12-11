@@ -727,6 +727,7 @@ namespace PurposeColor.screens
 
         async void LocationInputTapRecognizer_Tapped(object sender, EventArgs e)
         {
+            App.nearByLocationsSource.Clear();
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             try
             {
@@ -742,43 +743,43 @@ namespace PurposeColor.screens
 
                 progress.ShowProgressbar("Getting Location..");
 
+                locator.StartListening(1, 100);
+
+
                 var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-                try
+                if (position == null)
                 {
-                    locator.StartListening(1, 100);
-
-                    if (position == null)
-                    {
-                        return;
-                    }
-                    App.Lattitude = position.Latitude;
-                    App.Longitude = position.Longitude;
-                    lattitude = position.Latitude.ToString() != null ? position.Latitude.ToString() : string.Empty;
-                    longitude = position.Longitude.ToString() != null ? position.Longitude.ToString() : string.Empty;
-                    locator.StopListening();
-
+                    return;
                 }
-                catch (Exception)
-                {
-                    DisplayAlert("Location error", "Location could not be retrived", "OK");
-                }
+                App.Lattitude = position.Latitude;
+                App.Longitude = position.Longitude;
+                lattitude = position.Latitude.ToString() != null ? position.Latitude.ToString() : string.Empty;
+                longitude = position.Longitude.ToString() != null ? position.Longitude.ToString() : string.Empty;
+                locator.StopListening();
+
                 ILocation loc = DependencyService.Get<ILocation>();
                 try
                 {
-                    var address = await loc.GetLocation(position.Latitude, position.Longitude);
-                    currentAddress = address;
-                    if (currentAddress != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
-                    {
-                        eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
-                    }
-                    eventDescription.Text = eventDescription.Text + address;
+                    await ServiceHelper.GetCurrentAddressToList(App.Lattitude, App.Longitude);
+
+                    await ServiceHelper.GetNearByLocations( App.Lattitude, App.Longitude );
+
+
+                    progress.HideProgressbar();
+                    List<CustomListViewItem> pickerSource = App.nearByLocationsSource;
+                    CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform(65, 65, 55),"Nearby Places", true, false);// 65
+                    ePicker.WidthRequest = screenWidth;
+                    ePicker.HeightRequest = screenHeight;
+                    ePicker.ClassId = "ePicker";
+                    ePicker.listView.ItemSelected += OnLocationListViewItemSelected;
+                    masterLayout.AddChildToLayout(ePicker, 0, 0);
                 }
                 catch (Exception)
                 {
                     DisplayAlert("Location error", "Address could not be retrived", "OK");
                 }
 
-                progress.HideProgressbar();
+
             }
             catch (Exception ex)
             {
@@ -786,6 +787,29 @@ namespace PurposeColor.screens
                 progress.HideProgressbar();
             }
 
+        }
+
+        void OnLocationListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            CustomListViewItem item =(CustomListViewItem) e.SelectedItem;
+
+            if (item != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
+             {
+                 eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
+             }
+
+            string formattedString = eventDescription.Text;
+            if( formattedString != null )
+            {
+                eventDescription.Text.Replace("@", "");
+            }
+            eventDescription.Text = formattedString + item.Name;
+
+             currentAddress =  item.Name;
+
+             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+             masterLayout.Children.Remove(pickView);
+             pickView = null;
         }
 
         private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)

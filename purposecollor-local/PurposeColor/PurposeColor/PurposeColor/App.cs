@@ -33,6 +33,7 @@ namespace PurposeColor
         public static List<CustomListViewItem> actionsListSource;
         public static List<CustomListViewItem> eventsListSource;
         public static List<CustomListViewItem> emotionsListSource;
+        public static List<CustomListViewItem> nearByLocationsSource;
         public static List<MediaItem> MediaArray { get; set; }
         public static List<string> ExtentionArray { get; set; }
         public static List<string> ContactsArray { get; set; }
@@ -69,6 +70,7 @@ namespace PurposeColor
             ContactsArray = new List<string>();
             ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
+            nearByLocationsSource = new List<CustomListViewItem>();
             MenuPage menuPage = new MenuPage();
             masterPage = new PurposeMasterDetailPage();
             MainPage = masterPage;

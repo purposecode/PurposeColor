@@ -203,6 +203,7 @@
     <Content Include="Assets\txtbox_bg.png" />
     <Content Include="Assets\welldone.jpg" />
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />
+    <Content Include="PluginsHelp\GeolocatorReadme.txt" />
     <Content Include="README_FIRST.txt" />
     <Content Include="SplashScreenImage.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -249,6 +250,14 @@
     </Reference>
     <Reference Include="Facebook.Client">
       <HintPath>..\..\packages\Facebook.Client.0.5.0-alpha\lib\wp8\Facebook.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Geolocator.Plugin, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Xam.Plugin.Geolocator.1.1.1\lib\wp8\Geolocator.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="Geolocator.Plugin.Abstractions, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Xam.Plugin.Geolocator.1.1.1\lib\wp8\Geolocator.Plugin.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="ImageCircle.Forms.Plugin.Abstractions, Version=1.1.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Forms.ImageCircle.1.1.6\lib\wp8\ImageCircle.Forms.Plugin.Abstractions.dll</HintPath>

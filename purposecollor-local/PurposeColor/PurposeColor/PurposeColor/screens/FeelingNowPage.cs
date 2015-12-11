@@ -302,9 +302,6 @@ namespace PurposeColor
             try
             {
 
-           /*     await ServiceHelper.GetNearByLocations();
-                return;*/
-
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
                 CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 55 ), Constants.SELECT_EMOTIONS, true, true);// 65
                 ePicker.WidthRequest = screenWidth;

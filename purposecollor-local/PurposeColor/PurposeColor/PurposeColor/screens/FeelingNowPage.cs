@@ -32,6 +32,8 @@ namespace PurposeColor
         double screenHeight;
         double screenWidth;
         IProgressBar progressBar;
+        bool doRetry = false;
+
         public FeelingNowPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -245,37 +247,64 @@ namespace PurposeColor
         async void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
 
-            if (emotionalPickerButton.Text == "Select Emotion")
+            try
             {
-                await DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
-            }
-            else if (eventPickerButton.Text == "Events, Situation & Thoughts")
-            {
-                await DisplayAlert("Purpose Color", "Event not selected.", "Ok");
-            }
-            else if (slider.Value == 0)
-            {
-                await DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
-            }
-            else
-            {
-                try
-                {
-                    progressBar.ShowProgressbar("Saving details..");
-                    bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
 
-                    if (!isDataSaved)
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
-                    }
-                    progressBar.HideProgressbar();
-                    await Navigation.PushAsync(new FeelingsSecondPage());
-                }
-                catch (System.Exception ex)
+                if (emotionalPickerButton.Text == "Select Emotion")
                 {
-                    progressBar.HideProgressbar();
-                    DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
+                    await DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
                 }
+                else if (eventPickerButton.Text == "Events, Situation & Thoughts")
+                {
+                    await DisplayAlert("Purpose Color", "Event not selected.", "Ok");
+                }
+                else if (slider.Value == 0)
+                {
+                    await DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
+                }
+                else
+                {
+                    var saveStatus = await SaveData();
+                    if (saveStatus)
+                    {
+                        await Navigation.PushAsync(new FeelingsSecondPage());
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais, please try again", Constants.ALERT_OK);
+            }
+        }
+
+        private async Task<bool> SaveData()
+        {
+            try
+            {
+                progressBar.ShowProgressbar("Saving details..");
+                bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
+                progressBar.HideProgressbar();
+                if (!isDataSaved)
+                {
+                    doRetry = await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
+
+                    if (doRetry)
+                    {
+                        await SaveData();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                progressBar.HideProgressbar();
+                DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
+                
+                return false;
             }
         }
 
@@ -401,27 +430,41 @@ namespace PurposeColor
                     var downloadEmotionStatus = await DownloadAllEmotions();
                     if (!downloadEmotionStatus)
                     {
-                        DisplayAlert("Purpose Color", "Netwrok error occured.", "Ok");
                         progressBar.HideProgressbar();
-                        return;
+                        DisplayAlert("Purpose Color", "Netwrok error unable to update  the emotions.", "Ok");
+                        
+                        var oldList = App.emotionsListSource;
+                        App.emotionsListSource = App.Settings.GetAllEmotions();
                     }
-
-                    if (App.emotionsListSource != null)
+                    else
                     {
-                        App.Settings.SaveEmotions(App.emotionsListSource);
+                        if (App.emotionsListSource != null)
+                        {
+                            App.Settings.DeleteAllEmotions();
+                            App.Settings.SaveEmotions(App.emotionsListSource);
+                        }
                     }
+                    
                     progressBar.HideProgressbar();
                 }
 
                 if (App.eventsListSource == null || App.eventsListSource.Count < 1)
                 {
-                    await DownloadAllEvents();
-                    if (App.eventsListSource != null)
+                    var downloadEventsStatus  = await DownloadAllEvents();
+                    if (!downloadEventsStatus)
                     {
-                        App.Settings.SaveEvents(App.eventsListSource);
+                        //DisplayAlert("Purpose Color", "Netwrok error unable to update  the emotions.", "Ok");
+                        App.eventsListSource = App.Settings.GetAllEvents();
+                    }
+                    else
+                    {
+                        if (App.eventsListSource != null)
+                        {
+                            App.Settings.DeleteAllEvents();
+                            App.Settings.SaveEvents(App.eventsListSource);
+                        }
                     }
                 }
-
             }
             catch (System.Exception ex)
             {
@@ -442,11 +485,19 @@ namespace PurposeColor
                     emotionsReult = null;
                     return true;
                 }
+                else
+                {
+                    //DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the emotions.", Constants.ALERT_OK);
+                    //var oldList = App.emotionsListSource;
+                    //App.emotionsListSource = App.Settings.GetAllEmotions();
+                }
 
             }
             catch (System.Exception ex)
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the emotions.", Constants.ALERT_OK);
+                
+
             }
             return false;
 
@@ -466,15 +517,16 @@ namespace PurposeColor
                         App.eventsListSource.Add(item);
                     }
                     eventList = null;
+                    return true;
                 }
             }
             catch (System.Exception ex)
             {
-                //await DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the events", Constants.ALERT_OK);
+                //DisplayAlert(Constants.ALERT_TITLE, "Could not refresh the events", Constants.ALERT_OK);
                 return false;
             }
 
-            return true;
+            return false;
         }
 
         public void Dispose()

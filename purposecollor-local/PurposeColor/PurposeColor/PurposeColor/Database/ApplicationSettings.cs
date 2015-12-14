@@ -157,11 +157,25 @@ namespace PurposeColor.Database
         #endregion
 
         #region EMOTIONS TABLE
-        public List<Emotion> GetAllEmotions()
+        public List<CustomListViewItem> GetAllEmotions()
         {
             try
             {
-                return (from t in Connection.Table<Emotion>() select t).ToList();
+                List<Emotion> localEmotions = new List<Emotion>();
+                localEmotions = (from t in Connection.Table<Emotion>() select t).ToList();
+
+                List<CustomListViewItem> localEmotionListToDisplay = null;
+
+                if (localEmotions != null && localEmotions.Count > 0)
+                {
+                    localEmotionListToDisplay = new List<CustomListViewItem>();
+                    foreach (var item in localEmotions)
+                    {
+                        localEmotionListToDisplay.Add(new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  });
+                    }
+                    
+                }
+                return localEmotionListToDisplay;
             }
             catch (Exception ex)
             {
@@ -235,11 +249,22 @@ namespace PurposeColor.Database
             }
         }
 
-        public List<UserEvent> GetAllEvents()
+        public List<CustomListViewItem> GetAllEvents()
         {
             try
             {
-                return (from t in Connection.Table<UserEvent>() select t).ToList();
+                List<UserEvent> localEvents = new List<UserEvent>();
+                localEvents = (from t in Connection.Table<UserEvent>() select t).ToList();
+                List<CustomListViewItem> localEventListToDisplay = null;
+                if (localEvents != null && localEvents.Count > 0)
+                {
+                    localEventListToDisplay = new List<CustomListViewItem>();
+                    foreach (var item in localEvents)
+                    {
+                        localEventListToDisplay.Add(new CustomListViewItem { Name = item.EventName, EventID = item.EventId.ToString()});
+                    }
+                }
+                return localEventListToDisplay;
             }
             catch (Exception ex)
             {

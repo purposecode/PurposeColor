@@ -192,6 +192,7 @@ namespace PurposeColor
         {
             try
             {
+                bool isValueSaved = false;
                 if (goalsAndDreamsPickerButton.Text == "Goals & Dreams")
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Plese select Goals & Dreams.", Constants.ALERT_OK);
@@ -206,26 +207,42 @@ namespace PurposeColor
                 }
                 else
                 {
-                    bool isValueSaved = await ServiceHelper.SaveGoalsAndActions(slider.Value.ToString(), App.newEmotionId, selectedGoal.EventID, selectedActions);
-                    if (!isValueSaved)
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", Constants.ALERT_OK);
-                    }
-                    else
-                    {
-                        ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                        notfiy.ShowNotification(Constants.ALERT_TITLE, "Emotional awareness created");
-                        progressBar.ShowToast("slider is in neutral");
-                        await Navigation.PushAsync(new FeelingNowPage());
-                    }
+                    if (await SaveData())
+	                {
+		                 await Navigation.PushAsync(new FeelingNowPage());
+	                }
                 }
-
             }
             catch (System.Exception ex)
             {
                 var test = ex.Message;
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais, please try again", Constants.ALERT_OK);
             }
+        }
+
+        private async Task<bool> SaveData()
+        {
+            bool isValueSaved = await ServiceHelper.SaveGoalsAndActions(slider.Value.ToString(), App.newEmotionId, selectedGoal.EventID, selectedActions);
+            if (!isValueSaved)
+            {
+                bool doRetry = await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
+                if (doRetry)
+                {
+                    await SaveData();
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                notfiy.ShowNotification(Constants.ALERT_TITLE, "Emotional awareness created");
+                
+                return true;
+            }
+            return false;
         }
 
         public async void GetstopGetsture(bool pressed)

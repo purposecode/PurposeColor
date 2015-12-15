@@ -207,10 +207,7 @@ namespace PurposeColor
                 }
                 else
                 {
-                    if (await SaveData())
-	                {
-		                 await Navigation.PushAsync(new FeelingNowPage());
-	                }
+					SaveData();
                 }
             }
             catch (System.Exception ex)
@@ -220,38 +217,38 @@ namespace PurposeColor
             }
         }
 
-        private async Task<bool> SaveData()
+        private async void SaveData()
         {
-            bool isValueSaved = await ServiceHelper.SaveGoalsAndActions(slider.Value.ToString(), App.newEmotionId, selectedGoal.EventID, selectedActions);
-            if (!isValueSaved)
-            {
-                bool doRetry = await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
-                if (doRetry)
-                {
-                    await SaveData();
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                notfiy.ShowNotification(Constants.ALERT_TITLE, "Emotional awareness created");
-                
-                return true;
-            }
-            return false;
+			try 
+			{
+				bool isValueSaved = await ServiceHelper.SaveGoalsAndActions (slider.Value.ToString (), App.newEmotionId, selectedGoal.EventID, selectedActions);
+				if (!isValueSaved) 
+				{
+					bool doRetry = await DisplayAlert (Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
+					if (doRetry) 
+					{
+						SaveData ();
+					}
+				} 
+				else 
+				{
+					ILocalNotification notfiy = DependencyService.Get<ILocalNotification> ();
+					notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created");
+					await Navigation.PushAsync (new FeelingNowPage ());
+				}
+			} 
+			catch (Exception ex) 
+			{
+				progressBar.HideProgressbar();
+				DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
+			}
         }
 
         public async void GetstopGetsture(bool pressed)
         {
             try
             {
-
                 var goalsList = await DownloadAllGoals();
-
                 OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
 
             }

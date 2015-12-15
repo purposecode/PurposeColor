@@ -23,16 +23,15 @@ namespace PurposeColor
         CustomSlider slider;
         CustomPicker ePicker;
         CustomLayout masterLayout;
-        PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
-        PurposeColor.interfaces.CustomImageButton eventPickerButton;
+        public PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
+        public PurposeColor.interfaces.CustomImageButton eventPickerButton;
         CustomListViewItem selectedEmotionItem;
-        CustomListViewItem selectedEventItem;
+        public CustomListViewItem selectedEventItem;
         Label about;
         public static int sliderValue;
         double screenHeight;
         double screenWidth;
         IProgressBar progressBar;
-        bool doRetry = false;
 
         public FeelingNowPage()
         {
@@ -264,11 +263,7 @@ namespace PurposeColor
                 }
                 else
                 {
-                    var saveStatus = await SaveData();
-                    if (saveStatus)
-                    {
-                        await Navigation.PushAsync(new FeelingsSecondPage());
-                    }
+                    SaveData();
                 }
             }
             catch (System.Exception ex)
@@ -277,7 +272,7 @@ namespace PurposeColor
             }
         }
 
-        private async Task<bool> SaveData()
+        private async void SaveData()
         {
             try
             {
@@ -286,25 +281,21 @@ namespace PurposeColor
                 progressBar.HideProgressbar();
                 if (!isDataSaved)
                 {
-                    doRetry = await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
-
+                    bool doRetry = await DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
                     if (doRetry)
                     {
-                        await SaveData();
+                        SaveData();
                     }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                return true;
+				}
+				else
+				{
+					await Navigation.PushAsync(new FeelingsSecondPage());
+				}
             }
             catch (System.Exception ex)
             {
                 progressBar.HideProgressbar();
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
-                
-                return false;
             }
         }
 
@@ -339,6 +330,11 @@ namespace PurposeColor
                 ePicker.FeelingsPage = this;
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                 masterLayout.AddChildToLayout(ePicker, 0, 0);
+                ePicker.ChildRemoved += async (s, ee)=>
+                {
+                    var test = "test";
+                };
+
                 //ePicker.FadeTo(1, 1000, Easing.CubicOut);
                 //double yPos = 60 * screenHeight / 100;
                 //ePicker.TranslateTo(0, 65, 3000, Easing.Linear);
@@ -351,7 +347,7 @@ namespace PurposeColor
             }
         }
 
-        void OnEventPickerButtonClicked(object sender, System.EventArgs e)
+        public void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
@@ -372,7 +368,7 @@ namespace PurposeColor
             }
         }
 
-        void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        public void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
@@ -444,7 +440,7 @@ namespace PurposeColor
                             App.Settings.SaveEmotions(App.emotionsListSource);
                         }
                     }
-                    
+
                     progressBar.HideProgressbar();
                 }
 

@@ -36,5 +36,9 @@
 	</dict>
 	<key>UIMainStoryboardFile</key>
 	<string>LaunchScreen</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Get Locations</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Localtion always</string>
 </dict>
 </plist>

@@ -811,6 +811,7 @@ namespace PurposeColor.screens
             try
             {
                 var locator = CrossGeolocator.Current;
+				//locator.AllowsBackgroundUpdates = true;
                 locator.DesiredAccuracy = 50;
 
                 if (!locator.IsGeolocationEnabled)

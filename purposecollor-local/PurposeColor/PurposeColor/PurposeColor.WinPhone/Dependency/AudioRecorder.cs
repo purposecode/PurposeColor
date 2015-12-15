@@ -16,12 +16,13 @@ namespace PurposeColor.WinPhone.Dependency
         int sampleRate;
         System.Windows.Threading.DispatcherTimer dispatcherTimer;
         string fileName = string.Empty;
+        string fileUrl = string.Empty;
 
         public string AudioPath
         {
             get
             {
-                return fileName;
+                return fileUrl;
             }
         }
 
@@ -82,13 +83,19 @@ namespace PurposeColor.WinPhone.Dependency
             try
             {
                 StopRequested = true;
+                MemoryStream memStream = new MemoryStream();
+                using (FileStream fs = File.OpenRead(fileUrl))
+                {
+                    fs.CopyTo(memStream);
+                }
+                return memStream;
             }
             catch (System.Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine("StopRecording :" + ex.Message);
             }
 
-            return null; //for testing only
+            return null;
         }
 
         public void PlayAudio()
@@ -97,7 +104,7 @@ namespace PurposeColor.WinPhone.Dependency
             {
                 var fname = fileName;
                 Windows.Storage.StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-                var fileUrl = local.Path + @"\Purposecolor\Audio\" + fileName;//test.wav
+                //fileUrl = local.Path + @"\Purposecolor\Audio\" + fileName;//test.wav
                 AudioTrack audioTrack = new AudioTrack(new Uri(fileUrl, UriKind.Relative), string.Empty, string.Empty, string.Empty, null);
                 BackgroundAudioPlayer.Instance.Track = audioTrack;
                 BackgroundAudioPlayer.Instance.Play();
@@ -128,7 +135,7 @@ namespace PurposeColor.WinPhone.Dependency
                 stream.Write(buffer, 0, buffer.Length);
 
                 fileName = string.Format("Audio{0}.wav", DateTime.Now.ToString("yyyyMMddHHmmss"));
-
+                
                 Windows.Storage.StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
                 var dataFolder = await local.CreateFolderAsync("Purposecolor", Windows.Storage.CreationCollisionOption.OpenIfExists);
                 var audioFolder = await dataFolder.CreateFolderAsync("Audio", Windows.Storage.CreationCollisionOption.OpenIfExists);
@@ -139,6 +146,8 @@ namespace PurposeColor.WinPhone.Dependency
                     audioFile.Flush();
                     audioFile.Close();
                 }
+
+                fileUrl = local.Path + @"\Purposecolor\Audio\" + fileName;
 
                 audioFolder = null;
                 dataFolder = null;

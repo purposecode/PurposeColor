@@ -218,8 +218,8 @@ namespace PurposeColor.screens
             TapGestureRecognizer RecodeOffTapRecognizer = new TapGestureRecognizer();
             audioRecodeOffHolder.GestureRecognizers.Add(RecodeOffTapRecognizer);
 
-            audioRecodeOffHolder.TranslateTo(0, audioRecodeOffButton.Y + 60, 5, null);
-            audioRecodeOnHolder.TranslateTo(0, audioRecodeOffButton.Y + 60, 5, null);
+            audioRecodeOffHolder.TranslateTo(0, Device.OnPlatform(audioRecodeOffButton.Y + 60,audioRecodeOffButton.Y + 60,audioRecodeOffButton.Y + 50), 5, null);
+            audioRecodeOnHolder.TranslateTo(0, Device.OnPlatform(audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 50), 5, null);
 
             RecodeOnTapRecognizer.Tapped += RecodeOnTapRecognizer_Tapped;
             RecodeOffTapRecognizer.Tapped += RecodeOffTapRecognizer_Tapped;
@@ -663,7 +663,7 @@ namespace PurposeColor.screens
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
             listContainer.Children.Add(previewListView);
-            masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 54 ));
+            masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 50 ));
             #endregion
 
             #endregion
@@ -717,7 +717,18 @@ namespace PurposeColor.screens
                     MemoryStream stream = audioRecorder.StopRecording();
                     if (stream == null)
                     {
-                        progress.ShowToast("Could not save audio, please try again later.");
+                        Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+                        {
+                            stream = audioRecorder.StopRecording();
+                            AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
+                            if (stream == null)
+                            {
+                                progress.ShowToast("Could not save audio, please try again later.");
+                            }
+                            return false;
+                        });
+
+                        
                     }
                     else
                     {

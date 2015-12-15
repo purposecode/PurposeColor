@@ -482,21 +482,23 @@ namespace PurposeColor.screens
                     }
                     else
                     {
+						if(await CrossContacts.Current.RequestPermission())
+						{
+							await Task.Run(() =>
+								{
+									CrossContacts.Current.PreferContactAggregation = false;
 
-                        await Task.Run(() =>
-                        {
-                            CrossContacts.Current.PreferContactAggregation = false;
+									if (CrossContacts.Current.Contacts == null)
+										return;
 
-                            if (CrossContacts.Current.Contacts == null)
-                                return;
 
-      
-                            plugInContacts = CrossContacts.Current.Contacts
-                              .Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.Phones.Count > 0)
-                              .ToList();
+									plugInContacts = CrossContacts.Current.Contacts
+										.Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.Phones.Count > 0)
+										.ToList();
 
-                            conatctList = plugInContacts.Select(item => item.FirstName).ToList();
-                        });
+									conatctList = plugInContacts.Select(item => item.FirstName).ToList();
+								});
+						}
                       
                     }
 

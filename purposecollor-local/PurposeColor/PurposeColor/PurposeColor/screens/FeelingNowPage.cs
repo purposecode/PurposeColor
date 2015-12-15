@@ -103,9 +103,10 @@ namespace PurposeColor
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             //about.TextColor = Color.Gray;
             //about.FontSize = Device.OnPlatform(16, 16, 30);
-            //about.WidthRequest = screenWidth * 50 / 100;
+			about.WidthRequest = screenWidth;
             //about.HeightRequest = screenHeight * 15 / 100;
             about.HorizontalOptions = LayoutOptions.Center;
+			about.XAlign = TextAlignment.Center;
 
             about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             about.TextColor = Color.FromRgb(40, 47, 50);
@@ -116,7 +117,7 @@ namespace PurposeColor
             {
                 howYouAreFeeling.FontSize = Device.OnPlatform(20, 22, 30);
                 howYouAreFeeling2.FontSize = Device.OnPlatform(20, 22, 30);
-                about.FontSize = Device.OnPlatform(20, 22, 30);
+                about.FontSize = Device.OnPlatform(15, 22, 30);
 
                 emotionalPickerButton.HeightRequest = screenHeight * 6 / 100;
                 fontSize = 17;
@@ -164,7 +165,7 @@ namespace PurposeColor
              masterLayout.AddChildToLayout(sliderDivider3, 70, 40.5f);*/
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform( 50,50,47 ));
-            masterLayout.AddChildToLayout(about, 41, Device.OnPlatform(62, 62, 59));
+            masterLayout.AddChildToLayout(about, 0, Device.OnPlatform(62, 62, 59));
             masterLayout.AddChildToLayout(eventPickerButton, 5, Device.OnPlatform(70, 70,67));
 
             Content = masterLayout;

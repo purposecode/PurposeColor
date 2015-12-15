@@ -384,7 +384,7 @@ namespace PurposeColor
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnActionPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
+				masterLayout.AddLayout(ePicker, 0, 0);
 
                 //double yPos = 60 * screenHeight / 100;
                 // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
@@ -409,7 +409,7 @@ namespace PurposeColor
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
+				masterLayout.AddLayout(ePicker, 0, 0);
                 //double yPos = 60 * screenHeight / 100;
                 //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
                 // ePicker.FadeTo(1, 750, Easing.Linear); 

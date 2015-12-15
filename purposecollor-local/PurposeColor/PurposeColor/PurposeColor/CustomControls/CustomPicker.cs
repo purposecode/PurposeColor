@@ -205,6 +205,7 @@ namespace PurposeColor.CustomControls
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
            // listView.HeightRequest = screenHeight * 42 / 100;
+			listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.Opacity = 1;
             listView.BackgroundColor = Constants.LIST_BG_COLOR;
             listView.WidthRequest = screenWidth * 60;

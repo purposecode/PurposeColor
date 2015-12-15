@@ -329,7 +329,7 @@ namespace PurposeColor
                 ePicker.ClassId = "ePicker";
                 ePicker.FeelingsPage = this;
                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
+				masterLayout.AddLayout(ePicker, 0, Device.OnPlatform( 0, 0, 0 ));
                 ePicker.ChildRemoved += async (s, ee)=>
                 {
                     var test = "test";
@@ -356,7 +356,7 @@ namespace PurposeColor
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnEventPickerItemSelected;
-                masterLayout.AddChildToLayout(ePicker, 0, 0);
+				masterLayout.AddLayout(ePicker, 0, 0);
                 //double yPos = 60 * screenHeight / 100;
                 //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
                 // ePicker.FadeTo(1, 750, Easing.Linear); 

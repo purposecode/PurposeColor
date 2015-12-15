@@ -313,12 +313,6 @@
     <Reference Include="XLabs.Forms">
       <HintPath>..\..\packages\XLabs.Forms.2.0.5782\lib\Xamarin.iOS10\XLabs.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="EZCompress1.Plugin">
-      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.dll</HintPath>
-    </Reference>
-    <Reference Include="EZCompress1.Plugin.Abstractions">
-      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="Plugin.Connectivity">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.0.0\lib\Xamarin.iOS10\Plugin.Connectivity.dll</HintPath>
     </Reference>
@@ -333,6 +327,12 @@
     </Reference>
     <Reference Include="Media.Plugin">
       <HintPath>..\..\packages\Xam.Plugin.Media.1.0.3\lib\Xamarin.iOS10\Media.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="EZCompress1.Plugin.Abstractions">
+      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="EZCompress1.Plugin">
+      <HintPath>..\..\packages\JosephAntolick.EZCompress1.Plugin.1.0.0.0\lib\Xamarin.iOS10\EZCompress1.Plugin.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

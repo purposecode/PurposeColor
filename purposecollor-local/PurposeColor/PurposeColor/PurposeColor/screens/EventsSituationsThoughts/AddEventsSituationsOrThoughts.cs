@@ -1132,6 +1132,9 @@ namespace PurposeColor.screens
                     IResize resize = DependencyService.Get<IResize>();
                     compressedStream = resize.CompessImage(50, ms);
 
+	
+
+
                     Byte[] inArray = compressedStream.ToArray();
                     Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
                     Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);

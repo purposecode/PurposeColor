@@ -21,6 +21,8 @@ namespace PurposeColor.iOS.Renderers
             base.OnElementChanged(e);
             UITextView textView = (UITextView)Control;
 
+
+
             //Color
             textView.BackgroundColor = UIColor.White;
             textView.TextColor = UIColor.Gray;
@@ -33,7 +35,7 @@ namespace PurposeColor.iOS.Renderers
             var element = this.Element as PurposeColor.CustomControls.CustomEditor;
 
             adelegate.Placeholder = element.Placeholder;
-
+			adelegate.formsEditor = element;
             replacingControl.Delegate = adelegate;
             replacingControl.TextColor = UIColor.LightGray;
             replacingControl.Text = adelegate.Placeholder;
@@ -45,6 +47,7 @@ namespace PurposeColor.iOS.Renderers
         public class CustomTextViewDelegate : UITextViewDelegate
         {
             public string Placeholder { get; set; }
+			public PurposeColor.CustomControls.CustomEditor formsEditor{ get; set;}
 
             public CustomTextViewDelegate()
             {
@@ -80,6 +83,7 @@ namespace PurposeColor.iOS.Renderers
                     textView.Text = Placeholder;
                     textView.TextColor = UIColor.LightGray;
                 }
+				formsEditor.Text = textView.Text;
                 textView.ResignFirstResponder();
                 UIView view = getRootSuperView(textView);
                 textView.BackgroundColor = UIColor.White;

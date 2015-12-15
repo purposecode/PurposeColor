@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Text;
 using UIKit;
 using System.IO;
+using Foundation;
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOSResize))]
 namespace PurposeColor.iOS.Dependency
@@ -44,11 +45,39 @@ namespace PurposeColor.iOS.Dependency
 
 		public MemoryStream CompessImage(int ratio, MemoryStream ms)
 		{
-			MemoryStream compressedStream = new MemoryStream();
-			compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, 50);
-			return compressedStream;
+			//MemoryStream compressedStream = new MemoryStream();
+			//compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, 40);
+			return MyCompressImage(ms,ratio) ;
 		}
 
+
+
+		public MemoryStream MyCompressImage(Stream _image, int _compressAmount)
+		{
+			if (_compressAmount < 1 || _compressAmount > 100)
+			{
+				System.Diagnostics.Debug.WriteLine("Compress amount must be between 1 and 100! Compression failed.");
+				return null;
+			}
+
+			_image.Position = 0;
+
+			using (var data = NSData.FromStream(_image))
+			{
+				float compressAmount = (float)(_compressAmount * .01);
+
+				var image = UIImage.LoadFromData(data);
+
+				var newResult = image.AsJPEG(compressAmount);
+				var finalStream = newResult.AsStream();
+
+				finalStream.Position = 0;
+
+				MemoryStream compressedStream = new MemoryStream();
+				finalStream.CopyTo ( compressedStream );
+				return compressedStream;
+			}
+		}
 
         public static UIKit.UIImage ImageFromByteArray(byte[] data)
         {

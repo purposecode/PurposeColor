@@ -1271,6 +1271,8 @@ namespace PurposeColor.screens
         {
 
             IProgressBar progres = DependencyService.Get<IProgressBar>();
+
+			if(  Device.OS != TargetPlatform.iOS )
             progres.ShowProgressbar("Preparing media..");
             if ((sender as CustomImageButton).ClassId == "camera")
             {
@@ -1354,6 +1356,7 @@ namespace PurposeColor.screens
         async void OnVideoButtonClicked(object sender, EventArgs e)
         {
             IProgressBar progres = DependencyService.Get<IProgressBar>();
+			if(  Device.OS != TargetPlatform.iOS )
             progres.ShowProgressbar("Preparing media..");
             if ((sender as CustomImageButton).ClassId == "camera")
             {

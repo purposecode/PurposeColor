@@ -612,19 +612,19 @@ namespace PurposeColor.screens
                 },
                 ColumnDefinitions = 
             {
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80) )/5, GridUnitType.Absolute) }, // icon container x = 3 //new ColumnDefinition { Width = GridLength.Auto },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80)) /5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80) )/4, GridUnitType.Absolute) }, // icon container x = 3 //new ColumnDefinition { Width = GridLength.Auto },
+                  //  new ColumnDefinition { Width = new GridLength(((screenWidth * .80)) /5, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
             }
             };
 
             iconContainerGrid.Children.Add(galleryInputStack, 0, 0);
             iconContainerGrid.Children.Add(cameraInputStack, 1, 0);
-            iconContainerGrid.Children.Add(audioInputStack, 2, 0);
-            iconContainerGrid.Children.Add(locationInputStack, 3, 0);
-            iconContainerGrid.Children.Add(contactInputStack, 4, 0);
+          //  iconContainerGrid.Children.Add(audioInputStack, 2, 0);
+            iconContainerGrid.Children.Add(locationInputStack, 2, 0);
+            iconContainerGrid.Children.Add(contactInputStack, 3, 0);
 
             textinputAndIconsHolder = new StackLayout
             {

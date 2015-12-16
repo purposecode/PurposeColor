@@ -938,6 +938,12 @@ namespace PurposeColor.screens
             pickView = null;
         }
 
+
+        public void DisplayAlert( string messege )
+        {
+            DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK);
+        }
+
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
 
@@ -1407,6 +1413,15 @@ namespace PurposeColor.screens
                         file.GetStream().CopyTo(ms);
                         ms.Position = 0;
 
+                        if (ms.Length > 15728640)
+                        {
+                            MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                            progres.HideProgressbar();
+                            ms = null;
+                            file = null;
+                            return;
+                        }
+
                         MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
                     }
 
@@ -1437,6 +1452,15 @@ namespace PurposeColor.screens
                     MemoryStream ms = new MemoryStream();
                     file.GetStream().CopyTo(ms);
                     ms.Position = 0;
+
+                    if (ms.Length > 15728640)
+                    {
+                        MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                        progres.HideProgressbar();
+                        ms = null;
+                        file = null;
+                        return;
+                    }
 
                     MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
 

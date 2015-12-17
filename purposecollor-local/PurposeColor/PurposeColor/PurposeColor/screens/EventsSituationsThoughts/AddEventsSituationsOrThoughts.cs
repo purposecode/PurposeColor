@@ -723,6 +723,7 @@ namespace PurposeColor.screens
 
             previewListView = new ListView();
             previewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            PreviewListViewCellItem.addEvntObject = this;
             previewListView.ItemTemplate = new DataTemplate(typeof(PreviewListViewCellItem));
             previewListView.SeparatorVisibility = SeparatorVisibility.None;
             previewListView.Opacity = 1;
@@ -1306,6 +1307,20 @@ namespace PurposeColor.screens
             }
         }
 
+
+        public  async  void ShowAlert( string messege, PreviewItem toDelete )
+        {
+           var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete ?.", Constants.ALERT_OK, "Cancel");
+            if( alert  )
+            {
+                App.PreviewListSource.Remove(toDelete);
+                MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
+                if (media != null)
+                    App.MediaArray.Remove(media);
+            }
+        }
+
+
         public void Dispose()
         {
             subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
@@ -1585,6 +1600,7 @@ namespace PurposeColor.screens
 
     public class PreviewListViewCellItem : ViewCell
     {
+        public static AddEventsSituationsOrThoughts addEvntObject;
         public PreviewListViewCellItem()
         {
             CustomLayout masterLayout = new CustomLayout();
@@ -1622,14 +1638,12 @@ namespace PurposeColor.screens
                 {
                     try
                     {
+                        
                         CustomImageButton button = sender as CustomImageButton;
                         PreviewItem itemToDel = App.PreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
                         if (itemToDel != null)
                         {
-                            App.PreviewListSource.Remove(itemToDel);
-                            MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == itemToDel.Name);
-                            if (media != null)
-                                App.MediaArray.Remove(media);
+                            addEvntObject.ShowAlert("Are you sure you want to delete this item ?", itemToDel);
                         }
                     }
                     catch (Exception ex)

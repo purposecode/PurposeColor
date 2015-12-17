@@ -64,9 +64,11 @@ namespace PurposeColor.screens
         StackLayout audioRecodeOnHolder = null;
         StackLayout audioRecodeOffHolder = null;
         Label locationInfo;
-        Entry locEntry;
-        StackLayout locationEditStack;
+        Entry locAndContactsEntry;
+        StackLayout editLocationAndContactsStack;
         CustomImageButton editLocationDoneButton;
+		Label contactInfo;
+		StackLayout locLayout;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -251,19 +253,19 @@ namespace PurposeColor.screens
             locationInfo.GestureRecognizers.Add(locationlabelTap);
             locationlabelTap.Tapped += OnEditLocationInfo;
 
-			locationEditStack = new StackLayout();
-			locationEditStack.Padding = new Thickness(1, 1, 1, 1);
-			locationEditStack.BackgroundColor = Color.FromRgb(30, 126, 210);
-			locationEditStack.WidthRequest = App.screenWidth * 90 / 100;
-			locationEditStack.IsVisible = false;
-			locationEditStack.Orientation = StackOrientation.Horizontal;
+			editLocationAndContactsStack = new StackLayout();
+			editLocationAndContactsStack.Padding = new Thickness(1, 1, 1, 1);
+			editLocationAndContactsStack.BackgroundColor = Color.FromRgb(30, 126, 210);
+			editLocationAndContactsStack.WidthRequest = App.screenWidth * 90 / 100;
+			editLocationAndContactsStack.IsVisible = false;
+			editLocationAndContactsStack.Orientation = StackOrientation.Horizontal;
 
 
-            locEntry = new Entry();
-            locEntry.TextColor = Color.Black;
-            locEntry.BackgroundColor = Color.White;
-            locEntry.VerticalOptions = LayoutOptions.Center;
-			locEntry.WidthRequest = App.screenWidth  * 80 / 100;
+            locAndContactsEntry = new Entry();
+            locAndContactsEntry.TextColor = Color.Black;
+            locAndContactsEntry.BackgroundColor = Color.White;
+            locAndContactsEntry.VerticalOptions = LayoutOptions.Center;
+			locAndContactsEntry.WidthRequest = App.screenWidth  * 80 / 100;
 
             editLocationDoneButton = new CustomImageButton();
             editLocationDoneButton.VerticalOptions = LayoutOptions.Center;
@@ -273,23 +275,42 @@ namespace PurposeColor.screens
             editLocationDoneButton.Clicked += OnLocationEditCompleted;
 
 
-			locationEditStack.Children.Add ( locEntry );
-			locationEditStack.Children.Add ( editLocationDoneButton );
+			editLocationAndContactsStack.Children.Add ( locAndContactsEntry );
+			editLocationAndContactsStack.Children.Add ( editLocationDoneButton );
 
-            StackLayout locLayout = new StackLayout();
+            locLayout = new StackLayout();
             locLayout.Orientation = StackOrientation.Vertical;
             locLayout.BackgroundColor = Color.Transparent;
 
      
 
             locLayout.Children.Add( locationInfo );
-			//locLayout.Children.Add(locationEditStack);
 
+			TapGestureRecognizer contactsLabelTap = new TapGestureRecognizer();
+		    contactInfo = new Label();
+			contactInfo.TextColor = Constants.BLUE_BG_COLOR;
+			contactInfo.BackgroundColor = Color.Transparent;
+			contactInfo.FontSize = 12;
+			contactInfo.HeightRequest = 25;
+			contactInfo.GestureRecognizers.Add (contactsLabelTap);
+			contactsLabelTap.Tapped += (object sender, EventArgs e) => 
+			{
+				editLocationAndContactsStack.ClassId = "contactedit";
+				locAndContactsEntry.Text = contactInfo.Text;
+				editLocationAndContactsStack.IsVisible = true;
+				contactInfo.IsVisible = false;
+				iconContainerGrid.IsVisible = false;
+
+			};
+
+			locLayout.IsVisible = false;
+			contactInfo.IsVisible = false;
 
             StackLayout entryAndLocContainer = new StackLayout();
             entryAndLocContainer.Orientation = StackOrientation.Vertical;
             entryAndLocContainer.BackgroundColor = Color.White;
             entryAndLocContainer.Children.Add( eventDescription );
+			entryAndLocContainer.Children.Add(contactInfo);
             entryAndLocContainer.Children.Add(locLayout);
 
             textInputContainer = new StackLayout
@@ -674,7 +695,7 @@ namespace PurposeColor.screens
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
                 Padding = 0,
-				Children = { textInputContainer, iconContainerGrid, locationEditStack }
+				Children = { textInputContainer, iconContainerGrid, editLocationAndContactsStack }
             };
 
             Button createEvent = new Button();
@@ -718,9 +739,17 @@ namespace PurposeColor.screens
 
         void OnLocationEditCompleted(object sender, EventArgs e)
         {
-			locationInfo.Text = locEntry.Text;
-			locationInfo.IsVisible = true;
-			locationEditStack.IsVisible = false;
+			if (editLocationAndContactsStack.ClassId == "locationedit")
+			{
+				locationInfo.Text = locAndContactsEntry.Text;
+				locationInfo.IsVisible = true;
+			}
+			else
+			{
+				contactInfo.Text = locAndContactsEntry.Text;
+				contactInfo.IsVisible = true;
+			}
+			editLocationAndContactsStack.IsVisible = false;
 			iconContainerGrid.IsVisible = true;
         }
 
@@ -728,8 +757,9 @@ namespace PurposeColor.screens
 
         void OnEditLocationInfo(object sender, EventArgs e)
 		{
-			locEntry.Text = locationInfo.Text;
-			locationEditStack.IsVisible = true;
+			editLocationAndContactsStack.ClassId = "locationedit";
+			locAndContactsEntry.Text = locationInfo.Text;
+			editLocationAndContactsStack.IsVisible = true;
 			locationInfo.IsVisible = false;
 			iconContainerGrid.IsVisible = false;
             
@@ -964,7 +994,7 @@ namespace PurposeColor.screens
 
             locationInfo.Text = "";
             locationInfo.Text = "  @" + item.Name;
-
+			locLayout.IsVisible = true;
              View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
              masterLayout.Children.Remove(pickView);
              pickView = null;
@@ -977,21 +1007,29 @@ namespace PurposeColor.screens
             if (!string.IsNullOrEmpty(name))
             {
                 int nIndex = 0;
-                string preText = " with ";
+                string preText = "  With ";
                 selectedContact = name;
-                if (eventDescription.Text != null)
-                {
-                    nIndex = eventDescription.Text.IndexOf(name);
-                    preText = eventDescription.Text.IndexOf("with") <= 0 ? " with " : ", ";
-                }
+				if (string.IsNullOrEmpty (contactInfo.Text))
+				{
+					contactInfo.Text = preText;
+				}
 
-                if (nIndex <= 0)
-                {
-                    eventDescription.Text = eventDescription.Text + preText + name;
-                }
-                //App.ContactsArray = new List<string>();
+				if (contactInfo.Text != "  With ") {
+					contactInfo.Text = contactInfo.Text + "," + selectedContact;
+				} 
+				else 
+				{
+					contactInfo.Text = contactInfo.Text +  selectedContact;
+				}
+
+				if (contactInfo.Text.Length > 40) 
+				{
+					contactInfo.Text = contactInfo.Text.Substring(0, 40);
+					contactInfo.Text += "...";
+				}
+					
+				contactInfo.IsVisible = true;
                 App.ContactsArray.Add(name);
-                //App.ContactsArray.Add("Tom");
 
             }
 
@@ -1291,8 +1329,8 @@ namespace PurposeColor.screens
             this.audioRecorder = null;
             this.eventTitle = null;
             this.iconContainerGrid = null;
-			this.locEntry = null;
-			this.locationEditStack = null;
+			this.locAndContactsEntry = null;
+			this.editLocationAndContactsStack = null;
 			this.editLocationDoneButton = null;
             GC.Collect();
         }

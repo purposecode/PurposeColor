@@ -305,6 +305,7 @@ namespace PurposeColor.screens
 				editLocationAndContactsStack.IsVisible = true;
 				contactInfo.IsVisible = false;
 				iconContainerGrid.IsVisible = false;
+                locationInfo.IsVisible = true;
 
 			};
 
@@ -768,7 +769,7 @@ namespace PurposeColor.screens
 			editLocationAndContactsStack.IsVisible = true;
 			locationInfo.IsVisible = false;
 			iconContainerGrid.IsVisible = false;
-            
+            contactInfo.IsVisible = true;
         }
 
         void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)
@@ -1315,7 +1316,7 @@ namespace PurposeColor.screens
 
         public  async  void ShowAlert( string messege, PreviewItem toDelete )
         {
-           var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete ?.", Constants.ALERT_OK, "Cancel");
+            var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
             if( alert  )
             {
                 App.PreviewListSource.Remove(toDelete);

@@ -157,10 +157,8 @@ namespace PurposeColor.screens
 						DisplayAlert ("Registeration", "New user registered successfully", "OK");
 					}
 				} catch (Exception ex) {
-					var msg = ex.Message;
-					if (true) {
-					
-					}
+                    DisplayAlert("Purposecode", "Could not save to local database.", "OK");
+                    Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
 				}
 			}
 			#endregion

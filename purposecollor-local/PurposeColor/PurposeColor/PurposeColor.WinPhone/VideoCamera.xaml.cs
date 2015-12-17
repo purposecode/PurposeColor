@@ -1,25 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using System.ComponentModel;
-using System.Threading;
 using System.IO;
 using System.IO.IsolatedStorage;
-using Microsoft.Phone.Shell;
-using System.Windows.Navigation;
-using Microsoft.Devices;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using Microsoft.Phone.Controls;
 
 namespace PurposeColor.WinPhone
 {
@@ -160,20 +145,6 @@ namespace PurposeColor.WinPhone
                                             FileMode.Open, FileAccess.Read,
                                             IsolatedStorageFile.GetUserStoreForApplication());
 
-
-                    /////////////////////////////////////
-
-                    //Windows.Storage.StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-                    //var dataFolder = local.CreateFolderAsync("Purposecolor", Windows.Storage.CreationCollisionOption.OpenIfExists);
-                    //var audioFolder = dataFolder.CreateFolderAsync("Video", Windows.Storage.CreationCollisionOption.OpenIfExists);
-                    //using (var audioFile = File.Create(audioFolder.Path + "\\" + fileName))
-                    //{
-                    //    var dataBuffer = stream.GetBuffer();
-                    //    audioFile.Write(dataBuffer, 0, (int)stream.Length);
-                    //    audioFile.Flush();
-                    //    audioFile.Close();
-                    //}
-                    ///////////////////////////////////////
                     MemoryStream videoStream = new MemoryStream();
                     using (isoVideoFile)
                     {
@@ -181,7 +152,9 @@ namespace PurposeColor.WinPhone
                     }
 
                     PurposeColor.screens.AddEventsSituationsOrThoughts.ReceiveVideoFromWindows(videoStream, isoVideoFile.Name);
-
+                    
+                    isoVideoFile.Flush();
+                    isoVideoFile.Dispose();
                     isoVideoFile = null;
                     //videoStream = null;
 

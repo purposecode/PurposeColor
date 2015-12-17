@@ -25,8 +25,9 @@ namespace PurposeColor.WinPhone.Dependency
                 var connection = new SQLite.Net.SQLiteConnection(platform, path);
                 return connection;
             }
-            catch (System.Exception)
+            catch (System.Exception ex)
             {
+                var test = ex.Message;
                 return null;
             }
             

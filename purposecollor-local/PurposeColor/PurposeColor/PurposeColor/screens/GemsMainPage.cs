@@ -16,9 +16,9 @@ namespace PurposeColor.screens
         CustomLayout masterLayout;
         IProgressBar progressBar;
         StackLayout listContainer;
-        PurposeColorSubTitleBar subTitleBar;
         List<GemsPageInfo> gemsList;
         int listViewVislbleIndex;
+        GemsPageTitleBar mainTitleBar;
         public GemsMainPage()
         {
 
@@ -27,9 +27,9 @@ namespace PurposeColor.screens
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
 
-            PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Gems");
-            subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
+           // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+            mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
+           
             listContainer = new StackLayout();
             listContainer.WidthRequest = App.screenWidth;
 
@@ -42,7 +42,7 @@ namespace PurposeColor.screens
             gemsInfo1.SecondImage = "manali.jpg";
             gemsInfo1.FirstImage = "manali.jpg";
             gemsInfo1.MainTitle = "Goals and Dreams";
-            gemsInfo1.IsMainTitleVisible = true;
+            gemsInfo1.IsMainTitleVisible = false;
 
 
             GemsPageInfo gemsInfo2 = new GemsPageInfo();
@@ -75,16 +75,14 @@ namespace PurposeColor.screens
             gemsGoals.SecondDetailsInfo = "First and last experiement";
             gemsGoals.SecondImage = "manali.jpg";
             gemsGoals.FirstImage = "manali.jpg";
-            gemsGoals.MainTitle = "Goal Changer";
+            gemsGoals.MainTitle = "My Goals and Dreams";
             gemsGoals.IsMainTitleVisible = true;
 
 
             gemsList = new List<GemsPageInfo>();
             gemsList.Add( gemsInfo1 );
             gemsList.Add(gemsInfo2);
-            gemsList.Add(gemsInfo3);
             gemsList.Add(gemsGoals);
-            gemsList.Add(gemsInfo1);
             gemsList.Add(gemsInfo2);
             gemsList.Add(gemsInfo3);
             //gemsList.Add(gemsInfo);
@@ -94,7 +92,7 @@ namespace PurposeColor.screens
             mainListView.BackgroundColor = Constants.LIST_BG_COLOR;
             mainListView.ItemsSource = gemsList;
             mainListView.ItemTemplate = new DataTemplate(typeof(GemsListCellTemplate));
-            mainListView.RowHeight =(int) App.screenHeight * 40 / 100;
+            //mainListView.RowHeight =(int) App.screenHeight * 40 / 100;
             mainListView.HeightRequest = App.screenHeight;
             mainListView.HasUnevenRows = true;
             mainListView.Scroll = ScrollVisibleItems;
@@ -102,8 +100,8 @@ namespace PurposeColor.screens
 
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(listContainer, 0, 20);
+          //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+            masterLayout.AddChildToLayout(listContainer, 0, 10);
             Content = masterLayout;
         }
 
@@ -119,14 +117,22 @@ namespace PurposeColor.screens
 
         public void ScrollVisibleItems( int visbleIndex )
         {
-
+     
             if (visbleIndex >= 0 && visbleIndex < gemsList.Count && listViewVislbleIndex != visbleIndex)
             {
                 GemsPageInfo gems = gemsList[visbleIndex];
 
-                if( gems.IsMainTitleVisible )
+                /*if( gems.IsMainTitleVisible )
                 {
-                    subTitleBar.title.Text = gems.MainTitle;
+                    
+                }*/
+                if( visbleIndex < 2 )
+                {
+                    mainTitleBar.title.Text = "My Supporting Emotions";
+                }
+                else 
+                {
+                    mainTitleBar.title.Text = "My Goals and Dreams";
                 }
                
             }
@@ -151,7 +157,7 @@ namespace PurposeColor.screens
             headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 
             CustomLayout customLayout = new CustomLayout();
-            customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+            customLayout.BackgroundColor =  Color.FromRgb(244, 244, 244);
             double screenWidth = App.screenWidth;
             double screenHeight = App.screenHeight;
 
@@ -166,6 +172,7 @@ namespace PurposeColor.screens
            // mainTitle.HeightRequest = App.screenHeight * 5 / 100;
             mainTitle.TextOrientation = TextOrientation.Middle;
             mainTitle.SetBinding(CustomImageButton.IsVisibleProperty, "IsMainTitleVisible");
+            headerLayout.VerticalOptions = LayoutOptions.Center;
 
 
             Label subTitle = new Label();
@@ -174,8 +181,10 @@ namespace PurposeColor.screens
             subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             subTitle.XAlign = TextAlignment.Center;
             int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+            subTitle.VerticalOptions = LayoutOptions.Center;
             subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
             subTitle.WidthRequest = App.screenWidth * 90 / 100;
+            subTitle.HeightRequest = 40;
 
             Label firstDetailsInfo = new Label();
             firstDetailsInfo.SetBinding(Label.TextProperty, "TrimmedFirstDetailsInfo");
@@ -238,7 +247,7 @@ namespace PurposeColor.screens
             moreButton.TextColor = Color.Silver;
 
             customLayout.WidthRequest = screenWidth;
-            customLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 40, 7) / 100;
+            customLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 31, 7) / 100;
 
             
             StackLayout viewContainer = new StackLayout();

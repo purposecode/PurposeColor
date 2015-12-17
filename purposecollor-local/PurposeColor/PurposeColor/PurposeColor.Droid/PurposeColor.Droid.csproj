@@ -442,6 +442,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\line_seperate.png" />
     <AndroidResource Include="Resources\drawable-hdpi\line_seperate.png" />
     <AndroidResource Include="Resources\drawable\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

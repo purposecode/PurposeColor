@@ -48,6 +48,7 @@
     <Compile Include="CustomControls\CustomSlider.cs" />
     <Compile Include="CustomControls\CustomTitleBar.cs" />
     <Compile Include="CustomControls\GemsListView.cs" />
+    <Compile Include="CustomControls\GemsPageTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorBlueSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorTitleBar.cs" />

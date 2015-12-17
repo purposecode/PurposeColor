@@ -479,6 +479,7 @@ namespace PurposeColor
                 actionPickerButton.IsVisible = true;
                 selectedGoal = item;
 
+                selectedActions.Clear();
                 OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
 
             }

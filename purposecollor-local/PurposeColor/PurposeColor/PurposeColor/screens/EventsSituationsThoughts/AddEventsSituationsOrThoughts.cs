@@ -388,7 +388,7 @@ namespace PurposeColor.screens
             {
                 try
                 {
-                    
+					await ApplyAnimation( cameraInputStack );
                     StackLayout send = s as StackLayout;
                     MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                     chooser.ClassId = "mediachooser";
@@ -485,6 +485,7 @@ namespace PurposeColor.screens
             galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
             galleryInputStackTapRecognizer.Tapped += async (s, e) =>
             {
+				await ApplyAnimation( galleryInputStack );
                 StackLayout send = s as StackLayout;
                 MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                 chooser.ClassId = "mediachooser";
@@ -553,6 +554,7 @@ namespace PurposeColor.screens
             contactInputStack.GestureRecognizers.Add(contactsInputTapRecognizer);
             contactsInputTapRecognizer.Tapped += async (s, e) =>
             {
+				await ApplyAnimation( contactInputStack );
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 try
                 {
@@ -764,6 +766,14 @@ namespace PurposeColor.screens
             Content = masterLayout;
         }
 
+
+		private async Task<bool> ApplyAnimation( StackLayout layout )
+		{
+			await layout.TranslateTo(0, -30, 250, Easing.CubicOut);
+			await layout.TranslateTo(0, 0, 250, Easing.CubicOut);
+			return true;
+		}
+
         void OnLocationEditCompleted(object sender, EventArgs e)
         {
 			if (editLocationAndContactsStack.ClassId == "locationedit")
@@ -938,6 +948,7 @@ namespace PurposeColor.screens
 
         async void LocationInputTapRecognizer_Tapped(object sender, EventArgs e)
         {
+			await ApplyAnimation ( locationInputStack );
             App.nearByLocationsSource.Clear();
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             try

@@ -734,6 +734,10 @@ namespace PurposeColor.screens
             previewListView.SeparatorVisibility = SeparatorVisibility.None;
             previewListView.Opacity = 1;
             previewListView.ItemsSource = App.PreviewListSource;
+			previewListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) => 
+			{
+				previewListView.SelectedItem = null;
+			};
             listContainer.Children.Add(previewListView);
             masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 50 ));
             #endregion

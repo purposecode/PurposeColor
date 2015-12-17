@@ -161,7 +161,7 @@ namespace PurposeColor.screens
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                HeightRequest = 125,
+                HeightRequest = 100,
                 Placeholder = pageTitle,
                 BackgroundColor = Color.White
             };
@@ -249,7 +249,7 @@ namespace PurposeColor.screens
             locationInfo.TextColor = Constants.BLUE_BG_COLOR;
             locationInfo.BackgroundColor = Color.Transparent;
             locationInfo.FontSize = 12;
-            locationInfo.HeightRequest = 25;
+			locationInfo.HeightRequest = Device.OnPlatform( 15, 25, 25 );
             locationInfo.GestureRecognizers.Add(locationlabelTap);
             locationlabelTap.Tapped += OnEditLocationInfo;
 
@@ -296,7 +296,7 @@ namespace PurposeColor.screens
 			contactInfo.TextColor = Constants.BLUE_BG_COLOR;
 			contactInfo.BackgroundColor = Color.Transparent;
 			contactInfo.FontSize = 12;
-			contactInfo.HeightRequest = 25;
+			contactInfo.HeightRequest = Device.OnPlatform( 15, 25, 25 );
 			contactInfo.GestureRecognizers.Add (contactsLabelTap);
 			contactsLabelTap.Tapped += (object sender, EventArgs e) => 
 			{
@@ -388,7 +388,7 @@ namespace PurposeColor.screens
             {
                 try
                 {
-                    
+					await ApplyAnimation( cameraInputStack );
                     StackLayout send = s as StackLayout;
                     MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                     chooser.ClassId = "mediachooser";
@@ -485,6 +485,7 @@ namespace PurposeColor.screens
             galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
             galleryInputStackTapRecognizer.Tapped += async (s, e) =>
             {
+				await ApplyAnimation( galleryInputStack );
                 StackLayout send = s as StackLayout;
                 MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                 chooser.ClassId = "mediachooser";
@@ -553,6 +554,7 @@ namespace PurposeColor.screens
             contactInputStack.GestureRecognizers.Add(contactsInputTapRecognizer);
             contactsInputTapRecognizer.Tapped += async (s, e) =>
             {
+				await ApplyAnimation( contactInputStack );
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 try
                 {
@@ -730,6 +732,8 @@ namespace PurposeColor.screens
                 createEvent.BorderWidth = 0;
                 createEvent.BorderColor = Color.Transparent;
                 createEvent.Clicked += createEvent_Clicked;
+				if( Device.OS == TargetPlatform.iOS )
+				createEvent.TranslationY = -8;
                 textinputAndIconsHolder.Children.Add(createEvent);
 
             }
@@ -763,6 +767,14 @@ namespace PurposeColor.screens
 
             Content = masterLayout;
         }
+
+
+		private async Task<bool> ApplyAnimation( StackLayout layout )
+		{
+			await layout.TranslateTo(0, -30, 250, Easing.CubicOut);
+			await layout.TranslateTo(0, 0, 250, Easing.CubicOut);
+			return true;
+		}
 
         void OnLocationEditCompleted(object sender, EventArgs e)
         {
@@ -938,6 +950,7 @@ namespace PurposeColor.screens
 
         async void LocationInputTapRecognizer_Tapped(object sender, EventArgs e)
         {
+			await ApplyAnimation ( locationInputStack );
             App.nearByLocationsSource.Clear();
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             try

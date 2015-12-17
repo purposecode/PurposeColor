@@ -54,7 +54,8 @@ namespace PurposeColor.WinPhone
         {
             try
             {
-                fileName = string.Format(@"\Purposecode\Video{0}.mp4", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                //fileName = string.Format(@"\Purposecode\Video{0}.mp4", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                fileName = string.Format("Video{0}.mp4", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
                 if (captureSource == null)
                 {

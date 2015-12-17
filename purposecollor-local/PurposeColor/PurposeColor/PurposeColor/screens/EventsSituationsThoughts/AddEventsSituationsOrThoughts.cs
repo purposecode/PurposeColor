@@ -278,6 +278,11 @@ namespace PurposeColor.screens
 			editLocationAndContactsStack.Children.Add ( locAndContactsEntry );
 			editLocationAndContactsStack.Children.Add ( editLocationDoneButton );
 
+			if (Device.OS == TargetPlatform.iOS) 
+			{
+				editLocationAndContactsStack.TranslationY = -30;
+			}
+
             locLayout = new StackLayout();
             locLayout.Orientation = StackOrientation.Vertical;
             locLayout.BackgroundColor = Color.Transparent;

@@ -14,6 +14,7 @@ namespace PurposeColor.iOS.Dependency
 		Foundation.NSDictionary settings;
 		string audioFilePath;
 		public AVAudioPlayer player;
+		string fileName;
 
 		public AudioRecorder ()
 		{
@@ -23,7 +24,7 @@ namespace PurposeColor.iOS.Dependency
         {
             get
             {
-                return "";
+				return fileName;
             }
         }
 
@@ -51,7 +52,7 @@ namespace PurposeColor.iOS.Dependency
 					var test = ex.Message;
 				}
 
-				string fileName = string.Format ("Audio{0}.wav", DateTime.Now.ToString ("yyyyMMddHHmmss"));
+			    fileName = string.Format ("Audio{0}.wav", DateTime.Now.ToString ("yyyyMMddHHmmss"));
 			    audioFilePath = System.IO.Path.Combine (directoryname, fileName);
 
 				url = Foundation.NSUrl.FromFilename (audioFilePath);
@@ -98,6 +99,7 @@ namespace PurposeColor.iOS.Dependency
 			{
 				fs.CopyTo(memStream);
 			}
+		
 			return memStream;
 		}
 

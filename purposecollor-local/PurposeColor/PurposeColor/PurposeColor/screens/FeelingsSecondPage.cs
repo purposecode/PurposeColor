@@ -178,6 +178,7 @@ namespace PurposeColor
             actionPreviewListView = new ListView();
             actionPreviewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             actionPreviewListView.ItemTemplate = new DataTemplate(typeof(ActionPreviewCellItem));
+            ActionPreviewCellItem.mainPage = this;
             actionPreviewListView.SeparatorVisibility = SeparatorVisibility.None;
             actionPreviewListView.Opacity = 1;
             actionPreviewListView.ItemsSource = actionPreviewListSource;
@@ -465,6 +466,16 @@ namespace PurposeColor
             }
         }
 
+
+        public async void ShowAlert(string messege, PreviewItem toDelete)
+        {
+            var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
+            if (alert)
+            {
+                FeelingsSecondPage.actionPreviewListSource.Remove(toDelete);
+            }
+        }
+
         void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
@@ -543,6 +554,7 @@ namespace PurposeColor
         Label name = null;
         StackLayout divider = null;
         CustomImageButton deleteButton = null;
+        public static FeelingsSecondPage mainPage;
 
         public ActionPreviewCellItem()
         {
@@ -576,7 +588,7 @@ namespace PurposeColor
                        PreviewItem itemToDel = FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
                        if (itemToDel != null)
                        {
-                           FeelingsSecondPage.actionPreviewListSource.Remove(itemToDel);
+                           mainPage.ShowAlert("Are you sure you want to delete this item ?.", itemToDel);
                        }
                    }
                    catch (Exception ex)

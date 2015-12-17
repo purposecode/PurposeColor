@@ -64,6 +64,11 @@ namespace PurposeColor.screens
         StackLayout audioRecodeOnHolder = null;
         StackLayout audioRecodeOffHolder = null;
         Label locationInfo;
+        Entry locAndContactsEntry;
+        StackLayout editLocationAndContactsStack;
+        CustomImageButton editLocationDoneButton;
+		Label contactInfo;
+		StackLayout locLayout;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -237,18 +242,81 @@ namespace PurposeColor.screens
                 }
             };
 
+
+            TapGestureRecognizer locationlabelTap = new TapGestureRecognizer();
+
             locationInfo = new Label();
             locationInfo.TextColor = Constants.BLUE_BG_COLOR;
             locationInfo.BackgroundColor = Color.Transparent;
             locationInfo.FontSize = 12;
-            locationInfo.HeightRequest = 15;
+            locationInfo.HeightRequest = 25;
+            locationInfo.GestureRecognizers.Add(locationlabelTap);
+            locationlabelTap.Tapped += OnEditLocationInfo;
 
+			editLocationAndContactsStack = new StackLayout();
+			editLocationAndContactsStack.Padding = new Thickness(1, 1, 1, 1);
+			editLocationAndContactsStack.BackgroundColor = Color.FromRgb(30, 126, 210);
+			editLocationAndContactsStack.WidthRequest = App.screenWidth * 90 / 100;
+			editLocationAndContactsStack.IsVisible = false;
+			editLocationAndContactsStack.Orientation = StackOrientation.Horizontal;
+
+
+            locAndContactsEntry = new Entry();
+            locAndContactsEntry.TextColor = Color.Black;
+            locAndContactsEntry.BackgroundColor = Color.White;
+            locAndContactsEntry.VerticalOptions = LayoutOptions.Center;
+			locAndContactsEntry.WidthRequest = App.screenWidth  * 80 / 100;
+
+            editLocationDoneButton = new CustomImageButton();
+            editLocationDoneButton.VerticalOptions = LayoutOptions.Center;
+			editLocationDoneButton.ImageName = "icn_done.png";
+            editLocationDoneButton.HeightRequest = 25;
+			editLocationDoneButton.WidthRequest = 25;
+            editLocationDoneButton.Clicked += OnLocationEditCompleted;
+
+
+			editLocationAndContactsStack.Children.Add ( locAndContactsEntry );
+			editLocationAndContactsStack.Children.Add ( editLocationDoneButton );
+
+			if (Device.OS == TargetPlatform.iOS) 
+			{
+				editLocationAndContactsStack.TranslationY = -30;
+			}
+
+            locLayout = new StackLayout();
+            locLayout.Orientation = StackOrientation.Vertical;
+            locLayout.BackgroundColor = Color.Transparent;
+
+     
+
+            locLayout.Children.Add( locationInfo );
+
+			TapGestureRecognizer contactsLabelTap = new TapGestureRecognizer();
+		    contactInfo = new Label();
+			contactInfo.TextColor = Constants.BLUE_BG_COLOR;
+			contactInfo.BackgroundColor = Color.Transparent;
+			contactInfo.FontSize = 12;
+			contactInfo.HeightRequest = 25;
+			contactInfo.GestureRecognizers.Add (contactsLabelTap);
+			contactsLabelTap.Tapped += (object sender, EventArgs e) => 
+			{
+				editLocationAndContactsStack.ClassId = "contactedit";
+				locAndContactsEntry.Text = contactInfo.Text;
+				editLocationAndContactsStack.IsVisible = true;
+				contactInfo.IsVisible = false;
+				iconContainerGrid.IsVisible = false;
+
+			};
+
+			locLayout.IsVisible = false;
+			contactInfo.IsVisible = false;
 
             StackLayout entryAndLocContainer = new StackLayout();
             entryAndLocContainer.Orientation = StackOrientation.Vertical;
             entryAndLocContainer.BackgroundColor = Color.White;
             entryAndLocContainer.Children.Add( eventDescription );
-            entryAndLocContainer.Children.Add(locationInfo);
+			entryAndLocContainer.Children.Add(contactInfo);
+            entryAndLocContainer.Children.Add(locLayout);
 
             textInputContainer = new StackLayout
             {
@@ -628,19 +696,19 @@ namespace PurposeColor.screens
                 },
                 ColumnDefinitions = 
             {
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80) )/5, GridUnitType.Absolute) }, // icon container x = 3 //new ColumnDefinition { Width = GridLength.Auto },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80)) /5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
-                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/5, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80) )/4, GridUnitType.Absolute) }, // icon container x = 3 //new ColumnDefinition { Width = GridLength.Auto },
+                  //  new ColumnDefinition { Width = new GridLength(((screenWidth * .80)) /5, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
+                    new ColumnDefinition { Width = new GridLength(((screenWidth * .80))/4, GridUnitType.Absolute) },
             }
             };
 
             iconContainerGrid.Children.Add(galleryInputStack, 0, 0);
             iconContainerGrid.Children.Add(cameraInputStack, 1, 0);
-            iconContainerGrid.Children.Add(audioInputStack, 2, 0);
-            iconContainerGrid.Children.Add(locationInputStack, 3, 0);
-            iconContainerGrid.Children.Add(contactInputStack, 4, 0);
+          //  iconContainerGrid.Children.Add(audioInputStack, 2, 0);
+            iconContainerGrid.Children.Add(locationInputStack, 2, 0);
+            iconContainerGrid.Children.Add(contactInputStack, 3, 0);
 
             textinputAndIconsHolder = new StackLayout
             {
@@ -648,7 +716,7 @@ namespace PurposeColor.screens
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
                 Padding = 0,
-                Children = { textInputContainer, iconContainerGrid }
+				Children = { textInputContainer, iconContainerGrid, editLocationAndContactsStack }
             };
 
             Button createEvent = new Button();
@@ -676,6 +744,7 @@ namespace PurposeColor.screens
 
             previewListView = new ListView();
             previewListView.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+            PreviewListViewCellItem.addEvntObject = this;
             previewListView.ItemTemplate = new DataTemplate(typeof(PreviewListViewCellItem));
             previewListView.SeparatorVisibility = SeparatorVisibility.None;
             previewListView.Opacity = 1;
@@ -684,9 +753,38 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 50 ));
             #endregion
 
+			//masterLayout.AddChildToLayout(locationEditStack, 5, 30 );
             #endregion
 
             Content = masterLayout;
+        }
+
+        void OnLocationEditCompleted(object sender, EventArgs e)
+        {
+			if (editLocationAndContactsStack.ClassId == "locationedit")
+			{
+				locationInfo.Text = locAndContactsEntry.Text;
+				locationInfo.IsVisible = true;
+			}
+			else
+			{
+				contactInfo.Text = locAndContactsEntry.Text;
+				contactInfo.IsVisible = true;
+			}
+			editLocationAndContactsStack.IsVisible = false;
+			iconContainerGrid.IsVisible = true;
+        }
+
+
+
+        void OnEditLocationInfo(object sender, EventArgs e)
+		{
+			editLocationAndContactsStack.ClassId = "locationedit";
+			locAndContactsEntry.Text = locationInfo.Text;
+			editLocationAndContactsStack.IsVisible = true;
+			locationInfo.IsVisible = false;
+			iconContainerGrid.IsVisible = false;
+            
         }
 
         void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)
@@ -869,8 +967,8 @@ namespace PurposeColor.screens
                 ILocation loc = DependencyService.Get<ILocation>();
                 try
                 {
-                    await ServiceHelper.GetCurrentAddressToList(App.Lattitude, App.Longitude);
 
+                    await ServiceHelper.GetCurrentAddressToList(App.Lattitude, App.Longitude);
                     await ServiceHelper.GetNearByLocations( App.Lattitude, App.Longitude );
 
 
@@ -918,7 +1016,7 @@ namespace PurposeColor.screens
 
             locationInfo.Text = "";
             locationInfo.Text = "  @" + item.Name;
-
+			locLayout.IsVisible = true;
              View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
              masterLayout.Children.Remove(pickView);
              pickView = null;
@@ -931,27 +1029,41 @@ namespace PurposeColor.screens
             if (!string.IsNullOrEmpty(name))
             {
                 int nIndex = 0;
-                string preText = " with ";
+                string preText = "  With ";
                 selectedContact = name;
-                if (eventDescription.Text != null)
+				if (string.IsNullOrEmpty (contactInfo.Text))
                 {
-                    nIndex = eventDescription.Text.IndexOf(name);
-                    preText = eventDescription.Text.IndexOf("with") <= 0 ? " with " : ", ";
+					contactInfo.Text = preText;
                 }
 
-                if (nIndex <= 0)
+				if (contactInfo.Text != "  With ") {
+					contactInfo.Text = contactInfo.Text + "," + selectedContact;
+				} 
+				else 
                 {
-                    eventDescription.Text = eventDescription.Text + preText + name;
+					contactInfo.Text = contactInfo.Text +  selectedContact;
                 }
-                //App.ContactsArray = new List<string>();
+
+				if (contactInfo.Text.Length > 40) 
+				{
+					contactInfo.Text = contactInfo.Text.Substring(0, 40);
+					contactInfo.Text += "...";
+				}
+					
+				contactInfo.IsVisible = true;
                 App.ContactsArray.Add(name);
-                //App.ContactsArray.Add("Tom");
 
             }
 
             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
             masterLayout.Children.Remove(pickView);
             pickView = null;
+        }
+
+
+        public void DisplayAlert( string messege )
+        {
+            DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK);
         }
 
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
@@ -1211,6 +1323,19 @@ namespace PurposeColor.screens
             }
         }
 
+
+        public  async  void ShowAlert( string messege, PreviewItem toDelete )
+        {
+           var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete ?.", Constants.ALERT_OK, "Cancel");
+            if( alert  )
+            {
+                App.PreviewListSource.Remove(toDelete);
+                MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
+                if (media != null)
+                    App.MediaArray.Remove(media);
+            }
+        }
+
         public static void ReceiveVideoFromWindows(MemoryStream ms, string path)
         {
             //AddFileToMediaArray(ms, fileName, PurposeColor.Constants.MediaType.Video);
@@ -1286,6 +1411,9 @@ namespace PurposeColor.screens
             this.audioRecorder = null;
             eventTitle = null;
             this.iconContainerGrid = null;
+			this.locAndContactsEntry = null;
+			this.editLocationAndContactsStack = null;
+			this.editLocationDoneButton = null;
             GC.Collect();
         }
     }
@@ -1474,6 +1602,15 @@ namespace PurposeColor.screens
                         file.GetStream().CopyTo(ms);
                         ms.Position = 0;
 
+                        if (ms.Length > 15728640)
+                        {
+                            MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                            progres.HideProgressbar();
+                            ms = null;
+                            file = null;
+                            return;
+                        }
+
                         MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
                     }
 
@@ -1505,6 +1642,15 @@ namespace PurposeColor.screens
                     file.GetStream().CopyTo(ms);
                     ms.Position = 0;
 
+                    if (ms.Length > 15728640)
+                    {
+                        MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                        progres.HideProgressbar();
+                        ms = null;
+                        file = null;
+                        return;
+                    }
+
                     MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
 
                 }
@@ -1525,6 +1671,7 @@ namespace PurposeColor.screens
 
     public class PreviewListViewCellItem : ViewCell
     {
+        public static AddEventsSituationsOrThoughts addEvntObject;
         public PreviewListViewCellItem()
         {
             CustomLayout masterLayout = new CustomLayout();
@@ -1562,14 +1709,12 @@ namespace PurposeColor.screens
                 {
                     try
                     {
+                        
                         CustomImageButton button = sender as CustomImageButton;
                         PreviewItem itemToDel = App.PreviewListSource.FirstOrDefault(item => item.Name == button.ClassId);
                         if (itemToDel != null)
                         {
-                            App.PreviewListSource.Remove(itemToDel);
-                            MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == itemToDel.Name);
-                            if (media != null)
-                                App.MediaArray.Remove(media);
+                            addEvntObject.ShowAlert("Are you sure you want to delete this item ?", itemToDel);
                         }
                     }
                     catch (Exception ex)

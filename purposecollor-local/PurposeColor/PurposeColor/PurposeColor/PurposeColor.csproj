@@ -47,6 +47,8 @@
     <Compile Include="CustomControls\CustomPicker.cs" />
     <Compile Include="CustomControls\CustomSlider.cs" />
     <Compile Include="CustomControls\CustomTitleBar.cs" />
+    <Compile Include="CustomControls\GemsListView.cs" />
+    <Compile Include="CustomControls\GemsPageTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorBlueSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorTitleBar.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="screens\ChangePassword.cs" />
+    <Compile Include="screens\GemsMainPage.cs" />
     <Compile Include="screens\GemsPage.cs" />
     <Compile Include="screens\GraphPage.cs" />
     <Compile Include="screens\LogInPage.cs" />

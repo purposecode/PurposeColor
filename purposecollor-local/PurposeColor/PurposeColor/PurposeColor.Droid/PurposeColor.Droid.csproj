@@ -211,6 +211,7 @@
     <Compile Include="Dependency\AndroidReminderImpl.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Renderers\AndImageButtonRenderer.cs" />
+    <Compile Include="Renderers\AndroidGemsListViewRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomSliderRenderer.cs" />
@@ -431,6 +432,21 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\turn_off_mic.png" />
     <AndroidResource Include="Resources\drawable-hdpi\mic.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icn_attach.png" />
+    <AndroidResource Include="Resources\drawable\blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\blue_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable\line_seperate.png" />
+    <AndroidResource Include="Resources\drawable\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_icon.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\logo_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

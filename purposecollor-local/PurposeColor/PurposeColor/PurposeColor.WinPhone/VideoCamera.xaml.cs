@@ -54,7 +54,7 @@ namespace PurposeColor.WinPhone
         {
             try
             {
-                fileName = string.Format("Video{0}.mp4", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                fileName = string.Format(@"\Purposecode\Video{0}.mp4", DateTime.Now.ToString("yyyyMMddHHmmss"));
 
                 if (captureSource == null)
                 {
@@ -148,7 +148,7 @@ namespace PurposeColor.WinPhone
                     // Disconnect fileSink.
                     fileSink.CaptureSource = null;
                     fileSink.IsolatedStorageFileName = null;
-
+                    
                     // Set the button states and the message.
                     UpdateUI(ButtonState.Stopped, "Recording stopped...");
 
@@ -162,16 +162,16 @@ namespace PurposeColor.WinPhone
 
                     /////////////////////////////////////
 
-                    Windows.Storage.StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
-                    var dataFolder = local.CreateFolderAsync("Purposecolor", Windows.Storage.CreationCollisionOption.OpenIfExists);
-                    var audioFolder = dataFolder.CreateFolderAsync("Video", Windows.Storage.CreationCollisionOption.OpenIfExists);
-                    using (var audioFile = File.Create(audioFolder.Path + "\\" + fileName))
-                    {
-                        var dataBuffer = stream.GetBuffer();
-                        audioFile.Write(dataBuffer, 0, (int)stream.Length);
-                        audioFile.Flush();
-                        audioFile.Close();
-                    }
+                    //Windows.Storage.StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+                    //var dataFolder = local.CreateFolderAsync("Purposecolor", Windows.Storage.CreationCollisionOption.OpenIfExists);
+                    //var audioFolder = dataFolder.CreateFolderAsync("Video", Windows.Storage.CreationCollisionOption.OpenIfExists);
+                    //using (var audioFile = File.Create(audioFolder.Path + "\\" + fileName))
+                    //{
+                    //    var dataBuffer = stream.GetBuffer();
+                    //    audioFile.Write(dataBuffer, 0, (int)stream.Length);
+                    //    audioFile.Flush();
+                    //    audioFile.Close();
+                    //}
                     ///////////////////////////////////////
                     MemoryStream videoStream = new MemoryStream();
                     using (isoVideoFile)

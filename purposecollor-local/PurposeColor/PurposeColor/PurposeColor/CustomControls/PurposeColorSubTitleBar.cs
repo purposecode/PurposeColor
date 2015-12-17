@@ -16,7 +16,7 @@ namespace PurposeColor.CustomControls
         public TapGestureRecognizer BackButtonTapRecognizer;
         public TapGestureRecognizer NextButtonTapRecognizer;
         public CustomImageButton NextButton;
-        Label title;
+        public Label title;
 
         public PurposeColorSubTitleBar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true )
         {

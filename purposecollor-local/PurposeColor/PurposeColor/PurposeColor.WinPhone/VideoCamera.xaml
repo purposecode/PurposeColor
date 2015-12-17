@@ -1,0 +1,63 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="PurposeColor.WinPhone.VideoCamera"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Landscape" Orientation="Landscape"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <Canvas x:Name="LayoutRoot" Background="Transparent" Margin="10,10,0,0">
+
+        <!--Camera viewfinder >-->
+        <Rectangle 
+            x:Name="viewfinderRectangle"
+            Width="660" 
+            Height="420" 
+            HorizontalAlignment="Left" Canvas.Left="10" Canvas.Top="40"/>
+
+        <MediaElement 
+            x:Name="VideoPlayer" 
+            Width="708" 
+            Height="450"
+            AutoPlay="True" 
+            RenderTransformOrigin="0.5, 0.5" 
+            VerticalAlignment="Center" 
+            HorizontalAlignment="Center" 
+            Stretch="Fill" Canvas.Top="10" Canvas.Left="10"/>
+
+        <!--Used for debugging >-->
+        <TextBlock 
+            Height="40" 
+            HorizontalAlignment="Left"
+            Name="txtDebug" 
+            VerticalAlignment="Top"
+            Width="460"
+            FontSize="24" 
+            FontWeight="ExtraBold" Canvas.Left="126" Canvas.Top="374"/>
+        <Button Content="record" x:Name="StartRecording" Click="StartRecording_Click" Canvas.Left="10" Canvas.Top="10" ></Button>
+        <Button Content="stop" x:Name="StopPlaybackRecording" Click="StopPlaybackRecording_Click" Canvas.Left="126" Canvas.Top="10" ></Button>
+
+    </Canvas>
+
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True" x:Name="PhoneAppBar" Opacity="0.0">
+            -->
+    <!--<shell:ApplicationBarIconButton IconUri="/Assets/appbar.feature.video.rest.png" Text="record"  x:Name="StartRecording" Click="StartRecording_Click" />-->
+    <!--<shell:ApplicationBarIconButton IconUri="/Assets/appbar.stop.rest.png" Text="stop" x:Name="StopPlaybackRecording" Click="StopPlaybackRecording_Click"/>-->
+    <!--<shell:ApplicationBarIconButton IconUri="/Assets/appbar.transport.play.rest.png" Text="play" x:Name="StartPlayback" Click="StartPlayback_Click"  />
+            <shell:ApplicationBarIconButton IconUri="/Assets/appbar.transport.pause.rest.png" Text="pause" x:Name="PausePlayback" Click="PausePlayback_Click"/>-->
+    <!--
+
+
+
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+</phone:PhoneApplicationPage>

@@ -227,19 +227,18 @@ namespace PurposeColor
             masterPage = master;
 
             //  Title = "details";
-            //Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
-            int titlebarHeight = (int)App.screenHeight * 10 / 100;//(int)spec.ScreenHeight * 10 / 100;
-            int titlebarWidth = (int)App.screenWidth; //(int)spec.ScreenWidth;
+            int titlebarHeight = (int)App.screenHeight * 10 / 100;
+            int titlebarWidth = (int)App.screenWidth;
 
             CustomLayout masteLlayout = new CustomLayout();
-            masteLlayout.WidthRequest = (int)App.screenWidth;//(int)spec.ScreenWidth;
-            masteLlayout.HeightRequest = (int)App.screenHeight;//(int)spec.ScreenHeight;
+            masteLlayout.WidthRequest = (int)App.screenWidth;
+            masteLlayout.HeightRequest = (int)App.screenHeight;
 
     //        CustomTitleBar titleBar = new CustomTitleBar();
 
             StackLayout layout = new StackLayout();
-            layout.WidthRequest = (int)App.screenWidth;//(int)spec.ScreenWidth;
-            layout.HeightRequest = (int)App.screenHeight * 90 / 100; //(int)spec.ScreenHeight * 90 / 100;
+            layout.WidthRequest = (int)App.screenWidth;
+            layout.HeightRequest = (int)App.screenHeight * 90 / 100;
         
             masteLlayout.AddChildToLayout(layout, 0, 10);
 

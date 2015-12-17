@@ -27,11 +27,11 @@ namespace PurposeColor.screens
     {
         #region MEMBERS
 
-        CustomLayout masterLayout;
+        public static CustomLayout masterLayout;
         StackLayout TopTitleBar;
         PurposeColorBlueSubTitleBar subTitleBar;
-        CustomEditor eventDescription;
-        CustomEntry eventTitle;
+        public static CustomEditor eventDescription;
+        public static CustomEntry eventTitle;
         StackLayout textInputContainer;
         StackLayout audioInputStack;
         Image cameraInput;
@@ -54,8 +54,8 @@ namespace PurposeColor.screens
         string longitude;
         string currentAddress;
         string selectedContact;
-        StackLayout listContainer;
-        ListView previewListView;
+        public static StackLayout listContainer;
+        public static ListView previewListView;
         Label startDateLabel;
         Label endDateLabel;
         double screenHeight;
@@ -319,6 +319,21 @@ namespace PurposeColor.screens
             {
                 try
                 {
+                    
+                    StackLayout send = s as StackLayout;
+                    MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
+                    chooser.ClassId = "mediachooser";
+                    masterLayout.AddChildToLayout(chooser, 0, 0);
+                   
+                }
+                catch (System.Exception ex)
+                {
+                    DisplayAlert("Camera", ex.Message + " Please try again later", "ok");
+                }
+
+                /*
+                try
+                {
                     StackLayout send = s as StackLayout;
                     MediaSourceChooser chooser = new MediaSourceChooser(this, masterLayout, send.ClassId);
                     chooser.ClassId = "mediachooser";
@@ -328,6 +343,7 @@ namespace PurposeColor.screens
                 {
                     DisplayAlert("Camera", ex.Message + " Please try again later", "ok");
                 }
+                */
             };
 
             #endregion
@@ -1137,17 +1153,12 @@ namespace PurposeColor.screens
                     App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
                 }
 
-
                 imgType = imgType.Replace(".", "");
                 if (mediaType == Constants.MediaType.Image)
                 {
-
                     MemoryStream compressedStream = new MemoryStream();
                     IResize resize = DependencyService.Get<IResize>();
                     compressedStream = resize.CompessImage(50, ms);
-
-	
-
 
                     Byte[] inArray = compressedStream.ToArray();
                     Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
@@ -1200,14 +1211,66 @@ namespace PurposeColor.screens
             }
         }
 
+        public static void ReceiveVideoFromWindows(MemoryStream ms, string path)
+        {
+            //AddFileToMediaArray(ms, fileName, PurposeColor.Constants.MediaType.Video);
+
+            try
+            {
+                MediaPost mediaWeb = new MediaPost();
+                mediaWeb.event_details = string.IsNullOrWhiteSpace(eventDescription.Text) ? string.Empty : eventDescription.Text;
+                mediaWeb.event_title = string.IsNullOrWhiteSpace(eventTitle.Text) ? string.Empty : eventTitle.Text;
+                mediaWeb.user_id = 2;
+
+                string imgType = System.IO.Path.GetExtension(path);
+                string fileName = System.IO.Path.GetFileName(path);
+
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
+
+                imgType = imgType.Replace(".", "");
+                
+                
+                Byte[] inArray = ms.ToArray();
+                Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
+                Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                string test2 = new string(outArray);
+                App.ExtentionArray.Add(imgType);
+                MediaItem item = new MediaItem();
+                item.MediaString = test2;
+                item.Name = fileName;
+                App.MediaArray.Add(item);
+
+                inArray = null;
+                outArray = null;
+                test2 = null;
+                item = null;
+                GC.Collect();
+                
+                imgType = string.Empty;
+                fileName = string.Empty;
+
+                StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
+                masterLayout.Children.Remove(preview);
+                preview = null;
+                previewListView.ItemsSource = null;
+                previewListView.ItemsSource = App.PreviewListSource;
+                masterLayout.AddChildToLayout(listContainer, 5, 60);
+            }
+            catch (Exception ex)
+            {
+                //DisplayAlert(Constants.ALERT_TITLE, "Unable to add the media", Constants.ALERT_OK);
+                var test = ex.Message;
+            }
+        }
+
         public void Dispose()
         {
             subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
             subTitleBar.NextButtonTapRecognizer.Tapped -= NextButtonTapRecognizer_Tapped;
-            this.masterLayout = null;
+            masterLayout = null;
             this.TopTitleBar = null;
             this.subTitleBar = null;
-            this.eventDescription = null;
+            eventDescription = null;
             this.textInputContainer = null;
             this.audioInputStack = null;
             this.cameraInput = null;
@@ -1221,7 +1284,7 @@ namespace PurposeColor.screens
             this.contactInputStack = null;
             this.textinputAndIconsHolder = null;
             this.audioRecorder = null;
-            this.eventTitle = null;
+            eventTitle = null;
             this.iconContainerGrid = null;
             GC.Collect();
         }
@@ -1379,8 +1442,12 @@ namespace PurposeColor.screens
             {
                 try
                 {
-
-                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    if (Device.OS == TargetPlatform.WinPhone)
+                    {
+                        PurposeColor.interfaces.ICameraCapture camera = DependencyService.Get<PurposeColor.interfaces.ICameraCapture>();
+                        camera.RecodeVideo();
+                    }
+                    else if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                     {
 
                         if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)

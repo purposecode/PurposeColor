@@ -52,6 +52,7 @@
     <Compile Include="CustomControls\PurposeColorTitleBar.cs" />
     <Compile Include="CustomControls\RoundedButton.cs" />
     <Compile Include="Database\ApplicationSettings.cs" />
+    <Compile Include="interfaces\ICameraCapture.cs" />
     <Compile Include="interfaces\IContacts.cs" />
     <Compile Include="interfaces\IDBConnection.cs" />
     <Compile Include="CustomControls\ImageButton.cs" />

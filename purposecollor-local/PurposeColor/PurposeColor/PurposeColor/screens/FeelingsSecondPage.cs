@@ -480,6 +480,7 @@ namespace PurposeColor
                 selectedGoal = item;
 
                 selectedActions.Clear();
+				actionPreviewListSource.Clear();
                 OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
 
             }

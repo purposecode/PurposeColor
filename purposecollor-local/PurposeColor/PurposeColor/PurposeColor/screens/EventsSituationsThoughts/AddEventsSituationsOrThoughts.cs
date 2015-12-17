@@ -64,6 +64,9 @@ namespace PurposeColor.screens
         StackLayout audioRecodeOnHolder = null;
         StackLayout audioRecodeOffHolder = null;
         Label locationInfo;
+        Entry locEntry;
+        StackLayout locationEditStack;
+        CustomImageButton editLocationDoneButton;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -237,18 +240,57 @@ namespace PurposeColor.screens
                 }
             };
 
+
+            TapGestureRecognizer locationlabelTap = new TapGestureRecognizer();
+
             locationInfo = new Label();
             locationInfo.TextColor = Constants.BLUE_BG_COLOR;
             locationInfo.BackgroundColor = Color.Transparent;
             locationInfo.FontSize = 12;
-            locationInfo.HeightRequest = 15;
+            locationInfo.HeightRequest = 25;
+            locationInfo.GestureRecognizers.Add(locationlabelTap);
+            locationlabelTap.Tapped += OnEditLocationInfo;
+
+			locationEditStack = new StackLayout();
+			locationEditStack.Padding = new Thickness(1, 1, 1, 1);
+			locationEditStack.BackgroundColor = Color.FromRgb(30, 126, 210);
+			locationEditStack.WidthRequest = App.screenWidth * 90 / 100;
+			locationEditStack.IsVisible = false;
+			locationEditStack.Orientation = StackOrientation.Horizontal;
+
+
+            locEntry = new Entry();
+            locEntry.TextColor = Color.Black;
+            locEntry.BackgroundColor = Color.White;
+            locEntry.VerticalOptions = LayoutOptions.Center;
+			locEntry.WidthRequest = App.screenWidth  * 80 / 100;
+
+            editLocationDoneButton = new CustomImageButton();
+            editLocationDoneButton.VerticalOptions = LayoutOptions.Center;
+			editLocationDoneButton.ImageName = "icn_done.png";
+            editLocationDoneButton.HeightRequest = 25;
+			editLocationDoneButton.WidthRequest = 25;
+            editLocationDoneButton.Clicked += OnLocationEditCompleted;
+
+
+			locationEditStack.Children.Add ( locEntry );
+			locationEditStack.Children.Add ( editLocationDoneButton );
+
+            StackLayout locLayout = new StackLayout();
+            locLayout.Orientation = StackOrientation.Vertical;
+            locLayout.BackgroundColor = Color.Transparent;
+
+     
+
+            locLayout.Children.Add( locationInfo );
+			//locLayout.Children.Add(locationEditStack);
 
 
             StackLayout entryAndLocContainer = new StackLayout();
             entryAndLocContainer.Orientation = StackOrientation.Vertical;
             entryAndLocContainer.BackgroundColor = Color.White;
             entryAndLocContainer.Children.Add( eventDescription );
-            entryAndLocContainer.Children.Add(locationInfo);
+            entryAndLocContainer.Children.Add(locLayout);
 
             textInputContainer = new StackLayout
             {
@@ -632,7 +674,7 @@ namespace PurposeColor.screens
                 HorizontalOptions = LayoutOptions.Center,
                 Spacing = 0,
                 Padding = 0,
-                Children = { textInputContainer, iconContainerGrid }
+				Children = { textInputContainer, iconContainerGrid, locationEditStack }
             };
 
             Button createEvent = new Button();
@@ -668,9 +710,29 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(listContainer, 5, Device.OnPlatform( 63, 63, 50 ));
             #endregion
 
+			//masterLayout.AddChildToLayout(locationEditStack, 5, 30 );
             #endregion
 
             Content = masterLayout;
+        }
+
+        void OnLocationEditCompleted(object sender, EventArgs e)
+        {
+			locationInfo.Text = locEntry.Text;
+			locationInfo.IsVisible = true;
+			locationEditStack.IsVisible = false;
+			iconContainerGrid.IsVisible = true;
+        }
+
+
+
+        void OnEditLocationInfo(object sender, EventArgs e)
+		{
+			locEntry.Text = locationInfo.Text;
+			locationEditStack.IsVisible = true;
+			locationInfo.IsVisible = false;
+			iconContainerGrid.IsVisible = false;
+            
         }
 
         void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)
@@ -853,8 +915,8 @@ namespace PurposeColor.screens
                 ILocation loc = DependencyService.Get<ILocation>();
                 try
                 {
-                    await ServiceHelper.GetCurrentAddressToList(App.Lattitude, App.Longitude);
 
+                    await ServiceHelper.GetCurrentAddressToList(App.Lattitude, App.Longitude);
                     await ServiceHelper.GetNearByLocations( App.Lattitude, App.Longitude );
 
 
@@ -1229,6 +1291,9 @@ namespace PurposeColor.screens
             this.audioRecorder = null;
             this.eventTitle = null;
             this.iconContainerGrid = null;
+			this.locEntry = null;
+			this.locationEditStack = null;
+			this.editLocationDoneButton = null;
             GC.Collect();
         }
     }

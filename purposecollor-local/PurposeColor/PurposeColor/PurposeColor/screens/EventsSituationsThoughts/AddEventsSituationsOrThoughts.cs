@@ -298,7 +298,7 @@ namespace PurposeColor.screens
 			contactInfo.FontSize = 12;
 			contactInfo.HeightRequest = Device.OnPlatform( 15, 25, 25 );
 			contactInfo.GestureRecognizers.Add (contactsLabelTap);
-			contactsLabelTap.Tapped += (object sender, EventArgs e) => 
+			contactsLabelTap.Tapped += async (object sender, EventArgs e) => 
 			{
 				editLocationAndContactsStack.ClassId = "contactedit";
 				locAndContactsEntry.Text = contactInfo.Text;
@@ -306,6 +306,9 @@ namespace PurposeColor.screens
 				contactInfo.IsVisible = false;
 				iconContainerGrid.IsVisible = false;
                 locationInfo.IsVisible = true;
+
+                await editLocationAndContactsStack.TranslateTo(100, 0, 300, Easing.SinInOut);
+                await editLocationAndContactsStack.TranslateTo(0, 0, 300, Easing.SinIn);
 
 			};
 
@@ -794,14 +797,18 @@ namespace PurposeColor.screens
 
 
 
-        void OnEditLocationInfo(object sender, EventArgs e)
+        async void OnEditLocationInfo(object sender, EventArgs e)
 		{
+
 			editLocationAndContactsStack.ClassId = "locationedit";
 			locAndContactsEntry.Text = locationInfo.Text;
 			editLocationAndContactsStack.IsVisible = true;
 			locationInfo.IsVisible = false;
 			iconContainerGrid.IsVisible = false;
             contactInfo.IsVisible = true;
+
+            await editLocationAndContactsStack.TranslateTo(100, 0, 300, Easing.SinInOut);
+            await editLocationAndContactsStack.TranslateTo(0, 0, 300, Easing.SinIn);
         }
 
         void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)

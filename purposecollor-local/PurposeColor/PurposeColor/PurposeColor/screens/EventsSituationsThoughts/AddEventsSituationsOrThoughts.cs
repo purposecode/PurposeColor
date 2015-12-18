@@ -1024,28 +1024,17 @@ namespace PurposeColor.screens
 
         void OnLocationListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            CustomListViewItem item =(CustomListViewItem) e.SelectedItem;
-
-          /*  if (item != null && eventDescription.Text != null && eventDescription.Text.Contains(currentAddress))
-             {
-                 eventDescription.Text = eventDescription.Text.Replace(currentAddress, "");
-             }
-
-            string formattedString = eventDescription.Text;
-            if( formattedString != null )
-            {
-                eventDescription.Text.Replace("@", "");
-            }
-            eventDescription.Text = formattedString + item.Name;
-
-             currentAddress =  item.Name;*/
+            CustomListViewItem item = (CustomListViewItem)e.SelectedItem;
 
             locationInfo.Text = "";
-            locationInfo.Text = "  @" + item.Name;
-			locLayout.IsVisible = true;
-             View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-             masterLayout.Children.Remove(pickView);
-             pickView = null;
+            var s = new FormattedString();
+            s.Spans.Add(new Span { Text = "   - at ", ForegroundColor = Color.Black });
+            s.Spans.Add(new Span { Text = item.Name });
+            locationInfo.FormattedText = s;
+            locLayout.IsVisible = true;
+            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+            masterLayout.Children.Remove(pickView);
+            pickView = null;
         }
 
         private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)

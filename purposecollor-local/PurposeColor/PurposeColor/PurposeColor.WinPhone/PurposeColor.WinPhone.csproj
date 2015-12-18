@@ -169,6 +169,7 @@
     <Content Include="Assets\back_arrow.png" />
     <Content Include="Assets\bckarow.png" />
     <Content Include="Assets\bg_top.png" />
+    <Content Include="Assets\blue_bg.png" />
     <Content Include="Assets\circle.png" />
     <Content Include="Assets\comunity_menu_icon.png" />
     <Content Include="Assets\delete_button.png" />

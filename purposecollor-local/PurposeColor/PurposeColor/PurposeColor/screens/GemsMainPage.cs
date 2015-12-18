@@ -117,7 +117,7 @@ namespace PurposeColor.screens
 
                 StackLayout headerLayout = new StackLayout();
                 headerLayout.Orientation = StackOrientation.Vertical;
-				headerLayout.BackgroundColor = Color.Red;// Color.FromRgb(244, 244, 244);
+				headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 
                 CustomLayout customLayout = new CustomLayout();
                 customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
@@ -127,13 +127,14 @@ namespace PurposeColor.screens
                 CustomImageButton mainTitle = new CustomImageButton();
                 //  mainTitle.IsEnabled = false;
                 mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-                mainTitle.ImageName = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//top_bg.png");
+                mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
                 mainTitle.Text = "Main Title  -- " + index.ToString();
                 mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = 12;
+                mainTitle.FontSize = Device.OnPlatform( 12, 12, 18 );
                 mainTitle.WidthRequest = App.screenWidth;
                 mainTitle.TextOrientation = TextOrientation.Middle;
-                headerLayout.VerticalOptions = LayoutOptions.Center;
+                headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
+                mainTitle.HeightRequest = 80;
 
 
                 Label subTitle = new Label();
@@ -155,8 +156,8 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? 17 : 15;
-                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform( 17, 17, 13 ) : 15;
+                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
                 Label firstDateInfo = new Label();
@@ -164,13 +165,13 @@ namespace PurposeColor.screens
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int detailsFontSize = (App.screenDensity > 1.5) ? 15 : 12;
-                firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 15, 13) : 12;
+                firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 
                 Image firstEmotionsImage = new Image();
-                firstEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform( 25, 25, 20 ) / 100;
                 firstEmotionsImage.Source =  Device.OnPlatform("manali.jpg","manali.jpg" , "//Assets//manali.jpg");
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
@@ -183,24 +184,24 @@ namespace PurposeColor.screens
                 secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 secondDetailsInfo.HeightRequest = 45;
-                secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
+                secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
                 Label secondDateInfo = new Label();
                 secondDateInfo.Text = "second date info";
                 secondDateInfo.TextColor = Color.Black;
                 secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
+                secondDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 
                 Image secondEmotionsImage = new Image();
-                secondEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 secondEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
 
 
                 Button moreButton = new Button();
-                moreButton.BackgroundColor = Color.Transparent;
+               // moreButton.BackgroundColor = Color.Red;
                 moreButton.BorderColor = Color.Transparent;
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "more";
@@ -233,14 +234,14 @@ namespace PurposeColor.screens
 
 				customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform( -5, 0, 0 ));
 				customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform( -3 ,2 ,2 ));
-				customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform( 4, 9, 9 ));
+				customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform( 4, 9, 5 ));
 				customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform( -5, 0, 0 ));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
-				customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform( 10, 15, 15 ));
-				customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform( 17, 22, 22 ));
-				customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform( 8, 13, 13 ));
-				customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform( 25, 25, 25 ));
+				customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform( 10, 15, 11 ));
+				customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform( 17, 22, 15 ));
+				customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform( 8, 13, 10 ));
+				customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform( 25, 25, 19 ));
 
                 masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);

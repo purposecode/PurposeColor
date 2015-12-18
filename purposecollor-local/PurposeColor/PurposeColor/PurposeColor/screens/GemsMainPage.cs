@@ -2,6 +2,7 @@
 using PurposeColor.CustomControls;
 using PurposeColor.interfaces;
 using PurposeColor.Model;
+using PurposeColor.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace PurposeColor.screens
         int listViewVislbleIndex;
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
+        StackLayout masterStack;
         public GemsMainPage()
         {
 
@@ -28,87 +30,47 @@ namespace PurposeColor.screens
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
 
+
+            this.Appearing += OnAppearing;
            // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
            
-            listContainer = new StackLayout();
-            listContainer.WidthRequest = App.screenWidth;
-
-            GemsPageInfo gemsInfo1 = new GemsPageInfo();
-            gemsInfo1.SubTitle = "This is sub Title";
-            gemsInfo1.FirstDateInfo = "2015 jan 30";
-            gemsInfo1.FirstDetailsInfo = "This is first details info. am i right ?";
-            gemsInfo1.SecondDateInfo = "2015 ottober 31";
-            gemsInfo1.SecondDetailsInfo = "i believe in omens and that should act on time";
-            gemsInfo1.SecondImage = "manali.jpg";
-            gemsInfo1.FirstImage = "manali.jpg";
-            gemsInfo1.MainTitle = "Goals and Dreams";
-            gemsInfo1.IsMainTitleVisible = false;
-
-
-            GemsPageInfo gemsInfo2 = new GemsPageInfo();
-            gemsInfo2.SubTitle = "Mixed";
-            gemsInfo2.FirstDateInfo = "2014 December  25";
-            gemsInfo2.FirstDetailsInfo = "travelled more than 55 km in side seat";
-            gemsInfo2.SecondDateInfo = "2014 December 26";
-            gemsInfo2.SecondDetailsInfo = "It was a merry xmas this year";
-            gemsInfo2.SecondImage = "manali.jpg";
-            gemsInfo2.FirstImage = "manali.jpg";
-            gemsInfo2.IsMainTitleVisible = false;
-
-
-            GemsPageInfo gemsInfo3 = new GemsPageInfo();
-            gemsInfo3.SubTitle = "Emotion 3";
-            gemsInfo3.FirstDateInfo = "2015 october 31";
-            gemsInfo3.FirstDetailsInfo = "had a happy moment";
-            gemsInfo3.SecondDateInfo = "2015 April 19";
-            gemsInfo3.SecondDetailsInfo = "First and last experiement";
-            gemsInfo3.SecondImage = "manali.jpg";
-            gemsInfo3.FirstImage = "manali.jpg";
-            gemsInfo3.IsMainTitleVisible = false;
-
-
-            GemsPageInfo gemsGoals = new GemsPageInfo();
-            gemsGoals.SubTitle = "Emotion 3";
-            gemsGoals.FirstDateInfo = "2015 october 31";
-            gemsGoals.FirstDetailsInfo = "had a happy moment";
-            gemsGoals.SecondDateInfo = "2015 April 19";
-            gemsGoals.SecondDetailsInfo = "First and last experiement";
-            gemsGoals.SecondImage = "manali.jpg";
-            gemsGoals.FirstImage = "manali.jpg";
-            gemsGoals.MainTitle = "My Goals and Dreams";
-            gemsGoals.IsMainTitleVisible = true;
-
-
-            gemsList = new List<GemsPageInfo>();
-            gemsList.Add( gemsInfo1 );
-            gemsList.Add(gemsInfo2);
-            gemsList.Add(gemsGoals);
-            gemsList.Add(gemsInfo2);
-            gemsList.Add(gemsInfo3);
-            //gemsList.Add(gemsInfo);
-
-
-          /*  GemsListView mainListView = new GemsListView();
-            mainListView.BackgroundColor = Constants.LIST_BG_COLOR;
-            mainListView.ItemsSource = gemsList;
-            mainListView.ItemTemplate = new DataTemplate(typeof(GemsListCellTemplate));
-            //mainListView.RowHeight =(int) App.screenHeight * 40 / 100;
-            mainListView.HeightRequest = App.screenHeight;
-            mainListView.HasUnevenRows = true;
-            mainListView.Scroll = ScrollVisibleItems;
-            listContainer.Children.Add( mainListView );*/
 
 
             masterScroll = new ScrollView();
             masterScroll.WidthRequest = App.screenWidth;
             masterScroll.HeightRequest = App.screenHeight * 85 / 100;
 
-            StackLayout masterStack = new StackLayout();
+            masterStack = new StackLayout();
             masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.Transparent;
 
-            for( int index = 0; index < 4; index++ )
+          
+        }
+
+        async void OnAppearing(object sender, EventArgs e)
+        {
+            IProgressBar progress = DependencyService.Get<IProgressBar>();
+            progress.ShowProgressbar( "Loading gems.." );
+            var gemsEmotions = await ServiceHelper.GetAllSupportingEmotions();
+            if( gemsEmotions == null )
+            {
+                var success = await DisplayAlert( Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY );
+                if (!success)
+                    OnAppearing(sender, EventArgs.Empty);
+                else
+                    return;
+            }
+
+            List<GemsEmotionsDetails> emotionList = new List<GemsEmotionsDetails>();
+            if( gemsEmotions.resultarray != null && gemsEmotions.resultarray.Count > 1 )
+            {
+                emotionList.Add(gemsEmotions.resultarray[0]);
+                emotionList.Add(gemsEmotions.resultarray[1]);
+            }
+
+
+            foreach (var item in emotionList)
             {
                 StackLayout cellMasterLayout = new StackLayout();
                 cellMasterLayout.Orientation = StackOrientation.Vertical;
@@ -117,7 +79,7 @@ namespace PurposeColor.screens
 
                 StackLayout headerLayout = new StackLayout();
                 headerLayout.Orientation = StackOrientation.Vertical;
-				headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 
                 CustomLayout customLayout = new CustomLayout();
                 customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
@@ -128,9 +90,9 @@ namespace PurposeColor.screens
                 //  mainTitle.IsEnabled = false;
                 mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
                 mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                mainTitle.Text = "Main Title  -- " + index.ToString();
+                mainTitle.Text = item.emotion_title;
                 mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = Device.OnPlatform( 12, 12, 18 );
+                mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
                 mainTitle.WidthRequest = App.screenWidth;
                 mainTitle.TextOrientation = TextOrientation.Middle;
                 headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
@@ -146,8 +108,8 @@ namespace PurposeColor.screens
                 subTitle.VerticalOptions = LayoutOptions.Center;
                 subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
                 subTitle.WidthRequest = App.screenWidth * 90 / 100;
-				headerLayout.HorizontalOptions = LayoutOptions.Center;
-				subTitle.HeightRequest = Device.OnPlatform( 40, 40, 30 );
+                headerLayout.HorizontalOptions = LayoutOptions.Center;
+                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
                 Label firstDetailsInfo = new Label();
                 firstDetailsInfo.Text = "First Details Info";
@@ -156,7 +118,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform( 17, 17, 13 ) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -171,8 +133,8 @@ namespace PurposeColor.screens
 
                 Image firstEmotionsImage = new Image();
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform( 25, 25, 20 ) / 100;
-                firstEmotionsImage.Source =  Device.OnPlatform("manali.jpg","manali.jpg" , "//Assets//manali.jpg");
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                firstEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -201,7 +163,7 @@ namespace PurposeColor.screens
 
 
                 Button moreButton = new Button();
-               // moreButton.BackgroundColor = Color.Red;
+                moreButton.BackgroundColor = Color.Transparent;
                 moreButton.BorderColor = Color.Transparent;
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "more";
@@ -232,21 +194,21 @@ namespace PurposeColor.screens
                 headerLayout.Children.Add(subTitle);
 
 
-				customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform( -5, 0, 0 ));
-				customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform( -3 ,2 ,2 ));
-				customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform( 4, 9, 5 ));
-				customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform( -5, 0, 0 ));
+                customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
+                customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
+                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 5));
+                customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
-				customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform( 10, 15, 11 ));
-				customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform( 17, 22, 15 ));
-				customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform( 8, 13, 10 ));
-				customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform( 25, 25, 19 ));
+                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
+                customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
+                customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));
 
                 masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);
 
-               // masterStack.Children.Add( cellMasterLayout );
+                // masterStack.Children.Add( cellMasterLayout );
             }
 
 
@@ -256,9 +218,12 @@ namespace PurposeColor.screens
             masterScroll.Content = masterStack;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-          //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 0, 10);
             Content = masterLayout;
+
+
+            progress.HideProgressbar();
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

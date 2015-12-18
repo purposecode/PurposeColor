@@ -871,5 +871,50 @@ namespace PurposeColor.Service
                 return false;
             }
         }
+
+
+        public static async Task<GemsEmotionsObject> GetAllSupportingEmotions()
+        {
+            try
+            {
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    return null;
+                }
+
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return null;
+                }
+
+                var client = new System.Net.Http.HttpClient();
+
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+                string uriString = "api.php?action=getallsupportingemotion&user_id=" + user.UserId.ToString();
+
+                var response = await client.GetAsync(uriString);
+
+                var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+                var rootobject = JsonConvert.DeserializeObject<GemsEmotionsObject>(actionsJson);
+                if (rootobject != null && rootobject.resultarray != null)
+                {
+                    foreach (var item in rootobject.resultarray)
+                    {
+                        CustomListViewItem listItem = new CustomListViewItem();
+                    }
+                }
+                return rootobject;;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+        }
     }
 }

@@ -119,21 +119,20 @@ namespace PurposeColor.screens
         {
             if (listView.SelectedItem == null)
                 return;
-            DisplayAlert("Yet to implement", "Functionality yet to be implemented.", "OK");
-            listView.SelectedItem = null;
-            return;
+
 
             MenuItems selItem = e.SelectedItem as MenuItems;
 
-            if ("EMOTIONAL AWARENESS" == selItem.Name)
+            if ("Emotional Awareness" == selItem.Name)
             {
 
                 App.masterPage.IsPresented = false;
                 App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
             }
-            else if ("GEMs (Goal Enabling Materials)" == selItem.Name)
+            else if ("Goals Enabling Materials" == selItem.Name)
             {
-
+                App.masterPage.IsPresented = false;
+                App.masterPage.Detail = new NavigationPage(new GemsMainPage());
             }
             else if ("GOALS & DREAMS" == selItem.Name)
             {

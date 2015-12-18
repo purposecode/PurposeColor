@@ -322,8 +322,10 @@ namespace PurposeColor
         {
             try
             {
-				await emotionalPickerButton.TranslateTo( 50, 0, 500, Easing.BounceOut );
-				await emotionalPickerButton.TranslateTo( 0,0, 500, Easing.BounceOut );
+
+                await emotionalPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await emotionalPickerButton.ScaleTo(1, 100, Easing.Linear);
+
 
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
                 CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 55 ), Constants.SELECT_EMOTIONS, true, true);// 65
@@ -354,8 +356,8 @@ namespace PurposeColor
         {
             try
             {
-				await eventPickerButton.TranslateTo( 50, 0, 500, Easing.BounceOut );
-				await eventPickerButton.TranslateTo( 0,0, 500, Easing.BounceOut );
+                await eventPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await eventPickerButton.ScaleTo(1, 100, Easing.Linear);
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEventsList(), 45, Constants.ADD_EVENTS, true, true);
                 ePicker.WidthRequest = screenWidth;

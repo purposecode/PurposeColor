@@ -323,6 +323,10 @@ namespace PurposeColor
             try
             {
 
+                await emotionalPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await emotionalPickerButton.ScaleTo(1, 100, Easing.Linear);
+
+
                 List<CustomListViewItem> pickerSource = App.emotionsListSource.Where(toAdd => toAdd.SliderValue == slider.CurrentValue).ToList();
                 CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, Device.OnPlatform( 65, 65, 55 ), Constants.SELECT_EMOTIONS, true, true);// 65
                 ePicker.WidthRequest = screenWidth;
@@ -348,10 +352,13 @@ namespace PurposeColor
             }
         }
 
-        public void OnEventPickerButtonClicked(object sender, System.EventArgs e)
+        public async void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
+                await eventPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await eventPickerButton.ScaleTo(1, 100, Easing.Linear);
+
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEventsList(), 45, Constants.ADD_EVENTS, true, true);
                 ePicker.WidthRequest = screenWidth;
                 ePicker.HeightRequest = screenHeight;
@@ -396,7 +403,6 @@ namespace PurposeColor
         {
             try
             {
-
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
                 eventPickerButton.Text = item.Name;
                 eventPickerButton.TextColor = Color.Black;

@@ -68,6 +68,7 @@
     <Compile Include="Model\Events.cs" />
     <Compile Include="Model\GEMCategory.cs" />
     <Compile Include="Model\CustomeGraphModel.cs" />
+    <Compile Include="Model\Gems.cs" />
     <Compile Include="Model\Goals.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Media.cs" />

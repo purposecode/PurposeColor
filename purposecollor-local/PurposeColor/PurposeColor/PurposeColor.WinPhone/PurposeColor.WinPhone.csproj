@@ -170,6 +170,7 @@
     <Content Include="Assets\back_arrow.png" />
     <Content Include="Assets\bckarow.png" />
     <Content Include="Assets\bg_top.png" />
+    <Content Include="Assets\blue_bg.png" />
     <Content Include="Assets\circle.png" />
     <Content Include="Assets\comunity_menu_icon.png" />
     <Content Include="Assets\delete_button.png" />
@@ -392,8 +393,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
-      <Name>SQLite for Windows Phone</Name>
+    <SDKReference Include="SQLite.WP80, Version=3.9.2">
+      <Name>SQLite for Windows Phone %28SQLite.WP80, Version=3.9.2%29</Name>
     </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

@@ -375,10 +375,12 @@ namespace PurposeColor
             Navigation.PushAsync(new GraphPage());
         }
 
-        void OnActionPickerButtonClicked(object sender, System.EventArgs e)
+        async void OnActionPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
+                await actionPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await actionPickerButton.ScaleTo(1, 100, Easing.Linear);
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
                 ePicker.WidthRequest = screenWidth;
@@ -400,10 +402,12 @@ namespace PurposeColor
 
         }
 
-        void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
+        async void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
+                await goalsAndDreamsPickerButton.ScaleTo(1.5, 100, Easing.Linear);
+                await goalsAndDreamsPickerButton.ScaleTo(1, 100, Easing.Linear);
 
                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetGoalsList(), 35, Constants.ADD_GOALS, true, true);
                 ePicker.WidthRequest = screenWidth;

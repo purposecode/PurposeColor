@@ -69,6 +69,7 @@ namespace PurposeColor.screens
         CustomImageButton editLocationDoneButton;
 		Label contactInfo;
 		StackLayout locLayout;
+        CustomPicker ePicker;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -1331,6 +1332,7 @@ namespace PurposeColor.screens
                 masterLayout.Children.Remove(preview);
                 preview = null;
                 previewListView.ItemsSource = null;
+               
                 previewListView.ItemsSource = App.PreviewListSource;
                 masterLayout.AddChildToLayout(listContainer, 5, 60);
             }
@@ -1387,8 +1389,6 @@ namespace PurposeColor.screens
                 outArray = null;
                 test2 = null;
                 item = null;
-                GC.Collect();
-                
                 imgType = string.Empty;
                 fileName = string.Empty;
 
@@ -1398,10 +1398,12 @@ namespace PurposeColor.screens
                 previewListView.ItemsSource = null;
                 previewListView.ItemsSource = App.PreviewListSource;
                 masterLayout.AddChildToLayout(listContainer, 5, 60);
+
+
+                GC.Collect();
             }
             catch (Exception ex)
             {
-                //DisplayAlert(Constants.ALERT_TITLE, "Unable to add the media", Constants.ALERT_OK);
                 var test = ex.Message;
             }
         }
@@ -1533,6 +1535,7 @@ namespace PurposeColor.screens
                 catch (Exception ex)
                 {
                     var test = ex.Message;
+                    progres.HideProgressbar();
                 }
 
             }
@@ -1566,8 +1569,9 @@ namespace PurposeColor.screens
                 catch (Exception ex)
                 {
                     var test = ex.Message;
+                    progres.HideProgressbar();
                 }
-                progres.HideProgressbar();
+                
             }
 
 
@@ -1626,6 +1630,7 @@ namespace PurposeColor.screens
                             progres.HideProgressbar();
                             ms = null;
                             file = null;
+                            GC.Collect();
                             return;
                         }
 
@@ -1643,33 +1648,106 @@ namespace PurposeColor.screens
             {
                 try
                 {
-                    if (!CrossMedia.Current.IsPickVideoSupported)
+                    if (Device.OS == TargetPlatform.WinPhone)
+                    {
+                        //https://social.msdn.microsoft.com/Forums/windowsapps/en-US/7e4492dc-d8f3-4dc5-8055-625352aaa8b6/fileopenpicker-class-on-wp8
+                        // We do not currently support choosing files other than photos or choosing files from other Store apps
+
+                        // list the video folder content in a list view.
+                        // http://www.c-sharpcorner.com/UploadFile/2b876a/how-to-use-folders-and-files-in-windows-phone-8/
+
+                        PurposeColor.interfaces.IFileBrowser fileBrowser = DependencyService.Get<PurposeColor.interfaces.IFileBrowser>();
+                        List<String> files = await fileBrowser.GetVideoFileList();
+                        //fileBrowser = null; // so the the memory can be released.
+
+                        if (files == null || files.Count < 1)
+                        {
+                            //progres.HideProgressbar();
+                            // should hide the DataTemplateSelector so don't return from here.'
+                            MasterObject.DisplayAlert("Video files not accessible");
+                        }
+                        else
+                        {
+                            // display the file names in custom picker, and get the file once the user taps on any of the file name.
+                            View fileView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
+                            if (fileView != null)
+                            {
+                                PageContainer.Children.Remove(fileView);
+                                fileView = null;
+                            }
+                            
+                            List<CustomListViewItem> customList = new List<CustomListViewItem>();
+                            foreach (var item in files)
+                            {
+                                customList.Add(new CustomListViewItem { Name = item});
+                            }
+
+                            CustomPicker filePicker = new CustomPicker(PageContainer, customList, 65, "Select file", true, false);
+                            //customList = null;
+                            filePicker.WidthRequest = App.screenWidth;
+                            filePicker.HeightRequest = App.screenHeight;
+                            filePicker.ClassId = "filePicker";
+                            PageContainer.AddChildToLayout(filePicker, 0, 0);
+
+                            filePicker.listView.ItemSelected += async (s, eve) =>
+                            {
+                                CustomListViewItem item = eve.SelectedItem as CustomListViewItem;
+                                MemoryStream videoFileMS = await fileBrowser.GetVideostream(item.Name);
+
+                                if (videoFileMS != null)
+                                {
+                                    MasterObject.AddFileToMediaArray(videoFileMS, item.Name, Constants.MediaType.Video);
+                                }
+                                else
+                                {
+                                    MasterObject.DisplayAlert("File read error");
+                                }
+
+                                View filepickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
+                                if (filepickView != null)
+                                {
+                                    PageContainer.Children.Remove(filepickView);
+                                    fileView = null;
+                                }
+                                //videoFileMS = null;
+                            };
+                            
+                            //fileBrowser = null;
+                        }
+                    }
+                    else if (CrossMedia.Current.IsPickVideoSupported)
+                    {
+                        var file = await CrossMedia.Current.PickVideoAsync();
+
+                        if (file == null)
+                        {
+                            progres.HideProgressbar();
+                            return;
+                        }
+
+                        MemoryStream ms = new MemoryStream();
+                        file.GetStream().CopyTo(ms);
+                        ms.Position = 0;
+
+                        if (ms.Length > 15728640)
+                        {
+                            MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                            progres.HideProgressbar();
+                            ms = null;
+                            file = null;
+                            GC.Collect();
+                            return;
+                        }
+
+                        MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                    }
+                    else
                     {
                         progres.HideProgressbar();
+                        MasterObject.DisplayAlert("Video library not available");
                         return;
                     }
-                    var file = await CrossMedia.Current.PickVideoAsync();
-
-                    if (file == null)
-                    {
-                        progres.HideProgressbar();
-                        return;
-                    }
-
-                    MemoryStream ms = new MemoryStream();
-                    file.GetStream().CopyTo(ms);
-                    ms.Position = 0;
-
-                    if (ms.Length > 15728640)
-                    {
-                        MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
-                        progres.HideProgressbar();
-                        ms = null;
-                        file = null;
-                        return;
-                    }
-
-                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                    
 
                 }
                 catch (Exception ex)
@@ -1684,6 +1762,7 @@ namespace PurposeColor.screens
             pickView = null;
             progres.HideProgressbar();
 
+            GC.Collect();
         }
     }
 

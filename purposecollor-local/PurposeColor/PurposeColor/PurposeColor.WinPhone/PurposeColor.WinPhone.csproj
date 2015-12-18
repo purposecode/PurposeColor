@@ -100,6 +100,7 @@
     <Compile Include="Dependency\DBConnection.cs" />
     <Compile Include="Dependency\DeviceCommunications.cs" />
     <Compile Include="Dependency\DeviceSpec.cs" />
+    <Compile Include="Dependency\FileBrowser.cs" />
     <Compile Include="Dependency\ProgressBarImpl.cs" />
     <Compile Include="Dependency\WinReminderImpl.cs" />
     <Compile Include="Dependency\WinResize.cs" />

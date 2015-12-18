@@ -19,6 +19,7 @@ namespace PurposeColor.screens
         List<GemsPageInfo> gemsList;
         int listViewVislbleIndex;
         GemsPageTitleBar mainTitleBar;
+        ScrollView masterScroll;
         public GemsMainPage()
         {
 
@@ -88,7 +89,7 @@ namespace PurposeColor.screens
             //gemsList.Add(gemsInfo);
 
 
-            GemsListView mainListView = new GemsListView();
+          /*  GemsListView mainListView = new GemsListView();
             mainListView.BackgroundColor = Constants.LIST_BG_COLOR;
             mainListView.ItemsSource = gemsList;
             mainListView.ItemTemplate = new DataTemplate(typeof(GemsListCellTemplate));
@@ -96,13 +97,189 @@ namespace PurposeColor.screens
             mainListView.HeightRequest = App.screenHeight;
             mainListView.HasUnevenRows = true;
             mainListView.Scroll = ScrollVisibleItems;
-            listContainer.Children.Add( mainListView );
+            listContainer.Children.Add( mainListView );*/
 
+
+            masterScroll = new ScrollView();
+            masterScroll.WidthRequest = App.screenWidth;
+            masterScroll.HeightRequest = App.screenHeight * 85 / 100;
+
+            StackLayout masterStack = new StackLayout();
+            masterStack.Orientation = StackOrientation.Vertical;
+            masterStack.BackgroundColor = Color.Transparent;
+
+            for( int index = 0; index < 4; index++ )
+            {
+                StackLayout cellMasterLayout = new StackLayout();
+                cellMasterLayout.Orientation = StackOrientation.Vertical;
+                cellMasterLayout.BackgroundColor = Color.White;
+
+
+                StackLayout headerLayout = new StackLayout();
+                headerLayout.Orientation = StackOrientation.Vertical;
+				headerLayout.BackgroundColor = Color.Red;// Color.FromRgb(244, 244, 244);
+
+                CustomLayout customLayout = new CustomLayout();
+                customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                double screenWidth = App.screenWidth;
+                double screenHeight = App.screenHeight;
+
+                CustomImageButton mainTitle = new CustomImageButton();
+                //  mainTitle.IsEnabled = false;
+                mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
+                mainTitle.ImageName = Device.OnPlatform("top_bg.png", "light_blue_bg.png", "//Assets//top_bg.png");
+                mainTitle.Text = "Main Title  -- " + index.ToString();
+                mainTitle.TextColor = Color.White;
+                mainTitle.FontSize = 12;
+                mainTitle.WidthRequest = App.screenWidth;
+                mainTitle.TextOrientation = TextOrientation.Middle;
+                headerLayout.VerticalOptions = LayoutOptions.Center;
+
+
+                Label subTitle = new Label();
+                subTitle.Text = "Sub Title";
+                subTitle.TextColor = Color.Gray;
+                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                subTitle.XAlign = TextAlignment.Center;
+                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+                subTitle.VerticalOptions = LayoutOptions.Center;
+                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
+                subTitle.WidthRequest = App.screenWidth * 90 / 100;
+				headerLayout.HorizontalOptions = LayoutOptions.Center;
+				subTitle.HeightRequest = Device.OnPlatform( 40, 40, 30 );
+
+                Label firstDetailsInfo = new Label();
+                firstDetailsInfo.Text = "First Details Info";
+                //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                firstDetailsInfo.TextColor = Color.Gray;
+                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                firstDetailsInfo.HeightRequest = 45;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? 17 : 15;
+                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
+
+
+                Label firstDateInfo = new Label();
+                firstDateInfo.Text = "First Date Info";
+                //firstDateInfo.Text = "2015 Januvary 30";
+                firstDateInfo.TextColor = Color.Black;
+                firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                int detailsFontSize = (App.screenDensity > 1.5) ? 15 : 12;
+                firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
+
+
+                Image firstEmotionsImage = new Image();
+                firstEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
+                firstEmotionsImage.Source =  Device.OnPlatform("manali.jpg","manali.jpg" , "//Assets//manali.jpg");
+                //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
+
+
+
+                Label secondDetailsInfo = new Label();
+                secondDetailsInfo.Text = "second details info";
+                // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                secondDetailsInfo.TextColor = Color.Gray;
+                secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                secondDetailsInfo.HeightRequest = 45;
+                secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
+
+
+                Label secondDateInfo = new Label();
+                secondDateInfo.Text = "second date info";
+                secondDateInfo.TextColor = Color.Black;
+                secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
+
+
+                Image secondEmotionsImage = new Image();
+                secondEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
+                secondEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
+
+
+                Button moreButton = new Button();
+                moreButton.BackgroundColor = Color.Transparent;
+                moreButton.BorderColor = Color.Transparent;
+                moreButton.BorderWidth = 0;
+                moreButton.Text = "more";
+                moreButton.FontSize = 15;
+                moreButton.MinimumHeightRequest = 20;
+                moreButton.TextColor = Color.Silver;
+
+                customLayout.WidthRequest = screenWidth;
+                customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
+
+
+                StackLayout viewContainer = new StackLayout();
+                viewContainer.WidthRequest = App.screenWidth;
+                viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
+                viewContainer.BackgroundColor = Color.White;
+
+                Image divider = new Image();
+                divider.Source = "line_seperate.png";
+                divider.BackgroundColor = Color.Transparent;
+                divider.WidthRequest = App.screenWidth * 85 / 100;
+
+                /*  StackLayout whiteBorder = new StackLayout();
+                  whiteBorder.BackgroundColor = Color.White;
+                  whiteBorder.HeightRequest = 5;
+                  whiteBorder.WidthRequest = App.screenWidth;*/
+
+                headerLayout.Children.Add(mainTitle);
+                headerLayout.Children.Add(subTitle);
+
+
+				customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform( -5, 0, 0 ));
+				customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform( -3 ,2 ,2 ));
+				customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform( 4, 9, 9 ));
+				customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform( -5, 0, 0 ));
+                customLayout.AddChildToLayout(divider, 5, 14);
+
+				customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform( 10, 15, 15 ));
+				customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform( 17, 22, 22 ));
+				customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform( 8, 13, 13 ));
+				customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform( 25, 25, 25 ));
+
+                masterStack.Children.Add(headerLayout);
+                masterStack.Children.Add(customLayout);
+
+               // masterStack.Children.Add( cellMasterLayout );
+            }
+
+
+
+
+            masterScroll.Scrolled += OnScroll;
+            masterScroll.Content = masterStack;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
           //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(listContainer, 0, 10);
+            masterLayout.AddChildToLayout(masterScroll, 0, 10);
             Content = masterLayout;
+        }
+
+        void OnScroll(object sender, ScrolledEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
+
+            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307 )
+            {
+                if( mainTitleBar.title.Text != "0 th Menu" )
+                mainTitleBar.title.Text = "0 th Menu";
+            }
+            else if( masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610 )
+            {
+                if( mainTitleBar.title.Text != "1 th Menu")
+                mainTitleBar.title.Text = "1 th Menu";
+            }
+            else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
+            {
+                if( mainTitleBar.title.Text != "2 th Menu")
+                mainTitleBar.title.Text = "2 th Menu";
+            }
+
         }
 
         void NextButtonTapRecognizer_Tapped(object sender, EventArgs e)
@@ -147,9 +324,9 @@ namespace PurposeColor.screens
         public GemsListCellTemplate()
         {
 
-            StackLayout masterLayout = new StackLayout();
-            masterLayout.Orientation = StackOrientation.Vertical;
-            masterLayout.BackgroundColor = Color.White;
+            StackLayout cellMasterLayout = new StackLayout();
+            cellMasterLayout.Orientation = StackOrientation.Vertical;
+            cellMasterLayout.BackgroundColor = Color.White;
 
 
             StackLayout headerLayout = new StackLayout();
@@ -280,8 +457,8 @@ namespace PurposeColor.screens
             customLayout.AddChildToLayout(secondEmotionsImage, 65, 13);
             customLayout.AddChildToLayout(moreButton, 75, 25);
 
-            masterLayout.Children.Add( headerLayout );
-            masterLayout.Children.Add( customLayout );
+            cellMasterLayout.Children.Add( headerLayout );
+            cellMasterLayout.Children.Add( customLayout );
            // masterLayout.AddChildToLayout(whiteBorder, 0, 45);
 
           /*  masterLayout.AddChildToLayout(firstDetailsInfo, (float)8, (float)Device.OnPlatform(5, 15, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -296,7 +473,7 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(secondEmotionsImage, (float)70, (float)Device.OnPlatform(5, 65, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             */
 
-            this.View = masterLayout;
+            this.View = cellMasterLayout;
         }
 
         public void Dispose()

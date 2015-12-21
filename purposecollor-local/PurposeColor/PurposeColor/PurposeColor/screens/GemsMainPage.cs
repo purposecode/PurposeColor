@@ -22,9 +22,9 @@ namespace PurposeColor.screens
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
+        GemsEmotionsObject gemsEmotionsObject;
         public GemsMainPage()
         {
-
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
@@ -52,8 +52,8 @@ namespace PurposeColor.screens
         {
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar( "Loading gems.." );
-            var gemsEmotions = await ServiceHelper.GetAllSupportingEmotions();
-            if( gemsEmotions == null )
+            gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
+            if (gemsEmotionsObject == null)
             {
                 var success = await DisplayAlert( Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY );
                 if (!success)
@@ -63,10 +63,10 @@ namespace PurposeColor.screens
             }
 
             List<GemsEmotionsDetails> emotionList = new List<GemsEmotionsDetails>();
-            if( gemsEmotions.resultarray != null && gemsEmotions.resultarray.Count > 1 )
+            if (gemsEmotionsObject.resultarray != null && gemsEmotionsObject.resultarray.Count > 1)
             {
-                emotionList.Add(gemsEmotions.resultarray[2]);
-                emotionList.Add(gemsEmotions.resultarray[3]);
+                emotionList.Add(gemsEmotionsObject.resultarray[0]);
+                emotionList.Add(gemsEmotionsObject.resultarray[3]);
             }
 
             int index = 0;
@@ -138,7 +138,8 @@ namespace PurposeColor.screens
                 Image firstEmotionsImage = new Image();
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
+                string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0] : "no_image_found.jpg";
+                firstEmotionsImage.Source = Device.OnPlatform("manali.jpg", firstImageSource, "//Assets//manali.jpg");
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -169,7 +170,8 @@ namespace PurposeColor.screens
                 Image secondEmotionsImage = new Image();
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                secondEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
+                string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1] : "no_image_found.jpg";
+                secondEmotionsImage.Source = Device.OnPlatform("manali.jpg", secondImageSource, "//Assets//manali.jpg");
 
 
                 Button moreButton = new Button();
@@ -180,6 +182,8 @@ namespace PurposeColor.screens
                 moreButton.FontSize = 15;
                 moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
+                moreButton.ClassId = item.emotion_id.ToString();
+                moreButton.Clicked += OnMoreButtonClicked;
 
                 customLayout.WidthRequest = screenWidth;
                 customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
@@ -229,12 +233,19 @@ namespace PurposeColor.screens
             masterScroll.Content = masterStack;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 0, 10);
             Content = masterLayout;
 
 
             progress.HideProgressbar();
+        }
+
+
+        async void OnMoreButtonClicked(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            List<GemsEmotionsDetails> emotionDetailsList = gemsEmotionsObject.resultarray.FindAll(item => item.emotion_id == btn.ClassId).ToList();
+            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList));
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)
@@ -266,7 +277,14 @@ namespace PurposeColor.screens
 
         public void Dispose()
         {
-
+            masterLayout = null;
+            progressBar = null;
+            listContainer = null;
+            gemsList = null;
+            mainTitleBar = null;
+            masterScroll = null; ;
+            masterStack = null;
+            GemsEmotionsObject gemsEmotionsObject;
         }
 
         public void ScrollVisibleItems( int visbleIndex )

@@ -893,7 +893,7 @@ namespace PurposeColor.Service
 
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-                string uriString = "api.php?action=getallsupportingemotion&user_id=" + user.UserId.ToString();
+                string uriString = "api.php?action=getallsupportingemotion5&user_id=" + user.UserId.ToString();
 
                 var response = await client.GetAsync(uriString);
 

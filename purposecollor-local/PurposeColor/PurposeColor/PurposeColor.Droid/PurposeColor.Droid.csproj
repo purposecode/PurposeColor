@@ -452,6 +452,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icn_done.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icn_done.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_done.png" />
+    <AndroidResource Include="Resources\drawable\no_image_found.jpg" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

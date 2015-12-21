@@ -905,12 +905,10 @@ namespace PurposeColor.Service
                     var rootobject = JsonConvert.DeserializeObject<GemsEmotionsObject>(actionsJson);
                     if (rootobject != null && rootobject.resultarray != null)
                     {
-                        foreach (var item in rootobject.resultarray)
-                        {
-                            CustomListViewItem listItem = new CustomListViewItem();
-                        }
+                        return rootobject; 
                     }
-                    return rootobject; ;
+                    return null;
+
                 }
                 else
                 {

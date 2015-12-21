@@ -10,13 +10,14 @@ namespace PurposeColor.Model
     public class GemsEmotionsDetails
     {
         public string user_id { get; set; }
+        public string emotion_id { get; set; }
         public string emotion_title { get; set; }
-        public string event_title { get; set; }
-        public string event_details { get; set; }
-        public string event_datetime { get; set; }
-        public string event_id { get; set; }
-        public List<string> event_media { get; set; }
+        public List<string> event_id { get; set; }
+        public List<string> event_title { get; set; }
+        public List<string> event_details { get; set; }
+        public List<string> event_datetime { get; set; }
         public List<string> media_type { get; set; }
+        public List<string> event_media { get; set; }
     }
 
     public class GemsEmotionsObject

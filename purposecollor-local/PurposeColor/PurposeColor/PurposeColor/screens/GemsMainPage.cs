@@ -65,17 +65,16 @@ namespace PurposeColor.screens
             List<GemsEmotionsDetails> emotionList = new List<GemsEmotionsDetails>();
             if( gemsEmotions.resultarray != null && gemsEmotions.resultarray.Count > 1 )
             {
-                emotionList.Add(gemsEmotions.resultarray[0]);
-                emotionList.Add(gemsEmotions.resultarray[1]);
+                emotionList.Add(gemsEmotions.resultarray[2]);
+                emotionList.Add(gemsEmotions.resultarray[3]);
             }
 
-
-            foreach (var item in emotionList)
+            int index = 0;
+            foreach (var item in emotionList )
             {
                 StackLayout cellMasterLayout = new StackLayout();
                 cellMasterLayout.Orientation = StackOrientation.Vertical;
                 cellMasterLayout.BackgroundColor = Color.White;
-
 
                 StackLayout headerLayout = new StackLayout();
                 headerLayout.Orientation = StackOrientation.Vertical;
@@ -90,7 +89,7 @@ namespace PurposeColor.screens
                 //  mainTitle.IsEnabled = false;
                 mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
                 mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                mainTitle.Text = item.emotion_title;
+                mainTitle.Text = "My Supporting Emotions";
                 mainTitle.TextColor = Color.White;
                 mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
                 mainTitle.WidthRequest = App.screenWidth;
@@ -100,7 +99,7 @@ namespace PurposeColor.screens
 
 
                 Label subTitle = new Label();
-                subTitle.Text = "Sub Title";
+                subTitle.Text = item.emotion_title;
                 subTitle.TextColor = Color.Gray;
                 subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 subTitle.XAlign = TextAlignment.Center;
@@ -112,18 +111,23 @@ namespace PurposeColor.screens
                 subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
                 Label firstDetailsInfo = new Label();
-                firstDetailsInfo.Text = "First Details Info";
-                //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                string trimmedFirstDetails = (item.event_details != null && item.event_details.Count > 0) ? item.event_details[0] : "empty";
+                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 55 )
+                {
+                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 55);
+                    trimmedFirstDetails = trimmedFirstDetails + "....";
+                }
+                firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
                 Label firstDateInfo = new Label();
-                firstDateInfo.Text = "First Date Info";
+                firstDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 0) ? item.event_datetime[0] : "empty";
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -140,7 +144,13 @@ namespace PurposeColor.screens
 
 
                 Label secondDetailsInfo = new Label();
-                secondDetailsInfo.Text = "second details info";
+                string trimmedSecondDetails = (item.event_details != null && item.event_details.Count > 1) ? item.event_details[1] : "empty";
+                if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 55)
+                {
+                    trimmedSecondDetails = trimmedSecondDetails.Substring(0, 55);
+                    trimmedSecondDetails = trimmedSecondDetails + "....";
+                }
+                secondDetailsInfo.Text = trimmedSecondDetails;
                 // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
                 secondDetailsInfo.TextColor = Color.Gray;
                 secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -150,7 +160,7 @@ namespace PurposeColor.screens
 
 
                 Label secondDateInfo = new Label();
-                secondDateInfo.Text = "second date info";
+                secondDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 1) ? item.event_datetime[1] : "empty";
                 secondDateInfo.TextColor = Color.Black;
                 secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 secondDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
@@ -190,6 +200,7 @@ namespace PurposeColor.screens
                   whiteBorder.HeightRequest = 5;
                   whiteBorder.WidthRequest = App.screenWidth;*/
 
+                if( index == 0)
                 headerLayout.Children.Add(mainTitle);
                 headerLayout.Children.Add(subTitle);
 
@@ -207,10 +218,10 @@ namespace PurposeColor.screens
 
                 masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);
-
+                index++;
                 // masterStack.Children.Add( cellMasterLayout );
             }
-
+            index = 0;
 
 
 
@@ -233,7 +244,7 @@ namespace PurposeColor.screens
             if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307 )
             {
                 if( mainTitleBar.title.Text != "0 th Menu" )
-                mainTitleBar.title.Text = "0 th Menu";
+                mainTitleBar.title.Text = "My Supporting Emotions";
             }
             else if( masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610 )
             {

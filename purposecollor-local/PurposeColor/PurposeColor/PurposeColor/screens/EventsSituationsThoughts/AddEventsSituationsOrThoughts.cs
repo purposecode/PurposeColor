@@ -70,6 +70,8 @@ namespace PurposeColor.screens
 		Label contactInfo;
 		StackLayout locLayout;
         CustomPicker ePicker;
+        Image audioRecodeOffButton = null;
+        int Seconds = 0;
         #endregion
 
         public AddEventsSituationsOrThoughts(string title)
@@ -207,7 +209,7 @@ namespace PurposeColor.screens
             TapGestureRecognizer RecodeOnTapRecognizer = new TapGestureRecognizer();
             audioRecodeOnHolder.GestureRecognizers.Add(RecodeOnTapRecognizer);
 
-            Image audioRecodeOffButton = new Image
+            audioRecodeOffButton = new Image
             {
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center,
@@ -421,46 +423,6 @@ namespace PurposeColor.screens
                 }
                 */
             };
-
-            #endregion
-
-            #region AUDIO TAP RECOGNIZER
-
-            //TapGestureRecognizer audioTapGestureRecognizer = new TapGestureRecognizer();
-
-            //audioTapGestureRecognizer.Tapped += (s, e) =>
-            //{
-            //    try
-            //    {
-            //        if (!isAudioRecording)
-            //        {
-            //            isAudioRecording = true;
-            //            if (!audioRecorder.RecordAudio())
-            //            {
-            //                DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
-            //            }
-            //            else
-            //            {
-            //                DisplayAlert("Audio recording", "Audio recording started, Tap the audio icon again to end.", "ok");
-            //            }
-            //        }
-            //        else
-            //        {
-            //            isAudioRecording = false;
-            //            MemoryStream stream = audioRecorder.StopRecording();
-
-
-            //            AddFileToMediaArray(stream, audioRecorder.AudioPath, Constants.MediaType.Audio);
-
-            //        }
-            //    }
-            //    catch (System.Exception)
-            //    {
-            //        DisplayAlert("Audio recording", "Audio cannot be recorded, please try again later.", "ok");
-            //    }
-            //};
-
-            //audioInputStack.GestureRecognizers.Add(audioTapGestureRecognizer);
 
             #endregion
 
@@ -802,7 +764,17 @@ namespace PurposeColor.screens
 			iconContainerGrid.IsVisible = true;
         }
 
-
+        private void AnimateMic()
+        {
+            if (Seconds % 2 == 0)
+            {
+                audioRecodeOffButton.FadeTo(0, 10, Easing.Linear);
+            }
+            else
+            {
+                audioRecodeOffButton.FadeTo(1, 10, Easing.Linear);
+            }
+        }
 
         async void OnEditLocationInfo(object sender, EventArgs e)
 		{
@@ -829,11 +801,30 @@ namespace PurposeColor.screens
                     audioRecodeOffHolder.IsVisible = true;
                     audioRecodeOnHolder.IsVisible = false;
                     isAudioRecording = true;
-                    Device.StartTimer(TimeSpan.FromSeconds(60), () =>
+                    Device.StartTimer(TimeSpan.FromSeconds(1), () =>
                     {
-                        RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
-                        progress.ShowToast("Maximum duration has reached.");
+                        //RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
+                        //progress.ShowToast("Maximum duration has reached.");
+                        //return false;
+                        if (isAudioRecording)
+                        {
+                            if (Seconds >= 60)
+                            {
+                                RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
+                                progress.ShowToast("Maximum duration has reached.");
+                                Seconds = 0;
+                                return false;
+                            }
+                            else
+                            {
+                                Seconds++;
+                                AnimateMic();
+                                return true;
+                            }
+                        }
+                        Seconds = 0;
                         return false;
+                        
                     });
 
                     if (!audioRecorder.RecordAudio())
@@ -849,6 +840,10 @@ namespace PurposeColor.screens
             catch (System.Exception)
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Audio cannot be recorded, please try again later.", Constants.ALERT_OK);
+                audioRecodeOffHolder.IsVisible = false;
+                audioRecodeOnHolder.IsVisible = true;
+                isAudioRecording = false;
+                Seconds = 0;
             }
         }
 

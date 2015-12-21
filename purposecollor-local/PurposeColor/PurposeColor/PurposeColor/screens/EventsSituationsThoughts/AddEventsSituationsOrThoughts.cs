@@ -302,7 +302,10 @@ namespace PurposeColor.screens
 			contactsLabelTap.Tapped += async (object sender, EventArgs e) => 
 			{
 				editLocationAndContactsStack.ClassId = "contactedit";
-				locAndContactsEntry.Text = contactInfo.Text;
+                string spanContacts = "";
+                if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                spanContacts = contactInfo.FormattedText.Spans[1].Text;
+                locAndContactsEntry.Text = spanContacts;
 				editLocationAndContactsStack.IsVisible = true;
 				contactInfo.IsVisible = false;
 				iconContainerGrid.IsVisible = false;
@@ -789,7 +792,8 @@ namespace PurposeColor.screens
 			}
 			else
 			{
-				contactInfo.Text = locAndContactsEntry.Text;
+				//contactInfo.Text = locAndContactsEntry.Text;
+                contactInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
 				contactInfo.IsVisible = true;
 			}
 			editLocationAndContactsStack.IsVisible = false;
@@ -1044,27 +1048,61 @@ namespace PurposeColor.screens
             if (!string.IsNullOrEmpty(name))
             {
                 int nIndex = 0;
-                string preText = "  With ";
+                string preText = "   - with ";
                 selectedContact = name;
-				if (string.IsNullOrEmpty (contactInfo.Text))
+
+                var s = new FormattedString();
+
+                if (contactInfo.FormattedText == null)
                 {
 					contactInfo.Text = preText;
+                    s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
                 }
 
-				if (contactInfo.Text != "  With ") {
-					contactInfo.Text = contactInfo.Text + "," + selectedContact;
+                if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1 ) 
+                {
+                    string spanContact = "";
+                    if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                    {
+                        spanContact = contactInfo.FormattedText.Spans[1].Text  +" , " + selectedContact; ;
+                    }
+                    s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
+                    s.Spans.Add(new Span { Text = spanContact });
 				} 
 				else 
                 {
-					contactInfo.Text = contactInfo.Text +  selectedContact;
+
+                    string spanContact = "";
+                    if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1  )
+                    {
+                        spanContact = contactInfo.FormattedText.Spans[1].Text;
+                    }
+                    else
+                    {
+                        spanContact = selectedContact;
+                        s.Spans.Add(new Span { Text = selectedContact });
+                    }
+                   
                 }
 
-				if (contactInfo.Text.Length > 40) 
+
+                contactInfo.FormattedText = s;
+
+                if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1 ) 
 				{
-					contactInfo.Text = contactInfo.Text.Substring(0, 40);
-					contactInfo.Text += "...";
+                    if( contactInfo.FormattedText.Spans[1].Text.Length > 40 )
+                    {
+                        string trimmedContacts = contactInfo.FormattedText.Spans[1].Text;
+                        trimmedContacts = trimmedContacts.Substring(0, 40);
+                        trimmedContacts += "...";
+
+                        contactInfo.FormattedText.Spans[1].Text = trimmedContacts;
+                    }
+
 				}
-					
+
+
+
 				contactInfo.IsVisible = true;
                 App.ContactsArray.Add(name);
 

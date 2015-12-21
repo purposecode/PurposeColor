@@ -787,12 +787,14 @@ namespace PurposeColor.screens
         {
 			if (editLocationAndContactsStack.ClassId == "locationedit")
 			{
-				locationInfo.Text = locAndContactsEntry.Text;
+                if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
+				locationInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
 				locationInfo.IsVisible = true;
 			}
 			else
 			{
 				//contactInfo.Text = locAndContactsEntry.Text;
+                if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
                 contactInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
 				contactInfo.IsVisible = true;
 			}
@@ -806,7 +808,8 @@ namespace PurposeColor.screens
 		{
 
 			editLocationAndContactsStack.ClassId = "locationedit";
-			locAndContactsEntry.Text = locationInfo.Text;
+            if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
+			locAndContactsEntry.Text = locationInfo.FormattedText.Spans[1].Text;
 			editLocationAndContactsStack.IsVisible = true;
 			locationInfo.IsVisible = false;
 			iconContainerGrid.IsVisible = false;

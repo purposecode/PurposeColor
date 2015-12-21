@@ -897,18 +897,27 @@ namespace PurposeColor.Service
 
                 var response = await client.GetAsync(uriString);
 
-                var actionsJson = response.Content.ReadAsStringAsync().Result;
-
-
-                var rootobject = JsonConvert.DeserializeObject<GemsEmotionsObject>(actionsJson);
-                if (rootobject != null && rootobject.resultarray != null)
+                if( response != null && response.Content != null )
                 {
-                    foreach (var item in rootobject.resultarray)
+                    var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+                    var rootobject = JsonConvert.DeserializeObject<GemsEmotionsObject>(actionsJson);
+                    if (rootobject != null && rootobject.resultarray != null)
                     {
-                        CustomListViewItem listItem = new CustomListViewItem();
+                        foreach (var item in rootobject.resultarray)
+                        {
+                            CustomListViewItem listItem = new CustomListViewItem();
+                        }
                     }
+                    return rootobject; ;
                 }
-                return rootobject;;
+                else
+                {
+                    return null;
+                }
+
+             
             }
             catch (Exception)
             {

@@ -53,6 +53,7 @@
     <Compile Include="CustomControls\PurposeColorSubTitleBar.cs" />
     <Compile Include="CustomControls\PurposeColorTitleBar.cs" />
     <Compile Include="CustomControls\RoundedButton.cs" />
+    <Compile Include="CustomControls\SelectMultipleBasePage.cs" />
     <Compile Include="Database\ApplicationSettings.cs" />
     <Compile Include="interfaces\IFileBrowser.cs" />
     <Compile Include="interfaces\ICameraCapture.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Model\Media.cs" />
     <Compile Include="Model\Preview.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
+    <Compile Include="screens\CheckItem.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\CustomeMultiSelectionList.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="screens\ChangePassword.cs" />
     <Compile Include="screens\GemsMainPage.cs" />
     <Compile Include="screens\GemsPage.cs" />
+    <Compile Include="screens\GoalsMainPage.cs" />
     <Compile Include="screens\GraphPage.cs" />
     <Compile Include="screens\LogInPage.cs" />
     <Compile Include="screens\LoginWebViewHolder.cs" />

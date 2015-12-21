@@ -68,7 +68,7 @@ namespace PurposeColor.screens
                 headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 
                 CustomLayout customLayout = new CustomLayout();
-                customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                customLayout.BackgroundColor = Color.White;
                 double screenWidth = App.screenWidth;
                 double screenHeight = App.screenHeight;
 
@@ -127,10 +127,15 @@ namespace PurposeColor.screens
                 items.Add(new CheckItem { Name = "Xamarin.com" });
                 items.Add(new CheckItem { Name = "Twitter" });
                 items.Add(new CheckItem { Name = "Facebook" });
+                items.Add(new CheckItem { Name = "Xamarin.com" });
+                items.Add(new CheckItem { Name = "Twitter" });
+                items.Add(new CheckItem { Name = "Facebook" });
+                items.Add(new CheckItem { Name = "Xamarin.com" });
 
                 var multiPage = new SelectMultipleBasePage<CheckItem>(items);
+                multiPage.HeightRequest = items.Count * 50;
 
-                customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
+              //  customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(multiPage, 5, Device.OnPlatform(-3, 10, 20));
 

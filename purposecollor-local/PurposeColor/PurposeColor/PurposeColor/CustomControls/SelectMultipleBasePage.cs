@@ -57,6 +57,10 @@ namespace Multiselect
 					Constraint.Constant (50),
 					Constraint.RelativeToParent (p => p.Height - 10)
 				);
+
+              /*  StackLayout layout = new StackLayout();
+                layout.BackgroundColor = Color.Red;
+                layout.HeightRequest = 50;*/
 				View = layout;
 			}
 		}

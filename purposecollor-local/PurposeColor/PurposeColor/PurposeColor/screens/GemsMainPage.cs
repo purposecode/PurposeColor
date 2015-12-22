@@ -112,9 +112,9 @@ namespace PurposeColor.screens
 
                 Label firstDetailsInfo = new Label();
                 string trimmedFirstDetails = (item.event_details != null && item.event_details.Count > 0) ? item.event_details[0] : "empty";
-                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 55 )
+                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 50 )
                 {
-                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 55);
+                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
                     trimmedFirstDetails = trimmedFirstDetails + "....";
                 }
                 firstDetailsInfo.Text = trimmedFirstDetails;
@@ -146,9 +146,9 @@ namespace PurposeColor.screens
 
                 Label secondDetailsInfo = new Label();
                 string trimmedSecondDetails = (item.event_details != null && item.event_details.Count > 1) ? item.event_details[1] : "empty";
-                if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 55)
+                if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 50)
                 {
-                    trimmedSecondDetails = trimmedSecondDetails.Substring(0, 55);
+                    trimmedSecondDetails = trimmedSecondDetails.Substring(0, 50);
                     trimmedSecondDetails = trimmedSecondDetails + "....";
                 }
                 secondDetailsInfo.Text = trimmedSecondDetails;

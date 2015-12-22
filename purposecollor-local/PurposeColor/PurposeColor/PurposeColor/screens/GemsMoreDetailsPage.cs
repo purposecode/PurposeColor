@@ -99,9 +99,9 @@ namespace PurposeColor.screens
 
                 Label firstDetailsInfo = new Label();
                 string trimmedFirstDetails = (item.event_details != null && item.event_details.Count > 0) ? item.event_details[index] : "empty";
-                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 55 )
+                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 50 )
                 {
-                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 55);
+                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
                     trimmedFirstDetails = trimmedFirstDetails + "....";
                 }
                 firstDetailsInfo.Text = trimmedFirstDetails;

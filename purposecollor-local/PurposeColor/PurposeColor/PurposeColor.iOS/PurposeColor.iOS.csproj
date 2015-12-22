@@ -99,6 +99,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
     <Compile Include="Dependency\IOSReminderImpl.cs" />
     <Compile Include="Dependency\IOSResize.cs" />

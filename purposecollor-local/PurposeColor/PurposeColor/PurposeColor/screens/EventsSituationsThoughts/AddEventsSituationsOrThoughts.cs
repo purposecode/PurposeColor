@@ -725,6 +725,9 @@ namespace PurposeColor.screens
             previewListView.ItemsSource = App.PreviewListSource;
 			previewListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) => 
 			{
+              /*  PreviewItem items = previewListView.SelectedItem as PreviewItem;
+                if( items != null )
+                App.Navigator.PushModalAsync( new VideoPlayerView( items.Path ) );*/
 				previewListView.SelectedItem = null;
 			};
             listContainer.Children.Add(previewListView);
@@ -1305,15 +1308,15 @@ namespace PurposeColor.screens
 
                 if (mediaType == Constants.MediaType.Image)
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("image.png", "image.png", "//Assets//image.png") });//Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
+                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("image.png", "image.png", "//Assets//image.png") });//Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
                 }
                 else if (mediaType == Constants.MediaType.Video)
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
+                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
                 }
                 else
                 {
-                    App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
+                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
                 }
 
                 imgType = imgType.Replace(".", "");
@@ -1402,7 +1405,7 @@ namespace PurposeColor.screens
                 string imgType = System.IO.Path.GetExtension(path);
                 string fileName = System.IO.Path.GetFileName(path);
 
-                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
+                App.PreviewListSource.Add(new PreviewItem { Name = fileName, Path = path, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
 
                 imgType = imgType.Replace(".", "");
                 

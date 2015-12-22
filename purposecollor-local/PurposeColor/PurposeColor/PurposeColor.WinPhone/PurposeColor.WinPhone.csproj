@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\CameraCapture.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
@@ -393,7 +394,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
+    <SDKReference Include="SQLite.WP80, Version=3.9.2">
       <Name>SQLite for Windows Phone</Name>
     </SDKReference>
   </ItemGroup>

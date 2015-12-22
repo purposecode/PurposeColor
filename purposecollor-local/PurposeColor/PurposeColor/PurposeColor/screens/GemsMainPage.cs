@@ -116,6 +116,8 @@ namespace PurposeColor.screens
                 {
                     trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
                     trimmedFirstDetails = trimmedFirstDetails + "....";
+					trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
+					trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
                 }
                 firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
@@ -150,6 +152,8 @@ namespace PurposeColor.screens
                 {
                     trimmedSecondDetails = trimmedSecondDetails.Substring(0, 50);
                     trimmedSecondDetails = trimmedSecondDetails + "....";
+					trimmedSecondDetails = trimmedSecondDetails.Replace("\\n", string.Empty);
+					trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
                 }
                 secondDetailsInfo.Text = trimmedSecondDetails;
                 // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";

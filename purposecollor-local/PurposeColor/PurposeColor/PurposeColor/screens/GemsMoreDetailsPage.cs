@@ -48,7 +48,14 @@ namespace PurposeColor.screens
             masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.Transparent;
 
-            this.Appearing += OnAppearing;
+
+			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+			//  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+			masterLayout.AddChildToLayout(masterScroll, 0, 10);
+			Content = masterLayout;
+
+
+			this.Appearing += OnAppearing;
 
 
         }
@@ -103,6 +110,8 @@ namespace PurposeColor.screens
                 {
                     trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
                     trimmedFirstDetails = trimmedFirstDetails + "....";
+					trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
+					trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
                 }
                 firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
@@ -213,10 +222,7 @@ namespace PurposeColor.screens
           //  masterScroll.Scrolled += OnScroll;
             masterScroll.Content = masterStack;
 
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 0, 10);
-            Content = masterLayout;
+
         }
 
        /* void OnScroll(object sender, ScrolledEventArgs e)

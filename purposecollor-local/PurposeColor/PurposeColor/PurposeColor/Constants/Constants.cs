@@ -12,7 +12,7 @@ namespace PurposeColor
         public const string EMOTIONAL_AWARENESS = "Emotional Awareness";
         public const string GEM = "Goals Enabling Materials";
         public const string GOALS_AND_DREAMS = "Goals & Dreams";
-        public const string EMOTIONAL_INTELLIGENCE = "Emtional Intelligence";
+        public const string EMOTIONAL_INTELLIGENCE = "Emotional Intelligence";
         public const string COMMUNITY_GEMS = "Community GEMs";
         public const string APPLICATION_SETTTINGS = "Application Settings";
         public const string SELECT_EMOTIONS = "Select Emotions";

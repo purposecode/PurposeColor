@@ -21,17 +21,18 @@ namespace PurposeColor.screens
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
-        List<GemsEmotionsDetails> emotionsMasterList;
-        public GemsMoreDetailsPage( List<GemsEmotionsDetails> emotionsList )
+        GemsEmotionsDetails emotionsMasterList;
+        public string mediaPath;
+        public string mediaThumbPath;
+        public GemsMoreDetailsPage(GemsEmotionsDetails emotionsList, string media, string mediaThumb)
         {
 
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
-
- 
-
+            mediaPath = media;
+            mediaThumbPath = mediaThumb;
             emotionsMasterList = emotionsList;
 
 
@@ -49,11 +50,6 @@ namespace PurposeColor.screens
             masterStack.BackgroundColor = Color.Transparent;
 
 
-			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-			//  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout(masterScroll, 0, 10);
-			Content = masterLayout;
-
 
 			this.Appearing += OnAppearing;
 
@@ -63,8 +59,12 @@ namespace PurposeColor.screens
         async void OnAppearing(object sender, EventArgs e)
         {
 
-            int index = 0;
-            foreach (var item in emotionsMasterList )
+
+            // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null); // slide up
+            this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null);
+
+         //   int index = 0;
+            for (int index = 0; index < emotionsMasterList.event_details.Count; index++)
             {
                 StackLayout cellMasterLayout = new StackLayout();
                 cellMasterLayout.Orientation = StackOrientation.Vertical;
@@ -93,7 +93,7 @@ namespace PurposeColor.screens
 
 
                 Label subTitle = new Label();
-                subTitle.Text = item.emotion_title;
+                subTitle.Text = (emotionsMasterList.event_title != null && emotionsMasterList.event_title.Count > 0) ? emotionsMasterList.event_title[index] : "empty";
                 subTitle.TextColor = Color.Gray;
                 subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 subTitle.XAlign = TextAlignment.Center;
@@ -105,13 +105,13 @@ namespace PurposeColor.screens
                 subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
                 Label firstDetailsInfo = new Label();
-                string trimmedFirstDetails = (item.event_details != null && item.event_details.Count > 0) ? item.event_details[index] : "empty";
-                if( trimmedFirstDetails != null && trimmedFirstDetails.Length > 50 )
+                string trimmedFirstDetails = (emotionsMasterList.event_details != null && emotionsMasterList.event_details.Count > 0) ? emotionsMasterList.event_details[index] : "empty";
+                if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
                 {
                     trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
                     trimmedFirstDetails = trimmedFirstDetails + "....";
-					trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
-					trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
+                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
+                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
                 }
                 firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
@@ -123,7 +123,7 @@ namespace PurposeColor.screens
 
 
                 Label firstDateInfo = new Label();
-                firstDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 0) ? item.event_datetime[index] : "empty";
+                firstDateInfo.Text = (emotionsMasterList.event_datetime != null && emotionsMasterList.event_datetime.Count > 0) ? emotionsMasterList.event_datetime[index] : "empty";
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -134,7 +134,8 @@ namespace PurposeColor.screens
                 Image firstEmotionsImage = new Image();
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.Source = Device.OnPlatform("manali.jpg", "manali.jpg", "//Assets//manali.jpg");
+                string firstImageSource = (emotionsMasterList.event_media != null && emotionsMasterList.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + mediaThumbPath + emotionsMasterList.event_media[index] : "no_image_found.jpg";
+                firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -194,9 +195,9 @@ namespace PurposeColor.screens
                 divider.WidthRequest = App.screenWidth * 85 / 100;
 
 
-           //     if( index == 0)
-               // headerLayout.Children.Add(mainTitle);
-               // headerLayout.Children.Add(subTitle);
+                //     if( index == 0)
+                // headerLayout.Children.Add(mainTitle);
+                // headerLayout.Children.Add(subTitle);
 
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
@@ -205,24 +206,24 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
                 //customLayout.AddChildToLayout(divider, 5, 14);
 
-              /*  customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
-                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
-               // customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
-                customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));*/
+                /*  customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
+                  customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
+                 // customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
+                  customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));*/
 
-                masterStack.Children.Add(headerLayout);
+               // masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);
-                index++;
-                // masterStack.Children.Add( cellMasterLayout );
             }
-            index = 0;
 
 
 
           //  masterScroll.Scrolled += OnScroll;
             masterScroll.Content = masterStack;
 
-
+            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+            masterLayout.AddChildToLayout(masterScroll, 0, 10);
+            Content = masterLayout;
         }
 
        /* void OnScroll(object sender, ScrolledEventArgs e)

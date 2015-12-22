@@ -50,6 +50,7 @@ namespace PurposeColor.screens
 
         async void OnAppearing(object sender, EventArgs e)
         {
+            this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null);
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar( "Loading gems.." );
             gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
@@ -66,7 +67,7 @@ namespace PurposeColor.screens
             if (gemsEmotionsObject.resultarray != null && gemsEmotionsObject.resultarray.Count > 1)
             {
                 emotionList.Add(gemsEmotionsObject.resultarray[0]);
-                emotionList.Add(gemsEmotionsObject.resultarray[3]);
+                emotionList.Add(gemsEmotionsObject.resultarray[1]);
             }
 
             int index = 0;
@@ -91,7 +92,7 @@ namespace PurposeColor.screens
                 mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
                 mainTitle.Text = "My Supporting Emotions";
                 mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
+                mainTitle.FontSize = Device.OnPlatform(12, 18, 18);
                 mainTitle.WidthRequest = App.screenWidth;
                 mainTitle.TextOrientation = TextOrientation.Middle;
                 headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
@@ -248,8 +249,9 @@ namespace PurposeColor.screens
         async void OnMoreButtonClicked(object sender, EventArgs e)
         {
             Button btn = sender as Button;
-            List<GemsEmotionsDetails> emotionDetailsList = gemsEmotionsObject.resultarray.FindAll(item => item.emotion_id == btn.ClassId).ToList();
-            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList));
+            GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
+
+            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath));
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

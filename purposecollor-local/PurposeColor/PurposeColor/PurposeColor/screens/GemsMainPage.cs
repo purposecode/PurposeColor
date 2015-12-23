@@ -371,7 +371,7 @@ namespace PurposeColor.screens
                 moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
 				moreButton.ClassId = item.goal_id.ToString();
-               // moreButton.Clicked += OnMoreButtonClicked;
+                moreButton.Clicked += OnGoalsMore;
 
                 customLayout.WidthRequest = screenWidth;
                 customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
@@ -429,6 +429,14 @@ namespace PurposeColor.screens
             GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
 
             await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath));
+        }
+
+		async  void OnGoalsMore (object sender, EventArgs e)
+        {
+			Button btn = sender as Button;
+			GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
+
+			await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath));
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

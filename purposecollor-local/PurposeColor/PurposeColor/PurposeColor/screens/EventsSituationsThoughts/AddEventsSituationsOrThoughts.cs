@@ -725,9 +725,22 @@ namespace PurposeColor.screens
             previewListView.ItemsSource = App.PreviewListSource;
 			previewListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) => 
 			{
-              /*  PreviewItem items = previewListView.SelectedItem as PreviewItem;
-                if( items != null )
-                App.Navigator.PushModalAsync( new VideoPlayerView( items.Path ) );*/
+               /* PreviewItem items = previewListView.SelectedItem as PreviewItem;
+				if( items != null )
+				{
+					if( Device.OS == TargetPlatform.iOS )	
+					{
+						App.SelectedVideoPath = items.Path;
+						IPlayVideo video = DependencyService.Get<IPlayVideo>();
+						video.playVid();
+					}
+					else
+					{
+
+						App.Navigator.PushModalAsync( new VideoPlayerView( items.Path ) );
+					}
+				}*/
+         
 				previewListView.SelectedItem = null;
 			};
             listContainer.Children.Add(previewListView);

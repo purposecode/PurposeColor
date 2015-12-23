@@ -46,13 +46,28 @@ namespace PurposeColor.screens
             masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.Transparent;
 
-          
+
+    
+
+            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+            masterLayout.AddChildToLayout(masterScroll, 0, 10);
+
+            
+        }
+
+        void OnBackButtonTapRecognizerTapped(object sender, EventArgs e)
+        {
+            App.Navigator.PopAsync();
         }
 
         async void OnAppearing(object sender, EventArgs e)
         {
             this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null);
             IProgressBar progress = DependencyService.Get<IProgressBar>();
+
+            if (gemsEmotionsObject != null || gemsGoalsObject != null)
+                return;
+
             progress.ShowProgressbar( "Loading gems.." );
             gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
             gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
@@ -160,7 +175,7 @@ namespace PurposeColor.screens
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0] : "no_image_found.jpg";
-                firstEmotionsImage.Source = Device.OnPlatform("manali.jpg", firstImageSource, "//Assets//manali.jpg");
+                firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -234,12 +249,12 @@ namespace PurposeColor.screens
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 5));
+                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
                 customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
                 customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
-                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
                 customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
                 customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));
 
@@ -395,12 +410,12 @@ namespace PurposeColor.screens
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 5));
+                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
                 customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
                 customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
-                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
                 customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
                 customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));
 
@@ -413,9 +428,6 @@ namespace PurposeColor.screens
 
             masterScroll.Scrolled += OnScroll;
             masterScroll.Content = masterStack;
-
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(masterScroll, 0, 10);
             Content = masterLayout;
 
 
@@ -443,12 +455,12 @@ namespace PurposeColor.screens
         {
             System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
 
-            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 605 )
+            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 600 )
             {
 				if( mainTitleBar.title.Text != "My Supporting Emotions" )
                 mainTitleBar.title.Text = "My Supporting Emotions";
             }
-            else if (masterScroll.ScrollY > 605 && masterScroll.ScrollY < 900)
+            else if (masterScroll.ScrollY > 600 && masterScroll.ScrollY < 900)
             {
                 if( mainTitleBar.title.Text != "My Goals and Dreams")
 					mainTitleBar.title.Text = "My Goals and Dreams";

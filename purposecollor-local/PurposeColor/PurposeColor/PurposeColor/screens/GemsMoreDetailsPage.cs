@@ -18,7 +18,7 @@ namespace PurposeColor.screens
         StackLayout listContainer;
         List<GemsPageInfo> gemsList;
         int listViewVislbleIndex;
-        GemsPageTitleBar mainTitleBar;
+        GemsPageTitleBarWithBack mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
         GemsEmotionsDetails emotionsMasterList;
@@ -47,8 +47,15 @@ namespace PurposeColor.screens
 
 
             // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
-
+            mainTitleBar = new GemsPageTitleBarWithBack(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
+            if (emotionsMasterList != null)
+            {
+                mainTitleBar.title.Text = emotionsMasterList.emotion_title;
+            }
+            else
+            {
+                mainTitleBar.title.Text = goalsMasterList.goal_title;
+            }
 
 
             masterScroll = new ScrollView();
@@ -60,11 +67,15 @@ namespace PurposeColor.screens
             masterStack.BackgroundColor = Color.Transparent;
 
 
-
 			this.Appearing += OnAppearing;
 
 
+            masterScroll.Content = masterStack;
+            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+            masterLayout.AddChildToLayout(masterScroll, 0, 10);
+            Content = masterLayout;
         }
+
 
         async void OnAppearing(object sender, EventArgs e)
         {
@@ -273,16 +284,6 @@ namespace PurposeColor.screens
 				}
 			}
            
-
-
-
-          //  masterScroll.Scrolled += OnScroll;
-            masterScroll.Content = masterStack;
-
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 0, 10);
-            Content = masterLayout;
         }
 
        /* void OnScroll(object sender, ScrolledEventArgs e)

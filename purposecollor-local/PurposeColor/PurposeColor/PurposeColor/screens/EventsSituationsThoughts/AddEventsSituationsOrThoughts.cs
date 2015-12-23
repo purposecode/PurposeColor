@@ -804,14 +804,14 @@ namespace PurposeColor.screens
                     audioRecodeOffHolder.IsVisible = true;
                     audioRecodeOnHolder.IsVisible = false;
                     isAudioRecording = true;
-                    Device.StartTimer(TimeSpan.FromSeconds(1), () =>
+                    Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
                     {
                         //RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
                         //progress.ShowToast("Maximum duration has reached.");
                         //return false;
                         if (isAudioRecording)
                         {
-                            if (Seconds >= 60)
+                            if (Seconds >= 120) // for one minute// 120 * 500 = 60 Sec. //
                             {
                                 RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
                                 progress.ShowToast("Maximum duration has reached.");

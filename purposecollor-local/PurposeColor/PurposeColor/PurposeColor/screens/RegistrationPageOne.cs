@@ -242,14 +242,19 @@ namespace PurposeColor.screens
                         {
                             progressBar = DependencyService.Get<IProgressBar>();
                             progressBar.ShowProgressbar("Registering new user");
+                            string statusCode = await RegisterUser();
 
-                            if (await RegisterUser())
+                            if (statusCode == "201")
                             {
-                                await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email send to " + emailEntry.Text, Constants.ALERT_OK);
+                                await DisplayAlert(Constants.ALERT_TITLE, "Thanks for registering, We have send you an email with a link for activating the account. You need to activate the account inorder to loginto the app. ", Constants.ALERT_OK);
 
                                 /////////// to do ///////////
                                 /////////// navigate to sign in page ///////////
 
+                            }
+                            else if (statusCode == "208")
+                            {
+                                await DisplayAlert(Constants.ALERT_TITLE, "Please verify the email address, "+emailEntry.Text+" is alredy registered.", Constants.ALERT_OK);
                             }
                             else
                             {
@@ -294,14 +299,15 @@ namespace PurposeColor.screens
             Content = masterLayout;
         }
 
-        private async System.Threading.Tasks.Task<bool> RegisterUser()
+        private async System.Threading.Tasks.Task<string> RegisterUser()
         {
+            string statusCode = "500";
             try
             {
-                string statusCode = await PurposeColor.Service.ServiceHelper.RegisterUser(nameEntry.Text, emailEntry.Text, passwordEntry.Text);
-                if (statusCode == "201")
+                string responce = await PurposeColor.Service.ServiceHelper.RegisterUser(nameEntry.Text, emailEntry.Text, passwordEntry.Text);
+                if (!string.IsNullOrEmpty(responce))
                 {
-                    return true;
+                    statusCode = responce;
                 }
             }
             catch (Exception ex)
@@ -312,7 +318,7 @@ namespace PurposeColor.screens
                 }
             }
 
-            return false;
+            return statusCode;
         }
 
         public void Dispose()

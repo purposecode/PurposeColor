@@ -81,6 +81,7 @@
     <Compile Include="screens\CustomeMultiSelectionList.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />
     <Compile Include="screens\FeelingsSecondPage.cs" />
+    <Compile Include="screens\ForgotPassword.cs" />
     <Compile Include="screens\GemDetailedView.xaml.cs">
       <DependentUpon>GemDetailedView.xaml</DependentUpon>
     </Compile>

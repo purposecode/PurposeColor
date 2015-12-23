@@ -16,17 +16,19 @@ namespace PurposeColor.screens
         CustomLayout masterLayout = null;
         double screenHeight;
         double screenWidth;
+        double screenDensity;
         IProgressBar progressBar = null;
         Image pageBackGround = null;
-        Entry nameEntry = null;
-        Entry emailEntry = null;
-        Entry passwordEntry = null;
-        Entry confirmPasswordEntry = null;
+        CustomEntry nameEntry = null;
+        CustomEntry emailEntry = null;
+        CustomEntry passwordEntry = null;
+        CustomEntry confirmPasswordEntry = null;
         Label termsOfUseLabel = null;
         Image registrationButton = null;
         Switch termsSwitch = null;
         bool doesAgreeTerms = false;
         Image appIcon = null;
+        //Label forgotPasswordLabel = null;
 
         public RegistrationPageOne()
         {
@@ -34,6 +36,7 @@ namespace PurposeColor.screens
 
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
+            screenDensity = App.screenDensity;
             progressBar = DependencyService.Get<IProgressBar>();
 
             #region BACKGROUND IMAGE
@@ -54,9 +57,9 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(appIcon, 40, Device.OnPlatform(15, 15, 0));
 
-            #region ENTRYS
+            #region CustomEntryS
 
-            nameEntry = new Entry
+            nameEntry = new CustomEntry
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -64,11 +67,11 @@ namespace PurposeColor.screens
                 Placeholder = "First name",
                 //TextColor = Color.FromHex("#424646"),
                 WidthRequest = (int)(screenWidth * .80), // 80% of screen,
-                Keyboard = Keyboard.Default,
+                Keyboard = Keyboard.Default
             };
             masterLayout.AddChildToLayout(nameEntry, 10, Device.OnPlatform(30, 30, 18));
 
-            emailEntry = new Entry
+            emailEntry = new CustomEntry
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -80,7 +83,7 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(emailEntry, 10, Device.OnPlatform(40, 40, 28));
 
-            passwordEntry = new Entry
+            passwordEntry = new CustomEntry
             {
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -93,7 +96,7 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(50, 50, 38));
 
-            confirmPasswordEntry = new Entry
+            confirmPasswordEntry = new CustomEntry
             {
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -123,7 +126,15 @@ namespace PurposeColor.screens
                 doesAgreeTerms = !doesAgreeTerms;
             };
 
-            masterLayout.AddChildToLayout(termsSwitch, 10, Device.OnPlatform(70, 70, 56));
+            if (screenDensity < 1.5)
+            {
+                masterLayout.AddChildToLayout(termsSwitch, 5, Device.OnPlatform(70, 70, 56));
+            }
+            else
+            {
+                masterLayout.AddChildToLayout(termsSwitch, 10, Device.OnPlatform(70, 70, 56));
+            }
+            
 
             termsOfUseLabel = new Label
             {
@@ -132,9 +143,24 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center
             };
-            masterLayout.AddChildToLayout(termsOfUseLabel, 35, Device.OnPlatform(70, 70, 59));
+            masterLayout.AddChildToLayout(termsOfUseLabel, Device.OnPlatform(42, 42, 40), Device.OnPlatform(70, 70, 59));
 
             #endregion
+
+            //forgotPasswordLabel = new Label
+            //{
+            //    Text = "Forgot password",
+            //    WidthRequest = (int)(screenWidth * .50),
+            //    VerticalOptions = LayoutOptions.Center,
+            //    BackgroundColor = Color.Transparent
+            //};
+
+            //TapGestureRecognizer forgotPasswordTapRecognizer = new TapGestureRecognizer();
+            //forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTapRecognizer);
+            //forgotPasswordTapRecognizer.Tapped += async (s, e) =>
+            //{ 
+                
+            //};
 
             #region REGISTRATION
 
@@ -165,7 +191,7 @@ namespace PurposeColor.screens
                     }
                     else
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please enter all fields", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "Please input all fields", Constants.ALERT_OK);
                         allErntryAreValid = false;
                         return;
                     }
@@ -178,7 +204,7 @@ namespace PurposeColor.screens
                     }
                     else
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please enter valid email address.", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "Please provide a valid email address.", Constants.ALERT_OK);
                         allErntryAreValid = false;
                         return;
                     }
@@ -219,7 +245,7 @@ namespace PurposeColor.screens
 
                             if (await RegisterUser())
                             {
-                                await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email.", Constants.ALERT_OK);
+                                await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email send to " + emailEntry.Text, Constants.ALERT_OK);
 
                                 /////////// to do ///////////
                                 /////////// navigate to sign in page ///////////
@@ -302,6 +328,7 @@ namespace PurposeColor.screens
             this.registrationButton = null;
             this.termsSwitch = null;
             this.appIcon = null;
+            //this.forgotPasswordLabel = null;
 
             GC.Collect();
         }

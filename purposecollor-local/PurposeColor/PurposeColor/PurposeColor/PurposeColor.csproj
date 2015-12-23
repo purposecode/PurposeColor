@@ -109,6 +109,7 @@
     <Compile Include="screens\PurposeMasterDetailPage.cs" />
     <Compile Include="interfaces\IAudioRecorder.cs" />
     <Compile Include="screens\AudioRecorderPage.cs" />
+    <Compile Include="screens\RegistrationPageOne.cs" />
     <Compile Include="screens\VideoPlayerView.cs" />
     <Compile Include="Service\ServiceHelper.cs" />
     <Compile Include="interfaces\ILocation.cs" />

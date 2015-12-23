@@ -158,7 +158,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 16, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -167,7 +167,7 @@ namespace PurposeColor.screens
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 15, 13) : 12;
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(13, 15, 13) : 12;
                 firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 
@@ -320,7 +320,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 40;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 16, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -329,7 +329,7 @@ namespace PurposeColor.screens
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 15, 13) : 12;
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(13, 15, 13) : 12;
                 firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 

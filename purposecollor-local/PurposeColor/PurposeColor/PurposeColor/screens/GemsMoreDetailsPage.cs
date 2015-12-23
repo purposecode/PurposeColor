@@ -14,10 +14,6 @@ namespace PurposeColor.screens
     public class GemsMoreDetailsPage : ContentPage, IDisposable
     {
         CustomLayout masterLayout;
-        IProgressBar progressBar;
-        StackLayout listContainer;
-        List<GemsPageInfo> gemsList;
-        int listViewVislbleIndex;
         GemsPageTitleBarWithBack mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
@@ -35,7 +31,7 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-            progressBar = DependencyService.Get<IProgressBar>();
+			IProgressBar progressBar = DependencyService.Get<IProgressBar>();
             eventsMediaPath = eventMedia;
             eventsMediaThumbPath = eventMediaThumb;
 			goalsMediaPath = goalsMedia;
@@ -56,6 +52,10 @@ namespace PurposeColor.screens
             {
                 mainTitleBar.title.Text = goalsMasterList.goal_title;
             }
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				App.Navigator.PopModalAsync();
+			};
 
 
             masterScroll = new ScrollView();

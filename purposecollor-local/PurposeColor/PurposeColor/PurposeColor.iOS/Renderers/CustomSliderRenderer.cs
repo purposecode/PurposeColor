@@ -21,8 +21,13 @@ namespace PurposeColor.Droid.Renderers
         {
             base.OnElementChanged(e);
 			formsSlider = (CustomSlider)this.Element;
-			formsSlider.Value = 1;
-			formsSlider.CurrentValue = 1;
+
+			if (formsSlider != null) 
+			{
+				formsSlider.Value = 1;
+				formsSlider.CurrentValue = 1;
+			}
+
 			FeelingNowPage.sliderValue = 1;
             UISlider control = (UISlider)Control;
 			control.Value = 1.0f;

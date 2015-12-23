@@ -209,7 +209,7 @@ namespace PurposeColor.screens
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
                 string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1] : "no_image_found.jpg";
-                secondEmotionsImage.Source = Device.OnPlatform("manali.jpg", secondImageSource, "//Assets//manali.jpg");
+                secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
 
 
                 Button moreButton = new Button();

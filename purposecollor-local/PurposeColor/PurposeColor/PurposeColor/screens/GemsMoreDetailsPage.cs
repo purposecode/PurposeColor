@@ -152,8 +152,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image ();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 25, 20) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 25, 20) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
 					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index])) ? true : false;
 					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index] : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
@@ -252,8 +252,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 
 					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index])) ? true : false;
 					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index] : Constants.SERVICE_BASE_URL + goalsNoMediaPath;

@@ -172,8 +172,8 @@ namespace PurposeColor.screens
 
 
                 Image firstEmotionsImage = new Image();
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
                 string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0] : "no_image_found.jpg";
                 firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
@@ -206,8 +206,8 @@ namespace PurposeColor.screens
 
 
                 Image secondEmotionsImage = new Image();
-                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
                 string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1] : "no_image_found.jpg";
                 secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
 
@@ -250,12 +250,12 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
+                customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, -2, 0));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
                 customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
                 customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
-                customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
+                customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 11, 10));
                 customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));
 
                 masterStack.Children.Add(headerLayout);

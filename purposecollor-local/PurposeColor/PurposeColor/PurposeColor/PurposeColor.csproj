@@ -114,6 +114,7 @@
     <Compile Include="screens\VideoPlayerView.cs" />
     <Compile Include="Service\ServiceHelper.cs" />
     <Compile Include="interfaces\ILocation.cs" />
+    <Compile Include="interfaces\IPlayVideo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

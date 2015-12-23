@@ -206,7 +206,7 @@ namespace PurposeColor.screens
                 moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
                 moreButton.ClassId = item.emotion_id.ToString();
-                moreButton.Clicked += OnMoreButtonClicked;
+                moreButton.Clicked += OnEmotionsMoreButtonClicked;
 
                 customLayout.WidthRequest = screenWidth;
                 customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
@@ -423,20 +423,20 @@ namespace PurposeColor.screens
         }
 
 
-        async void OnMoreButtonClicked(object sender, EventArgs e)
+        async void OnEmotionsMoreButtonClicked(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
 
-            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath));
+            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, null, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath, gemsEmotionsObject.noimageurl, null, null, null));
         }
 
 		async  void OnGoalsMore (object sender, EventArgs e)
         {
 			Button btn = sender as Button;
-			GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
+			GemsGoalsDetails goalsDetailsList = gemsGoalsObject.resultarray.FirstOrDefault(item => item.goal_id == btn.ClassId);
 
-			await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath));
+            await Navigation.PushModalAsync(new GemsMoreDetailsPage(null, goalsDetailsList, null, null, null, gemsGoalsObject.mediapath, gemsGoalsObject.mediathumbpath, gemsGoalsObject.noimageurl));
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

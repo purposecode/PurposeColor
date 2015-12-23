@@ -126,7 +126,7 @@ namespace PurposeColor.screens
 					firstDetailsInfo.TextColor = Color.Gray;
 					firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-					firstDetailsInfo.HeightRequest = 45;
+					firstDetailsInfo.HeightRequest = 40;
 					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform (17, 16, 13) : 15;
 					firstDetailsInfo.FontSize = Device.OnPlatform (firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
@@ -226,7 +226,7 @@ namespace PurposeColor.screens
 					firstDetailsInfo.TextColor = Color.Gray;
 					firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-					firstDetailsInfo.HeightRequest = 45;
+					firstDetailsInfo.HeightRequest = 40;
 					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
 					firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 

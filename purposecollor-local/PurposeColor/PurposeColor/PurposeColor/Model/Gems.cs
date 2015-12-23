@@ -26,4 +26,27 @@ namespace PurposeColor.Model
         public List<GemsEmotionsDetails> resultarray { get; set; }
     }
 
+
+
+    public class GemsGoalsDetails
+    {
+        public string user_id { get; set; }
+        public string goal_id { get; set; }
+        public string goal_title { get; set; }
+        public List<string> goalaction_id { get; set; }
+        public List<string> action_title { get; set; }
+        public List<string> action_details { get; set; }
+        public List<string> action_datetime { get; set; }
+        public List<string> action_media { get; set; }
+    }
+
+    public class GemsGoalsObject
+    {
+        public string code { get; set; }
+        public string noimageurl { get; set; }
+        public string mediapath { get; set; }
+        public string mediathumbpath { get; set; }
+        public List<GemsGoalsDetails> resultarray { get; set; }
+    }
+
 }

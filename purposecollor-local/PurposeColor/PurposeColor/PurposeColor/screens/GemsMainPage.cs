@@ -23,6 +23,7 @@ namespace PurposeColor.screens
         ScrollView masterScroll;
         StackLayout masterStack;
         GemsEmotionsObject gemsEmotionsObject;
+        GemsGoalsObject gemsGoalsObject;
         public GemsMainPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -54,9 +55,19 @@ namespace PurposeColor.screens
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar( "Loading gems.." );
             gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
+            gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
             if (gemsEmotionsObject == null)
             {
                 var success = await DisplayAlert( Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY );
+                if (!success)
+                    OnAppearing(sender, EventArgs.Empty);
+                else
+                    return;
+            }
+
+            if (gemsGoalsObject == null)
+            {
+                var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
                 if (!success)
                     OnAppearing(sender, EventArgs.Empty);
                 else
@@ -70,7 +81,14 @@ namespace PurposeColor.screens
                 emotionList.Add(gemsEmotionsObject.resultarray[1]);
             }
 
-            int index = 0;
+            List<GemsGoalsDetails> goalsList = new List<GemsGoalsDetails>();
+            if( gemsGoalsObject.resultarray != null && gemsGoalsObject.resultarray.Count > 1 )
+            {
+                goalsList.Add( gemsGoalsObject.resultarray[0] );
+                goalsList.Add( gemsGoalsObject.resultarray[1] );
+            }
+
+            int emotionIndex = 0;
             foreach (var item in emotionList )
             {
                 StackLayout cellMasterLayout = new StackLayout();
@@ -209,7 +227,7 @@ namespace PurposeColor.screens
                   whiteBorder.HeightRequest = 5;
                   whiteBorder.WidthRequest = App.screenWidth;*/
 
-                if( index == 0)
+                if( emotionIndex == 0)
                 headerLayout.Children.Add(mainTitle);
                 headerLayout.Children.Add(subTitle);
 
@@ -227,12 +245,171 @@ namespace PurposeColor.screens
 
                 masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);
-                index++;
+                emotionIndex++;
                 // masterStack.Children.Add( cellMasterLayout );
             }
-            index = 0;
+            emotionIndex = 0;
+
+			int goalsIndex = 0;
+			foreach( var item in goalsList )
+            {
+                StackLayout cellMasterLayout = new StackLayout();
+                cellMasterLayout.Orientation = StackOrientation.Vertical;
+                cellMasterLayout.BackgroundColor = Color.White;
+
+                StackLayout headerLayout = new StackLayout();
+                headerLayout.Orientation = StackOrientation.Vertical;
+                headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+
+                CustomLayout customLayout = new CustomLayout();
+                customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                double screenWidth = App.screenWidth;
+                double screenHeight = App.screenHeight;
+
+                CustomImageButton mainTitle = new CustomImageButton();
+                //  mainTitle.IsEnabled = false;
+                mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
+                mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
+                mainTitle.Text = "My Goals and Dreams";
+                mainTitle.TextColor = Color.White;
+                mainTitle.FontSize = Device.OnPlatform(12, 18, 18);
+                mainTitle.WidthRequest = App.screenWidth;
+                mainTitle.TextOrientation = TextOrientation.Middle;
+                headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
+                mainTitle.HeightRequest = 80;
 
 
+                Label subTitle = new Label();
+                subTitle.Text = item.goal_title;
+                subTitle.TextColor = Color.Gray;
+                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                subTitle.XAlign = TextAlignment.Center;
+                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+                subTitle.VerticalOptions = LayoutOptions.Center;
+                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
+                subTitle.WidthRequest = App.screenWidth * 90 / 100;
+                headerLayout.HorizontalOptions = LayoutOptions.Center;
+                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
+
+                Label firstDetailsInfo = new Label();
+				string trimmedFirstDetails = (item.action_details != null && item.action_details.Count > 0 ) ? item.action_details[0] : "empty";
+                if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
+                {
+                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
+                    trimmedFirstDetails = trimmedFirstDetails + "....";
+                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
+                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
+                }
+                firstDetailsInfo.Text = trimmedFirstDetails;
+                firstDetailsInfo.TextColor = Color.Gray;
+                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                firstDetailsInfo.HeightRequest = 40;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
+                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+
+
+                Label firstDateInfo = new Label();
+				firstDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 0 ) ? item.action_datetime[0] : "empty";
+                //firstDateInfo.Text = "2015 Januvary 30";
+                firstDateInfo.TextColor = Color.Black;
+                firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 15, 13) : 12;
+                firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
+
+
+                Image firstEmotionsImage = new Image();
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+				bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty (item.action_media [0])) ? true : false;
+				//string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
+				string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
+				firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+                //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
+
+
+
+                Label secondDetailsInfo = new Label();
+				string trimmedSecondDetails = (item.action_details != null && item.action_details.Count > 1) ? item.action_details[1] : "empty";
+                if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 50)
+                {
+                    trimmedSecondDetails = trimmedSecondDetails.Substring(0, 50);
+                    trimmedSecondDetails = trimmedSecondDetails + "....";
+                    trimmedSecondDetails = trimmedSecondDetails.Replace("\\n", string.Empty);
+                    trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
+                }
+                secondDetailsInfo.Text = trimmedSecondDetails;
+                // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                secondDetailsInfo.TextColor = Color.Gray;
+                secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                secondDetailsInfo.HeightRequest = 40;
+                secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+
+
+                Label secondDateInfo = new Label();
+				secondDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 1) ? item.action_datetime[1] : "empty";
+                secondDateInfo.TextColor = Color.Black;
+                secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                secondDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
+
+
+                Image secondEmotionsImage = new Image();
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
+				bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty (item.action_media [1])) ? true : false;
+				string secondImageSource = ( secondImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[1] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
+				secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
+
+
+                Button moreButton = new Button();
+                moreButton.BackgroundColor = Color.Transparent;
+                moreButton.BorderColor = Color.Transparent;
+                moreButton.BorderWidth = 0;
+                moreButton.Text = "more";
+                moreButton.FontSize = 15;
+                moreButton.MinimumHeightRequest = 20;
+                moreButton.TextColor = Color.Silver;
+				moreButton.ClassId = item.goal_id.ToString();
+               // moreButton.Clicked += OnMoreButtonClicked;
+
+                customLayout.WidthRequest = screenWidth;
+                customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
+
+
+                StackLayout viewContainer = new StackLayout();
+                viewContainer.WidthRequest = App.screenWidth;
+                viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
+                viewContainer.BackgroundColor = Color.White;
+
+                Image divider = new Image();
+                divider.Source = "line_seperate.png";
+                divider.BackgroundColor = Color.Transparent;
+                divider.WidthRequest = App.screenWidth * 85 / 100;
+
+
+				if (goalsIndex == 0)
+                    headerLayout.Children.Add(mainTitle);
+                headerLayout.Children.Add(subTitle);
+
+
+                customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
+                customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
+                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 5));
+                customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
+                customLayout.AddChildToLayout(divider, 5, 14);
+
+                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 15));
+                customLayout.AddChildToLayout(secondEmotionsImage, 65, Device.OnPlatform(8, 13, 10));
+                customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 25, 19));
+
+                masterStack.Children.Add(headerLayout);
+                masterStack.Children.Add(customLayout);
+                goalsIndex++;
+                // masterStack.Children.Add( cellMasterLayout );
+            }
+            goalsIndex = 0;
 
             masterScroll.Scrolled += OnScroll;
             masterScroll.Content = masterStack;
@@ -258,20 +435,15 @@ namespace PurposeColor.screens
         {
             System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
 
-            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307 )
+            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 605 )
             {
-                if( mainTitleBar.title.Text != "0 th Menu" )
+				if( mainTitleBar.title.Text != "My Supporting Emotions" )
                 mainTitleBar.title.Text = "My Supporting Emotions";
             }
-            else if( masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610 )
+            else if (masterScroll.ScrollY > 605 && masterScroll.ScrollY < 900)
             {
-                if( mainTitleBar.title.Text != "1 th Menu")
-                mainTitleBar.title.Text = "1 th Menu";
-            }
-            else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
-            {
-                if( mainTitleBar.title.Text != "2 th Menu")
-                mainTitleBar.title.Text = "2 th Menu";
+                if( mainTitleBar.title.Text != "My Goals and Dreams")
+					mainTitleBar.title.Text = "My Goals and Dreams";
             }
 
         }

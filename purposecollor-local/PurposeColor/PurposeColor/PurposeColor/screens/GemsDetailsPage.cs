@@ -37,11 +37,11 @@ namespace PurposeColor
 
 			title = new Label ();
 			title.Text = titleVal;
-			title.TextColor = Color.Red;
+			title.TextColor = Color.Black;
 
 			description = new Label ();
 			description.Text = desc;
-			description.TextColor = Color.Red;
+			description.TextColor = Color.Black;
 
 
 

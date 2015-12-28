@@ -485,7 +485,7 @@ namespace PurposeColor.screens
 				string desc = "";
 				for (int index = 0;  index < emotionList.Count; index++)
 				{
-					media = emotionList[index].event_media.FindAll (med => med.event_id == tap.ClassId);
+					media = emotionList[index].event_media.FindAll (med => med.event_id == tap.ClassId).ToList();
 					if (media != null && media.Count > 0 )
 					{
 						break;

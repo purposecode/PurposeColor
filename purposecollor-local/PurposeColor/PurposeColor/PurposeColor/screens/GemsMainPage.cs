@@ -158,7 +158,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 16, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(12, 16, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -167,17 +167,17 @@ namespace PurposeColor.screens
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(13, 13, 13) : 12;
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(10, 13, 13) : 12;
                 firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 
                 Image firstEmotionsImage = new Image();
                 firstEmotionsImage.Aspect = Aspect.Fill;
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
                 string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0] : "no_image_found.jpg";
                 firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
-               // firstEmotionsImage.Source = "//Assets//manali.jpg"
+				//firstEmotionsImage.Source = "manali.jpg";
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -209,11 +209,11 @@ namespace PurposeColor.screens
 
                 Image secondEmotionsImage = new Image();
                 secondEmotionsImage.Aspect = Aspect.Fill;
-                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
                 string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1] : "no_image_found.jpg";
                 secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
-                //secondEmotionsImage.Source = "//Assets//manali.jpg"; 
+                //secondEmotionsImage.Source = "manali.jpg"; 
 
 
                 CustomImageButton moreButton = new CustomImageButton();
@@ -221,7 +221,7 @@ namespace PurposeColor.screens
                 moreButton.BorderColor = Color.Transparent;
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "More";
-                moreButton.FontSize = 15;
+				moreButton.FontSize = Device.OnPlatform (12, 15, 15);
                 moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
                 moreButton.ClassId = item.emotion_id.ToString();
@@ -254,13 +254,13 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, 4, 1));
+				customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform( 63, 60, 60 ), Device.OnPlatform(-2, 4, 1));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
-                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
-                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
-                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 16, 12));
-                customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 27, 19));
+                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
+				customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform( 63, 60, 60 ), Device.OnPlatform(14, 16, 12));
+				customLayout.AddChildToLayout(moreButton, Device.OnPlatform( 77, 75, 75 ), Device.OnPlatform(24, 27, 19));
 
                 double paddingLeft = App.screenWidth * 5 / 100;
                 customLayout.Padding = new Thickness(paddingLeft, 0, paddingLeft, 0);
@@ -327,7 +327,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 40;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 16, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(12, 16, 13) : 15;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -336,20 +336,19 @@ namespace PurposeColor.screens
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
                 firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(13, 13, 13) : 12;
+                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(10, 13, 13) : 12;
                 firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
 
                 Image firstEmotionsImage = new Image();
                 firstEmotionsImage.Aspect = Aspect.Fill;
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
 				bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty (item.action_media [0])) ? true : false;
 				//string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
 				string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
                 firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
-                //firstEmotionsImage.Source = "//Assets//manali.jpg";
-                //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
+                //firstEmotionsImage.Source = "manali.jpg";
 
 
 
@@ -380,11 +379,11 @@ namespace PurposeColor.screens
 
                 Image secondEmotionsImage = new Image();
                 secondEmotionsImage.Aspect = Aspect.Fill;
-                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
 				bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty (item.action_media [1])) ? true : false;
 				string secondImageSource = ( secondImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[1] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
-                //secondEmotionsImage.Source = "//Assets//manali.jpg"; 
+                //secondEmotionsImage.Source = "manali.jpg"; 
                 secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
 
 
@@ -393,7 +392,7 @@ namespace PurposeColor.screens
                 moreButton.BorderColor = Color.Transparent;
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "More";
-                moreButton.FontSize = 15;
+				moreButton.FontSize = Device.OnPlatform (12, 15, 15);
                 moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
 				moreButton.ClassId = item.goal_id.ToString();
@@ -422,13 +421,13 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, 4, 1));
+				customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform( 63, 60, 60 ), Device.OnPlatform(-2, 4, 1));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
-                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
-                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
-                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 16, 12));
-                customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 27, 19));
+                customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
+                customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
+				customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform( 63, 60, 60 ), Device.OnPlatform(14, 16, 12));
+				customLayout.AddChildToLayout(moreButton, Device.OnPlatform( 77, 75, 75 ), Device.OnPlatform(24, 27, 19));
 
                 double paddingLeft = App.screenWidth * 5 / 100;
                 customLayout.Padding = new Thickness(paddingLeft, 0, paddingLeft, 0);

@@ -172,10 +172,12 @@ namespace PurposeColor.screens
 
 
                 Image firstEmotionsImage = new Image();
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
+                firstEmotionsImage.Aspect = Aspect.Fill;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
                 string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0] : "no_image_found.jpg";
                 firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+               // firstEmotionsImage.Source = "//Assets//manali.jpg"
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -206,10 +208,12 @@ namespace PurposeColor.screens
 
 
                 Image secondEmotionsImage = new Image();
-                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
+                secondEmotionsImage.Aspect = Aspect.Fill;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
                 string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1] : "no_image_found.jpg";
                 secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
+                //secondEmotionsImage.Source = "//Assets//manali.jpg"; 
 
 
                 CustomImageButton moreButton = new CustomImageButton();
@@ -250,12 +254,12 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, -2, 0));
+                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, 4, 1));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
                 customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
                 customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
-                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 11, 10));
+                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 16, 12));
                 customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 27, 19));
 
                 double paddingLeft = App.screenWidth * 5 / 100;
@@ -337,12 +341,14 @@ namespace PurposeColor.screens
 
 
                 Image firstEmotionsImage = new Image();
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
+                firstEmotionsImage.Aspect = Aspect.Fill;
+                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
+                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
 				bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty (item.action_media [0])) ? true : false;
 				//string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
 				string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
-				firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+                firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+                //firstEmotionsImage.Source = "//Assets//manali.jpg";
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -373,11 +379,13 @@ namespace PurposeColor.screens
 
 
                 Image secondEmotionsImage = new Image();
-                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 20) / 100;
-                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 35, 20) / 100;
+                secondEmotionsImage.Aspect = Aspect.Fill;
+                secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 25, 22) / 100;
+                secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 17, 14) / 100;
 				bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty (item.action_media [1])) ? true : false;
 				string secondImageSource = ( secondImageValidity ) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[1] : Constants.SERVICE_BASE_URL +  gemsGoalsObject.noimageurl;
-				secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
+                //secondEmotionsImage.Source = "//Assets//manali.jpg"; 
+                secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
 
 
                 Button moreButton = new Button();
@@ -414,12 +422,12 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, -2, 0));
+                customLayout.AddChildToLayout(firstEmotionsImage, 60, Device.OnPlatform(-5, 4, 1));
                 customLayout.AddChildToLayout(divider, 5, 14);
 
                 customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(10, 15, 11));
                 customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(17, 22, 16));
-                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 11, 10));
+                customLayout.AddChildToLayout(secondEmotionsImage, 60, Device.OnPlatform(8, 16, 12));
                 customLayout.AddChildToLayout(moreButton, 75, Device.OnPlatform(25, 27, 19));
 
                 double paddingLeft = App.screenWidth * 5 / 100;
@@ -433,6 +441,13 @@ namespace PurposeColor.screens
             goalsIndex = 0;
 
             masterScroll.Scrolled += OnScroll;
+
+			StackLayout empty = new StackLayout ();
+			empty.HeightRequest = Device.OnPlatform( 50, 50, 100 );
+			empty.WidthRequest = App.screenWidth * 90 / 100;
+			empty.BackgroundColor = Color.Transparent;
+			masterStack.Children.Add ( empty );
+
             masterScroll.Content = masterStack;
             Content = masterLayout;
 

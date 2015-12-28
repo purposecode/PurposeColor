@@ -53,6 +53,11 @@ namespace PurposeColor
 
         public static Color MAIN_MENU_TEXT_COLOR = Color.FromHex("#42464d");
 
+        //public const string emailRegexString = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+        public const string emailRegexString = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+
+
+
         #region SERVICE
         public const string SERVICE_BASE_URL = "http://purposecodes.com/pc/";
         #endregion

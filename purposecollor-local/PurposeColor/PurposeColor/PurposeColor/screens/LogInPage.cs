@@ -15,29 +15,35 @@ using Xamarin.Forms;
 
 namespace PurposeColor.screens
 {
-    public class LogInPage : ContentPage
+    public class LogInPage : ContentPage, IDisposable
     {
         public Color TextColors { get; set; }
         ActivityIndicator indicator;
         CustomEntry userNameEntry;
         CustomEntry passwordEntry;
+        Label forgotPasswordLabel = null;
+        Button googleSignInButton = null;
+        PurposeColorSubTitleBar subTitleBar = null;
+        Button faceBookSignInButton = null;
+        Button signInButton = null;
+        CustomLayout masterLayout = null;
+        double screenHeight;
+        double screenWidth;
 
         public LogInPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
-            CustomLayout masterLayout = new CustomLayout();
-
+            masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
-
-            IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
-
-            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness");
+            subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Signin");
 
             userNameEntry = new CustomEntry
             {
-                Placeholder = "User name",
+                Placeholder = "Username",
                 Keyboard = Keyboard.Email
             };
 
@@ -47,7 +53,7 @@ namespace PurposeColor.screens
                 IsPassword = true
             };
 
-            Button signInButton = new Button
+            signInButton = new Button
             {
                 Text = "Sign in",
                 TextColor = Color.Gray,
@@ -55,12 +61,23 @@ namespace PurposeColor.screens
                 BorderWidth = 2
             };
 
-            ImageButton imgsignInButton = new ImageButton
+            TapGestureRecognizer forgotPasswordTap = new TapGestureRecognizer();
+            forgotPasswordLabel = new Label
             {
-                Source = "//Assets//circle.png"
+                Text = "Forgot password",
+                TextColor = Constants.BLUE_BG_COLOR,
+                BackgroundColor = Color.Transparent,
+                FontSize = 12,
+                HeightRequest = Device.OnPlatform(15, 25, 25),
             };
 
-            Button googleSignInButton = new Button
+            forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTap);
+            forgotPasswordTap.Tapped += (s, e) =>
+            {
+                // navigate to forgot pswd page.
+            };
+
+            googleSignInButton = new Button
             {
                 Text = "Sign in with Google",
                 TextColor = Color.Gray,
@@ -68,7 +85,7 @@ namespace PurposeColor.screens
                 BorderWidth = 2
             };
 
-            Button faceBookSignInButton = new Button
+            faceBookSignInButton = new Button
             {
                 Text = "Sign in with Facebook",
                 TextColor = Color.Gray,
@@ -81,14 +98,14 @@ namespace PurposeColor.screens
             indicator.IsEnabled = true;
             indicator.IsVisible = false;
 
-            userNameEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            passwordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            signInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
-            googleSignInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
-            faceBookSignInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
+            userNameEntry.WidthRequest = screenWidth * 80 / 100;
+            passwordEntry.WidthRequest = screenWidth * 80 / 100;
+            signInButton.WidthRequest = screenWidth * 60 / 100;
+            googleSignInButton.WidthRequest = screenWidth * 60 / 100;
+            faceBookSignInButton.WidthRequest = screenWidth * 60 / 100;
 
-            imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
-            imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
+            //imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
+            //imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
@@ -118,7 +135,7 @@ namespace PurposeColor.screens
                 return;
             }
 
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             System.Text.RegularExpressions.Match match = regex.Match(userNameEntry.Text);
             if (!match.Success)
             {
@@ -137,16 +154,20 @@ namespace PurposeColor.screens
                 return;
             }
 
-            #region FOR DB
+            #region SERVIDE
             if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
             {
+
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                 progress.ShowProgressbar("Signing in..");
+
                 ApplicationSettings AppSettings = App.Settings;
 
                 try
                 {
                     bool isSaveSuccess = false;
                     var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
-                    if (serviceResult.code != null && serviceResult.code == "200" )
+                    if (serviceResult.code != null && serviceResult.code == "200")
                     {
                         var loggedInUser = serviceResult.resultarray;
                         if (loggedInUser != null)
@@ -181,26 +202,30 @@ namespace PurposeColor.screens
                             }
 
                             isSaveSuccess = await AppSettings.SaveUser(newUser);
-
+                            progress.HideProgressbar();
                             await Navigation.PushAsync(new FeelingNowPage());
                         }
                         else
                         {
+                            progress.HideProgressbar();
                             await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
                             await Navigation.PushAsync(new FeelingNowPage());
                         }
                     }
                     else
                     {
+                        progress.HideProgressbar();
                         await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again", Constants.ALERT_OK);
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
+                    progress.HideProgressbar();
                     DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again", Constants.ALERT_OK);
                     Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
                 }
+                progress.HideProgressbar();
             }
 
             #endregion
@@ -233,6 +258,22 @@ namespace PurposeColor.screens
             App.IsFacebookLogin = true;
             App.IsGoogleLogin = false;
             Navigation.PushModalAsync(new LoginWebViewHolder());
+        }
+
+        public void Dispose()
+        {
+            this.forgotPasswordLabel = null;
+            this.userNameEntry = null;
+            this.passwordEntry = null;
+            this.indicator = null;
+            this.googleSignInButton = null;
+            this.subTitleBar = null;
+            this.faceBookSignInButton = null;
+            this.signInButton = null;
+            this.subTitleBar = null;
+            this.masterLayout = null;
+
+            GC.Collect();
         }
     }
 }

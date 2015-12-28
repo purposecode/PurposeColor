@@ -1087,5 +1087,53 @@ namespace PurposeColor.Service
 
             return null;
         }
+
+        public static async Task<string> ResetPassword(string email)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "404";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=forgotpassword";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    content.Add(new StringContent(email, Encoding.UTF8), "email");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "404";
+        }
+
     }
 }

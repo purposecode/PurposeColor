@@ -171,7 +171,7 @@ namespace PurposeColor.screens
                         return;
                     }
 
-                    Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                    Regex regex = new Regex(Constants.emailRegexString);
                     Match match = regex.Match(emailEntry.Text);
                     if (match.Success)
                     {
@@ -220,10 +220,9 @@ namespace PurposeColor.screens
 
                             if (await RegisterUser())
                             {
-                                await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email.", Constants.ALERT_OK);
-
-                                            /////////// to do ///////////
-                                /////////// navigate to sign in page ///////////
+                                progressBar.HideProgressbar();
+                                await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email. Please add our address in your contacts to prevent routing our mails to spam folder.", Constants.ALERT_OK);
+                                await Navigation.PushAsync(new LogInPage());
 
                             }
                             else
@@ -238,13 +237,14 @@ namespace PurposeColor.screens
                             progressBar.HideProgressbar();
                             DisplayAlert(Constants.ALERT_TITLE, "Network error, registration incomplete.", Constants.ALERT_OK);
                         }
-
+                        progressBar.HideProgressbar();
                     }
                 }
                 catch (Exception ex)
                 {
                     // DisplayAlert(Constants.ALERT_TITLE, ex.Message, Constants.ALERT_OK);
                 }
+                progressBar.HideProgressbar();
             };
 
             #endregion

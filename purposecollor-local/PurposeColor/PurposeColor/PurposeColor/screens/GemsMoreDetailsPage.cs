@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
 
+
 namespace PurposeColor.screens
 {
     public class GemsMoreDetailsPage : ContentPage, IDisposable
@@ -114,7 +115,7 @@ namespace PurposeColor.screens
 
 
 					Label subTitle = new Label ();
-					subTitle.Text = (emotionsMasterList.event_title != null && emotionsMasterList.event_title.Count > 0) ? emotionsMasterList.event_title [index] : "empty";
+					subTitle.Text = (emotionsMasterList.event_title != null && emotionsMasterList.event_title.Count > 0) ? emotionsMasterList.event_title [index].event_title : "empty";
 					subTitle.TextColor = Color.Gray;
 					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					subTitle.XAlign = TextAlignment.Center;
@@ -126,7 +127,7 @@ namespace PurposeColor.screens
 					subTitle.HeightRequest = Device.OnPlatform (40, 40, 30);
 
 					Label firstDetailsInfo = new Label ();
-					string trimmedFirstDetails = (emotionsMasterList.event_details != null && emotionsMasterList.event_details.Count > 0) ? emotionsMasterList.event_details [index] : "empty";
+					string trimmedFirstDetails = (emotionsMasterList.event_details != null && emotionsMasterList.event_details.Count > 0) ? emotionsMasterList.event_details [index].event_details : "empty";
 					if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50) {
 						trimmedFirstDetails = trimmedFirstDetails.Substring (0, 50);
 						trimmedFirstDetails = trimmedFirstDetails + "....";
@@ -143,7 +144,7 @@ namespace PurposeColor.screens
 
 
 					Label firstDateInfo = new Label ();
-					firstDateInfo.Text = (emotionsMasterList.event_datetime != null && emotionsMasterList.event_datetime.Count > 0) ? emotionsMasterList.event_datetime [index] : "empty";
+					firstDateInfo.Text = (emotionsMasterList.event_datetime != null && emotionsMasterList.event_datetime.Count > 0) ? emotionsMasterList.event_datetime [index].event_datetime : "empty";
 					//firstDateInfo.Text = "2015 Januvary 30";
 					firstDateInfo.TextColor = Color.Black;
 					firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -154,7 +155,7 @@ namespace PurposeColor.screens
 					Image firstEmotionsImage = new Image ();
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
-					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index])) ? true : false;
+					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index].event_media)) ? true : false;
 					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index] : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
@@ -213,7 +214,7 @@ namespace PurposeColor.screens
 
 
 					Label subTitle = new Label();
-					subTitle.Text = (goalsMasterList.action_title != null && goalsMasterList.action_title.Count > 0) ? goalsMasterList.action_title[index] : "empty";
+					subTitle.Text = (goalsMasterList.action_title != null && goalsMasterList.action_title.Count > 0) ? goalsMasterList.action_title[index].action_title : "empty";
 					subTitle.TextColor = Color.Gray;
 					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					subTitle.XAlign = TextAlignment.Center;
@@ -225,7 +226,7 @@ namespace PurposeColor.screens
 					subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
 					Label firstDetailsInfo = new Label();
-					string trimmedFirstDetails = (goalsMasterList.action_details != null &&goalsMasterList.action_details.Count > 0) ? goalsMasterList.action_details[index] : "empty";
+					string trimmedFirstDetails = (goalsMasterList.action_details != null &&goalsMasterList.action_details.Count > 0) ? goalsMasterList.action_details[index].action_details : "empty";
 					if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
 					{
 						trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
@@ -243,7 +244,7 @@ namespace PurposeColor.screens
 
 
 					Label firstDateInfo = new Label();
-					firstDateInfo.Text = (goalsMasterList.action_datetime != null && goalsMasterList.action_datetime.Count > 0) ? goalsMasterList.action_datetime[index] : "empty";
+					firstDateInfo.Text = (goalsMasterList.action_datetime != null && goalsMasterList.action_datetime.Count > 0) ? goalsMasterList.action_datetime[index].action_datetime : "empty";
 					//firstDateInfo.Text = "2015 Januvary 30";
 					firstDateInfo.TextColor = Color.Black;
 					firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -255,7 +256,7 @@ namespace PurposeColor.screens
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 
-					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index])) ? true : false;
+					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index].event_media)) ? true : false;
 					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index] : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");

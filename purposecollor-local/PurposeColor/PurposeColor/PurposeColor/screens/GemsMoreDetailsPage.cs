@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
 
+
 namespace PurposeColor.screens
 {
     public class GemsMoreDetailsPage : ContentPage, IDisposable
@@ -86,7 +87,10 @@ namespace PurposeColor.screens
 
 			if (emotionsMasterList != null)
 			{
-				for (int index = 0; index < emotionsMasterList.event_details.Count; index++) {
+				for (int index = 0; index < emotionsMasterList.event_details.Count; index++)
+				{
+					TapGestureRecognizer tap = new TapGestureRecognizer ();
+					tap.Tapped += Tap_Tapped;
 					StackLayout cellMasterLayout = new StackLayout ();
 					cellMasterLayout.Orientation = StackOrientation.Vertical;
 					cellMasterLayout.BackgroundColor = Color.White;
@@ -99,6 +103,8 @@ namespace PurposeColor.screens
 					customLayout.BackgroundColor = Color.FromRgb (244, 244, 244);
 					double screenWidth = App.screenWidth;
 					double screenHeight = App.screenHeight;
+					customLayout.ClassId = emotionsMasterList.event_details [index].event_id;
+					customLayout.GestureRecognizers.Add (  tap);
 
 					CustomImageButton mainTitle = new CustomImageButton ();
 					//  mainTitle.IsEnabled = false;
@@ -114,7 +120,7 @@ namespace PurposeColor.screens
 
 
 					Label subTitle = new Label ();
-					subTitle.Text = (emotionsMasterList.event_title != null && emotionsMasterList.event_title.Count > 0) ? emotionsMasterList.event_title [index] : "empty";
+					subTitle.Text = (emotionsMasterList.event_title != null && emotionsMasterList.event_title.Count > 0) ? emotionsMasterList.event_title [index].event_title : "empty";
 					subTitle.TextColor = Color.Gray;
 					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					subTitle.XAlign = TextAlignment.Center;
@@ -124,39 +130,50 @@ namespace PurposeColor.screens
 					subTitle.WidthRequest = App.screenWidth * 90 / 100;
 					headerLayout.HorizontalOptions = LayoutOptions.Center;
 					subTitle.HeightRequest = Device.OnPlatform (40, 40, 30);
+					subTitle.ClassId = emotionsMasterList.event_details [index].event_id;
+					subTitle.GestureRecognizers.Add (  tap);
+
 
 					Label firstDetailsInfo = new Label ();
-					string trimmedFirstDetails = (emotionsMasterList.event_details != null && emotionsMasterList.event_details.Count > 0) ? emotionsMasterList.event_details [index] : "empty";
+					string trimmedFirstDetails = (emotionsMasterList.event_details != null && emotionsMasterList.event_details.Count > 0) ? emotionsMasterList.event_details [index].event_details : "empty";
 					if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50) {
 						trimmedFirstDetails = trimmedFirstDetails.Substring (0, 50);
 						trimmedFirstDetails = trimmedFirstDetails + "....";
 						trimmedFirstDetails = trimmedFirstDetails.Replace ("\\n", string.Empty);
 						trimmedFirstDetails = trimmedFirstDetails.Replace ("\\r", string.Empty);
 					}
+
+  
 					firstDetailsInfo.Text = trimmedFirstDetails;
 					firstDetailsInfo.TextColor = Color.Gray;
 					firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
 					firstDetailsInfo.HeightRequest = 40;
+					firstDetailsInfo.ClassId = emotionsMasterList.event_details [index].event_id;
+					firstDetailsInfo.GestureRecognizers.Add (  tap);
 					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform (17, 16, 13) : 15;
 					firstDetailsInfo.FontSize = Device.OnPlatform (firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
 					Label firstDateInfo = new Label ();
-					firstDateInfo.Text = (emotionsMasterList.event_datetime != null && emotionsMasterList.event_datetime.Count > 0) ? emotionsMasterList.event_datetime [index] : "empty";
+					firstDateInfo.Text = (emotionsMasterList.event_datetime != null && emotionsMasterList.event_datetime.Count > 0) ? emotionsMasterList.event_datetime [index].event_datetime : "empty";
 					//firstDateInfo.Text = "2015 Januvary 30";
 					firstDateInfo.TextColor = Color.Black;
 					firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform (15, 15, 13) : 12;
 					firstDateInfo.FontSize = Device.OnPlatform (dateFontSize, dateFontSize, dateFontSize);
+					firstDateInfo.ClassId = emotionsMasterList.event_details [index].event_id;
+					firstDateInfo.GestureRecognizers.Add (  tap);
 
 
 					Image firstEmotionsImage = new Image ();
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
-					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index])) ? true : false;
-					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index] : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
+					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index].event_media)) ? true : false;
+					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
+					firstEmotionsImage.ClassId = emotionsMasterList.event_details [index].event_id;
+					firstEmotionsImage.GestureRecognizers.Add (  tap);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
 
@@ -213,7 +230,7 @@ namespace PurposeColor.screens
 
 
 					Label subTitle = new Label();
-					subTitle.Text = (goalsMasterList.action_title != null && goalsMasterList.action_title.Count > 0) ? goalsMasterList.action_title[index] : "empty";
+					subTitle.Text = (goalsMasterList.action_title != null && goalsMasterList.action_title.Count > 0) ? goalsMasterList.action_title[index].action_title : "empty";
 					subTitle.TextColor = Color.Gray;
 					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					subTitle.XAlign = TextAlignment.Center;
@@ -225,7 +242,7 @@ namespace PurposeColor.screens
 					subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
 					Label firstDetailsInfo = new Label();
-					string trimmedFirstDetails = (goalsMasterList.action_details != null &&goalsMasterList.action_details.Count > 0) ? goalsMasterList.action_details[index] : "empty";
+					string trimmedFirstDetails = (goalsMasterList.action_details != null &&goalsMasterList.action_details.Count > 0) ? goalsMasterList.action_details[index].action_details : "empty";
 					if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
 					{
 						trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
@@ -243,7 +260,7 @@ namespace PurposeColor.screens
 
 
 					Label firstDateInfo = new Label();
-					firstDateInfo.Text = (goalsMasterList.action_datetime != null && goalsMasterList.action_datetime.Count > 0) ? goalsMasterList.action_datetime[index] : "empty";
+					firstDateInfo.Text = (goalsMasterList.action_datetime != null && goalsMasterList.action_datetime.Count > 0) ? goalsMasterList.action_datetime[index].action_datetime : "empty";
 					//firstDateInfo.Text = "2015 Januvary 30";
 					firstDateInfo.TextColor = Color.Black;
 					firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -255,8 +272,8 @@ namespace PurposeColor.screens
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 
-					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index])) ? true : false;
-					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index] : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
+					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index].event_media)) ? true : false;
+					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index].event_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 
@@ -286,27 +303,33 @@ namespace PurposeColor.screens
            
         }
 
-       /* void OnScroll(object sender, ScrolledEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
 
-            if (masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307)
-            {
-                if (mainTitleBar.title.Text != "0 th Menu")
-                    mainTitleBar.title.Text = "My Supporting Emotions";
-            }
-            else if (masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610)
-            {
-                if (mainTitleBar.title.Text != "1 th Menu")
-                    mainTitleBar.title.Text = "1 th Menu";
-            }
-            else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
-            {
-                if (mainTitleBar.title.Text != "2 th Menu")
-                    mainTitleBar.title.Text = "2 th Menu";
-            }
+		async void Tap_Tapped (object sender, EventArgs e)
+		{
+			View tap = sender as View;
+			if (tap != null && tap.ClassId != null)
+			{
+				List<EventMedia> media = new List<EventMedia>();
+				EventTitle eventTitle = new EventTitle ();
+				EventDetail eventDetail = new EventDetail ();
 
-        }*/
+
+				eventDetail = emotionsMasterList.event_details.FirstOrDefault (itm => itm.event_id == tap.ClassId);
+				eventTitle = emotionsMasterList.event_title.FirstOrDefault ( itm => itm.event_id == tap.ClassId );
+				media = emotionsMasterList.event_media.FindAll (itm => itm.event_id == tap.ClassId).ToList();
+
+
+				//	title = emotionList.eve
+				if (media != null) 
+				{
+					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, null, null));
+				}
+			} 
+			else
+			{
+				await DisplayAlert( Constants.ALERT_TITLE, "Not a valid Event", Constants.ALERT_OK );
+			}
+		}
 
         void NextButtonTapRecognizer_Tapped(object sender, EventArgs e)
         {

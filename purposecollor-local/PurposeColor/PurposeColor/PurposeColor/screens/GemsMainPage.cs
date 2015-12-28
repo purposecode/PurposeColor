@@ -330,6 +330,8 @@ namespace PurposeColor.screens
                 headerLayout.HorizontalOptions = LayoutOptions.Center;
                 subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
+				TapGestureRecognizer goalsTap = new TapGestureRecognizer ();
+				goalsTap.Tapped += GoalsTap_Tapped;
                 Label firstDetailsInfo = new Label();
 				string trimmedFirstDetails = (item.action_details != null && item.action_details.Count > 0 ) ? item.action_details[0].action_details : "empty";
                 if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
@@ -339,6 +341,10 @@ namespace PurposeColor.screens
                     trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
                     trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
                 }
+
+  
+				firstDetailsInfo.GestureRecognizers.Add ( goalsTap );
+				firstDetailsInfo.ClassId = item.action_media [0].goalaction_id;
                 firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -349,6 +355,8 @@ namespace PurposeColor.screens
 
 
                 Label firstDateInfo = new Label();
+				firstDateInfo.ClassId = item.action_media [0].goalaction_id;
+				firstDateInfo.GestureRecognizers.Add ( goalsTap );
 				firstDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 0 ) ? item.action_datetime[0].action_datetime : "empty";
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
@@ -358,6 +366,8 @@ namespace PurposeColor.screens
 
 
                 Image firstEmotionsImage = new Image();
+				firstEmotionsImage.ClassId = item.action_media [0].goalaction_id;
+				firstEmotionsImage.GestureRecognizers.Add ( goalsTap );
                 firstEmotionsImage.Aspect = Aspect.Fill;
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
@@ -370,6 +380,7 @@ namespace PurposeColor.screens
 
 
                 Label secondDetailsInfo = new Label();
+				secondDetailsInfo.GestureRecognizers.Add ( goalsTap );
 				string trimmedSecondDetails = (item.action_details != null && item.action_details.Count > 1) ? item.action_details[1].action_details : "empty";
                 if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 50)
                 {
@@ -379,6 +390,7 @@ namespace PurposeColor.screens
                     trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
                 }
                 secondDetailsInfo.Text = trimmedSecondDetails;
+				secondDetailsInfo.ClassId = item.action_media [1].goalaction_id;
                 // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
                 secondDetailsInfo.TextColor = Color.Gray;
                 secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -388,6 +400,8 @@ namespace PurposeColor.screens
 
 
                 Label secondDateInfo = new Label();
+				secondDateInfo.ClassId = item.action_media [1].goalaction_id;
+				secondDateInfo.GestureRecognizers.Add ( goalsTap );
 				secondDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 1) ? item.action_datetime[1].action_datetime : "empty";
                 secondDateInfo.TextColor = Color.Black;
                 secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -395,6 +409,8 @@ namespace PurposeColor.screens
 
 
                 Image secondEmotionsImage = new Image();
+				secondEmotionsImage.ClassId = item.action_media [1].goalaction_id;
+				secondEmotionsImage.GestureRecognizers.Add ( goalsTap );
                 secondEmotionsImage.Aspect = Aspect.Fill;
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
@@ -522,6 +538,14 @@ namespace PurposeColor.screens
 			}
 		
 
+		}
+
+
+		async void GoalsTap_Tapped (object sender, EventArgs e)
+		{
+			View goalsTap = sender as View;
+			if (goalsTap != null) {
+			}
 		}
 
         async void OnEmotionsMoreButtonClicked(object sender, EventArgs e)

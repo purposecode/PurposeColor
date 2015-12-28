@@ -78,7 +78,7 @@ namespace PurposeColor.Model
 
     }
 
-    public class Resultarray
+    public class LoginUser
     {
         public string user_id;
         public string firstname;
@@ -93,6 +93,6 @@ namespace PurposeColor.Model
     {
         public string code;
         public string text;
-        public Resultarray resultarray;
+        public LoginUser resultarray;
     }
 }

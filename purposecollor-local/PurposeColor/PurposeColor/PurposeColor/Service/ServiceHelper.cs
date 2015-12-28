@@ -1037,7 +1037,7 @@ namespace PurposeColor.Service
             }
         }
 
-        public static async Task<Resultarray> Login(string email, string password)
+        public static async Task<UserDetailsOnLogin> Login(string email, string password)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -1073,9 +1073,9 @@ namespace PurposeColor.Service
 
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
                     var rootobject = JsonConvert.DeserializeObject<UserDetailsOnLogin>(eventsJson);
-                    if (rootobject != null && rootobject.resultarray != null)
+                    if (rootobject != null)
                     {
-                        return rootobject.resultarray;
+                        return rootobject;
                     }
                 }
                 client.Dispose();

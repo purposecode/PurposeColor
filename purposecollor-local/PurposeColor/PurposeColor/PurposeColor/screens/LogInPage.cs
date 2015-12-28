@@ -137,7 +137,7 @@ namespace PurposeColor.screens
                 return;
             }
 
-            #region FOR DB testing
+            #region FOR DB
             if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
             {
                 ApplicationSettings AppSettings = App.Settings;
@@ -146,45 +146,54 @@ namespace PurposeColor.screens
                 {
                     bool isSaveSuccess = false;
                     var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
-
-                    if (serviceResult != null)
+                    if (serviceResult.code != null && serviceResult.code == "200" )
                     {
-                        User newUser = null;
-                        if (!string.IsNullOrEmpty(serviceResult.email))
+                        var loggedInUser = serviceResult.resultarray;
+                        if (loggedInUser != null)
                         {
-                            newUser = await AppSettings.GetUserWithUserName(serviceResult.email);
-                        }
+                            User newUser = null;
+                            if (!string.IsNullOrEmpty(loggedInUser.email))
+                            {
+                                newUser = await AppSettings.GetUserWithUserName(loggedInUser.email);
+                            }
 
-                        if (newUser == null)
-                        {
-                            newUser = new User();
-                        }
+                            if (newUser == null)
+                            {
+                                newUser = new User();
+                            }
 
-                        newUser.StatusNote = string.IsNullOrEmpty(serviceResult.note) ? string.Empty : serviceResult.note;
-                        newUser.DisplayName = string.IsNullOrEmpty(serviceResult.firstname) ? string.Empty : serviceResult.firstname;
-                        newUser.Email = string.IsNullOrEmpty(serviceResult.email) ? string.Empty : serviceResult.email;
-                        newUser.ProfileImageUrl = string.IsNullOrEmpty(serviceResult.profileurl) ? string.Empty : serviceResult.profileurl;
-                        if (serviceResult.user_id != null)
-                        {
-                            newUser.UserId = Int32.Parse(serviceResult.user_id);
-                        }
-                        if (serviceResult.usertype_id != null)
-                        {
-                            newUser.UserType = Int32.Parse(serviceResult.usertype_id);
-                        }
-                        if (serviceResult.regdate != null)
-                        {
-                            //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
-                            newUser.RegistrationDate = serviceResult.regdate;
-                        }
+                            newUser.StatusNote = string.IsNullOrEmpty(loggedInUser.note) ? string.Empty : loggedInUser.note;
+                            newUser.DisplayName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
+                            newUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
+                            newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
+                            if (loggedInUser.user_id != null)
+                            {
+                                newUser.UserId = Int32.Parse(loggedInUser.user_id);
+                            }
+                            if (loggedInUser.usertype_id != null)
+                            {
+                                newUser.UserType = Int32.Parse(loggedInUser.usertype_id);
+                            }
+                            if (loggedInUser.regdate != null)
+                            {
+                                //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                                newUser.RegistrationDate = loggedInUser.regdate;
+                            }
 
-                        isSaveSuccess = AppSettings.SaveUser(newUser);
+                            isSaveSuccess = await AppSettings.SaveUser(newUser);
 
-                        await Navigation.PushAsync(new FeelingNowPage());
+                            await Navigation.PushAsync(new FeelingNowPage());
+                        }
+                        else
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
+                            await Navigation.PushAsync(new FeelingNowPage());
+                        }
                     }
                     else
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not login,Please try again", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again", Constants.ALERT_OK);
+                        return;
                     }
                 }
                 catch (Exception ex)

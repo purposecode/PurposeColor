@@ -115,7 +115,7 @@ namespace PurposeColor.Database
             }
         }
 
-        public bool SaveUser(User user)
+        public async Task<bool> SaveUser(User user)
         {
             bool isUserAdded = false;
 

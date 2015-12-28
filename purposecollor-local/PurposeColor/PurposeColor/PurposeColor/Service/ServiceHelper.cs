@@ -1036,5 +1036,56 @@ namespace PurposeColor.Service
                 return "500";
             }
         }
+
+        public static async Task<Resultarray> Login(string email, string password)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return null;
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=login";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+                
+                if (!string.IsNullOrEmpty(email))
+                {
+                    content.Add(new StringContent(email, Encoding.UTF8), "email");
+                }
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    content.Add(new StringContent(password, Encoding.UTF8), "password");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.Content != null)
+                {
+
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<UserDetailsOnLogin>(eventsJson);
+                    if (rootobject != null && rootobject.resultarray != null)
+                    {
+                        return rootobject.resultarray;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return null;
+        }
     }
 }

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PurposeColor.Database
@@ -77,7 +78,7 @@ namespace PurposeColor.Database
             }
         }
 
-        public User GetUserWithUserName(string userName)
+        public async Task<User> GetUserWithUserName(string userName)
         {
             try
             {
@@ -131,8 +132,9 @@ namespace PurposeColor.Database
                 newUser.Age = user.Age;
                 newUser.Country = user.Country;
                 newUser.UserId = user.UserId;
+                newUser.UserType = user.UserType;
 
-                if (user.ID == 0)
+                if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
                 {
                     Connection.Insert(newUser);
                 }

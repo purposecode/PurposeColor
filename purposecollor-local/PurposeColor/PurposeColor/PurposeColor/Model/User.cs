@@ -61,10 +61,38 @@ namespace PurposeColor.Model
         /// </summary>
         public int Mobile { get; set; }
 
+        public int UserType { get; set; }
+        
+        public string StatusNote { get; set; }
+
+        public string RegistrationDate { get; set; }
+
+        public string ProfileImageUrl{ get; set; }
+
+        public string Email { get; set; }
+
         /// <summary>
         /// Gets or sets the PreferredGEMS
         /// </summary>
         //public List<GEMCategory> PreferredGEMS { get; set; }
 
+    }
+
+    public class Resultarray
+    {
+        public string user_id;
+        public string firstname;
+        public string email;
+        public string profileurl;
+        public string note;
+        public string regdate;
+        public string usertype_id;
+    }
+
+    public class UserDetailsOnLogin
+    {
+        public string code;
+        public string text;
+        public Resultarray resultarray;
     }
 }

@@ -155,10 +155,10 @@ namespace PurposeColor.screens
                 {
                     bool allErntryAreValid = false;
 
-                    if (nameEntry.Text != null || !string.IsNullOrWhiteSpace(nameEntry.Text) &&
-                        emailEntry.Text != null || !string.IsNullOrWhiteSpace(emailEntry.Text) &&
-                        passwordEntry.Text != null || !string.IsNullOrWhiteSpace(passwordEntry.Text) &&
-                        confirmPasswordEntry.Text != null || !string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) &&
+                    if (nameEntry.Text != null && !string.IsNullOrWhiteSpace(nameEntry.Text) &&
+                        emailEntry.Text != null && !string.IsNullOrWhiteSpace(emailEntry.Text) &&
+                        passwordEntry.Text != null && !string.IsNullOrWhiteSpace(passwordEntry.Text) &&
+                        confirmPasswordEntry.Text != null && !string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) &&
                         passwordEntry.Text == confirmPasswordEntry.Text
                         )
                     {

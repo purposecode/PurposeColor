@@ -26,46 +26,34 @@ namespace PurposeColor.screens
         {
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
-            
+
             masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
 
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 
-            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness" );
-
-
-            /* Label userNameLabel = new Label
-             {
-                 Text = "User name",
-                 TextColor = TextColors
-             };
-
-             Label passwordLabel = new Label
-             {
-                 Text = "Password",
-                 TextColor = TextColors
-             };*/
+            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness");
 
             userNameEntry = new CustomEntry
             {
-                Placeholder = "User name"
+                Placeholder = "User name",
+                Keyboard = Keyboard.Email
             };
 
             passwordEntry = new CustomEntry
             {
-                Placeholder = "Password"
+                Placeholder = "Password",
+                IsPassword = true
             };
 
             Button signInButton = new Button
             {
-                Text = "Sign In",
-                TextColor = TextColors,
+                Text = "Sign in",
+                TextColor = Color.Gray,
                 BorderColor = Color.Black,
                 BorderWidth = 2
             };
-
 
             ImageButton imgsignInButton = new ImageButton
             {
@@ -74,16 +62,16 @@ namespace PurposeColor.screens
 
             Button googleSignInButton = new Button
             {
-                Text = "Sign In With Google",
-                TextColor = Color.Red,
+                Text = "Sign in with Google",
+                TextColor = Color.Gray,
                 BorderColor = Color.Black,
                 BorderWidth = 2
             };
 
             Button faceBookSignInButton = new Button
             {
-                Text = "Sign In With Facebook",
-                TextColor = Color.Red,
+                Text = "Sign in with Facebook",
+                TextColor = Color.Gray,
                 BorderColor = Color.Black,
                 BorderWidth = 2
             };
@@ -95,21 +83,20 @@ namespace PurposeColor.screens
 
             userNameEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
             passwordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            signInButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
-            googleSignInButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
-            faceBookSignInButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
+            signInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
+            googleSignInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
+            faceBookSignInButton.WidthRequest = deviceSpec.ScreenWidth * 60 / 100;
 
             imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
             imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
 
-            
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform( 9, 10, 10 ));
+            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
             masterLayout.AddChildToLayout(passwordEntry, 10, 35);
-            masterLayout.AddChildToLayout(signInButton, 30, 50);
-            masterLayout.AddChildToLayout(googleSignInButton, 30, 60);
-            masterLayout.AddChildToLayout(faceBookSignInButton, 30, 75);
+            masterLayout.AddChildToLayout(signInButton, 20, 50);
+            masterLayout.AddChildToLayout(googleSignInButton, 20, 60);
+            masterLayout.AddChildToLayout(faceBookSignInButton, 20, 70);
 
             googleSignInButton.Clicked += OnGoogleSignInButtonClicked;
             faceBookSignInButton.Clicked += faceBookSignInButton_Clicked;
@@ -118,53 +105,99 @@ namespace PurposeColor.screens
             Content = masterLayout;
         }
 
-
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
             App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
 
+        async void OnSignInButtonClicked(object sender, EventArgs e)
+        {
+            if (String.IsNullOrEmpty(userNameEntry.Text))
+            {
+                await DisplayAlert(Constants.ALERT_TITLE, "Please provide username", Constants.ALERT_OK);
+                return;
+            }
 
-        void OnSignInButtonClicked(object sender, EventArgs e)
-		{
-			//Navigation.PushAsync( new GraphPage() );
-			// Navigation.PushAsync(new CustomListView());
-			//Navigation.PushAsync( new TestScreen() );
+            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            System.Text.RegularExpressions.Match match = regex.Match(userNameEntry.Text);
+            if (!match.Success)
+            {
+                await DisplayAlert(Constants.ALERT_TITLE, "Username will be same as your valid email address.", Constants.ALERT_OK);
+                return;
+            }
 
+            if (String.IsNullOrEmpty(passwordEntry.Text))
+            {
+                await DisplayAlert(Constants.ALERT_TITLE, "Please provide password.", Constants.ALERT_OK);
+                return;
+            }
+            else if (!String.IsNullOrEmpty(passwordEntry.Text) && passwordEntry.Text.Length < 6)
+            {
+                await DisplayAlert(Constants.ALERT_TITLE, "Password must be six characters long.", Constants.ALERT_OK);
+                return;
+            }
 
-			#region FOR DB testing
-			if (!String.IsNullOrEmpty (userNameEntry.Text)) 
-			{
-				ApplicationSettings AppSettings = App.Settings;
-				User user = new User ();
-				user.UserName = userNameEntry.Text;
-				user.Password = passwordEntry.Text;
-			         	
-				try {
-					User newUser = AppSettings.GetUserWithUserName (user.UserName);
-					bool isSaveSuccess = false;
-					if (newUser == null) {
-						isSaveSuccess = AppSettings.SaveUser (user);
-					}
-			         	
-					if (newUser != null) { // for testing only 
-						if (newUser.Password == passwordEntry.Text) {
-							DisplayAlert ("Login", "User login successfull", "OK");
-						} else if (newUser.Password != passwordEntry.Text) {
-							DisplayAlert ("Login", "Username password do not match, please verify", "OK");
-						}
-					} else if (isSaveSuccess) {
-						DisplayAlert ("Registeration", "New user registered successfully", "OK");
-					}
-				} catch (Exception ex) {
-                    DisplayAlert("Purposecode", "Could not save to local database.", "OK");
+            #region FOR DB testing
+            if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
+            {
+                ApplicationSettings AppSettings = App.Settings;
+
+                try
+                {
+                    bool isSaveSuccess = false;
+                    var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
+
+                    if (serviceResult != null)
+                    {
+                        User newUser = null;
+                        if (!string.IsNullOrEmpty(serviceResult.email))
+                        {
+                            newUser = await AppSettings.GetUserWithUserName(serviceResult.email);
+                        }
+
+                        if (newUser == null)
+                        {
+                            newUser = new User();
+                        }
+
+                        newUser.StatusNote = string.IsNullOrEmpty(serviceResult.note) ? string.Empty : serviceResult.note;
+                        newUser.DisplayName = string.IsNullOrEmpty(serviceResult.firstname) ? string.Empty : serviceResult.firstname;
+                        newUser.Email = string.IsNullOrEmpty(serviceResult.email) ? string.Empty : serviceResult.email;
+                        newUser.ProfileImageUrl = string.IsNullOrEmpty(serviceResult.profileurl) ? string.Empty : serviceResult.profileurl;
+                        if (serviceResult.user_id != null)
+                        {
+                            newUser.UserId = Int32.Parse(serviceResult.user_id);
+                        }
+                        if (serviceResult.usertype_id != null)
+                        {
+                            newUser.UserType = Int32.Parse(serviceResult.usertype_id);
+                        }
+                        if (serviceResult.regdate != null)
+                        {
+                            //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                            newUser.RegistrationDate = serviceResult.regdate;
+                        }
+
+                        isSaveSuccess = AppSettings.SaveUser(newUser);
+
+                        await Navigation.PushAsync(new FeelingNowPage());
+                    }
+                    else
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not login,Please try again", Constants.ALERT_OK);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again", Constants.ALERT_OK);
                     Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
-				}
-			}
-			#endregion
+                }
+            }
 
-			Navigation.PushAsync (new FeelingNowPage ());
-		}
+            #endregion
+
+
+        }
 
         void OnGoogleSignInButtonClicked(object sender, EventArgs e)
         {

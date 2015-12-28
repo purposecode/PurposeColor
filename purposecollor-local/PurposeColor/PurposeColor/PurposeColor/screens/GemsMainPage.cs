@@ -404,7 +404,7 @@ namespace PurposeColor.screens
                 secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
 
 
-                Button moreButton = new Button();
+				CustomImageButton moreButton = new CustomImageButton();
                 moreButton.BackgroundColor = Color.Transparent;
                 moreButton.BorderColor = Color.Transparent;
                 moreButton.BorderWidth = 0;
@@ -482,7 +482,6 @@ namespace PurposeColor.screens
 				EventTitle eventTitle = new EventTitle ();
 				EventDetail eventDetail = new EventDetail ();
 			
-				string desc = "";
 				for (int index = 0;  index < emotionList.Count; index++)
 				{
 					media = emotionList[index].event_media.FindAll (med => med.event_id == tap.ClassId).ToList();

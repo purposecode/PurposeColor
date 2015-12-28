@@ -51,22 +51,25 @@ namespace PurposeColor
 			for (int index = 0; index < mediaList.Count; index++)
 			{
 				Image img = new Image ();
+
 				bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
 				img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + eventMedia + mediaList [index].event_media : Constants.SERVICE_BASE_URL + eventNoMedia;
 				img.Aspect = Aspect.AspectFill;
 				//img.HeightRequest = 200;
 				//img.WidthRequest = 150;
+				ActivityIndicator indi = new ActivityIndicator();
+				masterStack.Children.Add ( indi );
 				masterStack.Children.Add ( img );
 			}
 
 			masterScroll.HeightRequest = App.screenHeight - 10;
-			masterScroll.WidthRequest = App.screenWidth;
+			masterScroll.WidthRequest = App.screenWidth * 90 / 100;
 
 			masterScroll.Content = masterStack;
 
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-			masterLayout.AddChildToLayout(masterScroll, 0, 10);
+			masterLayout.AddChildToLayout(masterScroll, 5, 10);
 			Content = masterLayout;
 
 		/*	Content = new StackLayout

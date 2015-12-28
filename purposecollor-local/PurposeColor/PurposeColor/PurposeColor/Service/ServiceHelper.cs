@@ -181,9 +181,6 @@ namespace PurposeColor.Service
             }
         }
 
-
-
-
         public static async Task<bool> GetCurrentAddressToList( double lattitude, double longitude )
         {
             try
@@ -240,8 +237,6 @@ namespace PurposeColor.Service
             }
             return true;
         }
-
-
 
         public static async Task<bool> GetNearByLocations( double lattitude, double longitude )
         {
@@ -872,7 +867,6 @@ namespace PurposeColor.Service
             }
         }
 
-
         public static async Task<GemsEmotionsObject> GetAllSupportingEmotions()
         {
             try
@@ -927,7 +921,6 @@ namespace PurposeColor.Service
             }
         }
 
-
         public static async Task<GemsGoalsObject> GetAllSupportingGoals()
         {
             try
@@ -977,6 +970,70 @@ namespace PurposeColor.Service
             {
 
                 throw;
+            }
+        }
+
+        public static async Task<string> RegisterUser(string name, string email, string password)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "500";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=register";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+
+                if (!string.IsNullOrEmpty(name))
+                {
+                    content.Add(new StringContent(name, Encoding.UTF8), "firstname");
+                }
+
+                if (!string.IsNullOrEmpty(email))
+                {
+                    content.Add(new StringContent(email, Encoding.UTF8), "email");
+                }
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    content.Add(new StringContent(password, Encoding.UTF8), "password");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.Content != null)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code.ToString();
+                    }
+                }
+                else
+                {
+                    client.Dispose();
+                    return "500";
+                }
+
+                client.Dispose();
+                return "500";
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+                return "500";
             }
         }
     }

@@ -454,6 +454,20 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\icn_done.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_done.png" />
     <AndroidResource Include="Resources\drawable\no_image_found.jpg" />
+    <AndroidResource Include="Resources\drawable\reg_btn.png" />
+    <AndroidResource Include="Resources\drawable\bg.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\reg_btn.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bg.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\bckarow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\bg.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\reg_btn.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\arrow_right.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\reg_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\bg.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\gem.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\reg_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\bg.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

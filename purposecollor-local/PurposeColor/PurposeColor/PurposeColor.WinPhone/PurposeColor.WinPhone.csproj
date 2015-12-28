@@ -170,6 +170,7 @@
     <Content Include="Assets\avatar.jpg" />
     <Content Include="Assets\back_arrow.png" />
     <Content Include="Assets\bckarow.png" />
+    <Content Include="Assets\bg.png" />
     <Content Include="Assets\bg_top.png" />
     <Content Include="Assets\blue_bg.png" />
     <Content Include="Assets\circle.png" />
@@ -207,6 +208,7 @@
     <Content Include="Assets\menu.png" />
     <Content Include="Assets\menu_icn.png" />
     <Content Include="Assets\mic.png" />
+    <Content Include="Assets\reg_btn.png" />
     <Content Include="Assets\select_box_whitebg.png" />
     <Content Include="Assets\setings_menu_icon.png" />
     <Content Include="Assets\settings.png" />

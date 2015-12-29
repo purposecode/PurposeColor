@@ -43,7 +43,7 @@ namespace PurposeColor
 			pageTitle.TextColor = Color.Black;
 			pageTitle.FontAttributes = FontAttributes.Bold;
 			pageTitle.WidthRequest = App.screenWidth * 90 / 100;
-			pageTitle.HeightRequest = 75;
+			pageTitle.HeightRequest = 50;
 			pageTitle.XAlign = TextAlignment.Start;
 			pageTitle.YAlign = TextAlignment.Center;
 			pageTitle.FontSize = Device.OnPlatform (15, 20, 15);
@@ -114,7 +114,7 @@ namespace PurposeColor
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout(masterScroll, 5, 15);
+			masterLayout.AddChildToLayout(masterScroll, 5, 18);
 			Content = masterLayout;
 
 		/*	Content = new StackLayout

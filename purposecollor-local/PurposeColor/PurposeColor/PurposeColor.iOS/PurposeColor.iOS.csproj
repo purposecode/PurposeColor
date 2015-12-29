@@ -123,6 +123,9 @@
     <Compile Include="Dependency\AudioRecorder.cs" />
     <None Include="PluginsHelp\ConnectivityReadme.txt" />
     <Compile Include="Dependency\ProgressBarImpl.cs" />
+    <None Include="Resources\like.png" />
+    <None Include="Resources\like%402x.png" />
+    <None Include="Resources\like%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

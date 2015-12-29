@@ -14,10 +14,11 @@ namespace PurposeColor.screens
     {
         Label description = null;
         CustomLayout masterLayout = null;
-        PurposeColor.CustomControls.PurposeColorSubTitleBar subTitleBar = null;
+        PurposeColor.CustomControls.PurposeColorBlueSubTitleBar subTitleBar = null;
         double screenHeight;
         double screenWidth;
         CustomEntry email = null;
+        Button resetPasswordButton = null;
 
 
 
@@ -25,9 +26,9 @@ namespace PurposeColor.screens
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            PurposeColor.interfaces.IProgressBar progress = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+            
 
-            masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
+            masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             Cross.IDeviceSpec deviceSpec = DependencyService.Get<Cross.IDeviceSpec>();
@@ -37,58 +38,16 @@ namespace PurposeColor.screens
                 App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
 
-            subTitleBar = new PurposeColor.CustomControls.PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Forgot password");
+            subTitleBar = new PurposeColor.CustomControls.PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Forgot password");
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
                 Navigation.PopAsync();
             };
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            subTitleBar.NextButtonTapRecognizer.Tapped += async (s, e) =>
+            subTitleBar.NextButtonTapRecognizer.Tapped += (s, e) =>
             {
-                try
-                {
-                    if (String.IsNullOrEmpty(email.Text))
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please provide your registered email address.", Constants.ALERT_OK);
-                        return;
-                    }
-
-                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString);
-                    System.Text.RegularExpressions.Match match = regex.Match(email.Text);
-                    if (!match.Success)
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please provide your registered email address.", Constants.ALERT_OK);
-                        return;
-                    }
-
-
-                    progress.ShowProgressbar("Requesting Password reset.");
-                    string statusCode = await PurposeColor.Service.ServiceHelper.ResetPassword(email.Text);
-                    progress.HideProgressbar();
-                    if (statusCode == "200")
-                    {
-                        progress.HideProgressbar();
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please reset your password using the link send to "+email.Text+".", Constants.ALERT_OK);
-                        await Navigation.PushAsync(new LogInPage());
-                    }
-                    else if(statusCode == "404")
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please verify the email, " + email.Text + " is not registered with us.", Constants.ALERT_OK);
-                    }
-                    else
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, could not complete your request, Please try again.", Constants.ALERT_OK);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    progress.HideProgressbar();
-                    var test = ex.Message;
-                }
-
-                progress.HideProgressbar();
+                resetPasswordButton_Clicked(resetPasswordButton, null);
             };
 
             description = new Label
@@ -98,7 +57,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.Transparent,
                 FontSize = 16,
                 WidthRequest = screenWidth * 80 / 100,
-                HeightRequest = 70
+                HeightRequest = 80
             };
 
             masterLayout.AddChildToLayout(description, 10, 20);
@@ -108,14 +67,72 @@ namespace PurposeColor.screens
                 Keyboard = Keyboard.Email,
                 BackgroundColor = Color.Black,
                 TextColor = Color.White,
-                Text = "Email...",
                 HeightRequest = 50
             };
             email.WidthRequest = screenWidth * 80 / 100;
-            masterLayout.AddChildToLayout(email, 10, 40);
-            
+            masterLayout.AddChildToLayout(email, 10, 35);
+
+            resetPasswordButton = new Button
+            {
+                Text = "Reset password",
+                TextColor = Color.White,
+                BorderColor = Color.Black,
+                BorderWidth = 2
+            };
+
+            resetPasswordButton.Clicked += resetPasswordButton_Clicked;
+
+            resetPasswordButton.WidthRequest = screenWidth * 80 / 100;
+            masterLayout.AddChildToLayout(resetPasswordButton, 10, 43);
 
             Content = masterLayout;
+        }
+
+        async void resetPasswordButton_Clicked(object sender, EventArgs e)
+        {
+            PurposeColor.interfaces.IProgressBar progress = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+            try
+            {
+                if (String.IsNullOrEmpty(email.Text))
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please provide your registered email address.", Constants.ALERT_OK);
+                    return;
+                }
+
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString);
+                System.Text.RegularExpressions.Match match = regex.Match(email.Text);
+                if (!match.Success)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please provide your registered email address.", Constants.ALERT_OK);
+                    return;
+                }
+
+
+                progress.ShowProgressbar("Requesting Password reset.");
+                string statusCode = await PurposeColor.Service.ServiceHelper.ResetPassword(email.Text);
+                progress.HideProgressbar();
+                if (statusCode == "200")
+                {
+                    progress.HideProgressbar();
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please reset your password using the link send to " + email.Text + ".", Constants.ALERT_OK);
+                    await Navigation.PushAsync(new LogInPage());
+                }
+                else if (statusCode == "404")
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please verify the email, " + email.Text + " is not registered with us.", Constants.ALERT_OK);
+                }
+                else
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Network error, could not complete your request, Please try again.", Constants.ALERT_OK);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            progress.HideProgressbar();
         }
 
     }

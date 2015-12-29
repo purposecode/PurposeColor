@@ -67,6 +67,7 @@
     <Compile Include="interfaces\IResize.cs" />
     <Compile Include="Model\ActionModel.cs" />
     <Compile Include="Model\Addresses.cs" />
+    <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Model\Emotions.cs" />
     <Compile Include="Model\Events.cs" />
     <Compile Include="Model\GEMCategory.cs" />

@@ -22,8 +22,9 @@ namespace PurposeColor.screens
         CustomEntry userNameEntry;
         CustomEntry passwordEntry;
         Label forgotPasswordLabel = null;
+        Label registerLabel = null;
         Button googleSignInButton = null;
-        PurposeColorSubTitleBar subTitleBar = null;
+        PurposeColorBlueSubTitleBar subTitleBar = null;
         Button faceBookSignInButton = null;
         Button signInButton = null;
         CustomLayout masterLayout = null;
@@ -34,12 +35,16 @@ namespace PurposeColor.screens
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
+            masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
-            subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Signin");
+            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "               Sign In", true, false);
+            subTitleBar.NextButtonTapRecognizer.Tapped += (s, e) =>
+            {
+                OnSignInButtonClicked(signInButton, null);
+            };
 
             userNameEntry = new CustomEntry
             {
@@ -56,9 +61,10 @@ namespace PurposeColor.screens
             signInButton = new Button
             {
                 Text = "Sign in",
-                TextColor = Color.Gray,
-                BorderColor = Color.Black,
-                BorderWidth = 2
+                TextColor = Color.White,
+                BorderColor = Constants.BLUE_BG_COLOR,
+                BorderWidth = 2,
+                BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
             TapGestureRecognizer forgotPasswordTap = new TapGestureRecognizer();
@@ -74,23 +80,40 @@ namespace PurposeColor.screens
             forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTap);
             forgotPasswordTap.Tapped += (s, e) =>
             {
-                // navigate to forgot pswd page.
+                Navigation.PushAsync(new ForgotPassword());
+            };
+
+            TapGestureRecognizer registerTap = new TapGestureRecognizer();
+            registerLabel = new Label
+            {
+                Text = "Sign up",
+                TextColor = Constants.BLUE_BG_COLOR,
+                BackgroundColor = Color.Transparent,
+                FontSize = 12,
+                HeightRequest = Device.OnPlatform(15, 25, 25),
+            };
+            registerLabel.GestureRecognizers.Add(registerTap);
+            registerTap.Tapped += (s, e) =>
+            {
+                Navigation.PushAsync(new RegistrationPageOne());
             };
 
             googleSignInButton = new Button
             {
                 Text = "Sign in with Google",
-                TextColor = Color.Gray,
-                BorderColor = Color.Black,
-                BorderWidth = 2
+                TextColor = Color.White,
+                BorderColor = Constants.BLUE_BG_COLOR,
+                BorderWidth = 2,
+                BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
             faceBookSignInButton = new Button
             {
                 Text = "Sign in with Facebook",
-                TextColor = Color.Gray,
-                BorderColor = Color.Black,
-                BorderWidth = 2
+                TextColor = Color.White,
+                BorderColor = Constants.BLUE_BG_COLOR,
+                BorderWidth = 2,
+                BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
             indicator = new ActivityIndicator();
@@ -110,10 +133,14 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(userNameEntry, 10, 25);
-            masterLayout.AddChildToLayout(passwordEntry, 10, 35);
-            masterLayout.AddChildToLayout(signInButton, 20, 50);
-            masterLayout.AddChildToLayout(googleSignInButton, 20, 60);
-            masterLayout.AddChildToLayout(faceBookSignInButton, 20, 70);
+            masterLayout.AddChildToLayout(passwordEntry, 10, 33);
+            masterLayout.AddChildToLayout(signInButton, 20, 41);
+            masterLayout.AddChildToLayout(forgotPasswordLabel, 21, 50);
+            masterLayout.AddChildToLayout(registerLabel, 65, 50);
+            
+            
+            masterLayout.AddChildToLayout(googleSignInButton, 20, 65);
+            masterLayout.AddChildToLayout(faceBookSignInButton, 20, 75);
 
             googleSignInButton.Clicked += OnGoogleSignInButtonClicked;
             faceBookSignInButton.Clicked += faceBookSignInButton_Clicked;

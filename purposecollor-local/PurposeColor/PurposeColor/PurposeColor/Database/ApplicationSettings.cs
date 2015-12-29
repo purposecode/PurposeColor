@@ -38,6 +38,11 @@ namespace PurposeColor.Database
                 {
                     Connection.CreateTable<UserEvent>();
                 }
+                var appSettingsTableInfo = Connection.GetTableInfo("GlobalSettings");
+                if (appSettingsTableInfo == null ||appSettingsTableInfo.Count < 1)
+                {
+                    Connection.CreateTable<GlobalSettings>();
+                }
             }
             catch (Exception ex)
             {
@@ -288,6 +293,39 @@ namespace PurposeColor.Database
             }
         }
 
+        #endregion
+
+        #region APP SETTINGS TABLE
+
+        public GlobalSettings GetAppGlobalSettings()
+        {
+            return Connection.Table<GlobalSettings>().FirstOrDefault();
+        }
+
+        public async Task<bool> SaveAppGlobalSettings(GlobalSettings settings)
+        {
+            bool isAppGlobalSettingsAdded = false;
+            try
+            {
+                var newSettings = new GlobalSettings();
+                newSettings.IsLoggedIn = settings.IsLoggedIn;
+                newSettings.ShowRegistrationScreen = settings.ShowRegistrationScreen;
+                newSettings.IsFirstLogin = settings.IsFirstLogin;
+
+                Connection.DeleteAll<GlobalSettings>();
+                Connection.Insert(newSettings);
+
+                isAppGlobalSettingsAdded = true;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("SaveAppGlobalSettings :: " + ex.Message);
+                isAppGlobalSettingsAdded = false;
+            }
+
+            return isAppGlobalSettingsAdded;
+        }
+        
         #endregion
 
     }

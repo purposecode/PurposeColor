@@ -132,7 +132,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center
             };
-            masterLayout.AddChildToLayout(termsOfUseLabel, 35, Device.OnPlatform(70, 70, 59));
+            masterLayout.AddChildToLayout(termsOfUseLabel, Device.OnPlatform(40, 40, 35), Device.OnPlatform(70, 70, 59));
 
             #endregion
 
@@ -222,8 +222,24 @@ namespace PurposeColor.screens
                             {
                                 progressBar.HideProgressbar();
                                 await DisplayAlert(Constants.ALERT_TITLE, "User registration completed, Please verify the email. Please add our address in your contacts to prevent routing our mails to spam folder.", Constants.ALERT_OK);
-                                await Navigation.PushAsync(new LogInPage());
 
+                                #region GLOBAL SETTINGS DB
+
+                                PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
+                                PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
+                                if (globalSettings == null)
+                                {
+                                    globalSettings = new Model.GlobalSettings();
+                                }
+                                globalSettings.IsFirstLogin = true;
+                                globalSettings.IsLoggedIn = false;
+                                globalSettings.ShowRegistrationScreen = false;
+
+                                await AppSettings.SaveAppGlobalSettings(globalSettings);
+                                
+                                #endregion
+
+                                await Navigation.PushAsync(new LogInPage());
                             }
                             else
                             {

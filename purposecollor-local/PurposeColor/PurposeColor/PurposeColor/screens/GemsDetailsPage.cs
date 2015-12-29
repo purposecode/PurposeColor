@@ -106,7 +106,7 @@ namespace PurposeColor
 					Image img = new Image ();
 
 					bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
-					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList [index].event_media : Constants.SERVICE_BASE_URL + NoMedia;
+					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList [index].event_media : "noimage.png";
 					img.Aspect = Aspect.AspectFit;
 					//img.HeightRequest = 200;
 					//img.WidthRequest = 150;
@@ -123,7 +123,7 @@ namespace PurposeColor
 					Image img = new Image ();
 
 					bool isValidUrl = (actionMediaList [index].event_media != null && !string.IsNullOrEmpty (actionMediaList [index].event_media)) ? true : false;
-					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList [index].event_media : Constants.SERVICE_BASE_URL + NoMedia;
+					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList [index].event_media : "noimage.png";
 					img.Aspect = Aspect.AspectFill;
 					//img.HeightRequest = 200;
 					//img.WidthRequest = 150;

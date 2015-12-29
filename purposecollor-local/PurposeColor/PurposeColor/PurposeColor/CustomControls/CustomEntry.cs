@@ -9,6 +9,8 @@ namespace PurposeColor.CustomControls
 {
     public class CustomEntry : Entry
     {
-
+		public string BackGroundImageName{ get; set; }
     }
+
+
 }

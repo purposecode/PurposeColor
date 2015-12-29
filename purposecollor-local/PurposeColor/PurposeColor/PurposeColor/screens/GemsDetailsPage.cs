@@ -49,6 +49,40 @@ namespace PurposeColor
 			pageTitle.FontSize = Device.OnPlatform (15, 20, 15);
 
 
+			StackLayout emptyLayout = new StackLayout ();
+			emptyLayout.BackgroundColor = Color.White;
+			emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
+			emptyLayout.HeightRequest = 60;
+
+			StackLayout toolsLayout = new StackLayout ();
+			toolsLayout.BackgroundColor = Color.White;
+			toolsLayout.Spacing = 10;
+			toolsLayout.Orientation = StackOrientation.Horizontal;
+			toolsLayout.WidthRequest = App.screenWidth * 90 / 100;
+			toolsLayout.Padding = new Thickness (10, 0, 10, 0);
+			toolsLayout.TranslationY = -55;
+			//toolsLayout.HeightRequest = 100;
+
+			Image likeButton = new Image ();
+			likeButton.Source = "like.png";
+			likeButton.WidthRequest = 15;
+			likeButton.HeightRequest = 15;
+
+			Image shareButton = new Image ();
+			shareButton.Source = "share.png";
+			shareButton.WidthRequest = 15;
+			shareButton.HeightRequest = 15;
+
+			CustomEntry comment = new CustomEntry ();
+			comment.BackGroundImageName = "comnt_box.png";
+			comment.BackgroundColor = Color.White;
+			comment.Placeholder = "comments";
+			comment.WidthRequest = App.screenWidth * 70 / 100;
+
+			toolsLayout.Children.Add ( likeButton );
+			toolsLayout.Children.Add ( shareButton );
+			toolsLayout.Children.Add ( comment );
+
 			title = new Label ();
 			title.Text = titleVal;
 			title.TextColor = Color.Black;
@@ -73,7 +107,7 @@ namespace PurposeColor
 
 					bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
 					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList [index].event_media : Constants.SERVICE_BASE_URL + NoMedia;
-					img.Aspect = Aspect.AspectFill;
+					img.Aspect = Aspect.AspectFit;
 					//img.HeightRequest = 200;
 					//img.WidthRequest = 150;
 					//ActivityIndicator indi = new ActivityIndicator();
@@ -99,6 +133,8 @@ namespace PurposeColor
 				}
 			}
 	
+			masterStack.Children.Add ( emptyLayout );
+			masterStack.Children.Add ( toolsLayout );
 
 			StackLayout spaceOffsetlayout = new StackLayout ();
 			spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;

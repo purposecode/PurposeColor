@@ -129,6 +129,9 @@
     <None Include="Resources\share.png" />
     <None Include="Resources\share%402x.png" />
     <None Include="Resources\share%403x.png" />
+    <None Include="Resources\comnt_box.png" />
+    <None Include="Resources\comnt_box%402x.png" />
+    <None Include="Resources\comnt_box%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

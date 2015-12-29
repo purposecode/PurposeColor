@@ -159,6 +159,7 @@
     </None>
     <None Include="Assets\like.png" />
     <None Include="Assets\share.png" />
+    <None Include="Assets\comnt_box.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\appbar.feature.video.rest.png" />

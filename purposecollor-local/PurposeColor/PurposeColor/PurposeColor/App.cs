@@ -39,6 +39,7 @@ namespace PurposeColor
         public static List<string> ContactsArray { get; set; }
         public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
         public static string newEmotionId;
+        public static bool IsTesting = false;
         public static ApplicationSettings Settings
         {
             get
@@ -61,7 +62,6 @@ namespace PurposeColor
 
         public App()
         {
-			
             deviceSpec = DependencyService.Get<IDeviceSpec>();
             screenHeight = deviceSpec.ScreenHeight;
             screenWidth = deviceSpec.ScreenWidth;
@@ -71,6 +71,10 @@ namespace PurposeColor
             ExtentionArray = new List<string>();
             NavigationPage.SetHasNavigationBar(this, false);
             nearByLocationsSource = new List<CustomListViewItem>();
+            if (applicationSettings == null)
+            {
+                applicationSettings = new ApplicationSettings();
+            }
             MenuPage menuPage = new MenuPage();
             masterPage = new PurposeMasterDetailPage();
             MainPage = masterPage;

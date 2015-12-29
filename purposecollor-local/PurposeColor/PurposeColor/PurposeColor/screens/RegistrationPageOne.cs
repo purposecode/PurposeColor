@@ -18,10 +18,10 @@ namespace PurposeColor.screens
         double screenWidth;
         IProgressBar progressBar = null;
         Image pageBackGround = null;
-        Entry nameEntry = null;
-        Entry emailEntry = null;
-        Entry passwordEntry = null;
-        Entry confirmPasswordEntry = null;
+        CustomEntry nameEntry = null;
+        CustomEntry emailEntry = null;
+        CustomEntry passwordEntry = null;
+        CustomEntry confirmPasswordEntry = null;
         Label termsOfUseLabel = null;
         Image registrationButton = null;
         Switch termsSwitch = null;
@@ -56,7 +56,7 @@ namespace PurposeColor.screens
 
             #region ENTRYS
 
-            nameEntry = new Entry
+            nameEntry = new CustomEntry
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -68,7 +68,7 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(nameEntry, 10, Device.OnPlatform(30, 30, 18));
 
-            emailEntry = new Entry
+            emailEntry = new CustomEntry
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
@@ -80,7 +80,7 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(emailEntry, 10, Device.OnPlatform(40, 40, 28));
 
-            passwordEntry = new Entry
+            passwordEntry = new CustomEntry
             {
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -93,7 +93,7 @@ namespace PurposeColor.screens
             };
             masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(50, 50, 38));
 
-            confirmPasswordEntry = new Entry
+            confirmPasswordEntry = new CustomEntry
             {
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
@@ -153,6 +153,17 @@ namespace PurposeColor.screens
             {
                 try
                 {
+                    #region FOR TESTING
+
+                    if (nameEntry.Text != null && nameEntry.Text == "apptester")
+                    {
+                        await Navigation.PushAsync(new LogInPage());
+                        Navigation.RemovePage(this);
+                        return;
+                    }
+                    
+                    #endregion
+
                     bool allErntryAreValid = false;
 
                     if (nameEntry.Text != null && !string.IsNullOrWhiteSpace(nameEntry.Text) &&
@@ -240,6 +251,7 @@ namespace PurposeColor.screens
                                 #endregion
 
                                 await Navigation.PushAsync(new LogInPage());
+                                Navigation.RemovePage(this);
                             }
                             else
                             {

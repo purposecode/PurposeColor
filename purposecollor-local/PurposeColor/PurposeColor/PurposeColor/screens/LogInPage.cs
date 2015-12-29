@@ -17,7 +17,6 @@ namespace PurposeColor.screens
 {
     public class LogInPage : ContentPage, IDisposable
     {
-        public Color TextColors { get; set; }
         ActivityIndicator indicator;
         CustomEntry userNameEntry;
         CustomEntry passwordEntry;
@@ -162,6 +161,21 @@ namespace PurposeColor.screens
                 return;
             }
 
+            #region FOR TESTING
+
+            if (userNameEntry.Text == "apptester")
+            {
+                App.IsTesting = true;
+                await Navigation.PushAsync(new FeelingNowPage());
+                Navigation.RemovePage(this);
+                return;
+            }
+            else
+            {
+                App.IsTesting = false;
+            }
+            
+            #endregion
             System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             System.Text.RegularExpressions.Match match = regex.Match(userNameEntry.Text);
             if (!match.Success)
@@ -180,6 +194,8 @@ namespace PurposeColor.screens
                 await DisplayAlert(Constants.ALERT_TITLE, "Password must be six characters long.", Constants.ALERT_OK);
                 return;
             }
+
+            
 
             #region SERVIDE
             if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
@@ -229,14 +245,23 @@ namespace PurposeColor.screens
                             }
 
                             isSaveSuccess = await AppSettings.SaveUser(newUser);
+                            
+                            PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
+                            globalSettings.ShowRegistrationScreen = false;
+                            globalSettings.IsLoggedIn = true;
+                            globalSettings.IsFirstLogin = true;
+                            await AppSettings.SaveAppGlobalSettings(globalSettings);
+
                             progress.HideProgressbar();
                             await Navigation.PushAsync(new FeelingNowPage());
+                            Navigation.RemovePage(this);
                         }
                         else
                         {
                             progress.HideProgressbar();
                             await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
                             await Navigation.PushAsync(new FeelingNowPage());
+                            Navigation.RemovePage(this);
                         }
                     }
                     else

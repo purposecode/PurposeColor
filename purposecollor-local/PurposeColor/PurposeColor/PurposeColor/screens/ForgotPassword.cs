@@ -20,8 +20,6 @@ namespace PurposeColor.screens
         CustomEntry email = null;
         Button resetPasswordButton = null;
 
-
-
         public ForgotPassword()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -77,7 +75,8 @@ namespace PurposeColor.screens
                 Text = "Reset password",
                 TextColor = Color.White,
                 BorderColor = Color.Black,
-                BorderWidth = 2
+                BorderWidth = 2,
+                BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
             resetPasswordButton.Clicked += resetPasswordButton_Clicked;

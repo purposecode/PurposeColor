@@ -322,7 +322,7 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, null, null));
+					await App.Navigator.PushModalAsync( new GemsDetailsPage( media, null , "", eventTitle.event_title, eventDetail.event_details,eventsMediaPath, eventsNoMediaPath ) );
 				}
 			} 
 			else

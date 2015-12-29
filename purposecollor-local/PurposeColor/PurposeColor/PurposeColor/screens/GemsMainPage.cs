@@ -25,6 +25,7 @@ namespace PurposeColor.screens
         GemsEmotionsObject gemsEmotionsObject;
         GemsGoalsObject gemsGoalsObject;
 		List<GemsEmotionsDetails> emotionList;
+		List<GemsGoalsDetails> goalsList;
         public GemsMainPage()
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -97,7 +98,7 @@ namespace PurposeColor.screens
                 emotionList.Add(gemsEmotionsObject.resultarray[1]);
             }
 
-            List<GemsGoalsDetails> goalsList = new List<GemsGoalsDetails>();
+            goalsList = new List<GemsGoalsDetails>();
             if( gemsGoalsObject.resultarray != null && gemsGoalsObject.resultarray.Count > 1 )
             {
                 goalsList.Add( gemsGoalsObject.resultarray[0] );
@@ -134,7 +135,7 @@ namespace PurposeColor.screens
 
 				TapGestureRecognizer titleTap = new TapGestureRecognizer ();
 				titleTap.ClassId = item.event_title [0].event_id;
-				titleTap.Tapped += TitleTap_Tapped;
+				titleTap.Tapped += OnEmotionTapped;
                 Label subTitle = new Label();
                 subTitle.Text = item.emotion_title;
                 subTitle.TextColor = Color.Gray;
@@ -158,7 +159,7 @@ namespace PurposeColor.screens
 					trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
                 }
 
-				firstDetailsInfo.ClassId = item.event_title[0].event_id;
+				firstDetailsInfo.ClassId = item.event_title[0].event_id + "&&" + item.emotion_title;
                 firstDetailsInfo.Text = trimmedFirstDetails;
                 firstDetailsInfo.TextColor = Color.Gray;
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -170,7 +171,7 @@ namespace PurposeColor.screens
 
 
                 Label firstDateInfo = new Label();
-				firstDateInfo.ClassId = item.event_title [0].event_id;
+				firstDateInfo.ClassId = item.event_title [0].event_id + "&&" + item.emotion_title;
 				firstDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 0) ? item.event_datetime[0].event_datetime : "empty";
                 //firstDateInfo.Text = "2015 Januvary 30";
                 firstDateInfo.TextColor = Color.Black;
@@ -181,7 +182,7 @@ namespace PurposeColor.screens
 
 
                 Image firstEmotionsImage = new Image();
-				firstEmotionsImage.ClassId = item.event_title [0].event_id;
+				firstEmotionsImage.ClassId = item.event_title [0].event_id + "&&" + item.emotion_title;;
                 firstEmotionsImage.Aspect = Aspect.Fill;
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
@@ -203,7 +204,7 @@ namespace PurposeColor.screens
 					trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
                 }
                 secondDetailsInfo.Text = trimmedSecondDetails;
-				secondDetailsInfo.ClassId = item.event_details[1].event_id;
+				secondDetailsInfo.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title;;
 				secondDetailsInfo.GestureRecognizers.Add ( titleTap );
                 // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
                 secondDetailsInfo.TextColor = Color.Gray;
@@ -214,7 +215,7 @@ namespace PurposeColor.screens
 
 
                 Label secondDateInfo = new Label();
-				secondDateInfo.ClassId = item.event_details[1].event_id;
+				secondDateInfo.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title;;
 				secondDateInfo.GestureRecognizers.Add ( titleTap );
 				secondDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 1) ? item.event_datetime[1].event_datetime: "empty";
                 secondDateInfo.TextColor = Color.Black;
@@ -224,7 +225,7 @@ namespace PurposeColor.screens
 
                 Image secondEmotionsImage = new Image();
 				secondEmotionsImage.GestureRecognizers.Add ( titleTap );
-				secondEmotionsImage.ClassId = item.event_details[1].event_id;
+				secondEmotionsImage.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title;;
                 secondEmotionsImage.Aspect = Aspect.Fill;
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
@@ -331,7 +332,7 @@ namespace PurposeColor.screens
                 subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
 				TapGestureRecognizer goalsTap = new TapGestureRecognizer ();
-				goalsTap.Tapped += GoalsTap_Tapped;
+				goalsTap.Tapped += GoalsTapped;
                 Label firstDetailsInfo = new Label();
 				string trimmedFirstDetails = (item.action_details != null && item.action_details.Count > 0 ) ? item.action_details[0].action_details : "empty";
                 if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
@@ -390,7 +391,7 @@ namespace PurposeColor.screens
                     trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
                 }
                 secondDetailsInfo.Text = trimmedSecondDetails;
-				secondDetailsInfo.ClassId = item.action_media [1].goalaction_id;
+				secondDetailsInfo.ClassId = ( item.action_media.Count > 1 ) ? item.action_media [1].goalaction_id : null;
                 // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
                 secondDetailsInfo.TextColor = Color.Gray;
                 secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -400,7 +401,7 @@ namespace PurposeColor.screens
 
 
                 Label secondDateInfo = new Label();
-				secondDateInfo.ClassId = item.action_media [1].goalaction_id;
+				secondDateInfo.ClassId =  ( item.action_media.Count > 1 ) ? item.action_media [1].goalaction_id : null;
 				secondDateInfo.GestureRecognizers.Add ( goalsTap );
 				secondDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 1) ? item.action_datetime[1].action_datetime : "empty";
                 secondDateInfo.TextColor = Color.Black;
@@ -409,7 +410,7 @@ namespace PurposeColor.screens
 
 
                 Image secondEmotionsImage = new Image();
-				secondEmotionsImage.ClassId = item.action_media [1].goalaction_id;
+				secondEmotionsImage.ClassId =  ( item.action_media.Count > 1 ) ? item.action_media [1].goalaction_id : null;
 				secondEmotionsImage.GestureRecognizers.Add ( goalsTap );
                 secondEmotionsImage.Aspect = Aspect.Fill;
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
@@ -488,19 +489,24 @@ namespace PurposeColor.screens
         }
 
 
-		async void TitleTap_Tapped (object sender, EventArgs e)
+		async void OnEmotionTapped (object sender, EventArgs e)
 		{
 			
 			View tap = sender as View;
 			if (tap != null && tap.ClassId != null)
 			{
+				string[] delimiters = { "&&" };
+				string[] clasIDArray = tap.ClassId.Split(delimiters, StringSplitOptions.None);
+				string selectedEmotionName = clasIDArray [1];
+				string selectedEventID = clasIDArray [0];
+
 				List<EventMedia> media = new List<EventMedia>();
 				EventTitle eventTitle = new EventTitle ();
 				EventDetail eventDetail = new EventDetail ();
 			
 				for (int index = 0;  index < emotionList.Count; index++)
 				{
-					media = emotionList[index].event_media.FindAll (med => med.event_id == tap.ClassId).ToList();
+					media = emotionList[index].event_media.FindAll (med => med.event_id == selectedEventID).ToList();
 					if (media != null && media.Count > 0 )
 					{
 						break;
@@ -509,7 +515,7 @@ namespace PurposeColor.screens
 
 				for (int index = 0;  index < emotionList.Count; index++)
 				{
-					eventTitle = emotionList [index].event_title.FirstOrDefault (itm => itm.event_id == tap.ClassId);
+					eventTitle = emotionList [index].event_title.FirstOrDefault (itm => itm.event_id == selectedEventID);
 					if (eventTitle != null)
 					{
 						break;
@@ -518,18 +524,18 @@ namespace PurposeColor.screens
 
 				for (int index = 0;  index < emotionList.Count; index++)
 				{
-					eventDetail = emotionList [index].event_details.FirstOrDefault (itm => itm.event_id == tap.ClassId);
+					eventDetail = emotionList [index].event_details.FirstOrDefault (itm => itm.event_id == selectedEventID);
 					if (eventDetail != null)
 					{
 						break;
 					}
 				}
-
+					
 		
 			//	title = emotionList.eve
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, null, null));
+					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl));
 				}
 			} 
 			else
@@ -541,10 +547,51 @@ namespace PurposeColor.screens
 		}
 
 
-		async void GoalsTap_Tapped (object sender, EventArgs e)
+		async void GoalsTapped (object sender, EventArgs e)
 		{
 			View goalsTap = sender as View;
-			if (goalsTap != null) {
+
+			if (goalsTap != null && goalsTap.ClassId != null)
+			{
+				List<ActionMedia> media = new List<ActionMedia>();
+				ActionTitle eventTitle = new ActionTitle ();
+				ActionDetail eventDetail = new ActionDetail ();
+
+				for (int index = 0;  index < goalsList.Count; index++)
+				{
+					media = goalsList[index].action_media.FindAll (med => med.goalaction_id == goalsTap.ClassId).ToList();
+					if (media != null && media.Count > 0 )
+					{
+						break;
+					}
+				}
+
+				for (int index = 0;  index < goalsList.Count; index++)
+				{
+					eventTitle = goalsList [index].action_title.FirstOrDefault (itm => itm.goalaction_id == goalsTap.ClassId);
+					if (eventTitle != null)
+					{
+						break;
+					}
+				}
+
+				for (int index = 0;  index < goalsList.Count; index++)
+				{
+					eventDetail = goalsList [index].action_details.FirstOrDefault (itm => itm.goalaction_id == goalsTap.ClassId);
+					if (eventDetail != null)
+					{
+						break;
+					}
+				}
+
+				if (media != null) 
+				{
+					await App.Navigator.PushModalAsync (new GemsDetailsPage (null, media,"", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl));
+				}
+			}
+			else
+			{
+				await DisplayAlert( Constants.ALERT_TITLE, "Not a valid goal", Constants.ALERT_OK );
 			}
 		}
 

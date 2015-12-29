@@ -64,7 +64,6 @@ namespace PurposeColor.screens
 
         async void OnAppearing(object sender, EventArgs e)
         {
-            this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null);
             IProgressBar progress = DependencyService.Get<IProgressBar>();
 
             if (gemsEmotionsObject != null || gemsGoalsObject != null)
@@ -77,9 +76,16 @@ namespace PurposeColor.screens
             {
                 var success = await DisplayAlert( Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY );
                 if (!success)
+                {
                     OnAppearing(sender, EventArgs.Empty);
-                else
                     return;
+                }
+                else
+                {
+                    progress.HideProgressbar();
+                    return;
+                }
+                   
             }
 
             if (gemsGoalsObject == null)
@@ -240,7 +246,7 @@ namespace PurposeColor.screens
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "More";
 				moreButton.FontSize = Device.OnPlatform (12, 15, 15);
-                moreButton.MinimumHeightRequest = 20;
+				moreButton.MinimumHeightRequest = 20;
                 moreButton.TextColor = Color.Silver;
                 moreButton.ClassId = item.emotion_id.ToString();
                 moreButton.Clicked += OnEmotionsMoreButtonClicked;

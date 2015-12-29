@@ -132,6 +132,7 @@
     <None Include="Resources\comnt_box.png" />
     <None Include="Resources\comnt_box%402x.png" />
     <None Include="Resources\comnt_box%403x.png" />
+    <None Include="Resources\noimage.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

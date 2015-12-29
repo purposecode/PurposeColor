@@ -28,7 +28,20 @@ namespace PurposeColor.Droid.Renderers
             {
                 return;
             }
-            nativeTextView.SetBackgroundColor(Android.Graphics.Color.White);
+
+			if (this.Element != null)
+				formsEntry = this.Element as CustomEntry;
+
+			if (formsEntry != null && !string.IsNullOrEmpty (formsEntry.BackGroundImageName)) {
+				Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable (Resource.Drawable.comnt_box);
+				nativeTextView.Background = drawable;
+
+			} 
+			else 
+			{
+				nativeTextView.SetBackgroundColor(Android.Graphics.Color.White);
+			}
+
             nativeTextView.SetTextColor(Android.Graphics.Color.Gray);
             if (nativeTextView != null)
             {

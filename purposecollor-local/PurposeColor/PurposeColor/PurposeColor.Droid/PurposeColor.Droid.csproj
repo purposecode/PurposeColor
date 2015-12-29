@@ -277,6 +277,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\comnt_box.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\comnt_box.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\comnt_box.png" />
+    <AndroidResource Include="Resources\drawable\noimage.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

@@ -90,7 +90,7 @@ namespace PurposeColor.screens
 				for (int index = 0; index < emotionsMasterList.event_details.Count; index++)
 				{
 					TapGestureRecognizer tap = new TapGestureRecognizer ();
-					tap.Tapped += Tap_Tapped;
+					tap.Tapped += OnEmotionTapped;
 					StackLayout cellMasterLayout = new StackLayout ();
 					cellMasterLayout.Orientation = StackOrientation.Vertical;
 					cellMasterLayout.BackgroundColor = Color.White;
@@ -203,6 +203,8 @@ namespace PurposeColor.screens
 			{
 				for (int index = 0; index < goalsMasterList.action_details.Count; index++)
 				{
+					TapGestureRecognizer tap = new TapGestureRecognizer ();
+					tap.Tapped += OnGoalsTapped;;
 					StackLayout cellMasterLayout = new StackLayout();
 					cellMasterLayout.Orientation = StackOrientation.Vertical;
 					cellMasterLayout.BackgroundColor = Color.White;
@@ -215,6 +217,9 @@ namespace PurposeColor.screens
 					customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 					double screenWidth = App.screenWidth;
 					double screenHeight = App.screenHeight;
+					customLayout.ClassId = goalsMasterList.action_details [index].goalaction_id;
+					customLayout.GestureRecognizers.Add ( tap );
+
 
 					CustomImageButton mainTitle = new CustomImageButton();
 					//  mainTitle.IsEnabled = false;
@@ -255,6 +260,8 @@ namespace PurposeColor.screens
 					firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 					firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
 					firstDetailsInfo.HeightRequest = 40;
+					firstDetailsInfo.ClassId = goalsMasterList.action_details [index].goalaction_id;
+					firstDetailsInfo.GestureRecognizers.Add ( tap );
 					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 16, 13) : 15;
 					firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
@@ -264,6 +271,8 @@ namespace PurposeColor.screens
 					//firstDateInfo.Text = "2015 Januvary 30";
 					firstDateInfo.TextColor = Color.Black;
 					firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+					firstDateInfo.ClassId = goalsMasterList.action_details [index].goalaction_id;
+					firstDateInfo.GestureRecognizers.Add ( tap );
 					int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(15, 15, 13) : 12;
 					firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
 
@@ -271,7 +280,8 @@ namespace PurposeColor.screens
 					Image firstEmotionsImage = new Image();
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
-
+					firstEmotionsImage.ClassId = goalsMasterList.action_details [index].goalaction_id;
+					firstEmotionsImage.GestureRecognizers.Add ( tap );
 					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index].event_media)) ? true : false;
 					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index].event_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
@@ -303,8 +313,34 @@ namespace PurposeColor.screens
            
         }
 
+		async  void OnGoalsTapped (object sender, EventArgs e)
+        {
+			View tap = sender as View;
+			if (tap != null && tap.ClassId != null)
+			{
+				List<ActionMedia> media = new List<ActionMedia>();
+				ActionTitle eventTitle = new ActionTitle ();
+				ActionDetail eventDetail = new ActionDetail ();
 
-		async void Tap_Tapped (object sender, EventArgs e)
+				eventDetail = goalsMasterList.action_details.FirstOrDefault (itm => itm.goalaction_id == tap.ClassId);
+				eventTitle = goalsMasterList.action_title.FirstOrDefault ( itm => itm.goalaction_id == tap.ClassId );
+				media = goalsMasterList.action_media.FindAll (itm => itm.goalaction_id == tap.ClassId).ToList();
+
+
+				//	title = emotionList.eve
+				if (media != null) 
+				{
+					await App.Navigator.PushModalAsync( new GemsDetailsPage( null, media , goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details,goalsMediaPath, goalsNoMediaPath ) );
+				}
+			} 
+			else
+			{
+				await DisplayAlert( Constants.ALERT_TITLE, "Not a valid Action", Constants.ALERT_OK );
+			}
+        }
+
+
+		async void OnEmotionTapped (object sender, EventArgs e)
 		{
 			View tap = sender as View;
 			if (tap != null && tap.ClassId != null)
@@ -322,7 +358,7 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync( new GemsDetailsPage( media, null , "", eventTitle.event_title, eventDetail.event_details,eventsMediaPath, eventsNoMediaPath ) );
+					await App.Navigator.PushModalAsync( new GemsDetailsPage( media, null , emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details,eventsMediaPath, eventsNoMediaPath ) );
 				}
 			} 
 			else

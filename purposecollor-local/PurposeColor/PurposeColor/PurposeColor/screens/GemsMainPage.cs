@@ -240,7 +240,7 @@ namespace PurposeColor.screens
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "More";
 				moreButton.FontSize = Device.OnPlatform (12, 15, 15);
-                moreButton.MinimumHeightRequest = 20;
+				moreButton.HeightRequest = 30;
                 moreButton.TextColor = Color.Silver;
                 moreButton.ClassId = item.emotion_id.ToString();
                 moreButton.Clicked += OnEmotionsMoreButtonClicked;
@@ -427,7 +427,7 @@ namespace PurposeColor.screens
                 moreButton.BorderWidth = 0;
                 moreButton.Text = "More";
 				moreButton.FontSize = Device.OnPlatform (12, 15, 15);
-                moreButton.MinimumHeightRequest = 20;
+				moreButton.HeightRequest = 30;
                 moreButton.TextColor = Color.Silver;
 				moreButton.ClassId = item.goal_id.ToString();
                 moreButton.Clicked += OnGoalsMore;

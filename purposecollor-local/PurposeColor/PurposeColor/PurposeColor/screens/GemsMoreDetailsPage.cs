@@ -83,7 +83,7 @@ namespace PurposeColor.screens
 
 
             // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null); // slide up
-            this.Animate("", (s) => Layout(new Rectangle(X, (s - 1) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null);
+        
 
 			if (emotionsMasterList != null)
 			{
@@ -167,8 +167,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image ();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 20) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 30) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 30) / 100;
 					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index].event_media)) ? true : false;
 					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
@@ -193,8 +193,8 @@ namespace PurposeColor.screens
 
 					customLayout.AddChildToLayout (viewContainer, 0, Device.OnPlatform (-5, 0, 0));
 					customLayout.AddChildToLayout (firstDetailsInfo, 5, Device.OnPlatform (-3, 2, 2));
-					customLayout.AddChildToLayout (firstDateInfo, 5, Device.OnPlatform (4, 9, 5));
-					customLayout.AddChildToLayout (firstEmotionsImage, 65, Device.OnPlatform (-5, 0, 0));
+					customLayout.AddChildToLayout (firstDateInfo, 5, Device.OnPlatform (4, 9, 6));
+					customLayout.AddChildToLayout (firstEmotionsImage, 65, Device.OnPlatform (-5, 0, -3));
 
 					masterStack.Children.Add (customLayout);
 				}
@@ -278,8 +278,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 20) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 30) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 30) / 100;
 					firstEmotionsImage.ClassId = goalsMasterList.action_details [index].goalaction_id;
 					firstEmotionsImage.GestureRecognizers.Add ( tap );
 					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index].event_media)) ? true : false;
@@ -304,8 +304,8 @@ namespace PurposeColor.screens
 
 					customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
 					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 5));
-					customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, 0));
+					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 6));
+					customLayout.AddChildToLayout(firstEmotionsImage, 65, Device.OnPlatform(-5, 0, -3));
 
 					masterStack.Children.Add(customLayout);
 				}

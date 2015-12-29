@@ -163,6 +163,10 @@
     <None Include="Assets\noimage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\like.png" />
+    <Content Include="Assets\share.png" />
+    <Content Include="Assets\comnt_box.png" />
+    <Content Include="Assets\noimage.png" />
     <Content Include="Assets\appbar.feature.video.rest.png" />
     <Content Include="Assets\appbar.stop.rest.png" />
     <Content Include="Assets\appbar.transport.pause.rest.png" />

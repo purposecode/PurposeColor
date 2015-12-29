@@ -64,17 +64,17 @@ namespace PurposeColor
 			//toolsLayout.HeightRequest = 100;
 
 			Image likeButton = new Image ();
-			likeButton.Source = "like.png";
-			likeButton.WidthRequest = 15;
-			likeButton.HeightRequest = 15;
+            likeButton.Source = Device.OnPlatform("like.png", "like.png", "//Assets//like.png");
+			likeButton.WidthRequest = Device.OnPlatform( 15, 15, 15 );
+            likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 
 			Image shareButton = new Image ();
-			shareButton.Source = "share.png";
-			shareButton.WidthRequest = 15;
-			shareButton.HeightRequest = 15;
+            shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+            shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+            shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 
 			CustomEntry comment = new CustomEntry ();
-			comment.BackGroundImageName = "comnt_box.png";
+            comment.BackGroundImageName = Device.OnPlatform("comnt_box.png", "comnt_box.png", "//Assets//comnt_box.png"); 
 			comment.BackgroundColor = Color.White;
 			comment.Placeholder = "comments";
 			comment.WidthRequest = App.screenWidth * 70 / 100;
@@ -106,7 +106,7 @@ namespace PurposeColor
 					Image img = new Image ();
 
 					bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
-					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList [index].event_media : "noimage.png";
+                    img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png"); 
 					img.Aspect = Aspect.AspectFit;
 					//img.HeightRequest = 200;
 					//img.WidthRequest = 150;
@@ -123,8 +123,8 @@ namespace PurposeColor
 					Image img = new Image ();
 
 					bool isValidUrl = (actionMediaList [index].event_media != null && !string.IsNullOrEmpty (actionMediaList [index].event_media)) ? true : false;
-					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList [index].event_media : "noimage.png";
-					img.Aspect = Aspect.AspectFill;
+                    img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+					img.Aspect = Aspect.AspectFit;
 					//img.HeightRequest = 200;
 					//img.WidthRequest = 150;
 					//ActivityIndicator indi = new ActivityIndicator();
@@ -138,7 +138,7 @@ namespace PurposeColor
 
 			StackLayout spaceOffsetlayout = new StackLayout ();
 			spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-			spaceOffsetlayout.HeightRequest = Device.OnPlatform( 0, 100, 100 );
+			spaceOffsetlayout.HeightRequest = Device.OnPlatform( 0, 100, 200 );
 			spaceOffsetlayout.BackgroundColor = Color.Transparent;
 			masterStack.Children.Add ( spaceOffsetlayout );
 

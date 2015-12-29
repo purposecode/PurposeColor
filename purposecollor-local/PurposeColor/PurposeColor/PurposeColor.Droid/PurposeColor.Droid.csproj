@@ -18,7 +18,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -262,6 +262,21 @@
     <AndroidResource Include="Resources\drawable-xhdpi\tick_with_bg.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\tick_with_bg.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\tick_with_bg.png" />
+    <AndroidResource Include="Resources\drawable\like.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\like.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\like.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\like.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\like.png" />
+    <AndroidResource Include="Resources\drawable\share.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\share.png" />
+    <AndroidResource Include="Resources\drawable\comnt_box.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\comnt_box.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\comnt_box.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\comnt_box.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\comnt_box.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

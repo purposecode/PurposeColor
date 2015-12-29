@@ -19,57 +19,102 @@ namespace PurposeColor
 		Label title;
 		Label description;
 	    List<EventMedia> mediaList { get; set; } 
-		GemsPageTitleBarWithBack mainTitleBar;
-		public GemsDetailsPage (  List<EventMedia> mediaArray, string titleVal, string desc, string eventMedia, string eventNoMedia, string goalsMedia, string goalsNoMedia )
+		List<ActionMedia> actionMediaList { get; set; }
+
+		public GemsDetailsPage (  List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray,string pageTitleVal, string titleVal, string desc, string Media, string NoMedia )
 		{
 			NavigationPage.SetHasNavigationBar(this, false);
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			masterScroll = new ScrollView ();
-			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
 			masterStack = new StackLayout ();
 			masterStack.Orientation = StackOrientation.Vertical;
+			masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
 			mediaList = mediaArray;
+			actionMediaList = actionMediaArray;
 
-			// PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-			mainTitleBar = new GemsPageTitleBarWithBack(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
+			PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+
+			Label pageTitle = new Label();
+			pageTitle.Text = pageTitleVal;
+			pageTitle.TextColor = Color.Black;
+			pageTitle.FontAttributes = FontAttributes.Bold;
+			pageTitle.WidthRequest = App.screenWidth * 90 / 100;
+			pageTitle.HeightRequest = 50;
+			pageTitle.XAlign = TextAlignment.Start;
+			pageTitle.YAlign = TextAlignment.Center;
+			pageTitle.FontSize = Device.OnPlatform (15, 20, 15);
+
 
 			title = new Label ();
 			title.Text = titleVal;
 			title.TextColor = Color.Black;
+			title.WidthRequest = App.screenWidth * 90 / 100;
+			title.FontSize = Device.OnPlatform (12, 12, 12);
 
 			description = new Label ();
+			description.WidthRequest = App.screenWidth * 90 / 100;
 			description.Text = desc;
 			description.TextColor = Color.Black;
 
 
-
+			masterStack.Children.Add ( pageTitle );
 			masterStack.Children.Add ( title );
 			masterStack.Children.Add ( description );
 
-			for (int index = 0; index < mediaList.Count; index++)
+			if (mediaList != null)
 			{
-				Image img = new Image ();
+				for (int index = 0; index < mediaList.Count; index++)
+				{
+					Image img = new Image ();
 
-				bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
-				img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + eventMedia + mediaList [index].event_media : Constants.SERVICE_BASE_URL + eventNoMedia;
-				img.Aspect = Aspect.AspectFill;
-				//img.HeightRequest = 200;
-				//img.WidthRequest = 150;
-				ActivityIndicator indi = new ActivityIndicator();
-				masterStack.Children.Add ( indi );
-				masterStack.Children.Add ( img );
+					bool isValidUrl = (mediaList [index].event_media != null && !string.IsNullOrEmpty (mediaList [index].event_media)) ? true : false;
+					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList [index].event_media : Constants.SERVICE_BASE_URL + NoMedia;
+					img.Aspect = Aspect.AspectFill;
+					//img.HeightRequest = 200;
+					//img.WidthRequest = 150;
+					//ActivityIndicator indi = new ActivityIndicator();
+					//masterStack.Children.Add ( indi );
+					masterStack.Children.Add ( img );
+				}
 			}
+	
+			if (actionMediaList != null)
+			{
+				for (int index = 0; index < actionMediaList.Count; index++)
+				{
+					Image img = new Image ();
+
+					bool isValidUrl = (actionMediaList [index].event_media != null && !string.IsNullOrEmpty (actionMediaList [index].event_media)) ? true : false;
+					img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList [index].event_media : Constants.SERVICE_BASE_URL + NoMedia;
+					img.Aspect = Aspect.AspectFill;
+					//img.HeightRequest = 200;
+					//img.WidthRequest = 150;
+					//ActivityIndicator indi = new ActivityIndicator();
+					//masterStack.Children.Add ( indi );
+					masterStack.Children.Add ( img );
+				}
+			}
+	
+
+			StackLayout spaceOffsetlayout = new StackLayout ();
+			spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
+			spaceOffsetlayout.HeightRequest = Device.OnPlatform( 0, 100, 100 );
+			spaceOffsetlayout.BackgroundColor = Color.Transparent;
+			masterStack.Children.Add ( spaceOffsetlayout );
+
 
 			masterScroll.HeightRequest = App.screenHeight - 10;
 			masterScroll.WidthRequest = App.screenWidth * 90 / 100;
 
 			masterScroll.Content = masterStack;
 
-
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-			masterLayout.AddChildToLayout(masterScroll, 5, 10);
+			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+			masterLayout.AddChildToLayout(masterScroll, 5, 18);
 			Content = masterLayout;
 
 		/*	Content = new StackLayout

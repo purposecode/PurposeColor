@@ -267,6 +267,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\like.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\like.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\like.png" />
+    <AndroidResource Include="Resources\drawable\share.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\share.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\share.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

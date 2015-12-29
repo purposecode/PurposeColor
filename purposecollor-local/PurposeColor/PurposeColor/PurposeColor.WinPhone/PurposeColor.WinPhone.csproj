@@ -158,6 +158,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Assets\like.png" />
+    <None Include="Assets\share.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\appbar.feature.video.rest.png" />

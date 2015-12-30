@@ -80,7 +80,7 @@ namespace PurposeColor.Model
 
     public class LoginUser
     {
-        public string user_id;
+        public int user_id;
         public string firstname;
         public string email;
         public string profileurl;

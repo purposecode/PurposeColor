@@ -96,21 +96,11 @@ namespace PurposeColor.screens
 
                 #region SAVING SIGN OUT SETTINGS
 
-                PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
-                if (AppSettings == null)
-                {
-                    return;
-                }
-                AppSettings.DeleteAllUsers();
-                //PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
-                //globalSettings.ShowRegistrationScreen = false;
-                //globalSettings.IsLoggedIn = false;
-                //globalSettings.IsFirstLogin = true;
-                await AppSettings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
+                App.Settings.DeleteAllUsers();
+                await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
                 #endregion
 
                 // to do service to sign out user so that further notifications are not send from server. //
-
 
                 await Navigation.PushAsync(new LogInPage());
                 Navigation.RemovePage(this);

@@ -197,20 +197,16 @@ namespace PurposeColor.screens
             }
             else if (!String.IsNullOrEmpty(passwordEntry.Text) && passwordEntry.Text.Length < 6)
             {
-                await DisplayAlert(Constants.ALERT_TITLE, "Password must be six characters long.", Constants.ALERT_OK);
+                await DisplayAlert(Constants.ALERT_TITLE, "Password must be of minimum 6 characters length.", Constants.ALERT_OK);
                 return;
             }
-
-            
 
             #region SERVIDE
             if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
             {
 
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
-                 progress.ShowProgressbar("Signing in..");
-
-                ApplicationSettings AppSettings = App.Settings;
+                progress.ShowProgressbar("Signing in..");
 
                 try
                 {
@@ -224,7 +220,7 @@ namespace PurposeColor.screens
                             User newUser = null;
                             if (!string.IsNullOrEmpty(loggedInUser.email))
                             {
-                                newUser = await AppSettings.GetUserWithUserName(loggedInUser.email);
+                                newUser = await App.Settings.GetUserWithUserName(loggedInUser.email);
                             }
 
                             if (newUser == null)
@@ -236,13 +232,11 @@ namespace PurposeColor.screens
                             newUser.DisplayName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
                             newUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
                             newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
-                            if (loggedInUser.user_id != null)
-                            {
-                                newUser.UserId = Int32.Parse(loggedInUser.user_id);
-                            }
+                            newUser.UserId = loggedInUser.user_id;
+
                             if (loggedInUser.usertype_id != null)
                             {
-                                newUser.UserType = Int32.Parse(loggedInUser.usertype_id);
+                                newUser.UserType = int.Parse(loggedInUser.usertype_id);
                             }
                             if (loggedInUser.regdate != null)
                             {
@@ -250,13 +244,13 @@ namespace PurposeColor.screens
                                 newUser.RegistrationDate = loggedInUser.regdate;
                             }
 
-                            isSaveSuccess = await AppSettings.SaveUser(newUser);
-                            
-                            PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
+                            isSaveSuccess = await App.Settings.SaveUser(newUser);
+
+                            PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
                             globalSettings.ShowRegistrationScreen = false;
                             globalSettings.IsLoggedIn = true;
                             globalSettings.IsFirstLogin = true;
-                            await AppSettings.SaveAppGlobalSettings(globalSettings);
+                            await App.Settings.SaveAppGlobalSettings(globalSettings);
 
                             progress.HideProgressbar();
                             await Navigation.PushAsync(new FeelingNowPage());

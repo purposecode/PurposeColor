@@ -10,7 +10,6 @@ using PurposeColor.CustomControls;
 using System.Net.Http;
 using Plugin.Connectivity;
 
-
 namespace PurposeColor.Service
 {
     public class ServiceHelper
@@ -862,7 +861,6 @@ namespace PurposeColor.Service
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
@@ -1133,6 +1131,67 @@ namespace PurposeColor.Service
             }
 
             return "404";
+        }
+
+        public static async Task<string> UpdatePassword(string userId, string oldPassword, string newPassword, string confirmPassword)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "400";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=changepassword";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                if (!string.IsNullOrEmpty(oldPassword))
+                {
+                    content.Add(new StringContent(oldPassword, Encoding.UTF8), "oldpass");
+                }
+
+                if (!string.IsNullOrEmpty(newPassword))
+                {
+                    content.Add(new StringContent(newPassword, Encoding.UTF8), "newpass");
+                }
+
+                if (!string.IsNullOrEmpty(confirmPassword))
+                {
+                    content.Add(new StringContent(confirmPassword, Encoding.UTF8), "cpass");
+                }
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    content.Add(new StringContent(userId, Encoding.UTF8), "user_id");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "400";
         }
 
     }

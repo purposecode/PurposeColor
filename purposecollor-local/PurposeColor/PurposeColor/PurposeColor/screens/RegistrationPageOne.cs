@@ -212,7 +212,7 @@ namespace PurposeColor.screens
 
                     if (passwordEntry.Text.Length < 6) 
                     {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Password should have atlease 6 characters", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "password must be of minimum 6 characters length.", Constants.ALERT_OK);
                         allErntryAreValid = false;
                         return;
                     }

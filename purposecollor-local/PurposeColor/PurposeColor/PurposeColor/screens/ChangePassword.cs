@@ -59,8 +59,8 @@ namespace PurposeColor.screens
             {
                 Text = "Submit",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
@@ -137,7 +137,10 @@ namespace PurposeColor.screens
                     DisplayAlert(Constants.ALERT_TITLE, "Password updated successfully, please relogin.", Constants.ALERT_OK);
                     
                     await Navigation.PushAsync(new LogInPage());
-                    Navigation.RemovePage(this);
+                    if (Device.OS != TargetPlatform.WinPhone)
+                    {
+                        Navigation.RemovePage(this);
+                    }
                     
                 }
                 else if (statusCode == "400")

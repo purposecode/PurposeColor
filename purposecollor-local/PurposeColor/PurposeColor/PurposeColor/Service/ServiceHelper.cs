@@ -803,15 +803,20 @@ namespace PurposeColor.Service
             {
                 return false;
             }
-            User user = App.Settings.GetUser();
-            user = new User { UserId = 2 }; // for testing only // test
-            if (user == null)
-            {
-                return false;
-            }
 
             try
             {
+                User user = new User { UserId = 2 }; // for testing only // test remove after testing
+
+                if (App.Settings.GetUser() != null)
+                {
+                    user = App.Settings.GetUser();
+                }
+
+                if (user == null)
+                {
+                    return false;
+                }
                 var client = new HttpClient();
                 client.Timeout = new TimeSpan(0, 15, 0);
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);

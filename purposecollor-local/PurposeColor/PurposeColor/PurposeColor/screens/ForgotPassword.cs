@@ -63,9 +63,10 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Email",
                 Keyboard = Keyboard.Email,
-                BackgroundColor = Color.Black,
-                TextColor = Color.White,
-                HeightRequest = 50
+                BackgroundColor = Color.Transparent,
+                TextColor = Color.Black,
+                HeightRequest = Device.OnPlatform(50, 50, 75)
+                
             };
             email.WidthRequest = screenWidth * 80 / 100;
             masterLayout.AddChildToLayout(email, 10, 38);
@@ -74,15 +75,15 @@ namespace PurposeColor.screens
             {
                 Text = "Submit",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
             resetPasswordButton.Clicked += resetPasswordButton_Clicked;
 
             resetPasswordButton.WidthRequest = screenWidth * 80 / 100;
-            masterLayout.AddChildToLayout(resetPasswordButton, 10, 48);
+            masterLayout.AddChildToLayout(resetPasswordButton, 10, Device.OnPlatform(48, 48,46));
 
             Content = masterLayout;
         }

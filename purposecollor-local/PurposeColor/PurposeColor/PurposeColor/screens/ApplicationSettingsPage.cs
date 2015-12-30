@@ -42,8 +42,8 @@ namespace PurposeColor.screens
             {
                 Text = "Sign out",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
@@ -51,8 +51,8 @@ namespace PurposeColor.screens
             {
                 Text = "Change password",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
@@ -61,7 +61,7 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(signOutButton, 10, 20);
-            masterLayout.AddChildToLayout(changePassword, 10, 30);
+            masterLayout.AddChildToLayout(changePassword, 10, Device.OnPlatform(30, 30,28));
             signOutButton.Clicked += OnSignOutButtonClicked;
             changePassword.Clicked += ChangePassword_Clicked;
 
@@ -110,7 +110,10 @@ namespace PurposeColor.screens
                 await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
                 progressBar.HideProgressbar();
                 await Navigation.PushAsync(new LogInPage());
-                Navigation.RemovePage(this);
+                if (Device.OS != TargetPlatform.WinPhone)
+                {
+                    Navigation.RemovePage(this);
+                }
             }
             catch (Exception ex)
             {

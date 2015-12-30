@@ -53,22 +53,22 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Username",
                 Keyboard = Keyboard.Email,
-                HeightRequest = 50
+                HeightRequest = Device.OnPlatform(50, 50,75)
             };
 
             passwordEntry = new CustomEntry
             {
                 Placeholder = "Password",
                 IsPassword = true,
-                HeightRequest = 50
+                HeightRequest = Device.OnPlatform(50, 50, 75)
             };
 
             signInButton = new Button
             {
                 Text = "Sign in",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
                 //HeightRequest = 50
             };
@@ -79,7 +79,7 @@ namespace PurposeColor.screens
                 Text = "Forgot password",
                 TextColor = Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
-                FontSize = 12,
+                FontSize = Device.OnPlatform(12,12,15),
                 HeightRequest = Device.OnPlatform(15, 25, 25),
             };
 
@@ -95,7 +95,7 @@ namespace PurposeColor.screens
                 Text = "Sign up with us",
                 TextColor = Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
-                FontSize = 12,
+                FontSize = Device.OnPlatform(12, 12, 15),
                 HeightRequest = Device.OnPlatform(15, 25, 25),
             };
             registerLabel.GestureRecognizers.Add(registerTap);
@@ -108,8 +108,8 @@ namespace PurposeColor.screens
             {
                 Text = "Sign in with Google",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
@@ -117,8 +117,8 @@ namespace PurposeColor.screens
             {
                 Text = "Sign in with Facebook",
                 TextColor = Color.White,
-                BorderColor = Constants.BLUE_BG_COLOR,
-                BorderWidth = 2,
+                BorderColor = Color.Transparent,
+                BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
@@ -138,14 +138,14 @@ namespace PurposeColor.screens
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(userNameEntry, 10, 23);
-            masterLayout.AddChildToLayout(passwordEntry, 10, 33);
-            masterLayout.AddChildToLayout(signInButton, 10, 43);
-            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 11), 52);
-            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 66, 77), 52);
+            masterLayout.AddChildToLayout(userNameEntry, 10, Device.OnPlatform(23, 23, 23));
+            masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(33, 33, 31));
+            masterLayout.AddChildToLayout(signInButton, 10, Device.OnPlatform(43, 43, 39));
+            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 13), Device.OnPlatform(52,52,47));
+            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 66, 65), Device.OnPlatform(52,52,47));
             
-            masterLayout.AddChildToLayout(googleSignInButton, 10, 65);
-            masterLayout.AddChildToLayout(faceBookSignInButton, 10, 75);
+            masterLayout.AddChildToLayout(googleSignInButton, 10, Device.OnPlatform(65,65,62));
+            masterLayout.AddChildToLayout(faceBookSignInButton, 10, Device.OnPlatform(75, 75, 70));
 
             googleSignInButton.Clicked += OnGoogleSignInButtonClicked;
             faceBookSignInButton.Clicked += faceBookSignInButton_Clicked;
@@ -172,9 +172,17 @@ namespace PurposeColor.screens
             if (userNameEntry.Text == "apptester")
             {
                 App.IsTesting = true;
-                await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
+                bool userSaved = await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
+                if (!userSaved)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
+                }
                 await Navigation.PushAsync(new FeelingNowPage());
-                Navigation.RemovePage(this);
+                if (Device.OS != TargetPlatform.WinPhone)
+                {
+                    Navigation.RemovePage(this);
+                }
+                
                 return;
             }
             else
@@ -255,14 +263,20 @@ namespace PurposeColor.screens
 
                             progress.HideProgressbar();
                             await Navigation.PushAsync(new FeelingNowPage());
-                            Navigation.RemovePage(this);
+                            if (Device.OS != TargetPlatform.WinPhone)
+                            {
+                                Navigation.RemovePage(this);
+                            }
                         }
                         else
                         {
                             progress.HideProgressbar();
                             await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
                             await Navigation.PushAsync(new FeelingNowPage());
-                            Navigation.RemovePage(this);
+                            if (Device.OS != TargetPlatform.WinPhone)
+                            {
+                                Navigation.RemovePage(this);
+                            }
                         }
                     }
                     else

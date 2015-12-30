@@ -220,9 +220,15 @@ namespace PurposeColor
 
         private async void SaveData()
         {
+            bool isValueSaved = false;
 			try 
 			{
-				bool isValueSaved = await ServiceHelper.SaveGoalsAndActions (slider.Value.ToString (), App.newEmotionId, selectedGoal.EventID, selectedActions);
+                var test1 = slider.Value.ToString();
+                var test2 = App.newEmotionId;
+                var test3 = selectedGoal.EventID;
+                var test4 = selectedActions;
+
+				isValueSaved = await ServiceHelper.SaveGoalsAndActions (slider.Value.ToString (), App.newEmotionId, selectedGoal.EventID, selectedActions);
 				if (!isValueSaved) 
 				{
 					bool doRetry = await DisplayAlert (Constants.ALERT_TITLE, "Network error, unable to save the detais", "Retry", "Cancel");
@@ -241,7 +247,14 @@ namespace PurposeColor
 			catch (Exception ex) 
 			{
 				progressBar.HideProgressbar();
-				DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
+                if (!isValueSaved)
+                {
+                    DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
+                }
+                else
+                {
+                    Navigation.PushAsync(new FeelingNowPage());
+                }
 			}
         }
 

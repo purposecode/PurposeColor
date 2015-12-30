@@ -60,10 +60,9 @@ namespace PurposeColor.screens
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                BackgroundColor = Color.White,
+                BackgroundColor = Color.Transparent,
                 Placeholder = "First name",
-                //TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(screenWidth * .80), // 80% of screen,
+                WidthRequest = screenWidth * .80, // 80% of screen,
                 Keyboard = Keyboard.Default,
                 HeightRequest = 50
             };
@@ -73,10 +72,9 @@ namespace PurposeColor.screens
             {
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                BackgroundColor = Color.White,
+                BackgroundColor = Color.Transparent,
                 Placeholder = "Email",
-                //TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(screenWidth * .80), // 80% of screen,
+                WidthRequest = screenWidth * .80, // 80% of screen,
                 Keyboard = Keyboard.Email,
                 HeightRequest = 50
             };
@@ -87,10 +85,10 @@ namespace PurposeColor.screens
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                BackgroundColor = Color.White,
+                BackgroundColor = Color.Transparent,
                 Placeholder = "Password (min 6 char)",
                 //TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(screenWidth * .80), // 80% of screen,
+                WidthRequest = screenWidth * .80, // 80% of screen,
                 Keyboard = Keyboard.Default,
                 HeightRequest = 50
             };
@@ -101,10 +99,10 @@ namespace PurposeColor.screens
                 IsPassword = true,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                BackgroundColor = Color.White,
+                BackgroundColor = Color.Transparent,
                 Placeholder = "Confirm password",
                 //TextColor = Color.FromHex("#424646"),
-                WidthRequest = (int)(screenWidth * .80),// 80% of screen,
+                WidthRequest = screenWidth * .80,// 80% of screen,
                 Keyboard = Keyboard.Default,
                 HeightRequest = 50
             };
@@ -145,10 +143,10 @@ namespace PurposeColor.screens
             registrationButton = new Image
             {
                 BackgroundColor = Color.Transparent,
-                WidthRequest = (int)(screenWidth * .80),
+                WidthRequest = screenWidth * .75,
                 Source = Device.OnPlatform("reg_btn.png", "reg_btn.png", "//Assets//reg_btn.png")
             };
-            masterLayout.AddChildToLayout(registrationButton, 10, Device.OnPlatform(80, 80, 65));
+            masterLayout.AddChildToLayout(registrationButton, 13, Device.OnPlatform(80, 80, 65));
             TapGestureRecognizer registrationButtonTapRecognizer = new TapGestureRecognizer();
             registrationButton.GestureRecognizers.Add(registrationButtonTapRecognizer);
 
@@ -174,7 +172,10 @@ namespace PurposeColor.screens
                         await AppSettings.SaveAppGlobalSettings(globalSettings);
 
                         await Navigation.PushAsync(new LogInPage());
-                        Navigation.RemovePage(this);
+                        if (Device.OS != TargetPlatform.WinPhone)
+                        {
+                            Navigation.RemovePage(this);
+                        }
                         return;
                     }
                     
@@ -266,7 +267,10 @@ namespace PurposeColor.screens
                                 #endregion
 
                                 await Navigation.PushAsync(new LogInPage());
-                                Navigation.RemovePage(this);
+                                if (Device.OS != TargetPlatform.WinPhone)
+                                {
+                                    Navigation.RemovePage(this);
+                                }
                             }
                             else
                             {
@@ -303,7 +307,7 @@ namespace PurposeColor.screens
                 confirmPasswordEntry.HeightRequest = 73;
 
                 registrationButton.HeightRequest = 80;
-                registrationButton.WidthRequest = screenWidth * .80;
+               // registrationButton.WidthRequest = screenWidth * .80;
             }
 
             Content = masterLayout;

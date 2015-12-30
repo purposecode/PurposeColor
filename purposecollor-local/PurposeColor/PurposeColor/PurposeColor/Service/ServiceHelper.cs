@@ -1086,6 +1086,53 @@ namespace PurposeColor.Service
             return null;
         }
 
+        public static async Task<string> LogOut(string userId)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "404";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=logout";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    content.Add(new StringContent(userId, Encoding.UTF8), "user_id");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.Content != null)
+                {
+
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<UserDetailsOnLogin>(eventsJson);
+                    if (rootobject != null && rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "404";
+        }
+
         public static async Task<string> ResetPassword(string email)
         {
             if (!CrossConnectivity.Current.IsConnected)

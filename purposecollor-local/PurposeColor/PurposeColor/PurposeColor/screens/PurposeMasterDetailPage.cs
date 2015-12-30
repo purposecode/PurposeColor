@@ -13,7 +13,6 @@ namespace PurposeColor.screens
         {
             try
             {
-
                 App.Navigator = Navigation;
                 NavigationPage.SetHasNavigationBar(this, false);
                 Master = new MenuPage();
@@ -27,7 +26,7 @@ namespace PurposeColor.screens
                 }
                 if (globalSettings == null)
                 {
-                    Detail = new NavigationPage(new RegistrationPageOne());
+                    Detail = new NavigationPage(new LogInPage());
                 }
                 else if (globalSettings.IsLoggedIn)
                 {

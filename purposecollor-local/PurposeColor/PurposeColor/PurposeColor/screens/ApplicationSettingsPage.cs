@@ -1,5 +1,6 @@
 ﻿using CustomControls;
 using PurposeColor.CustomControls;
+using PurposeColor.interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace PurposeColor.screens
         PurposeColorTitleBar mainTitleBar = null;
         double screenHeight;
         double screenWidth;
+        IProgressBar progressBar;
 
         public ApplicationSettingsPage()
         {
@@ -35,7 +37,7 @@ namespace PurposeColor.screens
             {
                 App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
-
+            progressBar = DependencyService.Get<IProgressBar>();
             signOutButton = new Button
             {
                 Text = "Sign out",
@@ -70,18 +72,20 @@ namespace PurposeColor.screens
         {
             try
             {
-                PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
-                if (AppSettings != null)
+                if (App.Settings.GetUser() != null)
                 {
-                    await Navigation.PushAsync(new ChangePassword(AppSettings.GetUser()));
-                    return;
+                    await Navigation.PushAsync(new ChangePassword());
+                }
+                else
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Could not process your request now, please try again later.", Constants.ALERT_OK);
                 }
             }
             catch (Exception ex)
             {
                 var test = ex.Message;
+                DisplayAlert(Constants.ALERT_TITLE, "Could not process your request now, please try again later.", Constants.ALERT_OK);
             }
-            DisplayAlert(Constants.ALERT_TITLE, "Page not available now, please try again later.", Constants.ALERT_OK);
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
@@ -93,23 +97,26 @@ namespace PurposeColor.screens
         {
             try
             {
-
+                progressBar.ShowToast("Signing out..");
                 #region SAVING SIGN OUT SETTINGS
+                string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(App.Settings.GetUser().UserId.ToString());
 
+                if (statusCode != "200")
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
+                }
+                #endregion
                 App.Settings.DeleteAllUsers();
                 await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
-                #endregion
-
-                // to do service to sign out user so that further notifications are not send from server. //
-
+                progressBar.HideProgressbar();
                 await Navigation.PushAsync(new LogInPage());
                 Navigation.RemovePage(this);
-
             }
             catch (Exception ex)
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
             }
+            progressBar.HideProgressbar();
         }
 
         public void Dispose()

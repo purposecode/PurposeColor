@@ -17,7 +17,7 @@ namespace PurposeColor.screens
         CustomEntry oldPaswordEntry = null;
         CustomEntry confirmPaswordEntry = null;
 
-        public ChangePassword(User userInfo)
+        public ChangePassword()
         {
             NavigationPage.SetHasNavigationBar(this, false);
             CustomLayout masterLayout = new CustomLayout();
@@ -117,6 +117,12 @@ namespace PurposeColor.screens
                 if (oldPaswordEntry.Text.Length < 6 || newPaswordEntry.Text.Length < 6 || confirmPaswordEntry.Text.Length < 6)
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "password must be of minimum 6 characters length.", Constants.ALERT_OK);
+                    return;
+                }
+
+                if (newPaswordEntry.Text != confirmPaswordEntry.Text)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "New password and Confirm password fields should match.", Constants.ALERT_OK);
                     return;
                 }
 

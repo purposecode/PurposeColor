@@ -142,7 +142,7 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(passwordEntry, 10, 33);
             masterLayout.AddChildToLayout(signInButton, 10, 43);
             masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 11), 52);
-            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 65, 77), 52);
+            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 66, 77), 52);
             
             masterLayout.AddChildToLayout(googleSignInButton, 10, 65);
             masterLayout.AddChildToLayout(faceBookSignInButton, 10, 75);
@@ -172,6 +172,7 @@ namespace PurposeColor.screens
             if (userNameEntry.Text == "apptester")
             {
                 App.IsTesting = true;
+                await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
                 await Navigation.PushAsync(new FeelingNowPage());
                 Navigation.RemovePage(this);
                 return;
@@ -300,7 +301,7 @@ namespace PurposeColor.screens
             {
                 IAuthenticate winGoogle = DependencyService.Get<IAuthenticate>();
                 winGoogle.AutheticateGoogle();
-                Navigation.PushAsync(new ChangePassword(new User()));
+                Navigation.PushAsync(new ChangePassword());
             }
             // progress.ShowProgressbar(false, "Loading..");
         }

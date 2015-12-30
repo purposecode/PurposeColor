@@ -108,7 +108,7 @@ namespace PurposeColor
         {
             Device.BeginInvokeOnMainThread(() =>
             {
-                Navigator.PushAsync(new ChangePassword(userInfo));
+                Navigator.PushAsync(new ChangePassword());
             });
         }
 

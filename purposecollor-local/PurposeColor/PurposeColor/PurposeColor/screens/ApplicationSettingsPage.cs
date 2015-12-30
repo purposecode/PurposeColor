@@ -99,7 +99,20 @@ namespace PurposeColor.screens
             {
                 progressBar.ShowToast("Signing out..");
                 #region SAVING SIGN OUT SETTINGS
-                string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(App.Settings.GetUser().UserId.ToString());
+                PurposeColor.Model.User user = null;
+                try
+                {
+                    user = App.Settings.GetUser();
+                }
+                catch (Exception)
+                {
+                    
+                }
+                if (user == null)
+                {
+                    user = new Model.User { UserId = 2 };
+                }
+                string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(user.UserId.ToString());
 
                 if (statusCode != "200")
                 {

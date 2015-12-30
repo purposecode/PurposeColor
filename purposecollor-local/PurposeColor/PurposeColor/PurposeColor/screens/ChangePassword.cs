@@ -36,24 +36,23 @@ namespace PurposeColor.screens
             oldPaswordEntry = new CustomEntry
             {
                 Placeholder = "Old password",
-                HeightRequest = 50,
+                HeightRequest = Device.OnPlatform(50, 50, 75),
                 IsPassword = true
             };
 
             newPaswordEntry = new CustomEntry
             {
                 Placeholder = "New password",
-                HeightRequest = 50,
+                HeightRequest = Device.OnPlatform(50, 50, 75),
                 IsPassword = true
             };
 
             confirmPaswordEntry = new CustomEntry
             {
                 Placeholder = "Confirm new password",
-                HeightRequest = 50,
+                HeightRequest = Device.OnPlatform(50, 50, 75),
                 IsPassword = true
             };
-
 
             Button submitButton = new Button
             {
@@ -61,7 +60,8 @@ namespace PurposeColor.screens
                 TextColor = Color.White,
                 BorderColor = Color.Transparent,
                 BorderWidth = 0,
-                BackgroundColor = Constants.BLUE_BG_COLOR
+                BackgroundColor = Constants.BLUE_BG_COLOR,
+                HeightRequest = Device.OnPlatform(50, 50, 75),
             };
 
             oldPaswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
@@ -101,7 +101,7 @@ namespace PurposeColor.screens
                 {
                     user = new User { UserId = 2 }; // for testing only
                 }
-                
+
                 if (user == null)
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Could not change password, please try after relogin.", Constants.ALERT_OK);
@@ -134,14 +134,14 @@ namespace PurposeColor.screens
                     await App.Settings.SaveAppGlobalSettings(new GlobalSettings { IsLoggedIn = false, ShowRegistrationScreen = false, IsFirstLogin = false });
                     App.Settings.DeleteAllUsers();
                     progress.HideProgressbar();
-                    DisplayAlert(Constants.ALERT_TITLE, "Password updated successfully, please relogin.", Constants.ALERT_OK);
-                    
+                    await DisplayAlert(Constants.ALERT_TITLE, "Password updated successfully, please relogin.", Constants.ALERT_OK);
+
                     await Navigation.PushAsync(new LogInPage());
                     if (Device.OS != TargetPlatform.WinPhone)
                     {
                         Navigation.RemovePage(this);
                     }
-                    
+
                 }
                 else if (statusCode == "400")
                 {

@@ -39,22 +39,28 @@ namespace PurposeColor.screens
             screenWidth = App.screenWidth;
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
-            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "               Sign In", true, false);
+            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "               Sign In", true, true);
             subTitleBar.NextButtonTapRecognizer.Tapped += (s, e) =>
             {
                 OnSignInButtonClicked(signInButton, null);
+            };
+            subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
+            {
+                App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
 
             userNameEntry = new CustomEntry
             {
                 Placeholder = "Username",
-                Keyboard = Keyboard.Email
+                Keyboard = Keyboard.Email,
+                HeightRequest = 50
             };
 
             passwordEntry = new CustomEntry
             {
                 Placeholder = "Password",
-                IsPassword = true
+                IsPassword = true,
+                HeightRequest = 50
             };
 
             signInButton = new Button
@@ -64,6 +70,7 @@ namespace PurposeColor.screens
                 BorderColor = Constants.BLUE_BG_COLOR,
                 BorderWidth = 2,
                 BackgroundColor = Constants.BLUE_BG_COLOR
+                //HeightRequest = 50
             };
 
             TapGestureRecognizer forgotPasswordTap = new TapGestureRecognizer();
@@ -85,7 +92,7 @@ namespace PurposeColor.screens
             TapGestureRecognizer registerTap = new TapGestureRecognizer();
             registerLabel = new Label
             {
-                Text = "Sign up",
+                Text = "Sign up with us",
                 TextColor = Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
                 FontSize = 12,
@@ -122,24 +129,23 @@ namespace PurposeColor.screens
 
             userNameEntry.WidthRequest = screenWidth * 80 / 100;
             passwordEntry.WidthRequest = screenWidth * 80 / 100;
-            signInButton.WidthRequest = screenWidth * 60 / 100;
-            googleSignInButton.WidthRequest = screenWidth * 60 / 100;
-            faceBookSignInButton.WidthRequest = screenWidth * 60 / 100;
+            signInButton.WidthRequest = screenWidth * 80 / 100;
+            googleSignInButton.WidthRequest = screenWidth * 80 / 100;
+            faceBookSignInButton.WidthRequest = screenWidth * 80 / 100;
 
             //imgsignInButton.WidthRequest = deviceSpec.ScreenWidth * 10 / 100;
             //imgsignInButton.HeightRequest = deviceSpec.ScreenHeight * 5 / 100;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(userNameEntry, 10, 25);
+            masterLayout.AddChildToLayout(userNameEntry, 10, 23);
             masterLayout.AddChildToLayout(passwordEntry, 10, 33);
-            masterLayout.AddChildToLayout(signInButton, 20, 41);
-            masterLayout.AddChildToLayout(forgotPasswordLabel, 21, 50);
-            masterLayout.AddChildToLayout(registerLabel, 65, 50);
+            masterLayout.AddChildToLayout(signInButton, 10, 43);
+            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 11), 52);
+            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 65, 77), 52);
             
-            
-            masterLayout.AddChildToLayout(googleSignInButton, 20, 65);
-            masterLayout.AddChildToLayout(faceBookSignInButton, 20, 75);
+            masterLayout.AddChildToLayout(googleSignInButton, 10, 65);
+            masterLayout.AddChildToLayout(faceBookSignInButton, 10, 75);
 
             googleSignInButton.Clicked += OnGoogleSignInButtonClicked;
             faceBookSignInButton.Clicked += faceBookSignInButton_Clicked;

@@ -33,7 +33,7 @@ namespace PurposeColor.screens
 
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
-                Navigation.PopAsync();
+                App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
 
             signOutButton = new Button
@@ -54,12 +54,12 @@ namespace PurposeColor.screens
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
 
-            signOutButton.WidthRequest = screenWidth * 60 / 100;
-            changePassword.WidthRequest = screenWidth * 60 / 100;
+            signOutButton.WidthRequest = screenWidth * 80 / 100;
+            changePassword.WidthRequest = screenWidth * 80 / 100;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(signOutButton, 20, 41);
-            masterLayout.AddChildToLayout(changePassword, 20, 50);
+            masterLayout.AddChildToLayout(signOutButton, 10, 20);
+            masterLayout.AddChildToLayout(changePassword, 10, 30);
             signOutButton.Clicked += OnSignOutButtonClicked;
             changePassword.Clicked += ChangePassword_Clicked;
 
@@ -70,22 +70,18 @@ namespace PurposeColor.screens
         {
             try
             {
-
                 PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
-                if (AppSettings == null)
+                if (AppSettings != null)
                 {
+                    await Navigation.PushAsync(new ChangePassword(AppSettings.GetUser()));
                     return;
                 }
-
-                await Navigation.PushAsync(new ChangePassword(AppSettings.GetUser()));
-
             }
             catch (Exception ex)
             {
                 var test = ex.Message;
-                DisplayAlert(Constants.ALERT_TITLE, "Could not change passord, please try again later.", Constants.ALERT_OK);
             }
-
+            DisplayAlert(Constants.ALERT_TITLE, "Page not available now, please try again later.", Constants.ALERT_OK);
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)

@@ -65,6 +65,7 @@ namespace PurposeColor.screens
                 //TextColor = Color.FromHex("#424646"),
                 WidthRequest = (int)(screenWidth * .80), // 80% of screen,
                 Keyboard = Keyboard.Default,
+                HeightRequest = 50
             };
             masterLayout.AddChildToLayout(nameEntry, 10, Device.OnPlatform(30, 30, 18));
 
@@ -76,7 +77,8 @@ namespace PurposeColor.screens
                 Placeholder = "Email",
                 //TextColor = Color.FromHex("#424646"),
                 WidthRequest = (int)(screenWidth * .80), // 80% of screen,
-                Keyboard = Keyboard.Email
+                Keyboard = Keyboard.Email,
+                HeightRequest = 50
             };
             masterLayout.AddChildToLayout(emailEntry, 10, Device.OnPlatform(40, 40, 28));
 
@@ -86,10 +88,11 @@ namespace PurposeColor.screens
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 BackgroundColor = Color.White,
-                Placeholder = "Password (minimum 6 characters)",
+                Placeholder = "Password (min 6 char)",
                 //TextColor = Color.FromHex("#424646"),
                 WidthRequest = (int)(screenWidth * .80), // 80% of screen,
-                Keyboard = Keyboard.Default
+                Keyboard = Keyboard.Default,
+                HeightRequest = 50
             };
             masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(50, 50, 38));
 
@@ -102,7 +105,8 @@ namespace PurposeColor.screens
                 Placeholder = "Confirm password",
                 //TextColor = Color.FromHex("#424646"),
                 WidthRequest = (int)(screenWidth * .80),// 80% of screen,
-                Keyboard = Keyboard.Default
+                Keyboard = Keyboard.Default,
+                HeightRequest = 50
             };
             masterLayout.AddChildToLayout(confirmPasswordEntry, 10, Device.OnPlatform(60, 60, 48));
 
@@ -157,6 +161,18 @@ namespace PurposeColor.screens
 
                     if (nameEntry.Text != null && nameEntry.Text == "apptester")
                     {
+                        PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
+                        PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
+                        if (globalSettings == null)
+                        {
+                            globalSettings = new Model.GlobalSettings();
+                        }
+                        globalSettings.IsFirstLogin = true;
+                        globalSettings.IsLoggedIn = false;
+                        globalSettings.ShowRegistrationScreen = false;
+
+                        await AppSettings.SaveAppGlobalSettings(globalSettings);
+
                         await Navigation.PushAsync(new LogInPage());
                         Navigation.RemovePage(this);
                         return;
@@ -169,8 +185,7 @@ namespace PurposeColor.screens
                     if (nameEntry.Text != null && !string.IsNullOrWhiteSpace(nameEntry.Text) &&
                         emailEntry.Text != null && !string.IsNullOrWhiteSpace(emailEntry.Text) &&
                         passwordEntry.Text != null && !string.IsNullOrWhiteSpace(passwordEntry.Text) &&
-                        confirmPasswordEntry.Text != null && !string.IsNullOrWhiteSpace(confirmPasswordEntry.Text) &&
-                        passwordEntry.Text == confirmPasswordEntry.Text
+                        confirmPasswordEntry.Text != null && !string.IsNullOrWhiteSpace(confirmPasswordEntry.Text)
                         )
                     {
                         allErntryAreValid = true;

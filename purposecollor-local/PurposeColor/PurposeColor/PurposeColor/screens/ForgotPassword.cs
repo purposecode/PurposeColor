@@ -36,7 +36,7 @@ namespace PurposeColor.screens
                 App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
 
-            subTitleBar = new PurposeColor.CustomControls.PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Forgot password");
+            subTitleBar = new PurposeColor.CustomControls.PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Forgot password");
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
                 Navigation.PopAsync();
@@ -50,12 +50,12 @@ namespace PurposeColor.screens
 
             description = new Label
             {
-                Text = "Please provide your registered email adddress, we will be sending a password reset link to the same. Please add our address in your contacts to prevent routing our mails to spam folder.",
-                TextColor = Constants.BLUE_BG_COLOR,
+                Text = "Please provide your registered email adddress, we will send a password reset link to the same. Please add our address in your contacts to prevent routing our mails to spam folder.",
+                TextColor = Color.FromHex("#424646"),//Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
                 FontSize = 16,
                 WidthRequest = screenWidth * 80 / 100,
-                HeightRequest = 80
+                HeightRequest = 100
             };
 
             masterLayout.AddChildToLayout(description, 10, 20);
@@ -68,13 +68,13 @@ namespace PurposeColor.screens
                 HeightRequest = 50
             };
             email.WidthRequest = screenWidth * 80 / 100;
-            masterLayout.AddChildToLayout(email, 10, 35);
+            masterLayout.AddChildToLayout(email, 10, 38);
 
             resetPasswordButton = new Button
             {
-                Text = "Reset password",
+                Text = "Submit",
                 TextColor = Color.White,
-                BorderColor = Color.Black,
+                BorderColor = Constants.BLUE_BG_COLOR,
                 BorderWidth = 2,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
@@ -82,7 +82,7 @@ namespace PurposeColor.screens
             resetPasswordButton.Clicked += resetPasswordButton_Clicked;
 
             resetPasswordButton.WidthRequest = screenWidth * 80 / 100;
-            masterLayout.AddChildToLayout(resetPasswordButton, 10, 43);
+            masterLayout.AddChildToLayout(resetPasswordButton, 10, 48);
 
             Content = masterLayout;
         }

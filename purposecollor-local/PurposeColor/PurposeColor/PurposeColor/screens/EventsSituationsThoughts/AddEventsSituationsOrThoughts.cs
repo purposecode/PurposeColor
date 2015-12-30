@@ -143,6 +143,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White,
                 Placeholder = "Title",
                 TextColor = Color.FromHex("#424646"),
+                HeightRequest = 50,
                 WidthRequest = (int)(devWidth * .90) // 90% of screen,
             };
 
@@ -269,6 +270,7 @@ namespace PurposeColor.screens
             locAndContactsEntry.BackgroundColor = Color.White;
             locAndContactsEntry.VerticalOptions = LayoutOptions.Center;
 			locAndContactsEntry.WidthRequest = App.screenWidth  * 80 / 100;
+            locAndContactsEntry.HeightRequest = 50;
 
             editLocationDoneButton = new CustomImageButton();
             editLocationDoneButton.VerticalOptions = LayoutOptions.Center;

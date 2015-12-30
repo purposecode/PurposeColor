@@ -20,8 +20,11 @@ namespace PurposeColor.screens
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
             PurposeColorBlueSubTitleBar subTitleBar = null;
-            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Change Password", true, false);
-
+            subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Change Password", true, true);
+            subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
+            {
+                Navigation.PopAsync();
+            };
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
@@ -29,17 +32,23 @@ namespace PurposeColor.screens
 
             CustomEntry oldPaswordEntry = new CustomEntry
             {
-                Placeholder = "Old Password"
+                Placeholder = "Old password",
+                HeightRequest = 50,
+                IsPassword = true
             };
 
             CustomEntry paswordEntry = new CustomEntry
             {
-                Placeholder = "Password"
+                Placeholder = "New password",
+                HeightRequest = 50,
+                IsPassword = true
             };
 
             CustomEntry confirmPaswordEntry = new CustomEntry
             {
-                Placeholder = "Confirm Password"
+                Placeholder = "Confirm new password",
+                HeightRequest = 50,
+                IsPassword = true
             };
 
 
@@ -55,14 +64,14 @@ namespace PurposeColor.screens
             oldPaswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
             paswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
             confirmPaswordEntry.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
-            submitButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
+            submitButton.WidthRequest = deviceSpec.ScreenWidth * 80 / 100;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, 10);
             masterLayout.AddChildToLayout(oldPaswordEntry, 10, 25);
-            masterLayout.AddChildToLayout(paswordEntry, 10, 33);
-            masterLayout.AddChildToLayout(confirmPaswordEntry, 10, 41);
-            masterLayout.AddChildToLayout(submitButton, 30, 50);
+            masterLayout.AddChildToLayout(paswordEntry, 10, 35);
+            masterLayout.AddChildToLayout(confirmPaswordEntry, 10, 45);
+            masterLayout.AddChildToLayout(submitButton, 10, 55);
 
             submitButton.Clicked += OnSubmitButtonClicked;
 

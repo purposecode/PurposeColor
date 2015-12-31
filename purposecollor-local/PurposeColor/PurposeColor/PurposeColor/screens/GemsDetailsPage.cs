@@ -162,11 +162,25 @@ namespace PurposeColor
                 };*/
         }
 
+		protected override bool OnBackButtonPressed ()
+		{
+			Dispose ();
+			return base.OnBackButtonPressed ();
+		}
         public void Dispose()
         {
             masterScroll = null;
             Content = null;
             masterLayout = null;
+			progressBar = null;
+			masterStack = null;
+			masterScroll = null;
+			title = null;
+			description = null;
+			mediaList = null;
+			actionMediaList = null;
+			this = null;
+			GC.Collect ();
         }
     }
 

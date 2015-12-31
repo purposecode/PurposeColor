@@ -27,7 +27,7 @@ namespace PurposeColor.Droid.Dependency
         public MemoryStream CompessImage(int ratio, MemoryStream ms)
         {
             MemoryStream compressedStream = new MemoryStream();
-            compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, 50);
+			compressedStream = EZCompress1.Plugin.CrossEZCompress1.Current.compressImage(ms, ratio);
             return compressedStream;
         }
 

@@ -336,6 +336,10 @@ namespace PurposeColor.screens
 				if (media != null) 
 				{
 					await App.Navigator.PushModalAsync( new GemsDetailsPage( null, media , goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details,goalsMediaPath, goalsNoMediaPath ) );
+
+					eventDetail = null;
+					eventTitle = null;
+					media = null;
 				}
 			} 
 			else
@@ -364,6 +368,12 @@ namespace PurposeColor.screens
 				if (media != null) 
 				{
 					await App.Navigator.PushModalAsync( new GemsDetailsPage( media, null , emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details,eventsMediaPath, eventsNoMediaPath ) );
+
+
+					eventDetail = null;
+					eventTitle = null;
+					media = null;
+					GC.Collect ();
 				}
 			} 
 			else
@@ -377,9 +387,27 @@ namespace PurposeColor.screens
 
         }
 
+		protected override bool OnBackButtonPressed ()
+		{
+			Dispose ();
+			return base.OnBackButtonPressed ();
+		}
+
         public void Dispose()
         {
-
+			masterLayout = null;
+			mainTitleBar = null;
+			masterScroll = null;
+			masterStack = null;
+			emotionsMasterList = null;
+			goalsMasterList = null;
+			eventsMediaPath = null;
+			eventsMediaThumbPath = null;
+			goalsMediaPath = null;
+			goalsMediaThumbPath = null;
+			goalsNoMediaPath = null;
+			eventsNoMediaPath = null;
+			GC.Collect ();
         }
 
  

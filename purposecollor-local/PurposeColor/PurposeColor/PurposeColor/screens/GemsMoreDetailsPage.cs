@@ -169,8 +169,11 @@ namespace PurposeColor.screens
 					Image firstEmotionsImage = new Image ();
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (25, 30, 30) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 30, 30) / 100;
-					bool firstImageValidity = ( emotionsMasterList.event_media != null &&  emotionsMasterList.event_media.Count > 0 && !string.IsNullOrEmpty ( emotionsMasterList.event_media[index].event_media)) ? true : false;
-					string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + emotionsMasterList.event_media [index].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
+
+                    string eventID = emotionsMasterList.event_details[index].event_id;
+                    List<EventMedia> firstThumbMedia = emotionsMasterList.event_media.FindAll(itm => itm.event_id == eventID).ToList();
+                    bool firstImageValidity = (firstThumbMedia != null && firstThumbMedia.Count > 0 && !string.IsNullOrEmpty(firstThumbMedia[0].event_media)) ? true : false;
+                    string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + firstThumbMedia[0].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
 					firstEmotionsImage.ClassId = emotionsMasterList.event_details [index].event_id;
 					firstEmotionsImage.GestureRecognizers.Add (  tap);
@@ -281,9 +284,11 @@ namespace PurposeColor.screens
 					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(25, 30, 30) / 100;
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(25, 30, 30) / 100;
 					firstEmotionsImage.ClassId = goalsMasterList.action_details [index].goalaction_id;
+                    string actionID = goalsMasterList.action_details[index].goalaction_id;
+                    List<ActionMedia> SecondThumbMedia = goalsMasterList.action_media.FindAll(itm => itm.goalaction_id == actionID).ToList();
 					firstEmotionsImage.GestureRecognizers.Add ( tap );
-					bool firstImageValidity = ( goalsMasterList.action_media != null && goalsMasterList.action_media.Count > 0 && !string.IsNullOrEmpty (goalsMasterList.action_media[index].event_media)) ? true : false;
-					string firstImageSource = ( firstImageValidity ) ? Constants.SERVICE_BASE_URL +  goalsMediaThumbPath + goalsMasterList.action_media[index].event_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
+                    bool firstImageValidity = (SecondThumbMedia != null && SecondThumbMedia.Count > 0 && !string.IsNullOrEmpty(SecondThumbMedia[0].event_media)) ? true : false;
+                    string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + goalsMediaThumbPath + SecondThumbMedia[0].event_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 

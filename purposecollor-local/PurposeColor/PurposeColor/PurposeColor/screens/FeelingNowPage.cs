@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PurposeColor.screens;

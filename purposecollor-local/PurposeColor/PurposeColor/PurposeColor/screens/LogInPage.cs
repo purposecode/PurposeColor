@@ -87,7 +87,7 @@ namespace PurposeColor.screens
             forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTap);
             forgotPasswordTap.Tapped += (s, e) =>
             {
-                Navigation.PushModalAsync(new ForgotPassword());
+                Navigation.PushAsync(new ForgotPassword());
             };
 
             TapGestureRecognizer registerTap = new TapGestureRecognizer();
@@ -142,8 +142,8 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(userNameEntry, 10, Device.OnPlatform(23, 23, 23));
             masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(33, 33, 31));
             masterLayout.AddChildToLayout(signInButton, 10, Device.OnPlatform(43, 43, 39));
-            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 13), Device.OnPlatform(52,52,47));
-            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(77, 66, 65), Device.OnPlatform(52,52,47));
+            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 13), Device.OnPlatform(53,52,47));
+            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(62, 66, 65), Device.OnPlatform(53,52,47));
             
             masterLayout.AddChildToLayout(googleSignInButton, 10, Device.OnPlatform(65,65,62));
             masterLayout.AddChildToLayout(faceBookSignInButton, 10, Device.OnPlatform(75, 75, 70));
@@ -206,11 +206,11 @@ namespace PurposeColor.screens
                 await DisplayAlert(Constants.ALERT_TITLE, "Please provide password.", Constants.ALERT_OK);
                 return;
             }
-            else if (!String.IsNullOrEmpty(passwordEntry.Text) && passwordEntry.Text.Length < 6)
-            {
-                await DisplayAlert(Constants.ALERT_TITLE, "Password must be of minimum 6 characters length.", Constants.ALERT_OK);
-                return;
-            }
+//            else if (!String.IsNullOrEmpty(passwordEntry.Text) && passwordEntry.Text.Length < 6)
+//            {
+//                await DisplayAlert(Constants.ALERT_TITLE, "Password must be of minimum 6 characters length.", Constants.ALERT_OK);
+//                return;
+//            }
 
             #region SERVIDE
             if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))

@@ -17,7 +17,6 @@ namespace PurposeColor.screens
         Button changePassword = null;
         CustomLayout masterLayout = null;
         PurposeColorTitleBar mainTitleBar = null;
-        double screenHeight;
         double screenWidth;
         IProgressBar progressBar;
 
@@ -27,7 +26,6 @@ namespace PurposeColor.screens
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
-            screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
@@ -97,20 +95,19 @@ namespace PurposeColor.screens
         {
             try
             {
+				signOutButton.Clicked -= OnSignOutButtonClicked;
                 progressBar.ShowToast("Signing out..");
+
                 #region SAVING SIGN OUT SETTINGS
+
                 PurposeColor.Model.User user = null;
-                try
-                {
-                    user = App.Settings.GetUser();
-                }
-                catch (Exception)
-                {
-                    
-                }
+				user = App.Settings.GetUser();
+				App.Settings.DeleteAllUsers();
+				await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
+
                 if (user == null)
                 {
-                    user = new Model.User { UserId = 2 };
+                    user = new Model.User { UserId = 2 }; // for testing only // test
                 }
                 string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(user.UserId.ToString());
 
@@ -119,18 +116,18 @@ namespace PurposeColor.screens
                     await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
                 }
                 #endregion
-                App.Settings.DeleteAllUsers();
-                await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
+                
                 progressBar.HideProgressbar();
-                //await Navigation.PushModalAsync(new LogInPage());
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new LogInPage());
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                DisplayAlert(Constants.ALERT_TITLE, "Could not process the request.", Constants.ALERT_OK);
+                DisplayAlert(Constants.ALERT_TITLE, "Network error, Could not process the request.", Constants.ALERT_OK);
+				signOutButton.Clicked += OnSignOutButtonClicked;
             }
+
             progressBar.HideProgressbar();
+			App.masterPage.IsPresented = false;
+			App.masterPage.Detail = new NavigationPage(new LogInPage());
         }
 
         public void Dispose()

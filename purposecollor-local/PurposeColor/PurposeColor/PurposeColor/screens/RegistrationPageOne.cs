@@ -52,7 +52,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.Transparent,
                 Source = Device.OnPlatform("app_icon.png", "app_icon.png", "//Assets//app_icon.png")//app_icon //logo_icon
             };
-            masterLayout.AddChildToLayout(appIcon, 40, Device.OnPlatform(15, 15, 0));
+			masterLayout.AddChildToLayout(appIcon, Device.OnPlatform(40, 40, 40), Device.OnPlatform(7, 10, 0));
 
             #region ENTRYS
 
@@ -64,7 +64,8 @@ namespace PurposeColor.screens
                 Placeholder = "First name",
                 WidthRequest = screenWidth * .80, // 80% of screen,
                 Keyboard = Keyboard.Default,
-                HeightRequest = 50
+                HeightRequest = 50,
+
             };
             masterLayout.AddChildToLayout(nameEntry, 10, Device.OnPlatform(30, 30, 18));
 
@@ -130,11 +131,11 @@ namespace PurposeColor.screens
             termsOfUseLabel = new Label
             {
                 FormattedText = fs,
-                WidthRequest = (int)(screenWidth * .50),
+				WidthRequest = Device.OnPlatform(screenWidth * .60,screenWidth * .50,screenWidth * .50),
                 BackgroundColor = Color.Transparent,
                 VerticalOptions = LayoutOptions.Center
             };
-            masterLayout.AddChildToLayout(termsOfUseLabel, Device.OnPlatform(40, 40, 35), Device.OnPlatform(70, 70, 59));
+            masterLayout.AddChildToLayout(termsOfUseLabel, Device.OnPlatform(33, 40, 35), Device.OnPlatform(70, 70, 59));
 
             #endregion
 
@@ -143,13 +144,37 @@ namespace PurposeColor.screens
             registrationButton = new Image
             {
                 BackgroundColor = Color.Transparent,
-                WidthRequest = screenWidth * .75,
+                WidthRequest = screenWidth * .80,
                 Source = Device.OnPlatform("reg_btn.png", "reg_btn.png", "//Assets//reg_btn.png")
             };
-            masterLayout.AddChildToLayout(registrationButton, 13, Device.OnPlatform(80, 80, 65));
+			masterLayout.AddChildToLayout(registrationButton, Device.OnPlatform(10, 10, 13), Device.OnPlatform(80, 80, 65));
             TapGestureRecognizer registrationButtonTapRecognizer = new TapGestureRecognizer();
             registrationButton.GestureRecognizers.Add(registrationButtonTapRecognizer);
 
+			if (Device.OS == TargetPlatform.WinPhone) 
+			{
+				appIcon.WidthRequest = (int)(screenWidth * .20);
+				appIcon.HeightRequest = (int)(screenHeight * .20);
+
+				nameEntry.HeightRequest = 73;
+				emailEntry.HeightRequest = 73;
+				passwordEntry.HeightRequest = 73;
+				confirmPasswordEntry.HeightRequest = 73;
+
+				registrationButton.HeightRequest = 80;
+				registrationButton.WidthRequest = screenWidth * .75;
+			}
+			else if (Device.OS == TargetPlatform.iOS) 
+			{
+				appIcon.WidthRequest = (int)(screenWidth * .20);
+				appIcon.HeightRequest = (int)(screenHeight * .20);
+
+				nameEntry.BackgroundColor = Color.White;
+				passwordEntry.BackgroundColor = Color.White;
+				confirmPasswordEntry.BackgroundColor = Color.White;
+				emailEntry.BackgroundColor = Color.White;
+				registrationButton.WidthRequest = screenWidth * .80;
+			}
 
             registrationButtonTapRecognizer.Tapped += async (s, e) =>
             {
@@ -296,19 +321,7 @@ namespace PurposeColor.screens
 
             #endregion
 
-            if (Device.OS == TargetPlatform.WinPhone)
-            {
-                appIcon.WidthRequest = (int)(screenWidth * .20);
-                appIcon.HeightRequest = (int)(screenHeight * .20);
 
-                nameEntry.HeightRequest = 73;
-                emailEntry.HeightRequest = 73;
-                passwordEntry.HeightRequest = 73;
-                confirmPasswordEntry.HeightRequest = 73;
-
-                registrationButton.HeightRequest = 80;
-               // registrationButton.WidthRequest = screenWidth * .80;
-            }
 
             Content = masterLayout;
         }

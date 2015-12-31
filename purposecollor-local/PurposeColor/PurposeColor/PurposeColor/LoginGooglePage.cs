@@ -53,7 +53,9 @@ namespace PurposeColor
 
         void OnSubmitButtonClicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync( new FeelingNowPage() );
+            //Navigation.PushAsync( new FeelingNowPage() );
+            App.masterPage.IsPresented = false;
+            App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
         }
     }
 }

@@ -115,7 +115,9 @@ namespace PurposeColor.screens
                 {
                     progress.HideProgressbar();
                     await DisplayAlert(Constants.ALERT_TITLE, "Please reset your password using the link send to " + email.Text + ".", Constants.ALERT_OK);
-                    await Navigation.PushAsync(new LogInPage());
+                    //await Navigation.PushModalAsync(new LogInPage());
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new LogInPage());
                 }
                 else if (statusCode == "404")
                 {

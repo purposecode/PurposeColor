@@ -171,11 +171,13 @@ namespace PurposeColor.screens
 
                         await AppSettings.SaveAppGlobalSettings(globalSettings);
 
-                        await Navigation.PushAsync(new LogInPage());
-                        if (Device.OS != TargetPlatform.WinPhone)
-                        {
-                            Navigation.RemovePage(this);
-                        }
+                        //await Navigation.PushModalAsync(new LogInPage());
+                        App.masterPage.IsPresented = false;
+                        App.masterPage.Detail = new NavigationPage(new LogInPage());
+                        //if (Device.OS != TargetPlatform.WinPhone)
+                        //{
+                        //    Navigation.RemovePage(this);
+                        //}
                         return;
                     }
                     
@@ -266,11 +268,9 @@ namespace PurposeColor.screens
                                 
                                 #endregion
 
-                                await Navigation.PushAsync(new LogInPage());
-                                if (Device.OS != TargetPlatform.WinPhone)
-                                {
-                                    Navigation.RemovePage(this);
-                                }
+                                //await Navigation.PushModalAsync(new LogInPage());
+                                App.masterPage.IsPresented = false;
+                                App.masterPage.Detail = new NavigationPage(new LogInPage());
                             }
                             else
                             {

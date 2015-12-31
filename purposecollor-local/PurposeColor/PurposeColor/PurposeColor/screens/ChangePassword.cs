@@ -16,6 +16,7 @@ namespace PurposeColor.screens
         CustomEntry newPaswordEntry = null;
         CustomEntry oldPaswordEntry = null;
         CustomEntry confirmPaswordEntry = null;
+        Button submitButton = null;
 
         public ChangePassword()
         {
@@ -26,7 +27,7 @@ namespace PurposeColor.screens
             subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Change Password", true, true);
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
-                Navigation.PopAsync();
+                Navigation.PopModalAsync();
             };
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
@@ -54,7 +55,7 @@ namespace PurposeColor.screens
                 IsPassword = true
             };
 
-            Button submitButton = new Button
+            submitButton = new Button
             {
                 Text = "Submit",
                 TextColor = Color.White,
@@ -94,8 +95,10 @@ namespace PurposeColor.screens
         async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             PurposeColor.interfaces.IProgressBar progress = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+            bool isSuccess = false;
             try
             {
+                submitButton.Clicked -= OnSubmitButtonClicked;
                 User user = App.Settings.GetUser();
                 if (user == null)
                 {
@@ -135,12 +138,14 @@ namespace PurposeColor.screens
                     App.Settings.DeleteAllUsers();
                     progress.HideProgressbar();
                     await DisplayAlert(Constants.ALERT_TITLE, "Password updated successfully, please relogin.", Constants.ALERT_OK);
-
-                    await Navigation.PushAsync(new LogInPage());
-                    if (Device.OS != TargetPlatform.WinPhone)
-                    {
-                        Navigation.RemovePage(this);
-                    }
+                    isSuccess = true;
+                    //await Navigation.PushAsync(new LogInPage());
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new LogInPage());
+                    //if (Device.OS != TargetPlatform.WinPhone)
+                    //{
+                    //    Navigation.RemovePage(this);
+                    //}
 
                 }
                 else if (statusCode == "400")
@@ -161,13 +166,19 @@ namespace PurposeColor.screens
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, could not complete your request, Please try again.", Constants.ALERT_OK);
             }
             progress.HideProgressbar();
+            if (!isSuccess)
+            {
+                submitButton.Clicked += OnSubmitButtonClicked;
+            }
         }
 
         public void Dispose()
         {
-            newPaswordEntry = null;
-            oldPaswordEntry = null;
-            confirmPaswordEntry = null;
+            this.newPaswordEntry = null;
+            this.oldPaswordEntry = null;
+            this.confirmPaswordEntry = null;
+            this.submitButton.Clicked -= OnSubmitButtonClicked;
+            this.submitButton = null;
 
             GC.Collect();
         }

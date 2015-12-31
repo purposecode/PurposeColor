@@ -74,7 +74,7 @@ namespace PurposeColor.screens
             {
                 if (App.Settings.GetUser() != null)
                 {
-                    await Navigation.PushAsync(new ChangePassword());
+                    await Navigation.PushModalAsync(new ChangePassword());
                 }
                 else
                 {
@@ -122,15 +122,13 @@ namespace PurposeColor.screens
                 App.Settings.DeleteAllUsers();
                 await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
                 progressBar.HideProgressbar();
-                await Navigation.PushAsync(new LogInPage());
-                if (Device.OS != TargetPlatform.WinPhone)
-                {
-                    Navigation.RemovePage(this);
-                }
+                //await Navigation.PushModalAsync(new LogInPage());
+                App.masterPage.IsPresented = false;
+                App.masterPage.Detail = new NavigationPage(new LogInPage());
             }
             catch (Exception ex)
             {
-                DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
+                DisplayAlert(Constants.ALERT_TITLE, "Could not process the request.", Constants.ALERT_OK);
             }
             progressBar.HideProgressbar();
         }
@@ -138,6 +136,8 @@ namespace PurposeColor.screens
         public void Dispose()
         {
             this.subTitleBar = null;
+            this.signOutButton.Clicked -= OnSignOutButtonClicked;
+            this.changePassword.Clicked -= ChangePassword_Clicked;
             this.signOutButton = null;
             this.changePassword = null;
             this.masterLayout = null;

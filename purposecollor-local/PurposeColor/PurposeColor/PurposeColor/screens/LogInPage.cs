@@ -53,7 +53,8 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Username",
                 Keyboard = Keyboard.Email,
-                HeightRequest = Device.OnPlatform(50, 50,75)
+                HeightRequest = Device.OnPlatform(50, 50,75),
+                Text = "apptester" // for testing only // remove after testing
             };
 
             passwordEntry = new CustomEntry
@@ -86,7 +87,7 @@ namespace PurposeColor.screens
             forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTap);
             forgotPasswordTap.Tapped += (s, e) =>
             {
-                Navigation.PushAsync(new ForgotPassword());
+                Navigation.PushModalAsync(new ForgotPassword());
             };
 
             TapGestureRecognizer registerTap = new TapGestureRecognizer();
@@ -101,7 +102,7 @@ namespace PurposeColor.screens
             registerLabel.GestureRecognizers.Add(registerTap);
             registerTap.Tapped += (s, e) =>
             {
-                Navigation.PushAsync(new RegistrationPageOne());
+                Navigation.PushModalAsync(new RegistrationPageOne());
             };
 
             googleSignInButton = new Button
@@ -177,11 +178,12 @@ namespace PurposeColor.screens
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
                 }
-                await Navigation.PushAsync(new FeelingNowPage());
-                if (Device.OS != TargetPlatform.WinPhone)
-                {
-                    Navigation.RemovePage(this);
-                }
+                App.masterPage.IsPresented = false;
+                App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                //if (Device.OS != TargetPlatform.WinPhone)
+                //{
+                //    Navigation.RemovePage(this);
+                //}
                 
                 return;
             }
@@ -262,21 +264,23 @@ namespace PurposeColor.screens
                             await App.Settings.SaveAppGlobalSettings(globalSettings);
 
                             progress.HideProgressbar();
-                            await Navigation.PushAsync(new FeelingNowPage());
-                            if (Device.OS != TargetPlatform.WinPhone)
-                            {
-                                Navigation.RemovePage(this);
-                            }
+                            App.masterPage.IsPresented = false;
+                            App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                            //if (Device.OS != TargetPlatform.WinPhone)
+                            //{
+                            //    Navigation.RemovePage(this);
+                            //}
                         }
                         else
                         {
                             progress.HideProgressbar();
                             await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
-                            await Navigation.PushAsync(new FeelingNowPage());
-                            if (Device.OS != TargetPlatform.WinPhone)
-                            {
-                                Navigation.RemovePage(this);
-                            }
+                            App.masterPage.IsPresented = false;
+                            App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                            //if (Device.OS != TargetPlatform.WinPhone)
+                            //{
+                            //    Navigation.RemovePage(this);
+                            //}
                         }
                     }
                     else
@@ -315,7 +319,7 @@ namespace PurposeColor.screens
             {
                 IAuthenticate winGoogle = DependencyService.Get<IAuthenticate>();
                 winGoogle.AutheticateGoogle();
-                Navigation.PushAsync(new ChangePassword());
+                Navigation.PushModalAsync(new ChangePassword());
             }
             // progress.ShowProgressbar(false, "Loading..");
         }

@@ -169,6 +169,8 @@ namespace PurposeColor.screens
                 App.masterPage.IsPresented = false;
                 App.masterPage.Detail = new NavigationPage(new ApplicationSettingsPage());
             }
+
+            listView.SelectedItem = null; // reset the list selection, other wise the same menu cannot be selected again consecutively.
         }
     }
 }

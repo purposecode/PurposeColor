@@ -20,18 +20,19 @@ namespace PurposeColor
 
     public class FeelingNowPage : ContentPage, IDisposable
     {
-        CustomSlider slider;
-        CustomPicker ePicker;
-        CustomLayout masterLayout;
-        public PurposeColor.interfaces.CustomImageButton emotionalPickerButton;
-        public PurposeColor.interfaces.CustomImageButton eventPickerButton;
-        CustomListViewItem selectedEmotionItem;
-        public CustomListViewItem selectedEventItem;
-        Label about;
+        CustomSlider slider = null;
+        CustomLayout masterLayout = null;
+        public PurposeColor.interfaces.CustomImageButton emotionalPickerButton = null;
+        public PurposeColor.interfaces.CustomImageButton eventPickerButton = null;
+        CustomListViewItem selectedEmotionItem = null;
+        public CustomListViewItem selectedEventItem = null;
+        Label about = null;
         public static int sliderValue;
         double screenHeight;
         double screenWidth;
-        IProgressBar progressBar;
+        IProgressBar progressBar = null;
+        PurposeColorSubTitleBar subTitleBar = null;
+        PurposeColorTitleBar mainTitleBar = null;
 
         public FeelingNowPage()
         {
@@ -42,9 +43,9 @@ namespace PurposeColor
             screenWidth = App.screenWidth;
             progressBar = DependencyService.Get<IProgressBar>();
 
-            PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+            mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
-            PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
             subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
             subTitleBar.BackButtonTapRecognizer.Tapped += OnBackButtonTapRecognizerTapped;
 
@@ -241,26 +242,29 @@ namespace PurposeColor
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-            Navigation.PopAsync();
+            App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
 
         async void OnNextButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-
             try
             {
+                this.subTitleBar.NextButtonTapRecognizer.Tapped -= OnNextButtonTapRecognizerTapped; // to prevent duplicate submission when double tapped. // readded the event after saving data.
 
                 if (emotionalPickerButton.Text == "Select Emotion")
                 {
                     await DisplayAlert("Purpose Color", "Emotion not selected.", "Ok");
+                    this.subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
                 }
                 else if (eventPickerButton.Text == "Events, Situation & Thoughts")
                 {
                     await DisplayAlert("Purpose Color", "Event not selected.", "Ok");
+                    this.subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
                 }
                 else if (slider.Value == 0)
                 {
                     await DisplayAlert("Purpose Color", "Feelings slider is in Neutral", "Ok");
+                    this.subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
                 }
                 else
                 {
@@ -290,7 +294,7 @@ namespace PurposeColor
 				}
 				else
 				{
-					await Navigation.PushAsync(new FeelingsSecondPage());
+                    await Navigation.PushModalAsync(new FeelingsSecondPage());
 				}
             }
             catch (System.Exception ex)
@@ -298,24 +302,12 @@ namespace PurposeColor
                 progressBar.HideProgressbar();
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
             }
+            this.subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped; // added to perform function if user navigates back to this page and changes selection.
         }
 
         void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
             App.masterPage.IsPresented = !App.masterPage.IsPresented;
-        }
-
-        void backButton_Clicked(object sender, System.EventArgs e)
-        {
-
-            try
-            {
-                Navigation.PushAsync(new GraphPage());
-            }
-            catch (System.Exception)
-            {
-                DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
-            }
         }
 
        async  void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
@@ -534,19 +526,21 @@ namespace PurposeColor
 
         public void Dispose()
         {
-            eventPickerButton = null;
-            eventPickerButton.Clicked -= OnEventPickerButtonClicked;
-            emotionalPickerButton = null;
-            emotionalPickerButton.Clicked -= OnEmotionalPickerButtonClicked;
-            slider = null;
-            ePicker = null;
-            masterLayout = null;
-            progressBar = null;
-            selectedEmotionItem = null;
-            selectedEventItem = null;
-            about = null;
-
+            this.eventPickerButton = null;
+            this.eventPickerButton.Clicked -= OnEventPickerButtonClicked;
+            this.emotionalPickerButton = null;
+            this.emotionalPickerButton.Clicked -= OnEmotionalPickerButtonClicked;
+            this.slider = null;
+            this.masterLayout = null;
+            this.progressBar = null;
+            this.selectedEmotionItem = null;
+            this.selectedEventItem = null;
+            this.about = null;
+            this.subTitleBar.NextButtonTapRecognizer.Tapped -= OnNextButtonTapRecognizerTapped;
+            this.subTitleBar.BackButtonTapRecognizer.Tapped -= OnBackButtonTapRecognizerTapped;
+            this.subTitleBar = null;
             this.Appearing -= OnFeelingNowPageAppearing;
+            this.mainTitleBar = null;
 
             GC.Collect();
         }

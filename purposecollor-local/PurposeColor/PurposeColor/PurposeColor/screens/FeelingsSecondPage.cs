@@ -21,11 +21,10 @@ namespace PurposeColor
 
     public class FeelingsSecondPage : ContentPage, IDisposable
     {
-        CustomPicker ePicker;
-        CustomLayout masterLayout;
+        CustomLayout masterLayout = null;
         //IDeviceSpec deviceSpec;
-        PurposeColor.interfaces.CustomImageButton actionPickerButton;
-        PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton;
+        PurposeColor.interfaces.CustomImageButton actionPickerButton = null;
+        PurposeColor.interfaces.CustomImageButton goalsAndDreamsPickerButton = null;
         public static ObservableCollection<PreviewItem> actionPreviewListSource = null;
         PurposeColorSubTitleBar subTitleBar = null;
         PurposeColorTitleBar mainTitleBar = null;
@@ -191,9 +190,10 @@ namespace PurposeColor
 
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
+            bool isReadyToSave = false;
             try
             {
-                bool isValueSaved = false;
+                this.subTitleBar.NextButtonTapRecognizer.Tapped -= NextButtonTapRecognizer_Tapped;
                 if (goalsAndDreamsPickerButton.Text == "Goals & Dreams")
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Plese select Goals & Dreams.", Constants.ALERT_OK);
@@ -208,6 +208,7 @@ namespace PurposeColor
                 }
                 else
                 {
+                    isReadyToSave = true;
 					SaveData();
                 }
             }
@@ -215,6 +216,11 @@ namespace PurposeColor
             {
                 var test = ex.Message;
                 DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais, please try again", Constants.ALERT_OK);
+            }
+
+            if (!isReadyToSave)
+            {
+                this.subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
             }
         }
 
@@ -241,7 +247,9 @@ namespace PurposeColor
 				{
 					ILocalNotification notfiy = DependencyService.Get<ILocalNotification> ();
 					notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created");
-					await Navigation.PushAsync (new FeelingNowPage ());
+                    //App.masterPage.IsPresented = false;
+                    //App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                    Navigation.PushModalAsync(new FeelingNowPage());
 				}
 			} 
 			catch (Exception ex) 
@@ -250,12 +258,16 @@ namespace PurposeColor
                 if (!isValueSaved)
                 {
                     DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
+                    this.subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
                 }
                 else
                 {
-                    Navigation.PushAsync(new FeelingNowPage());
+                    //App.masterPage.IsPresented = false;
+                    //App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                    Navigation.PushModalAsync(new FeelingNowPage());
                 }
 			}
+            
         }
 
         public async void GetstopGetsture(bool pressed)
@@ -320,7 +332,7 @@ namespace PurposeColor
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-            Navigation.PopAsync();
+            Navigation.PopModalAsync();
         }
 
         async void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)
@@ -550,7 +562,6 @@ namespace PurposeColor
             this.actionPickerButton.Clicked -= OnActionPickerButtonClicked;
             this.actionPickerButton = null;
             this.subTitleBar = null;
-            this.ePicker = null;
             this.masterLayout = null;
             // this.deviceSpec = null;
             actionPreviewListSource.Clear();

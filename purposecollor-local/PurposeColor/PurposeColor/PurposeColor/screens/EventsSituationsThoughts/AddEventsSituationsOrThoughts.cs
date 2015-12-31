@@ -1326,7 +1326,7 @@ namespace PurposeColor.screens
                 {
                     MemoryStream compressedStream = new MemoryStream();
                     IResize resize = DependencyService.Get<IResize>();
-                    compressedStream = resize.CompessImage(50, ms);
+                    compressedStream = resize.CompessImage(25, ms);
 
                     Byte[] inArray = compressedStream.ToArray();
                     Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];

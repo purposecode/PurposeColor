@@ -167,6 +167,7 @@ namespace PurposeColor
 			Dispose ();
 			return base.OnBackButtonPressed ();
 		}
+
         public void Dispose()
         {
             masterScroll = null;
@@ -179,7 +180,7 @@ namespace PurposeColor
 			description = null;
 			mediaList = null;
 			actionMediaList = null;
-			this = null;
+			this.Content = null;
 			GC.Collect ();
         }
     }

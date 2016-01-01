@@ -167,8 +167,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image ();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (30, 28, 30) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 22, 30) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (30, 28, 25) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 22, 18) / 100;
 
                     string eventID = emotionsMasterList.event_details[index].event_id;
                     List<EventMedia> firstThumbMedia = emotionsMasterList.event_media.FindAll(itm => itm.event_id == eventID).ToList();
@@ -198,7 +198,7 @@ namespace PurposeColor.screens
 					customLayout.AddChildToLayout (viewContainer, 0, Device.OnPlatform (-5, 0, 0));
 					customLayout.AddChildToLayout (firstDetailsInfo, 5, Device.OnPlatform (-3, 2, 2));
 					customLayout.AddChildToLayout (firstDateInfo, 5, Device.OnPlatform (4, 9, 6));
-					customLayout.AddChildToLayout (firstEmotionsImage, Device.OnPlatform( 67, 65, 65 ), Device.OnPlatform (-3, 2, -3));
+					customLayout.AddChildToLayout (firstEmotionsImage, Device.OnPlatform( 67, 65, 67 ), Device.OnPlatform (-3, 2, 1));
 
 					masterStack.Children.Add (customLayout);
 				}
@@ -282,8 +282,8 @@ namespace PurposeColor.screens
 
 
 					Image firstEmotionsImage = new Image();
-					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (30, 28, 30) / 100;
-					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 22, 30) / 100;
+					firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform (30, 28, 25) / 100;
+					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 22, 18) / 100;
 					firstEmotionsImage.ClassId = goalsMasterList.action_details [index].goalaction_id;
                     string actionID = goalsMasterList.action_details[index].goalaction_id;
                     List<ActionMedia> SecondThumbMedia = goalsMasterList.action_media.FindAll(itm => itm.goalaction_id == actionID).ToList();
@@ -311,7 +311,7 @@ namespace PurposeColor.screens
 					customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
 					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
 					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 6));
-					customLayout.AddChildToLayout (firstEmotionsImage, Device.OnPlatform( 67, 65, 65 ), Device.OnPlatform (-3, 2, -3));
+                    customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(67, 65, 67), Device.OnPlatform(-3, 2, 1));
 
 					masterStack.Children.Add(customLayout);
 				}

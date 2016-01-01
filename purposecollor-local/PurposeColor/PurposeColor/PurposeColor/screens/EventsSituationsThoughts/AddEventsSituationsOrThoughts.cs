@@ -752,21 +752,30 @@ namespace PurposeColor.screens
 
         void OnLocationEditCompleted(object sender, EventArgs e)
         {
-			if (editLocationAndContactsStack.ClassId == "locationedit")
-			{
-                if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
-				locationInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
-				locationInfo.IsVisible = true;
-			}
-			else
-			{
-				//contactInfo.Text = locAndContactsEntry.Text;
-                if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
-                contactInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
-				contactInfo.IsVisible = true;
-			}
-			editLocationAndContactsStack.IsVisible = false;
-			iconContainerGrid.IsVisible = true;
+            try
+            {
+
+                if (editLocationAndContactsStack.ClassId == "locationedit")
+                {
+                    if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
+                        locationInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
+                    locationInfo.IsVisible = true;
+                }
+                else
+                {
+                    //contactInfo.Text = locAndContactsEntry.Text;
+                    if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                        contactInfo.FormattedText.Spans[1].Text = locAndContactsEntry.Text;
+                    contactInfo.IsVisible = true;
+                }
+                editLocationAndContactsStack.IsVisible = false;
+                iconContainerGrid.IsVisible = true;
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         private void AnimateMic()
@@ -783,17 +792,25 @@ namespace PurposeColor.screens
 
         async void OnEditLocationInfo(object sender, EventArgs e)
 		{
+            try
+            {
 
-			editLocationAndContactsStack.ClassId = "locationedit";
-            if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
-			locAndContactsEntry.Text = locationInfo.FormattedText.Spans[1].Text;
-			editLocationAndContactsStack.IsVisible = true;
-			locationInfo.IsVisible = false;
-			iconContainerGrid.IsVisible = false;
-            contactInfo.IsVisible = true;
+                editLocationAndContactsStack.ClassId = "locationedit";
+                if (locationInfo.FormattedText != null && locationInfo.FormattedText.Spans.Count > 1)
+                    locAndContactsEntry.Text = locationInfo.FormattedText.Spans[1].Text;
+                editLocationAndContactsStack.IsVisible = true;
+                locationInfo.IsVisible = false;
+                iconContainerGrid.IsVisible = false;
+                contactInfo.IsVisible = true;
 
-            await editLocationAndContactsStack.TranslateTo(100, 0, 300, Easing.SinInOut);
-            await editLocationAndContactsStack.TranslateTo(0, 0, 300, Easing.SinIn);
+                await editLocationAndContactsStack.TranslateTo(100, 0, 300, Easing.SinInOut);
+                await editLocationAndContactsStack.TranslateTo(0, 0, 300, Easing.SinIn);
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         void RecodeOnTapRecognizer_Tapped(object sender, EventArgs e)
@@ -892,74 +909,116 @@ namespace PurposeColor.screens
 
         void createEvent_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new CreateEventPage());
+            try
+            {
+                Navigation.PushModalAsync(new CreateEventPage());
+            }
+            catch (Exception)
+            {
+            }
         }
 
         void OnEndDateCalanderClicked(object sender, EventArgs e)
         {
-            CalendarView endCalendarView = new CalendarView()
+            try
             {
-                BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
-                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
-                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
-                ShouldHighlightDaysOfWeekLabels = false,
-                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
-                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
-                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
-                ShowNavigationArrows = true,
-                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
-                MonthTitleForegroundColor = Color.White,
-                DayOfWeekLabelForegroundColor = Color.White,
 
-            };
-            endCalendarView.ClassId = "endcalander";
-            endCalendarView.DateSelected += OnEndCalendarViewDateSelected;
-            masterLayout.AddChildToLayout(endCalendarView, 0, 35);
+                CalendarView endCalendarView = new CalendarView()
+                {
+                    BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
+                    MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                    MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                    HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                    ShouldHighlightDaysOfWeekLabels = false,
+                    SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                    TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                    HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                    ShowNavigationArrows = true,
+                    MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                    MonthTitleForegroundColor = Color.White,
+                    DayOfWeekLabelForegroundColor = Color.White,
+
+                };
+                endCalendarView.ClassId = "endcalander";
+                endCalendarView.DateSelected += OnEndCalendarViewDateSelected;
+                masterLayout.AddChildToLayout(endCalendarView, 0, 35);
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         void OnEndCalendarViewDateSelected(object sender, DateTime e)
         {
-            endDateLabel.Text = "Ends : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
-            View view = masterLayout.Children.First(child => child.ClassId == "endcalander");
-            if (view != null)
+            try
             {
-                masterLayout.Children.Remove(view);
-                view = null;
+
+                endDateLabel.Text = "Ends : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+                View view = masterLayout.Children.First(child => child.ClassId == "endcalander");
+                if (view != null)
+                {
+                    masterLayout.Children.Remove(view);
+                    view = null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
             }
         }
 
         void OnStartDateCalanderClicked(object sender, EventArgs e)
         {
-            CalendarView calendarView = new CalendarView()
+            try
             {
-                BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
-                MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
-                HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
-                ShouldHighlightDaysOfWeekLabels = false,
-                SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
-                TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
-                HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
-                ShowNavigationArrows = true,
-                MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
-                MonthTitleForegroundColor = Color.White,
-                DayOfWeekLabelForegroundColor = Color.White,
 
-            };
-            calendarView.ClassId = "startcalander";
-            calendarView.DateSelected += OnStartDateCalendarViewDateSelected;
-            masterLayout.AddChildToLayout(calendarView, 0, 35);
+                CalendarView calendarView = new CalendarView()
+                {
+                    BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
+                    MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+                    MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                    HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
+                    ShouldHighlightDaysOfWeekLabels = false,
+                    SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
+                    TodayBackgroundStyle = CalendarView.BackgroundStyle.CircleOutline,
+                    HighlightedDaysOfWeek = new DayOfWeek[] { DayOfWeek.Saturday, DayOfWeek.Sunday },
+                    ShowNavigationArrows = true,
+                    MonthTitleFont = Font.OfSize("Open 24 Display St", NamedSize.Medium),
+                    MonthTitleForegroundColor = Color.White,
+                    DayOfWeekLabelForegroundColor = Color.White,
+
+                };
+                calendarView.ClassId = "startcalander";
+                calendarView.DateSelected += OnStartDateCalendarViewDateSelected;
+                masterLayout.AddChildToLayout(calendarView, 0, 35);
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         void OnStartDateCalendarViewDateSelected(object sender, DateTime e)
         {
-            startDateLabel.Text = "Starts : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
-            View view = masterLayout.Children.First(child => child.ClassId == "startcalander");
-            if (view != null)
+            try
             {
-                masterLayout.Children.Remove(view);
-                view = null;
+
+                startDateLabel.Text = "Starts : " + e.Day.ToString() + "-" + e.Month.ToString() + "-" + e.Year.ToString();
+                View view = masterLayout.Children.First(child => child.ClassId == "startcalander");
+                if (view != null)
+                {
+                    masterLayout.Children.Remove(view);
+                    view = null;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
             }
         }
 
@@ -1031,89 +1090,106 @@ namespace PurposeColor.screens
 
         void OnLocationListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            CustomListViewItem item = (CustomListViewItem)e.SelectedItem;
+            try
+            {
 
-            locationInfo.Text = "";
-            var s = new FormattedString();
-            s.Spans.Add(new Span { Text = "   - at ", ForegroundColor = Color.Black });
-            s.Spans.Add(new Span { Text = item.Name });
-            locationInfo.FormattedText = s;
-            locLayout.IsVisible = true;
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
-            pickView = null;
+                CustomListViewItem item = (CustomListViewItem)e.SelectedItem;
+
+                locationInfo.Text = "";
+                var s = new FormattedString();
+                s.Spans.Add(new Span { Text = "   - at ", ForegroundColor = Color.Black });
+                s.Spans.Add(new Span { Text = item.Name });
+                locationInfo.FormattedText = s;
+                locLayout.IsVisible = true;
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var obj = e.SelectedItem as CustomListViewItem;
-            string name = (e.SelectedItem as CustomListViewItem).Name;
-            if (!string.IsNullOrEmpty(name))
+            try
             {
-                int nIndex = 0;
-                string preText = "   - with ";
-                selectedContact = name;
 
-                var s = new FormattedString();
-
-                if (contactInfo.FormattedText == null)
+                var obj = e.SelectedItem as CustomListViewItem;
+                string name = (e.SelectedItem as CustomListViewItem).Name;
+                if (!string.IsNullOrEmpty(name))
                 {
-					contactInfo.Text = preText;
-                    s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
-                }
+                    string preText = "   - with ";
+                    selectedContact = name;
 
-                if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1 ) 
-                {
-                    string spanContact = "";
+                    var s = new FormattedString();
+
+                    if (contactInfo.FormattedText == null)
+                    {
+                        contactInfo.Text = preText;
+                        s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
+                    }
+
                     if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
                     {
-                        spanContact = contactInfo.FormattedText.Spans[1].Text  +" , " + selectedContact; ;
-                    }
-                    s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
-                    s.Spans.Add(new Span { Text = spanContact });
-				} 
-				else 
-                {
-
-                    string spanContact = "";
-                    if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1  )
-                    {
-                        spanContact = contactInfo.FormattedText.Spans[1].Text;
+                        string spanContact = "";
+                        if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                        {
+                            spanContact = contactInfo.FormattedText.Spans[1].Text + " , " + selectedContact; ;
+                        }
+                        s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
+                        s.Spans.Add(new Span { Text = spanContact });
                     }
                     else
                     {
-                        spanContact = selectedContact;
-                        s.Spans.Add(new Span { Text = selectedContact });
+
+                        string spanContact = "";
+                        if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                        {
+                            spanContact = contactInfo.FormattedText.Spans[1].Text;
+                        }
+                        else
+                        {
+                            spanContact = selectedContact;
+                            s.Spans.Add(new Span { Text = selectedContact });
+                        }
+
                     }
-                   
+
+
+                    contactInfo.FormattedText = s;
+
+                    if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                    {
+                        if (contactInfo.FormattedText.Spans[1].Text.Length > 40)
+                        {
+                            string trimmedContacts = contactInfo.FormattedText.Spans[1].Text;
+                            trimmedContacts = trimmedContacts.Substring(0, 40);
+                            trimmedContacts += "...";
+
+                            contactInfo.FormattedText.Spans[1].Text = trimmedContacts;
+                        }
+
+                    }
+
+
+
+                    contactInfo.IsVisible = true;
+                    App.ContactsArray.Add(name);
+
                 }
 
-
-                contactInfo.FormattedText = s;
-
-                if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1 ) 
-				{
-                    if( contactInfo.FormattedText.Spans[1].Text.Length > 40 )
-                    {
-                        string trimmedContacts = contactInfo.FormattedText.Spans[1].Text;
-                        trimmedContacts = trimmedContacts.Substring(0, 40);
-                        trimmedContacts += "...";
-
-                        contactInfo.FormattedText.Spans[1].Text = trimmedContacts;
-                    }
-
-				}
-
-
-
-				contactInfo.IsVisible = true;
-                App.ContactsArray.Add(name);
+                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                masterLayout.Children.Remove(pickView);
+                pickView = null;
 
             }
-
-            View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-            masterLayout.Children.Remove(pickView);
-            pickView = null;
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
 
@@ -1124,176 +1200,192 @@ namespace PurposeColor.screens
 
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
-
-            if (string.IsNullOrWhiteSpace(eventDescription.Text) || string.IsNullOrWhiteSpace(eventTitle.Text))
+            try
             {
-                DisplayAlert(pageTitle, "value cannot be empty", "ok");
-            }
-            else
-            {
-                string input = pageTitle;
-                CustomListViewItem item = new CustomListViewItem { Name = eventDescription.Text };
 
-
-                if (input == Constants.ADD_ACTIONS)
+                if (string.IsNullOrWhiteSpace(eventDescription.Text) || string.IsNullOrWhiteSpace(eventTitle.Text))
                 {
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
-                    progress.ShowProgressbar("Creating new action..");
+                    DisplayAlert(pageTitle, "value cannot be empty", "ok");
+                }
+                else
+                {
+                    string input = pageTitle;
+                    CustomListViewItem item = new CustomListViewItem { Name = eventDescription.Text };
 
-                    try
+
+                    if (input == Constants.ADD_ACTIONS)
                     {
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowProgressbar("Creating new action..");
 
-
-                        ActionModel details = new ActionModel();
-                        details.action_title = eventTitle.Text;
-                        details.action_details = eventDescription.Text;
-                        details.user_id = "2";
-                        details.location_latitude = lattitude;
-                        details.location_longitude = longitude;
-
-                        details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
-                        details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
-                        details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
-                        details.end_time = DateTime.Now.AddHours(2).ToString("HH:mm"); //for testing only
-                        details.action_repeat = "0";
-                        details.action_alert = "0";
-
-                        if (!string.IsNullOrEmpty(currentAddress))
+                        try
                         {
-                            details.location_address = currentAddress;
-                        }
 
-                        if (!await ServiceHelper.AddAction(details))
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
-                        }
-                        else
-                        {
-                            try
+
+                            ActionModel details = new ActionModel();
+                            details.action_title = eventTitle.Text;
+                            details.action_details = eventDescription.Text;
+                            details.user_id = "2";
+                            details.location_latitude = lattitude;
+                            details.location_longitude = longitude;
+
+                            details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                            details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
+                            details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
+                            details.end_time = DateTime.Now.AddHours(2).ToString("HH:mm"); //for testing only
+                            details.action_repeat = "0";
+                            details.action_alert = "0";
+
+                            if (!string.IsNullOrEmpty(currentAddress))
                             {
-                                var suportingActions = await ServiceHelper.GetAllSpportingActions(); //for testing only
-                                if (suportingActions != null)
+                                details.location_address = currentAddress;
+                            }
+
+                            if (!await ServiceHelper.AddAction(details))
+                            {
+                                await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                            }
+                            else
+                            {
+                                try
                                 {
-                                    App.actionsListSource = null;
-                                    App.actionsListSource = new List<CustomListViewItem>();
-                                    foreach (var action in suportingActions)
+                                    var suportingActions = await ServiceHelper.GetAllSpportingActions(); //for testing only
+                                    if (suportingActions != null)
                                     {
-                                        App.actionsListSource.Add(action);
+                                        App.actionsListSource = null;
+                                        App.actionsListSource = new List<CustomListViewItem>();
+                                        foreach (var action in suportingActions)
+                                        {
+                                            App.actionsListSource.Add(action);
+                                        }
                                     }
                                 }
-                            }
-                            catch (System.Exception)
-                            {
-                                DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
-                            }
-                        }
-
-                        ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                        notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        var test = ex.Message;
-                        progress.HideProgressbar();
-                    }
-
-                    progress.HideProgressbar();
-                }
-                else if (input == Constants.ADD_EVENTS)
-                {
-                    try
-                    {
-
-                        EventDetails details = new EventDetails();
-                        details.event_title = eventTitle.Text;
-                        details.event_details = eventDescription.Text;
-                        details.user_id = "2";
-                        details.location_latitude = lattitude;
-                        details.location_longitude = longitude;
-                        if (!string.IsNullOrEmpty(currentAddress))
-                        {
-                            details.location_address = currentAddress;
-                        }
-
-                        IProgressBar progress = DependencyService.Get<IProgressBar>();
-                        progress.ShowProgressbar("Creating new event..");
-                        if (!await ServiceHelper.AddEvent(details))
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
-                        }
-                        await FeelingNowPage.DownloadAllEvents();
-
-                        progress.HideProgressbar();
-
-                    }
-                    catch (Exception ex)
-                    {
-                        var test = ex.Message;
-                    }
-                }
-                else if (input == Constants.ADD_GOALS)
-                {
-                    try
-                    {
-                        GoalDetails newGoal = new GoalDetails();
-                        //EventDetails newGoal = new EventDetails();
-                        newGoal.goal_title = eventTitle.Text;
-                        newGoal.goal_details = eventDescription.Text;
-                        newGoal.user_id = "2"; // for testing only // test
-                        newGoal.location_latitude = lattitude;
-                        newGoal.location_longitude = longitude;
-                        newGoal.category_id = "1";
-                        newGoal.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
-                        newGoal.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing onl
-
-                        if (!string.IsNullOrEmpty(currentAddress))
-                        {
-                            newGoal.location_address = currentAddress;
-                        }
-                        IProgressBar progress = DependencyService.Get<IProgressBar>();
-                        progress.ShowProgressbar("Creating new goal..");
-                        if (!await ServiceHelper.AddGoal(newGoal))
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
-                        }
-                        else
-                        {
-                            try
-                            {
-                                var goals = await ServiceHelper.GetAllGoals(2); //for testing only
-                                if (goals != null)
+                                catch (System.Exception)
                                 {
-                                    App.goalsListSource = null;
-                                    App.goalsListSource = new List<CustomListViewItem>();
-                                    foreach (var goal in goals)
-                                    {
-                                        App.goalsListSource.Add(goal);
-                                    }
+                                    DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
                                 }
                             }
-                            catch (System.Exception)
-                            {
-                                DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
-                            }
+
+                            ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+                            notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            var test = ex.Message;
+                            progress.HideProgressbar();
                         }
 
                         progress.HideProgressbar();
                     }
-                    catch (Exception ex)
+                    else if (input == Constants.ADD_EVENTS)
                     {
-                        DisplayAlert(Constants.ALERT_TITLE, ex.Message, Constants.ALERT_OK);
+                        try
+                        {
+
+                            EventDetails details = new EventDetails();
+                            details.event_title = eventTitle.Text;
+                            details.event_details = eventDescription.Text;
+                            details.user_id = "2";
+                            details.location_latitude = lattitude;
+                            details.location_longitude = longitude;
+                            if (!string.IsNullOrEmpty(locationInfo.Text))
+                            {
+                                details.location_address = locationInfo.Text;// currentAddress;
+                            }
+
+                            IProgressBar progress = DependencyService.Get<IProgressBar>();
+                            progress.ShowProgressbar("Creating new event..");
+                            if (!await ServiceHelper.AddEvent(details))
+                            {
+                                await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                            }
+                            await FeelingNowPage.DownloadAllEvents();
+
+                            progress.HideProgressbar();
+
+                        }
+                        catch (Exception ex)
+                        {
+                            var test = ex.Message;
+                        }
                     }
+                    else if (input == Constants.ADD_GOALS)
+                    {
+                        try
+                        {
+                            GoalDetails newGoal = new GoalDetails();
+                            //EventDetails newGoal = new EventDetails();
+                            newGoal.goal_title = eventTitle.Text;
+                            newGoal.goal_details = eventDescription.Text;
+                            newGoal.user_id = "2"; // for testing only // test
+                            newGoal.location_latitude = lattitude;
+                            newGoal.location_longitude = longitude;
+                            newGoal.category_id = "1";
+                            newGoal.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                            newGoal.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing onl
+
+                            if (!string.IsNullOrEmpty(currentAddress))
+                            {
+                                newGoal.location_address = currentAddress;
+                            }
+                            IProgressBar progress = DependencyService.Get<IProgressBar>();
+                            progress.ShowProgressbar("Creating new goal..");
+                            if (!await ServiceHelper.AddGoal(newGoal))
+                            {
+                                await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    var goals = await ServiceHelper.GetAllGoals(2); //for testing only
+                                    if (goals != null)
+                                    {
+                                        App.goalsListSource = null;
+                                        App.goalsListSource = new List<CustomListViewItem>();
+                                        foreach (var goal in goals)
+                                        {
+                                            App.goalsListSource.Add(goal);
+                                        }
+                                    }
+                                }
+                                catch (System.Exception)
+                                {
+                                    DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
+                                }
+                            }
+
+                            progress.HideProgressbar();
+                        }
+                        catch (Exception ex)
+                        {
+                            DisplayAlert(Constants.ALERT_TITLE, ex.Message, Constants.ALERT_OK);
+                        }
+                    }
+
+                    //Navigation.PopAsync();
+                    Navigation.PopModalAsync();
                 }
 
-                Navigation.PopAsync();
-
             }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
         }
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-            Navigation.PopAsync();
+            try
+            {
+                Navigation.PopModalAsync();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
 
         public void AddFileToMediaArray(MemoryStream ms, string path, PurposeColor.Constants.MediaType mediaType)
@@ -1383,13 +1475,22 @@ namespace PurposeColor.screens
 
         public  async  void ShowAlert( string messege, PreviewItem toDelete )
         {
-            var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
-            if( alert  )
+            try
             {
-                App.PreviewListSource.Remove(toDelete);
-                MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
-                if (media != null)
-                    App.MediaArray.Remove(media);
+
+                var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
+                if (alert)
+                {
+                    App.PreviewListSource.Remove(toDelete);
+                    MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
+                    if (media != null)
+                        App.MediaArray.Remove(media);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
             }
         }
 
@@ -1534,26 +1635,62 @@ namespace PurposeColor.screens
 
         async void OnImageButtonClicked(object sender, EventArgs e)
         {
-
-            IProgressBar progres = DependencyService.Get<IProgressBar>();
-
-			if(  Device.OS != TargetPlatform.iOS )
-            progres.ShowProgressbar("Preparing media..");
-            if ((sender as CustomImageButton).ClassId == "camera")
+            try
             {
-                try
+
+                IProgressBar progres = DependencyService.Get<IProgressBar>();
+
+                if (Device.OS != TargetPlatform.iOS)
+                    progres.ShowProgressbar("Preparing media..");
+                if ((sender as CustomImageButton).ClassId == "camera")
                 {
-                    if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    try
                     {
-                        string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
-                        var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                        if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                         {
+                            string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
 
-                            Directory = "Purposecolor",
-                            Name = fileName
-                        });
+                            var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
+                            {
 
+                                Directory = "Purposecolor",
+                                Name = fileName
+                            });
+
+
+                            if (file == null)
+                            {
+                                progres.HideProgressbar();
+                                return;
+                            }
+
+
+                            MemoryStream ms = new MemoryStream();
+                            file.GetStream().CopyTo(ms);
+                            ms.Position = 0;
+
+                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                        progres.HideProgressbar();
+                    }
+
+                }
+                else if ((sender as CustomImageButton).ClassId == "gallery")
+                {
+                    try
+                    {
+
+                        if (!CrossMedia.Current.IsPickPhotoSupported)
+                        {
+                            progres.HideProgressbar();
+                            return;
+                        }
+
+                        var file = await CrossMedia.Current.PickPhotoAsync();
 
                         if (file == null)
                         {
@@ -1567,239 +1704,220 @@ namespace PurposeColor.screens
                         ms.Position = 0;
 
                         MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
+
                     }
-                }
-                catch (Exception ex)
-                {
-                    var test = ex.Message;
-                    progres.HideProgressbar();
+                    catch (Exception ex)
+                    {
+                        var test = ex.Message;
+                        progres.HideProgressbar();
+                    }
+
                 }
 
+
+                View mediaChooserView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+                PageContainer.Children.Remove(mediaChooserView);
+                mediaChooserView = null;
+
+                progres.HideProgressbar();
+
             }
-            else if ((sender as CustomImageButton).ClassId == "gallery")
+            catch (Exception ex)
             {
-                try
-                {
-
-                    if (!CrossMedia.Current.IsPickPhotoSupported)
-                    {
-                        progres.HideProgressbar();
-                        return;
-                    }
-
-                    var file = await CrossMedia.Current.PickPhotoAsync();
-
-                    if (file == null)
-                    {
-                        progres.HideProgressbar();
-                        return;
-                    }
-
-
-                    MemoryStream ms = new MemoryStream();
-                    file.GetStream().CopyTo(ms);
-                    ms.Position = 0;
-
-                    MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Image);
-
-                }
-                catch (Exception ex)
-                {
-                    var test = ex.Message;
-                    progres.HideProgressbar();
-                }
-                
+                var test = ex.Message;
             }
-
-
-            View mediaChooserView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
-            PageContainer.Children.Remove(mediaChooserView);
-            mediaChooserView = null;
-
-            progres.HideProgressbar();
 
         }
 
         async void OnVideoButtonClicked(object sender, EventArgs e)
         {
-            IProgressBar progres = DependencyService.Get<IProgressBar>();
-			if(  Device.OS != TargetPlatform.iOS )
-            progres.ShowProgressbar("Preparing media..");
-            if ((sender as CustomImageButton).ClassId == "camera")
+            try
             {
-                try
+
+                IProgressBar progres = DependencyService.Get<IProgressBar>();
+                if (Device.OS != TargetPlatform.iOS)
+                    progres.ShowProgressbar("Preparing media..");
+                if ((sender as CustomImageButton).ClassId == "camera")
                 {
-                    if (Device.OS == TargetPlatform.WinPhone)
+                    try
                     {
-                        PurposeColor.interfaces.ICameraCapture camera = DependencyService.Get<PurposeColor.interfaces.ICameraCapture>();
-                        camera.RecodeVideo();
+                        if (Device.OS == TargetPlatform.WinPhone)
+                        {
+                            PurposeColor.interfaces.ICameraCapture camera = DependencyService.Get<PurposeColor.interfaces.ICameraCapture>();
+                            camera.RecodeVideo();
+                        }
+                        else if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                        {
+
+                            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
+                            {
+                                progres.HideProgressbar();
+                                return;
+                            }
+
+                            string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+                            var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
+                            {
+                                Name = fileName,
+                                Directory = "DefaultVideos",
+                            });
+
+                            if (file == null)
+                            {
+                                progres.HideProgressbar();
+                                return;
+                            }
+
+
+                            MemoryStream ms = new MemoryStream();
+                            file.GetStream().CopyTo(ms);
+                            ms.Position = 0;
+
+                            if (ms.Length > 15728640)
+                            {
+                                MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                                progres.HideProgressbar();
+                                ms = null;
+                                file = null;
+                                GC.Collect();
+                                return;
+                            }
+
+                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                        }
+
                     }
-                    else if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
+                    catch (Exception ex)
                     {
-
-                        if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
-                        {
-                            progres.HideProgressbar();
-                            return;
-                        }
-
-                        string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-                        var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
-                        {
-                            Name = fileName,
-                            Directory = "DefaultVideos",
-                        });
-
-                        if (file == null)
-                        {
-                            progres.HideProgressbar();
-                            return;
-                        }
-
-
-                        MemoryStream ms = new MemoryStream();
-                        file.GetStream().CopyTo(ms);
-                        ms.Position = 0;
-
-                        if (ms.Length > 15728640)
-                        {
-                            MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
-                            progres.HideProgressbar();
-                            ms = null;
-                            file = null;
-                            GC.Collect();
-                            return;
-                        }
-
-                        MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+                        var test = ex.Message;
                     }
-
+                    progres.HideProgressbar();
                 }
-                catch (Exception ex)
+                else if ((sender as CustomImageButton).ClassId == "gallery")
                 {
-                    var test = ex.Message;
-                }
-                progres.HideProgressbar();
-            }
-            else if ((sender as CustomImageButton).ClassId == "gallery")
-            {
-                try
-                {
-                    if (Device.OS == TargetPlatform.WinPhone)
+                    try
                     {
-                        //https://social.msdn.microsoft.com/Forums/windowsapps/en-US/7e4492dc-d8f3-4dc5-8055-625352aaa8b6/fileopenpicker-class-on-wp8
-                        // We do not currently support choosing files other than photos or choosing files from other Store apps
-
-                        // list the video folder content in a list view.
-                        // http://www.c-sharpcorner.com/UploadFile/2b876a/how-to-use-folders-and-files-in-windows-phone-8/
-
-                        PurposeColor.interfaces.IFileBrowser fileBrowser = DependencyService.Get<PurposeColor.interfaces.IFileBrowser>();
-                        List<String> files = await fileBrowser.GetVideoFileList();
-                        //fileBrowser = null; // so the the memory can be released.
-
-                        if (files == null || files.Count < 1)
+                        if (Device.OS == TargetPlatform.WinPhone)
                         {
-                            //progres.HideProgressbar();
-                            // should hide the DataTemplateSelector so don't return from here.'
-                            MasterObject.DisplayAlert("Video files not accessible");
+                            //https://social.msdn.microsoft.com/Forums/windowsapps/en-US/7e4492dc-d8f3-4dc5-8055-625352aaa8b6/fileopenpicker-class-on-wp8
+                            // We do not currently support choosing files other than photos or choosing files from other Store apps
+
+                            // list the video folder content in a list view.
+                            // http://www.c-sharpcorner.com/UploadFile/2b876a/how-to-use-folders-and-files-in-windows-phone-8/
+
+                            PurposeColor.interfaces.IFileBrowser fileBrowser = DependencyService.Get<PurposeColor.interfaces.IFileBrowser>();
+                            List<String> files = await fileBrowser.GetVideoFileList();
+                            //fileBrowser = null; // so the the memory can be released.
+
+                            if (files == null || files.Count < 1)
+                            {
+                                //progres.HideProgressbar();
+                                // should hide the DataTemplateSelector so don't return from here.'
+                                MasterObject.DisplayAlert("Video files not accessible");
+                            }
+                            else
+                            {
+                                // display the file names in custom picker, and get the file once the user taps on any of the file name.
+                                View fileView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
+                                if (fileView != null)
+                                {
+                                    PageContainer.Children.Remove(fileView);
+                                    fileView = null;
+                                }
+
+                                List<CustomListViewItem> customList = new List<CustomListViewItem>();
+                                foreach (var item in files)
+                                {
+                                    customList.Add(new CustomListViewItem { Name = item });
+                                }
+
+                                CustomPicker filePicker = new CustomPicker(PageContainer, customList, 65, "Select file", true, false);
+                                //customList = null;
+                                filePicker.WidthRequest = App.screenWidth;
+                                filePicker.HeightRequest = App.screenHeight;
+                                filePicker.ClassId = "filePicker";
+                                PageContainer.AddChildToLayout(filePicker, 0, 0);
+
+                                filePicker.listView.ItemSelected += async (s, eve) =>
+                                {
+                                    CustomListViewItem item = eve.SelectedItem as CustomListViewItem;
+                                    MemoryStream videoFileMS = await fileBrowser.GetVideostream(item.Name);
+
+                                    if (videoFileMS != null)
+                                    {
+                                        MasterObject.AddFileToMediaArray(videoFileMS, item.Name, Constants.MediaType.Video);
+                                    }
+                                    else
+                                    {
+                                        MasterObject.DisplayAlert("File read error");
+                                    }
+
+                                    View filepickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
+                                    if (filepickView != null)
+                                    {
+                                        PageContainer.Children.Remove(filepickView);
+                                        fileView = null;
+                                    }
+                                    //videoFileMS = null;
+                                };
+
+                                //fileBrowser = null;
+                            }
+                        }
+                        else if (CrossMedia.Current.IsPickVideoSupported)
+                        {
+                            var file = await CrossMedia.Current.PickVideoAsync();
+
+                            if (file == null)
+                            {
+                                progres.HideProgressbar();
+                                return;
+                            }
+
+                            MemoryStream ms = new MemoryStream();
+                            file.GetStream().CopyTo(ms);
+                            ms.Position = 0;
+
+                            if (ms.Length > 15728640)
+                            {
+                                MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
+                                progres.HideProgressbar();
+                                ms = null;
+                                file = null;
+                                GC.Collect();
+                                return;
+                            }
+
+                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
                         }
                         else
                         {
-                            // display the file names in custom picker, and get the file once the user taps on any of the file name.
-                            View fileView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
-                            if (fileView != null)
-                            {
-                                PageContainer.Children.Remove(fileView);
-                                fileView = null;
-                            }
-                            
-                            List<CustomListViewItem> customList = new List<CustomListViewItem>();
-                            foreach (var item in files)
-                            {
-                                customList.Add(new CustomListViewItem { Name = item});
-                            }
-
-                            CustomPicker filePicker = new CustomPicker(PageContainer, customList, 65, "Select file", true, false);
-                            //customList = null;
-                            filePicker.WidthRequest = App.screenWidth;
-                            filePicker.HeightRequest = App.screenHeight;
-                            filePicker.ClassId = "filePicker";
-                            PageContainer.AddChildToLayout(filePicker, 0, 0);
-
-                            filePicker.listView.ItemSelected += async (s, eve) =>
-                            {
-                                CustomListViewItem item = eve.SelectedItem as CustomListViewItem;
-                                MemoryStream videoFileMS = await fileBrowser.GetVideostream(item.Name);
-
-                                if (videoFileMS != null)
-                                {
-                                    MasterObject.AddFileToMediaArray(videoFileMS, item.Name, Constants.MediaType.Video);
-                                }
-                                else
-                                {
-                                    MasterObject.DisplayAlert("File read error");
-                                }
-
-                                View filepickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "filePicker");
-                                if (filepickView != null)
-                                {
-                                    PageContainer.Children.Remove(filepickView);
-                                    fileView = null;
-                                }
-                                //videoFileMS = null;
-                            };
-                            
-                            //fileBrowser = null;
-                        }
-                    }
-                    else if (CrossMedia.Current.IsPickVideoSupported)
-                    {
-                        var file = await CrossMedia.Current.PickVideoAsync();
-
-                        if (file == null)
-                        {
                             progres.HideProgressbar();
+                            MasterObject.DisplayAlert("Video library not available");
                             return;
                         }
 
-                        MemoryStream ms = new MemoryStream();
-                        file.GetStream().CopyTo(ms);
-                        ms.Position = 0;
 
-                        if (ms.Length > 15728640)
-                        {
-                            MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");
-                            progres.HideProgressbar();
-                            ms = null;
-                            file = null;
-                            GC.Collect();
-                            return;
-                        }
-
-                        MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        progres.HideProgressbar();
-                        MasterObject.DisplayAlert("Video library not available");
-                        return;
+                        var test = ex.Message;
                     }
-                    
+                    progres.HideProgressbar();
+                }
 
-                }
-                catch (Exception ex)
-                {
-                    var test = ex.Message;
-                }
+                View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
+                PageContainer.Children.Remove(pickView);
+                pickView = null;
                 progres.HideProgressbar();
+
+                GC.Collect();
+
             }
-
-            View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
-            PageContainer.Children.Remove(pickView);
-            pickView = null;
-            progres.HideProgressbar();
-
-            GC.Collect();
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
         }
     }
 

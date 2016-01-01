@@ -72,13 +72,22 @@ namespace PurposeColor.screens
 			startTimePicker.IsVisible = false;
 			startTimePicker.PropertyChanged += (object sender, System.ComponentModel.PropertyChangedEventArgs e) => 
 			{
-				if( "Time" == e.PropertyName )
-				{
-				//	string tie = startTimePicker.Time.ToString("hh:mm tt");
-					string amPM = ( startTimePicker.Time.Hours  > 12 ) ? "PM" : "AM";
-					startTimePickerButton.Text =  startTimePicker.Time.ToString(); //startTimePicker.Time.Hours.ToString () + " : " + startTimePicker.Time.Minutes.ToString() + "  " + amPM;
-				
-				}
+                try
+                {
+
+                    if ("Time" == e.PropertyName)
+                    {
+                        //	string tie = startTimePicker.Time.ToString("hh:mm tt");
+                        string amPM = (startTimePicker.Time.Hours > 12) ? "PM" : "AM";
+                        startTimePickerButton.Text = startTimePicker.Time.ToString(); //startTimePicker.Time.Hours.ToString () + " : " + startTimePicker.Time.Minutes.ToString() + "  " + amPM;
+
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 
 
@@ -88,11 +97,18 @@ namespace PurposeColor.screens
 			endTimePicker.IsVisible = false;
 			endTimePicker.PropertyChanged += (object sender, System.ComponentModel.PropertyChangedEventArgs e) => 
 			{
-				if( "Time" == e.PropertyName )
-				{
-					string amPM = ( endTimePicker.Time.Hours  > 12 ) ? "PM" : "AM";
-					endTimePickerButton.Text =  endTimePicker.Time.ToString();// endTimePicker.Time.Hours.ToString () + " : " + endTimePicker.Time.Minutes.ToString() + "  " + amPM;
-				}
+                try
+                {
+                    if ("Time" == e.PropertyName)
+                    {
+                        string amPM = (endTimePicker.Time.Hours > 12) ? "PM" : "AM";
+                        endTimePickerButton.Text = endTimePicker.Time.ToString();// endTimePicker.Time.Hours.ToString () + " : " + endTimePicker.Time.Minutes.ToString() + "  " + amPM;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 
             //startDatePickerButton = new CustomImageButton();
@@ -105,8 +121,15 @@ namespace PurposeColor.screens
             startDatePickerButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 			startDatePickerButton.Clicked += (object sender, EventArgs e) => 
 			{
-				startDatePicker.Date = DateTime.Now.AddDays( 1 );
-				startDatePicker.Focus();
+                try
+                {
+                    startDatePicker.Date = DateTime.Now.AddDays(1);
+                    startDatePicker.Focus();
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 
 
@@ -122,8 +145,15 @@ namespace PurposeColor.screens
             startTimePickerButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 			startTimePickerButton.Clicked += (object sender, EventArgs e) => 
 			{
-				startTimePicker.Time = new TimeSpan( 12 , 00 , 00 );
-				startTimePicker.Focus();
+                try
+                {
+                    startTimePicker.Time = new TimeSpan(12, 00, 00);
+                    startTimePicker.Focus();
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 		
 		
@@ -137,8 +167,15 @@ namespace PurposeColor.screens
 			endDatePickerButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 			endDatePickerButton.Clicked += (object sender, EventArgs e) => 	
 			{
-				endDatePicker.Date = DateTime.Now.AddDays( 1 );
-				endDatePicker.Focus ();
+                try
+                {
+                    endDatePicker.Date = DateTime.Now.AddDays(1);
+                    endDatePicker.Focus();
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 
 
@@ -152,8 +189,15 @@ namespace PurposeColor.screens
 			endTimePickerButton.WidthRequest = deviceSpec.ScreenWidth * 40 / 100;
 			endTimePickerButton.Clicked += (object sender, EventArgs e) => 	
 			{
-				endTimePicker.Time = new TimeSpan( 12 , 00 , 00 );
-				endTimePicker.Focus ();
+                try
+                {
+                    endTimePicker.Time = new TimeSpan(12, 00, 00);
+                    endTimePicker.Focus();
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
 			};
 
 			CustomImageButton reminderPickerButton = new CustomImageButton ();
@@ -183,9 +227,6 @@ namespace PurposeColor.screens
 				reminderPicker.Focus();
 			};
 
-
-
-
 			Button createReminderButton = new Button ();
 			createReminderButton.Text = "Create Reminder";
 			createReminderButton.TextColor = Color.White;
@@ -193,43 +234,53 @@ namespace PurposeColor.screens
 			createReminderButton.WidthRequest = deviceSpec.ScreenWidth * 90 / 100;
 			createReminderButton.Clicked += async (object sender, EventArgs e) =>
 			{
-				App.CalPage = this;
-                if( startDatePickerButton.Text == "Start Date" || endDatePickerButton.Text == "End Date")
+                try
                 {
-                    DisplayAlert(Constants.ALERT_TITLE, "Please select start date and end date to proceed", Constants.ALERT_OK);
-                    return;
-                }
-				IReminderService reminder = DependencyService.Get<IReminderService>();
 
-				if( Device.OS == TargetPlatform.iOS  )
-				{
-					var access = await reminder.RequestAccessAsync();
-					if( !access )
-						return;
-				}
-					
-                int reminderValue = 0;
-                if (reminderPickerButton.Text != null && reminderPickerButton.Text.Length > 0 &&  reminderPicker.SelectedIndex >= 0)
+                    App.CalPage = this;
+                    if (startDatePickerButton.Text == "Start Date" || endDatePickerButton.Text == "End Date")
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Please select start date and end date to proceed", Constants.ALERT_OK);
+                        return;
+                    }
+                    IReminderService reminder = DependencyService.Get<IReminderService>();
+
+                    if (Device.OS == TargetPlatform.iOS)
+                    {
+                        var access = await reminder.RequestAccessAsync();
+                        if (!access)
+                            return;
+                    }
+
+                    int reminderValue = 0;
+                    if (reminderPickerButton.Text != null && reminderPickerButton.Text.Length > 0 && reminderPicker.SelectedIndex >= 0)
+                    {
+                        reminderValue = Convert.ToInt32(reminderPickerButton.Text);
+                    }
+
+                    DateTime startDateAndTime = new DateTime(startDatePicker.Date.Year, startDatePicker.Date.Month, startDatePicker.Date.Day, startTimePicker.Time.Hours, startTimePicker.Time.Minutes, 0);
+                    DateTime endDateAndTime = new DateTime(endDatePicker.Date.Year, endDatePicker.Date.Month, endDatePicker.Date.Day, endTimePicker.Time.Hours, endTimePicker.Time.Minutes, 0);
+
+                    if (!reminder.Remind(startDateAndTime, endDateAndTime, title.Text, messege.Text, reminderValue))
+                    {
+                        await DisplayAlert("Purpose Color", "Error in creating calendar event", Constants.ALERT_OK);
+                    }
+                    else
+                    {
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowToast("Calander event created");
+                        if (Device.OS != TargetPlatform.iOS)
+                        { //Navigation.PopAsync(); 
+                            await Navigation.PopModalAsync();
+                        }
+
+                    }
+
+                }
+                catch (Exception ex)
                 {
-                    reminderValue = Convert.ToInt32(reminderPickerButton.Text);
+                    var test = ex.Message;
                 }
-
-                DateTime startDateAndTime = new DateTime(startDatePicker.Date.Year, startDatePicker.Date.Month, startDatePicker.Date.Day, startTimePicker.Time.Hours, startTimePicker.Time.Minutes, 0);
-                DateTime endDateAndTime = new DateTime(endDatePicker.Date.Year, endDatePicker.Date.Month, endDatePicker.Date.Day, endTimePicker.Time.Hours, endTimePicker.Time.Minutes, 0);
-
-                if (!reminder.Remind(startDateAndTime, endDateAndTime, title.Text, messege.Text, reminderValue))
-                {
-                    DisplayAlert("Purpose Color", "Error in creating calendar event", Constants.ALERT_OK);
-                }
-                else
-                {
-                    IProgressBar progress = DependencyService.Get<IProgressBar>();
-                    progress.ShowToast( "Calander event created" );
-					if( Device.OS != TargetPlatform.iOS )
-						Navigation.PopAsync(); 
-                   
-                }
-
 			};
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
@@ -254,7 +305,13 @@ namespace PurposeColor.screens
 
         void BackButtonTapRecognizer_Tapped(object sender, EventArgs e)
         {
-            Navigation.PopAsync();
+            try
+            {
+                Navigation.PopModalAsync();
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         void startDatePickerButton_Clicked(object sender, EventArgs e)

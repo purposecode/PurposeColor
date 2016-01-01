@@ -254,81 +254,90 @@ namespace PurposeColor.CustomControls
 
         void OnAddButtonClicked(object sender, EventArgs e)
         {
-            if (pageTitle == Constants.SELECT_EMOTIONS)
+            try
             {
-                CustomEntry emotionsEntry = new CustomEntry();
-                emotionsEntry.BackgroundColor = Color.White;
-                emotionsEntry.Placeholder = "Enter emotion";
-                emotionsEntry.WidthRequest = screenWidth * 75 / 100;
-                emotionsEntry.TextColor = Color.Black;
-                listTitle.IsVisible = false;
-                addButton.IsVisible = false;
 
-                addEmotionButton = new Image();
-                addEmotionButton.Source = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
+                if (pageTitle == Constants.SELECT_EMOTIONS)
+                {
+                    CustomEntry emotionsEntry = new CustomEntry();
+                    emotionsEntry.BackgroundColor = Color.White;
+                    emotionsEntry.Placeholder = "Enter emotion";
+                    emotionsEntry.WidthRequest = screenWidth * 75 / 100;
+                    emotionsEntry.TextColor = Color.Black;
+                    listTitle.IsVisible = false;
+                    addButton.IsVisible = false;
 
-                addEmotionButton.WidthRequest = Device.OnPlatform( 25, 25, 30 );
-                addEmotionButton.HeightRequest = Device.OnPlatform(25, 25, 30);
+                    addEmotionButton = new Image();
+                    addEmotionButton.Source = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
 
-				StackLayout addEmotionButtonLayout = new StackLayout();
-				addEmotionButtonLayout.HeightRequest = 50;
-				addEmotionButtonLayout.WidthRequest = 50;
-				addEmotionButtonLayout.BackgroundColor = Color.Transparent;
+                    addEmotionButton.WidthRequest = Device.OnPlatform(25, 25, 30);
+                    addEmotionButton.HeightRequest = Device.OnPlatform(25, 25, 30);
 
-				TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
-				addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
-					object addsender, EventArgs adde) => 
-				{
+                    StackLayout addEmotionButtonLayout = new StackLayout();
+                    addEmotionButtonLayout.HeightRequest = 50;
+                    addEmotionButtonLayout.WidthRequest = 50;
+                    addEmotionButtonLayout.BackgroundColor = Color.Transparent;
 
-                    IProgressBar progressBar = DependencyService.Get<IProgressBar>();
-
-                    progressBar.ShowProgressbar("sending new emotion");
-
-
-					listTitle.IsVisible = true;
-					addButton.IsVisible = true;
-                    addEmotionButton.IsVisible = false;
-                    emotionsEntry.IsVisible = false;
-                    addEmotionButtonLayout.IsVisible = false;
-
-                    if( emotionsEntry.Text == null )
+                    TapGestureRecognizer addEmotionButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
+                    addEmotionButtonLayoutTapGestureRecognizer.Tapped += async (
+                        object addsender, EventArgs adde) =>
                     {
-                        progressBar.ShowToast("emotion is empty");
+
+                        IProgressBar progressBar = DependencyService.Get<IProgressBar>();
+
+                        progressBar.ShowProgressbar("sending new emotion");
+
+
+                        listTitle.IsVisible = true;
+                        addButton.IsVisible = true;
+                        addEmotionButton.IsVisible = false;
+                        emotionsEntry.IsVisible = false;
+                        addEmotionButtonLayout.IsVisible = false;
+
+                        if (emotionsEntry.Text == null)
+                        {
+                            progressBar.ShowToast("emotion is empty");
+                            progressBar.HideProgressbar();
+                            return;
+                        }
+
+                        if (emotionsEntry.Text != null && emotionsEntry.Text.Trim().Length == 0)
+                        {
+                            progressBar.ShowToast("emotion is empty");
+                            progressBar.HideProgressbar();
+                            return;
+                        }
+                        var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
+
+                        await FeelingsPage.DownloadAllEmotions();
+
+                        View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+                        pageContainedLayout.Children.Remove(pickView);
+                        pickView = null;
+
                         progressBar.HideProgressbar();
-                        return;
-                    }
 
-                    if (emotionsEntry.Text != null && emotionsEntry.Text.Trim().Length == 0)
-                    {
-                        progressBar.ShowToast("emotion is empty");
-                        progressBar.HideProgressbar();
-                        return;
-                    }
-                    var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
+                    };
+                    addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
 
-                    await FeelingsPage.DownloadAllEmotions();
-
+                    masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
+                    masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - Device.OnPlatform(7, 7, 9));
+                    masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8));
+                }
+                else
+                {
+                    //Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
+                    Navigation.PushModalAsync(new AddEventsSituationsOrThoughts(pageTitle));
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);
                     pickView = null;
+                }
 
-                    progressBar.HideProgressbar();
-
-				};
-				addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
-
-				masterLayout.AddChildToLayout(addEmotionButton, 85, (100 - topYPos - 2) - 6);
-                masterLayout.AddChildToLayout(emotionsEntry, 7, (100 - topYPos - 2) - Device.OnPlatform( 7,7,9 ));
-				masterLayout.AddChildToLayout(addEmotionButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topYPos - 1) - 9, (100 - topYPos - 1) - 9, (100 - topYPos - 1) - 8)); 
             }
-            else
+            catch (Exception ex)
             {
-                Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
-                View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-                pageContainedLayout.Children.Remove(pickView);
-                pickView = null;
+                var test = ex.Message;
             }
-
         }
 
 

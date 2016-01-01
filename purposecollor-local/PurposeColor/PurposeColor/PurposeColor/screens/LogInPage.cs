@@ -87,7 +87,13 @@ namespace PurposeColor.screens
             forgotPasswordLabel.GestureRecognizers.Add(forgotPasswordTap);
             forgotPasswordTap.Tapped += (s, e) =>
             {
-                Navigation.PushAsync(new ForgotPassword());
+                try
+                {
+                    Navigation.PushAsync(new ForgotPassword());
+                }
+                catch (Exception)
+                {
+                }
             };
 
             TapGestureRecognizer registerTap = new TapGestureRecognizer();
@@ -102,7 +108,13 @@ namespace PurposeColor.screens
             registerLabel.GestureRecognizers.Add(registerTap);
             registerTap.Tapped += (s, e) =>
             {
-                Navigation.PushModalAsync(new RegistrationPageOne());
+                try
+                {
+                    Navigation.PushModalAsync(new RegistrationPageOne());
+                }
+                catch (Exception)
+                {
+                }
             };
 
             googleSignInButton = new Button
@@ -164,7 +176,7 @@ namespace PurposeColor.screens
         {
             if (String.IsNullOrEmpty(userNameEntry.Text))
             {
-                await DisplayAlert(Constants.ALERT_TITLE, "Please provide username", Constants.ALERT_OK);
+                await DisplayAlert(Constants.ALERT_TITLE, "Please provide username.", Constants.ALERT_OK);
                 return;
             }
 
@@ -286,14 +298,14 @@ namespace PurposeColor.screens
                     else
                     {
                         progress.HideProgressbar();
-                        await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again", Constants.ALERT_OK);
+                        await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again.", Constants.ALERT_OK);
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
                     progress.HideProgressbar();
-                    DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again", Constants.ALERT_OK);
+                    DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again.", Constants.ALERT_OK);
                     Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
                 }
                 progress.HideProgressbar();

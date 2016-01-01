@@ -39,7 +39,13 @@ namespace PurposeColor.screens
             subTitleBar = new PurposeColor.CustomControls.PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Forgot password");
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
-                Navigation.PopAsync();
+                try
+                {
+                    Navigation.PopAsync();
+                }
+                catch (Exception)
+                {
+                }
             };
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));

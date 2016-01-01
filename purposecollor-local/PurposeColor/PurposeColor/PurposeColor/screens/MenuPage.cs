@@ -79,10 +79,8 @@ namespace PurposeColor.screens
 
             try
             {
-
                 PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
                 PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
-
             }
             catch (Exception ex)
             {
@@ -107,12 +105,10 @@ namespace PurposeColor.screens
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
             listView.RowHeight =(int) screenHeight * 10 / 100;
-            
 
-            Icon = "icon.png";
+
+            Icon = Device.OnPlatform("bottom_menu_icon.png", "bottom_menu_icon.png", "//Assets//bottom_menu_icon.png");
             Title = "Menu";
-
-
 
             masterLayout.BackgroundColor = Constants.MENU_BG_COLOR;
 
@@ -133,44 +129,52 @@ namespace PurposeColor.screens
 
         void OnListViewItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if (listView.SelectedItem == null)
-                return;
-
-
-            MenuItems selItem = e.SelectedItem as MenuItems;
-
-            if ("Emotional Awareness" == selItem.Name)
+            try
             {
 
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-            }
-            else if ("Goals Enabling Materials" == selItem.Name)
-            {
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new GemsMainPage());
-            }
-            else if ("GOALS & DREAMS" == selItem.Name)
-            {
+                if (listView.SelectedItem == null)
+                    return;
+
+
+                MenuItems selItem = e.SelectedItem as MenuItems;
+
+                if ("Emotional Awareness" == selItem.Name)
+                {
+
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                }
+                else if ("Goals Enabling Materials" == selItem.Name)
+                {
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new GemsMainPage());
+                }
+                else if ("GOALS & DREAMS" == selItem.Name)
+                {
+
+                }
+                else if ("EMOTIONAL INTELLIGENCE" == selItem.Name)
+                {
+
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new GraphPage());
+                }
+                else if ("COMMUNITY GEMs" == selItem.Name)
+                {
+
+                }
+                else if (Constants.APPLICATION_SETTTINGS == selItem.Name)
+                {
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new ApplicationSettingsPage());
+                }
+
+                listView.SelectedItem = null; // reset the list selection, other wise the same menu cannot be selected again consecutively.
 
             }
-            else if ("EMOTIONAL INTELLIGENCE" == selItem.Name)
+            catch (Exception)
             {
-
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new GraphPage());
             }
-            else if ("COMMUNITY GEMs" == selItem.Name)
-            {
-
-            }
-            else if (Constants.APPLICATION_SETTTINGS == selItem.Name)
-            {
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new ApplicationSettingsPage());
-            }
-
-            listView.SelectedItem = null; // reset the list selection, other wise the same menu cannot be selected again consecutively.
         }
     }
 }

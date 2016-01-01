@@ -163,6 +163,7 @@
     <None Include="Assets\noimage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\bottom_menu_icon.png" />
     <Content Include="Assets\like.png" />
     <Content Include="Assets\share.png" />
     <Content Include="Assets\comnt_box.png" />
@@ -200,7 +201,6 @@
     <Content Include="Assets\icn_camera.png" />
     <Content Include="Assets\icn_contact.png" />
     <Content Include="Assets\icn_gallery.png" />
-    <Content Include="Assets\icn_list.png" />
     <Content Include="Assets\icn_location.png" />
     <Content Include="Assets\icn_plus.png" />
     <Content Include="Assets\icn_selected.png" />

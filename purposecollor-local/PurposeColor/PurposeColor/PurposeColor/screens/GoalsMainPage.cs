@@ -54,134 +54,138 @@ namespace PurposeColor.screens
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar("Loading gems..");
 
-
-
-            for (int index = 0; index < 3; index++)
+            try
             {
-                StackLayout cellMasterLayout = new StackLayout();
-                cellMasterLayout.Orientation = StackOrientation.Vertical;
-                cellMasterLayout.BackgroundColor = Color.White;
+                for (int index = 0; index < 3; index++)
+                {
+                    StackLayout cellMasterLayout = new StackLayout();
+                    cellMasterLayout.Orientation = StackOrientation.Vertical;
+                    cellMasterLayout.BackgroundColor = Color.White;
 
 
-                StackLayout headerLayout = new StackLayout();
-                headerLayout.Orientation = StackOrientation.Vertical;
-                headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                    StackLayout headerLayout = new StackLayout();
+                    headerLayout.Orientation = StackOrientation.Vertical;
+                    headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 
-                CustomLayout customLayout = new CustomLayout();
-                customLayout.BackgroundColor = Color.White;
-                double screenWidth = App.screenWidth;
-                double screenHeight = App.screenHeight;
+                    CustomLayout customLayout = new CustomLayout();
+                    customLayout.BackgroundColor = Color.White;
+                    double screenWidth = App.screenWidth;
+                    double screenHeight = App.screenHeight;
 
-                CustomImageButton mainTitle = new CustomImageButton();
-                //  mainTitle.IsEnabled = false;
-                mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-                mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                mainTitle.Text = "sample title";
-                mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
-                mainTitle.WidthRequest = App.screenWidth;
-                mainTitle.TextOrientation = TextOrientation.Middle;
-                headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
-                mainTitle.HeightRequest = 80;
-
-
-                Label subTitle = new Label();
-                subTitle.Text = "Sub Title";
-                subTitle.TextColor = Color.Gray;
-                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                subTitle.XAlign = TextAlignment.Center;
-                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                subTitle.VerticalOptions = LayoutOptions.Center;
-                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                headerLayout.HorizontalOptions = LayoutOptions.Center;
-                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
-                Label firstDetailsInfo = new Label();
-                firstDetailsInfo.Text = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
-                //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
-                firstDetailsInfo.TextColor = Color.Gray;
-                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
-                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+                    CustomImageButton mainTitle = new CustomImageButton();
+                    //  mainTitle.IsEnabled = false;
+                    mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
+                    mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
+                    mainTitle.Text = "sample title";
+                    mainTitle.TextColor = Color.White;
+                    mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
+                    mainTitle.WidthRequest = App.screenWidth;
+                    mainTitle.TextOrientation = TextOrientation.Middle;
+                    headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
+                    mainTitle.HeightRequest = 80;
 
 
-          
+                    Label subTitle = new Label();
+                    subTitle.Text = "Sub Title";
+                    subTitle.TextColor = Color.Gray;
+                    subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                    subTitle.XAlign = TextAlignment.Center;
+                    int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+                    subTitle.VerticalOptions = LayoutOptions.Center;
+                    subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
+                    subTitle.WidthRequest = App.screenWidth * 90 / 100;
+                    headerLayout.HorizontalOptions = LayoutOptions.Center;
+                    subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
-                customLayout.WidthRequest = screenWidth;
-             //   customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
+                    Label firstDetailsInfo = new Label();
+                    firstDetailsInfo.Text = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
+                    //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                    firstDetailsInfo.TextColor = Color.Gray;
+                    firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                    firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                    firstDetailsInfo.HeightRequest = 45;
+                    int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
+                    firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
-
-                StackLayout viewContainer = new StackLayout();
-                viewContainer.WidthRequest = App.screenWidth;
-                viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
-                viewContainer.BackgroundColor = Color.White;
-
-
-                headerLayout.Children.Add(mainTitle);
-                headerLayout.Children.Add(subTitle);
-
-                var items = new List<CheckItem>();
-                items.Add(new CheckItem { Name = "Xamarin.com" });
-                items.Add(new CheckItem { Name = "Twitter" });
-                items.Add(new CheckItem { Name = "Facebook" });
-                items.Add(new CheckItem { Name = "Xamarin.com" });
-                items.Add(new CheckItem { Name = "Twitter" });
-                items.Add(new CheckItem { Name = "Facebook" });
-                items.Add(new CheckItem { Name = "Xamarin.com" });
-
-                var multiPage = new SelectMultipleBasePage<CheckItem>(items);
-                multiPage.HeightRequest = items.Count * 50;
-
-              //  customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-                customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                customLayout.AddChildToLayout(multiPage, 5, Device.OnPlatform(-3, 10, 20));
+                    customLayout.WidthRequest = screenWidth;
+                    //   customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
 
 
+                    StackLayout viewContainer = new StackLayout();
+                    viewContainer.WidthRequest = App.screenWidth;
+                    viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
+                    viewContainer.BackgroundColor = Color.White;
 
-                masterStack.Children.Add(headerLayout);
-                masterStack.Children.Add(customLayout);
 
-                // masterStack.Children.Add( cellMasterLayout );
+                    headerLayout.Children.Add(mainTitle);
+                    headerLayout.Children.Add(subTitle);
+
+                    var items = new List<CheckItem>();
+                    items.Add(new CheckItem { Name = "Xamarin.com" });
+                    items.Add(new CheckItem { Name = "Twitter" });
+                    items.Add(new CheckItem { Name = "Facebook" });
+                    items.Add(new CheckItem { Name = "Xamarin.com" });
+                    items.Add(new CheckItem { Name = "Twitter" });
+                    items.Add(new CheckItem { Name = "Facebook" });
+                    items.Add(new CheckItem { Name = "Xamarin.com" });
+
+                    var multiPage = new SelectMultipleBasePage<CheckItem>(items);
+                    multiPage.HeightRequest = items.Count * 50;
+
+                    //  customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
+                    customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
+                    customLayout.AddChildToLayout(multiPage, 5, Device.OnPlatform(-3, 10, 20));
+
+                    masterStack.Children.Add(headerLayout);
+                    masterStack.Children.Add(customLayout);
+
+                    // masterStack.Children.Add( cellMasterLayout );
+                }
+
+                masterScroll.Scrolled += OnScroll;
+                masterScroll.Content = masterStack;
+
+                masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+                //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+                masterLayout.AddChildToLayout(masterScroll, 0, 10);
+                Content = masterLayout;
+
+
             }
-
-
-
-
-            masterScroll.Scrolled += OnScroll;
-            masterScroll.Content = masterStack;
-
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            //  masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 0, 10);
-            Content = masterLayout;
-
-
+            catch (Exception)
+            {
+                
+            }
             progress.HideProgressbar();
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
+            try
+            {
 
-            if (masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307)
-            {
-                if (mainTitleBar.title.Text != "0 th Menu")
-                    mainTitleBar.title.Text = "0 th Menu";
-            }
-            else if (masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610)
-            {
-                if (mainTitleBar.title.Text != "1 th Menu")
-                    mainTitleBar.title.Text = "1 th Menu";
-            }
-            else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
-            {
-                if (mainTitleBar.title.Text != "2 th Menu")
-                    mainTitleBar.title.Text = "2 th Menu";
-            }
+                System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
 
+                if (masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307)
+                {
+                    if (mainTitleBar.title.Text != "0 th Menu")
+                        mainTitleBar.title.Text = "0 th Menu";
+                }
+                else if (masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610)
+                {
+                    if (mainTitleBar.title.Text != "1 th Menu")
+                        mainTitleBar.title.Text = "1 th Menu";
+                }
+                else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
+                {
+                    if (mainTitleBar.title.Text != "2 th Menu")
+                        mainTitleBar.title.Text = "2 th Menu";
+                }
+
+            }
+            catch (Exception)
+            {
+            }
         }
 
         void NextButtonTapRecognizer_Tapped(object sender, EventArgs e)
@@ -196,27 +200,34 @@ namespace PurposeColor.screens
 
         public void ScrollVisibleItems(int visbleIndex)
         {
-
-            if (visbleIndex >= 0 && visbleIndex < gemsList.Count && listViewVislbleIndex != visbleIndex)
+            try
             {
-                GemsPageInfo gems = gemsList[visbleIndex];
 
-                /*if( gems.IsMainTitleVisible )
+                if (visbleIndex >= 0 && visbleIndex < gemsList.Count && listViewVislbleIndex != visbleIndex)
                 {
+                    GemsPageInfo gems = gemsList[visbleIndex];
+
+                    /*if( gems.IsMainTitleVisible )
+                    {
                     
-                }*/
-                if (visbleIndex < 2)
-                {
-                    mainTitleBar.title.Text = "My Supporting Emotions";
+                    }*/
+                    if (visbleIndex < 2)
+                    {
+                        mainTitleBar.title.Text = "My Supporting Emotions";
+                    }
+                    else
+                    {
+                        mainTitleBar.title.Text = "My Goals and Dreams";
+                    }
+
                 }
-                else
-                {
-                    mainTitleBar.title.Text = "My Goals and Dreams";
-                }
+
+                listViewVislbleIndex = visbleIndex;
 
             }
-
-            listViewVislbleIndex = visbleIndex;
+            catch (Exception)
+            {
+            }
         }
     }
 

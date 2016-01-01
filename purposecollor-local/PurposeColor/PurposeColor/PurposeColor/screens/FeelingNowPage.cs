@@ -289,11 +289,13 @@ namespace PurposeColor
                     if (doRetry)
                     {
                         SaveData();
+                        return;
                     }
 				}
 				else
 				{
                     await Navigation.PushModalAsync(new FeelingsSecondPage());
+                    return;
 				}
             }
             catch (System.Exception ex)

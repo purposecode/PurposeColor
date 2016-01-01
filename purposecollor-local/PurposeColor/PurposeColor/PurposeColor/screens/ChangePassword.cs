@@ -27,7 +27,13 @@ namespace PurposeColor.screens
             subTitleBar = new PurposeColorBlueSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Change Password", true, true);
             subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
             {
-                Navigation.PopModalAsync();
+                try
+                {
+                    Navigation.PopModalAsync();
+                }
+                catch (Exception ex)
+                {
+                }
             };
             IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
@@ -92,7 +98,7 @@ namespace PurposeColor.screens
             App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
 
-        async void OnSubmitButtonClicked(object sender, EventArgs e)
+        async void OnSubmitButtonClicked(object sender, EventArgs e)  
         {
             PurposeColor.interfaces.IProgressBar progress = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
             bool isSuccess = false;

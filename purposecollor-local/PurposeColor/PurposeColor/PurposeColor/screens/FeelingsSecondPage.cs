@@ -241,33 +241,31 @@ namespace PurposeColor
 					if (doRetry) 
 					{
 						SaveData ();
+                        return;
 					}
 				} 
 				else 
 				{
-					ILocalNotification notfiy = DependencyService.Get<ILocalNotification> ();
-					notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created");
-                    //App.masterPage.IsPresented = false;
-                    //App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-                    Navigation.PushModalAsync(new FeelingNowPage());
+                    try
+                    {
+                        ILocalNotification notfiy = DependencyService.Get<ILocalNotification> ();
+					    notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created");
+                    }
+                    catch (System.Exception)
+                    {
+                    }
+                    progressBar.HideProgressbar();
+                    await Navigation.PushModalAsync(new FeelingNowPage());
+                    return;
 				}
 			} 
 			catch (Exception ex) 
 			{
-				progressBar.HideProgressbar();
-                if (!isValueSaved)
-                {
-                    DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
-                    this.subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
-                }
-                else
-                {
-                    //App.masterPage.IsPresented = false;
-                    //App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-                    Navigation.PushModalAsync(new FeelingNowPage());
-                }
+                DisplayAlert(Constants.ALERT_TITLE, "Network error, unable to save the detais", "OK");
 			}
-            
+
+            progressBar.HideProgressbar();
+            this.subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
         }
 
         public async void GetstopGetsture(bool pressed)

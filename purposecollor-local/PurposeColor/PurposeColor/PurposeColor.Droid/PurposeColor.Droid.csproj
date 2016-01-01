@@ -484,6 +484,7 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\gem.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\reg_btn.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\bg.png" />
+    <AndroidResource Include="Resources\drawable\bottom_menu_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

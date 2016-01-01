@@ -174,173 +174,185 @@ namespace PurposeColor.screens
 
         async void OnSignInButtonClicked(object sender, EventArgs e)
         {
-            if (String.IsNullOrEmpty(userNameEntry.Text))
+            try
             {
-                await DisplayAlert(Constants.ALERT_TITLE, "Please provide username.", Constants.ALERT_OK);
-                return;
-            }
-
-            #region FOR TESTING
-
-            if (userNameEntry.Text == "apptester")
-            {
-                App.IsTesting = true;
-                bool userSaved = await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
-                if (!userSaved)
+                if (String.IsNullOrEmpty(userNameEntry.Text))
                 {
-                    await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please provide username.", Constants.ALERT_OK);
+                    return;
                 }
-                App.masterPage.IsPresented = false;
-                App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-                //if (Device.OS != TargetPlatform.WinPhone)
-                //{
-                //    Navigation.RemovePage(this);
-                //}
-                
-                return;
-            }
-            else
-            {
-                App.IsTesting = false;
-            }
-            
-            #endregion
-            System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString,System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            System.Text.RegularExpressions.Match match = regex.Match(userNameEntry.Text);
-            if (!match.Success)
-            {
-                await DisplayAlert(Constants.ALERT_TITLE, "Username will be same as your valid email address.", Constants.ALERT_OK);
-                return;
-            }
 
-            if (String.IsNullOrEmpty(passwordEntry.Text))
-            {
-                await DisplayAlert(Constants.ALERT_TITLE, "Please provide password.", Constants.ALERT_OK);
-                return;
-            }
-//            else if (!String.IsNullOrEmpty(passwordEntry.Text) && passwordEntry.Text.Length < 6)
-//            {
-//                await DisplayAlert(Constants.ALERT_TITLE, "Password must be of minimum 6 characters length.", Constants.ALERT_OK);
-//                return;
-//            }
+                #region FOR TESTING
 
-            #region SERVIDE
-            if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
-            {
-
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowProgressbar("Signing in..");
-
-                try
+                if (userNameEntry.Text == "apptester")
                 {
-                    bool isSaveSuccess = false;
-                    var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
-                    if (serviceResult.code != null && serviceResult.code == "200")
+                    App.IsTesting = true;
+                    bool userSaved = await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
+                    if (!userSaved)
                     {
-                        var loggedInUser = serviceResult.resultarray;
-                        if (loggedInUser != null)
+                        await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
+                    }
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                    return;
+                }
+                else
+                {
+                    App.IsTesting = false;
+                }
+
+                #endregion
+
+                System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(Constants.emailRegexString, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                System.Text.RegularExpressions.Match match = regex.Match(userNameEntry.Text);
+                if (!match.Success)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Username will be same as your valid email address.", Constants.ALERT_OK);
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(passwordEntry.Text))
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Please provide password.", Constants.ALERT_OK);
+                    return;
+                }
+
+                #region SERVIDE
+                if (!String.IsNullOrEmpty(userNameEntry.Text) && !String.IsNullOrEmpty(passwordEntry.Text))
+                {
+
+                    IProgressBar progress = DependencyService.Get<IProgressBar>();
+                    progress.ShowProgressbar("Signing in..");
+
+                    try
+                    {
+                        bool isSaveSuccess = false;
+                        var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
+                        if (serviceResult.code != null && serviceResult.code == "200")
                         {
-                            User newUser = null;
-                            if (!string.IsNullOrEmpty(loggedInUser.email))
+                            var loggedInUser = serviceResult.resultarray;
+                            if (loggedInUser != null)
                             {
-                                newUser = await App.Settings.GetUserWithUserName(loggedInUser.email);
-                            }
+                                User newUser = null;
+                                if (!string.IsNullOrEmpty(loggedInUser.email))
+                                {
+                                    newUser = await App.Settings.GetUserWithUserName(loggedInUser.email);
+                                }
 
-                            if (newUser == null)
+                                if (newUser == null)
+                                {
+                                    newUser = new User();
+                                }
+
+                                newUser.StatusNote = string.IsNullOrEmpty(loggedInUser.note) ? string.Empty : loggedInUser.note;
+                                newUser.DisplayName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
+                                newUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
+                                newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
+                                newUser.UserId = loggedInUser.user_id;
+
+                                if (loggedInUser.usertype_id != null)
+                                {
+                                    newUser.UserType = int.Parse(loggedInUser.usertype_id);
+                                }
+                                if (loggedInUser.regdate != null)
+                                {
+                                    //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
+                                    newUser.RegistrationDate = loggedInUser.regdate;
+                                }
+
+                                isSaveSuccess = await App.Settings.SaveUser(newUser);
+
+                                PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
+                                globalSettings.ShowRegistrationScreen = false;
+                                globalSettings.IsLoggedIn = true;
+                                globalSettings.IsFirstLogin = true;
+                                await App.Settings.SaveAppGlobalSettings(globalSettings);
+
+                                progress.HideProgressbar();
+                                App.masterPage.IsPresented = false;
+                                App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                                //if (Device.OS != TargetPlatform.WinPhone)
+                                //{
+                                //    Navigation.RemovePage(this);
+                                //}
+                            }
+                            else
                             {
-                                newUser = new User();
+                                progress.HideProgressbar();
+                                await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
+                                App.masterPage.IsPresented = false;
+                                App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                                //if (Device.OS != TargetPlatform.WinPhone)
+                                //{
+                                //    Navigation.RemovePage(this);
+                                //}
                             }
-
-                            newUser.StatusNote = string.IsNullOrEmpty(loggedInUser.note) ? string.Empty : loggedInUser.note;
-                            newUser.DisplayName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
-                            newUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
-                            newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
-                            newUser.UserId = loggedInUser.user_id;
-
-                            if (loggedInUser.usertype_id != null)
-                            {
-                                newUser.UserType = int.Parse(loggedInUser.usertype_id);
-                            }
-                            if (loggedInUser.regdate != null)
-                            {
-                                //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
-                                newUser.RegistrationDate = loggedInUser.regdate;
-                            }
-
-                            isSaveSuccess = await App.Settings.SaveUser(newUser);
-
-                            PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
-                            globalSettings.ShowRegistrationScreen = false;
-                            globalSettings.IsLoggedIn = true;
-                            globalSettings.IsFirstLogin = true;
-                            await App.Settings.SaveAppGlobalSettings(globalSettings);
-
-                            progress.HideProgressbar();
-                            App.masterPage.IsPresented = false;
-                            App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-                            //if (Device.OS != TargetPlatform.WinPhone)
-                            //{
-                            //    Navigation.RemovePage(this);
-                            //}
                         }
                         else
                         {
                             progress.HideProgressbar();
-                            await DisplayAlert(Constants.ALERT_TITLE, "Network error. Could not retrive user details.", Constants.ALERT_OK);
-                            App.masterPage.IsPresented = false;
-                            App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
-                            //if (Device.OS != TargetPlatform.WinPhone)
-                            //{
-                            //    Navigation.RemovePage(this);
-                            //}
+                            await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again.", Constants.ALERT_OK);
+                            return;
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
                         progress.HideProgressbar();
-                        await DisplayAlert(Constants.ALERT_TITLE, "Could not login. Username password does not match, Please try again.", Constants.ALERT_OK);
-                        return;
+                        DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again.", Constants.ALERT_OK);
+                        Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
                     }
-                }
-                catch (Exception ex)
-                {
                     progress.HideProgressbar();
-                    DisplayAlert(Constants.ALERT_TITLE, "Network error, Please try again.", Constants.ALERT_OK);
-                    Debug.WriteLine("OnSignInButtonClicked: " + ex.Message);
                 }
-                progress.HideProgressbar();
+
+                #endregion
+
             }
-
-            #endregion
-
+            catch (Exception)
+            {
+            }
 
         }
 
         void OnGoogleSignInButtonClicked(object sender, EventArgs e)
         {
-            IProgressBar progress = DependencyService.Get<IProgressBar>();
-            // progress.ShowProgressbar(true, "Loading..");
-            App.IsGoogleLogin = true;
+            try
+            {
 
-            if (Device.OS != TargetPlatform.WinPhone)
-            {
-                //Navigation.PushModalAsync(new LoginGooglePage());
-                Navigation.PushModalAsync(new LoginWebViewHolder());
+                IProgressBar progress = DependencyService.Get<IProgressBar>();
+                // progress.ShowProgressbar(true, "Loading..");
+                App.IsGoogleLogin = true;
+
+                if (Device.OS != TargetPlatform.WinPhone)
+                {
+                    //Navigation.PushModalAsync(new LoginGooglePage());
+                    Navigation.PushModalAsync(new LoginWebViewHolder());
+                }
+                else
+                {
+                    IAuthenticate winGoogle = DependencyService.Get<IAuthenticate>();
+                    winGoogle.AutheticateGoogle();
+                    Navigation.PushModalAsync(new ChangePassword());
+                }
+                // progress.ShowProgressbar(false, "Loading..");
+
             }
-            else
+            catch (Exception)
             {
-                IAuthenticate winGoogle = DependencyService.Get<IAuthenticate>();
-                winGoogle.AutheticateGoogle();
-                Navigation.PushModalAsync(new ChangePassword());
+                
             }
-            // progress.ShowProgressbar(false, "Loading..");
         }
 
         void faceBookSignInButton_Clicked(object sender, EventArgs e)
         {
-            App.IsFacebookLogin = true;
-            App.IsGoogleLogin = false;
-            Navigation.PushModalAsync(new LoginWebViewHolder());
+            try
+            {
+                App.IsFacebookLogin = true;
+                App.IsGoogleLogin = false;
+                Navigation.PushModalAsync(new LoginWebViewHolder());
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         public void Dispose()

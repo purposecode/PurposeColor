@@ -108,7 +108,11 @@ namespace PurposeColor
                     bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
                     string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     Image img = new Image();
+                    img.WidthRequest = App.screenWidth * 90 / 100;
+                    img.HeightRequest = App.screenWidth * 90 / 100;
+                    img.Aspect = Aspect.AspectFill;
                     img.Source = source;
+                    img.ClassId = source;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;

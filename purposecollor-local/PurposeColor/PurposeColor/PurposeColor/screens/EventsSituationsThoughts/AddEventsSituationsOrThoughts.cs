@@ -1418,7 +1418,9 @@ namespace PurposeColor.screens
                 {
                     MemoryStream compressedStream = new MemoryStream();
                     IResize resize = DependencyService.Get<IResize>();
-                    compressedStream = resize.CompessImage(25, ms);
+                    Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenWidth * App.screenDensity));
+                    MemoryStream resizedStream = new MemoryStream(resizedOutput);
+                    compressedStream = resize.CompessImage(25, resizedStream);
 
                     Byte[] inArray = compressedStream.ToArray();
                     Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
@@ -1434,6 +1436,7 @@ namespace PurposeColor.screens
                     outArray = null;
                     test2 = null;
                     item = null;
+                    resizedOutput = null;
                     GC.Collect();
                 }
                 else

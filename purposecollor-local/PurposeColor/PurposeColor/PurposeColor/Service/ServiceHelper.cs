@@ -1246,5 +1246,66 @@ namespace PurposeColor.Service
             return "400";
         }
 
+        public static async Task<string> AddComment(string userId, string goalEventId, string commentTxt, string shareComment)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "400";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=addcomments";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                if (!string.IsNullOrEmpty(goalEventId))
+                {
+                    content.Add(new StringContent(goalEventId, Encoding.UTF8), "goal_id");
+                }
+
+                if (!string.IsNullOrEmpty(commentTxt))
+                {
+                    content.Add(new StringContent(commentTxt, Encoding.UTF8), "comment_txt");
+                }
+
+                if (!string.IsNullOrEmpty(shareComment))
+                {
+                    content.Add(new StringContent(shareComment, Encoding.UTF8), "share_comment");
+                }
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    content.Add(new StringContent(userId, Encoding.UTF8), "user_id");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "400";
+        }
+
     }
 }

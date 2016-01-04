@@ -46,17 +46,21 @@ namespace PurposeColor.CustomControls
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
-            if (Device.OS == TargetPlatform.WinPhone)
-            {
-                backArrow.HeightRequest = screenWidth * 6 / 100;
-                backArrow.WidthRequest = screenWidth * 6 / 100;
-            }
+            
 
             title = new Label();
             title.Text = titleValue;
             title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             title.FontSize = Device.OnPlatform(17, 20, 22);
             title.TextColor = Color.FromRgb( 30, 127, 210 );
+
+            Image imgDivider = new Image();
+            imgDivider.Source = Device.OnPlatform("icn_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
+            if (Device.OS != TargetPlatform.iOS)
+            {
+                masterLayout.AddChildToLayout(imgDivider, 83, Device.OnPlatform(26, 26, 22), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            }
+            
 
             Image nextImage = new Image();
             nextImage.Source = Device.OnPlatform("tick_blue.png", "tick_blue.png", "//Assets//tick_blue.png");
@@ -65,9 +69,15 @@ namespace PurposeColor.CustomControls
 
             if (Device.OS == TargetPlatform.WinPhone)
             {
+                backArrow.HeightRequest = screenHeight * 4 / 100;
+                backArrow.WidthRequest = screenWidth * 8 / 100;
+
+                nextImage.HeightRequest = screenHeight * 6 / 100;
                 nextImage.WidthRequest = screenWidth * 10 / 100;
-                nextImage.HeightRequest = screenWidth * 10 / 100;
+
+                imgDivider.HeightRequest = screenHeight * 4 / 100;
             }
+         
 
             //masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(18, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
@@ -84,7 +94,7 @@ namespace PurposeColor.CustomControls
 
             if (backButtonVisible)
             {
-                masterLayout.AddChildToLayout(backArrow, 5, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(backArrow, 5, Device.OnPlatform(25, 25, 20), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             Content = masterLayout;

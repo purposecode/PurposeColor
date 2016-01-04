@@ -23,8 +23,9 @@ namespace PurposeColor
         Label description;
         List<EventMedia> mediaList { get; set; }
         List<ActionMedia> actionMediaList { get; set; }
+        List<string> CommentsList = null;
 
-        public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia)
+        public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string GoalEventId)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
@@ -40,6 +41,8 @@ namespace PurposeColor
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+
+            CommentsList = new List<string>();
 
             Label pageTitle = new Label();
             pageTitle.Text = pageTitleVal;
@@ -59,9 +62,9 @@ namespace PurposeColor
 
             StackLayout toolsLayout = new StackLayout();
             toolsLayout.BackgroundColor = Color.White;
-            toolsLayout.Spacing = 10;
+            toolsLayout.Spacing = 5;
             toolsLayout.Orientation = StackOrientation.Horizontal;
-            toolsLayout.WidthRequest = App.screenWidth * 90 / 100;
+            toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
             toolsLayout.Padding = new Thickness(10, 0, 10, 0);
             toolsLayout.TranslationY = -55;
             //toolsLayout.HeightRequest = 100;
@@ -79,12 +82,109 @@ namespace PurposeColor
             CustomEntry comment = new CustomEntry();
             comment.BackGroundImageName = Device.OnPlatform("comnt_box.png", "comnt_box.png", "//Assets//comnt_box.png");
             comment.BackgroundColor = Color.White;
-            comment.Placeholder = "comments";
+            comment.Placeholder = "Add comments";
             comment.WidthRequest = App.screenWidth * 70 / 100;
+            comment.HeightRequest = Device.OnPlatform(50, 50, 73);
 
             toolsLayout.Children.Add(likeButton);
             toolsLayout.Children.Add(shareButton);
             toolsLayout.Children.Add(comment);
+            
+            #region POST COMMENT
+            Label postLabel = new Label
+            {
+                Text = "post",
+                TextColor = Constants.BLUE_BG_COLOR,
+                BackgroundColor = Color.Transparent,
+                FontSize = Device.OnPlatform(12, 12, 15),
+                HeightRequest = Device.OnPlatform(15, 25, 25),
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Center
+            };
+            toolsLayout.Children.Add(postLabel);
+            TapGestureRecognizer postTap = new TapGestureRecognizer();
+            bool isPosting = false;
+
+            postTap.Tapped += async (s, e) =>
+            {
+                try
+                {
+                    if (isPosting == true)
+                    {
+                        return;
+                    }
+
+                    isPosting = true;
+
+                    if (!string.IsNullOrWhiteSpace(comment.Text))
+                    {
+                        User user = App.Settings.GetUser();
+
+                        ////////////// for testing  //test //////////////
+                        user = new User
+                        {
+                            UserId = 2,
+                            ShareToCommunity = 1,
+                        };
+                        ////////////// for testing  //test //////////////
+
+                        if (user == null)
+                        {
+                            isPosting = false;
+                            return;
+                        }
+
+                        string statusCode = await PurposeColor.Service.ServiceHelper.AddComment(user.UserId.ToString(), GoalEventId, comment.Text.Trim(), user.ShareToCommunity.ToString());
+                        if (statusCode == "200")
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, "Comment saved", Constants.ALERT_OK);
+                            isPosting = false;
+                            if (CommentsList == null)
+                            {
+                                CommentsList = new List<string>();
+                            }
+                            CommentsList.Add(comment.Text.Trim());
+                            comment.Text = string.Empty;
+
+                            //// add the comment as a label below the image ///
+
+
+                        }
+                        else
+                        {
+                            await DisplayAlert(Constants.ALERT_TITLE, "Could not save the comment now, please try again later", Constants.ALERT_OK);
+                        }
+                    }
+                    else
+                    {
+                        isPosting = false;
+                    }
+
+                }
+                catch (Exception)
+                {
+                    isPosting = false;
+                }
+            };
+            postLabel.GestureRecognizers.Add(postTap);
+            //StackLayout commentContainer = new StackLayout
+            //{
+            //    Orientation = StackOrientation.Vertical,
+            //    VerticalOptions = LayoutOptions.Center,
+            //    HorizontalOptions = LayoutOptions.Center,
+            //    BackgroundColor = Color.Transparent,
+            //    Spacing = 1,
+            //    HeightRequest = 70,
+            //    Children =
+            //    {
+            //        comment,
+            //        postLabel
+            //    }
+            //};
+            //toolsLayout.Children.Add(commentContainer);
+
+            
+            #endregion
 
             title = new Label();
             title.Text = titleVal;
@@ -102,6 +202,8 @@ namespace PurposeColor
             masterStack.Children.Add(title);
             masterStack.Children.Add(description);
 
+            #region MEDIA LIST
+
             if (mediaList != null)
             {
                 for (int index = 0; index < mediaList.Count; index++)
@@ -111,14 +213,14 @@ namespace PurposeColor
                     bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
                     string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
-                    bool isImage =  (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     Image img = new Image();
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
                     img.Aspect = Aspect.AspectFill;
                     img.Source = (isImage) ? source : "video.png";
                     img.GestureRecognizers.Add(videoTap);
-                    img.ClassId = ( !isImage ) ? source : null;
+                    img.ClassId = (!isImage) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
@@ -133,7 +235,7 @@ namespace PurposeColor
                 {
                     TapGestureRecognizer videoTap = new TapGestureRecognizer();
                     videoTap.Tapped += OnActionVideoTapped;
-                 
+
                     Image img = new Image();
                     bool isValidUrl = (actionMediaList[index].event_media != null && !string.IsNullOrEmpty(actionMediaList[index].event_media)) ? true : false;
                     string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
@@ -150,12 +252,16 @@ namespace PurposeColor
                     indicator.BindingContext = img;
                     masterStack.Children.Add(indicator);
                     masterStack.Children.Add(img);
-                    masterStack.Children.Add(img);
+                    //masterStack.Children.Add(img);
                 }
             }
+            
+            #endregion
 
             masterStack.Children.Add(emptyLayout);
             masterStack.Children.Add(toolsLayout);
+
+           
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
@@ -182,6 +288,7 @@ namespace PurposeColor
                 };*/
         }
 
+
         void OnActionVideoTapped(object sender, EventArgs e)
         {
             Image img = sender as Image;
@@ -200,10 +307,10 @@ namespace PurposeColor
         void OnEventVideoTapped(object sender, EventArgs e)
         {
             Image img = sender as Image;
-            if( img != null )
+            if (img != null)
             {
                 string fileName = Path.GetFileName(img.ClassId);
-                if( fileName != null )
+                if (fileName != null)
                 {
                     Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager>();
                     download.Download(img.ClassId, fileName);
@@ -213,7 +320,7 @@ namespace PurposeColor
 
         }
 
-		protected override bool OnBackButtonPressed ()
+        protected override bool OnBackButtonPressed ()
 		{
 			Dispose ();
 			return base.OnBackButtonPressed ();

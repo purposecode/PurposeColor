@@ -121,7 +121,7 @@ namespace PurposeColor.screens
             if (title.Length > titleMaxLength)
             {
                 trimmedPageTitle = title.Substring(0, titleMaxLength);
-                trimmedPageTitle += "...";
+                trimmedPageTitle += "..";
             }
             else
             {
@@ -143,7 +143,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White,
                 Placeholder = "Title",
                 TextColor = Color.FromHex("#424646"),
-                HeightRequest = 50,
+                HeightRequest = Device.OnPlatform(50,50,73),
                 WidthRequest = (int)(devWidth * .90) // 90% of screen,
             };
 

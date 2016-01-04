@@ -17,13 +17,16 @@ namespace PurposeColor.CustomControls
         public TapGestureRecognizer NextButtonTapRecognizer;
         public CustomImageButton NextButton;
         public Label title;
+        double screenHeight;
+        double screenWidth;
 
         public PurposeColorSubTitleBar(Color backGroundColor, string titleValue, bool nextButtonVisible = true, bool backButtonVisible = true )
         {
-            Cross.IDeviceSpec spec = DependencyService.Get<Cross.IDeviceSpec>();
             int titlebarHeight = (int)App.screenHeight * 7 / 100;
             int titlebarWidth = (int)App.screenWidth;
             this.BackgroundColor = backGroundColor;
+            screenHeight = App.screenHeight;
+            screenWidth = App.screenWidth;
 
             masterLayout = new CustomLayout();
             masterLayout.HeightRequest = titlebarHeight;
@@ -41,11 +44,7 @@ namespace PurposeColor.CustomControls
             BackButtonTapRecognizer = new TapGestureRecognizer();
             backArrow.GestureRecognizers.Add(BackButtonTapRecognizer);
 
-            if( Device.OS == TargetPlatform.WinPhone )
-            {
-                backArrow.HeightRequest = spec.ScreenWidth * 6 / 100;
-                backArrow.WidthRequest = spec.ScreenWidth * 6 / 100;
-            }
+            
 
             Image imgDivider = new Image();
 			imgDivider.Source = Device.OnPlatform("icn_seperate.png", "icn_seperate.png", "//Assets//top_seperate.png");
@@ -72,16 +71,23 @@ namespace PurposeColor.CustomControls
 
             if( Device.OS == TargetPlatform.WinPhone )
             {
-                nextImage.WidthRequest = spec.ScreenWidth * 6 / 100;
-                nextImage.HeightRequest = spec.ScreenWidth * 6 / 100;
-            }
+                backArrow.HeightRequest = screenHeight * 4 / 100;
+                backArrow.WidthRequest = screenWidth * 8 / 100;
 
+                nextImage.HeightRequest = screenHeight * 2 / 100;
+                nextImage.WidthRequest = screenWidth * 10 / 100;
+
+                imgDivider.HeightRequest = screenHeight * 4 / 100;
+            }
+            
 
            // masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             //masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(18, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            if( Device.OS == TargetPlatform.Android )
-            masterLayout.AddChildToLayout(imgDivider, 83, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            if (Device.OS != TargetPlatform.iOS)
+            {
+                masterLayout.AddChildToLayout(imgDivider, 83, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            }
 
 
             if( nextButtonVisible )
@@ -91,13 +97,13 @@ namespace PurposeColor.CustomControls
                 touchArea.HeightRequest = App.screenHeight * 8 / 100;
                 touchArea.BackgroundColor = Color.Transparent;
                 touchArea.GestureRecognizers.Add(NextButtonTapRecognizer);
-                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(87, 89, 85), Device.OnPlatform(10, 40, 25), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(nextImage, Device.OnPlatform(87, 89, 85), Device.OnPlatform(10, 40, 38), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
                 masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 75), Device.OnPlatform(10, 2, 15), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             if (backButtonVisible)
             {
-                masterLayout.AddChildToLayout(backArrow, 5, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+                masterLayout.AddChildToLayout(backArrow, 5, Device.OnPlatform(25, 25,20), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             }
 
             Content = masterLayout;

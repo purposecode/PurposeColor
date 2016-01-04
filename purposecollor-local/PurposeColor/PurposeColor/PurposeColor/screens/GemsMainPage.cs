@@ -541,7 +541,7 @@ namespace PurposeColor.screens
 			//	title = emotionList.eve
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl));
+					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id));
 				}
 			} 
 			else
@@ -592,7 +592,7 @@ namespace PurposeColor.screens
 
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync (new GemsDetailsPage (null, media,"", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl));
+                    await App.Navigator.PushModalAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id));
 				}
 			}
 			else

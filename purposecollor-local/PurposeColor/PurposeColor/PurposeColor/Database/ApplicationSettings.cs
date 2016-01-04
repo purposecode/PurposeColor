@@ -138,6 +138,7 @@ namespace PurposeColor.Database
                 newUser.Country = user.Country;
                 newUser.UserId = user.UserId;
                 newUser.UserType = user.UserType;
+				newUser.ShareToCommunity = user.ShareToCommunity;
 
                 if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
                 {

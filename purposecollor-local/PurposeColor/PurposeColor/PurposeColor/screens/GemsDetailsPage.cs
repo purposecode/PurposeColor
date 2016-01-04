@@ -8,6 +8,8 @@ using PurposeColor.Model;
 using System.Collections.Generic;
 using PurposeColor.CustomControls;
 using System.Diagnostics;
+using Xam.Plugin.DownloadManager.Abstractions;
+using System.IO;
 
 namespace PurposeColor
 {
@@ -104,15 +106,19 @@ namespace PurposeColor
             {
                 for (int index = 0; index < mediaList.Count; index++)
                 {
-
+                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
+                    videoTap.Tapped += OnEventVideoTapped;
                     bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
                     string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string fileExtenstion = Path.GetExtension(source);
+                    bool isImage =  (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     Image img = new Image();
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
                     img.Aspect = Aspect.AspectFill;
-                    img.Source = source;
-                    img.ClassId = source;
+                    img.Source = (isImage) ? source : "video.png";
+                    img.GestureRecognizers.Add(videoTap);
+                    img.ClassId = ( !isImage ) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
@@ -125,10 +131,20 @@ namespace PurposeColor
             {
                 for (int index = 0; index < actionMediaList.Count; index++)
                 {
+                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
+                    videoTap.Tapped += OnActionVideoTapped;
+                 
                     Image img = new Image();
                     bool isValidUrl = (actionMediaList[index].event_media != null && !string.IsNullOrEmpty(actionMediaList[index].event_media)) ? true : false;
-                    img.Source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
-                    img.Aspect = Aspect.AspectFit;
+                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string fileExtenstion = Path.GetExtension(source);
+                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+                    img.WidthRequest = App.screenWidth * 90 / 100;
+                    img.HeightRequest = App.screenWidth * 90 / 100;
+                    img.Aspect = Aspect.AspectFill;
+                    img.Source = (isImage) ? source : "video.png";
+                    img.GestureRecognizers.Add(videoTap);
+                    img.ClassId = (!isImage) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
@@ -164,6 +180,37 @@ namespace PurposeColor
                     WidthRequest = 500,
                     HeightRequest = 900
                 };*/
+        }
+
+        void OnActionVideoTapped(object sender, EventArgs e)
+        {
+            Image img = sender as Image;
+            if (img != null)
+            {
+                string fileName = Path.GetFileName(img.ClassId);
+                if (fileName != null)
+                {
+                    Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager>();
+                    download.Download(img.ClassId, fileName);
+                }
+
+            }
+        }
+
+        void OnEventVideoTapped(object sender, EventArgs e)
+        {
+            Image img = sender as Image;
+            if( img != null )
+            {
+                string fileName = Path.GetFileName(img.ClassId);
+                if( fileName != null )
+                {
+                    Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager>();
+                    download.Download(img.ClassId, fileName);
+                }
+
+            }
+
         }
 
 		protected override bool OnBackButtonPressed ()

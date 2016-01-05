@@ -209,6 +209,7 @@
     <Compile Include="Dependency\AndroidContactsImpl.cs" />
     <Compile Include="Dependency\AndroidLocalNotificationImpl.cs" />
     <Compile Include="Dependency\AndroidResize.cs" />
+    <Compile Include="Dependency\AndroidVideoPlayer.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
     <Compile Include="Dependency\DeviceCommunications.cs" />
@@ -216,6 +217,7 @@
     <Compile Include="Dependency\GoogleAuthenticator.cs" />
     <Compile Include="Dependency\ProgressbarImpl.cs" />
     <Compile Include="DeviceServices\SMSService.cs" />
+    <Compile Include="DownloadRecevier.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Dependency\AndroidReminderImpl.cs" />
     <Compile Include="MainApplication.cs" />
@@ -291,7 +293,9 @@
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />
     <Content Include="PluginsHelp\CrossActivityReadme.txt" />
     <Content Include="PluginsHelp\PermissionsReadme.txt" />
-    <Content Include="Properties\AndroidManifest.xml" />
+    <Content Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <AndroidResource Include="Resources\drawable\splash.png" />
     <AndroidResource Include="Resources\values\Styles.xml" />
     <AndroidResource Include="Resources\drawable\circle.png" />

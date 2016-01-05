@@ -301,16 +301,11 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-					if (Device.OS == TargetPlatform.Android) 
-					{
-						Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager> ();
-						download.Download (img.ClassId, fileName);
-					}
-					else if (Device.OS == TargetPlatform.iOS) 
-					{
-						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
-						videoDownload.Download ( img.ClassId, fileName );
-					}
+                    if (Device.OS != TargetPlatform.WinPhone)
+                    {
+                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                        videoDownload.Download(img.ClassId, fileName);
+                    }
 
                 }
 
@@ -325,15 +320,10 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-					if (Device.OS == TargetPlatform.Android) 
+					if (Device.OS  != TargetPlatform.WinPhone ) 
 					{
-						Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager> ();
-						download.Download (img.ClassId, fileName);
-					}
-					else if (Device.OS == TargetPlatform.iOS) 
-					{
-						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
-						videoDownload.Download ( img.ClassId, fileName );
+                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                        videoDownload.Download(img.ClassId, fileName);
 					}
                 }
 

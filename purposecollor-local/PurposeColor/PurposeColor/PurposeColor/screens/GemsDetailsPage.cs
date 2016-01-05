@@ -41,6 +41,10 @@ namespace PurposeColor
 
             PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+			subTitleBar.BackButtonTapRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				Navigation.PopAsync();
+			};
 
             CommentsList = new List<string>();
 
@@ -297,8 +301,17 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager>();
-                    download.Download(img.ClassId, fileName);
+					if (Device.OS == TargetPlatform.Android) 
+					{
+						Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager> ();
+						download.Download (img.ClassId, fileName);
+					}
+					else if (Device.OS == TargetPlatform.iOS) 
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download ( img.ClassId, fileName );
+					}
+
                 }
 
             }
@@ -312,8 +325,16 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager>();
-                    download.Download(img.ClassId, fileName);
+					if (Device.OS == TargetPlatform.Android) 
+					{
+						Xam.Plugin.DownloadManager.Abstractions.IDownloadManager download = DependencyService.Get<IDownloadManager> ();
+						download.Download (img.ClassId, fileName);
+					}
+					else if (Device.OS == TargetPlatform.iOS) 
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download ( img.ClassId, fileName );
+					}
                 }
 
             }

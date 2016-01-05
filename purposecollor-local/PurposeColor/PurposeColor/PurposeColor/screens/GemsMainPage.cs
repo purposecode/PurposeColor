@@ -541,7 +541,7 @@ namespace PurposeColor.screens
 			//	title = emotionList.eve
 				if (media != null) 
 				{
-					await App.Navigator.PushModalAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id));
+					await Navigation.PushAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id));
 				}
 			} 
 			else
@@ -592,7 +592,7 @@ namespace PurposeColor.screens
 
 				if (media != null) 
 				{
-                    await App.Navigator.PushModalAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id));
+					await Navigation.PushAsync (new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id));
 				}
 			}
 			else
@@ -606,7 +606,7 @@ namespace PurposeColor.screens
             Button btn = sender as Button;
             GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
 
-            await Navigation.PushModalAsync(new GemsMoreDetailsPage(emotionDetailsList, null, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath, gemsEmotionsObject.noimageurl, null, null, null));
+			await Navigation.PushAsync(new GemsMoreDetailsPage(emotionDetailsList, null, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath, gemsEmotionsObject.noimageurl, null, null, null));
         }
 
 		async  void OnGoalsMore (object sender, EventArgs e)
@@ -614,7 +614,7 @@ namespace PurposeColor.screens
 			Button btn = sender as Button;
 			GemsGoalsDetails goalsDetailsList = gemsGoalsObject.resultarray.FirstOrDefault(item => item.goal_id == btn.ClassId);
 
-            await Navigation.PushModalAsync(new GemsMoreDetailsPage(null, goalsDetailsList, null, null, null, gemsGoalsObject.mediapath, gemsGoalsObject.mediathumbpath, gemsGoalsObject.noimageurl));
+			await Navigation.PushAsync(new GemsMoreDetailsPage(null, goalsDetailsList, null, null, null, gemsGoalsObject.mediapath, gemsGoalsObject.mediathumbpath, gemsGoalsObject.noimageurl));
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

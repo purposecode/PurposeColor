@@ -181,7 +181,11 @@ namespace PurposeColor.screens
                     List<EventMedia> firstThumbMedia = emotionsMasterList.event_media.FindAll(itm => itm.event_id == eventID).ToList();
                     bool firstImageValidity = (firstThumbMedia != null && firstThumbMedia.Count > 0 && !string.IsNullOrEmpty(firstThumbMedia[0].event_media)) ? true : false;
                     string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + firstThumbMedia[0].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
-					firstEmotionsImage.Source = Device.OnPlatform (firstImageSource, firstImageSource, firstImageSource);
+                    if ( firstThumbMedia != null && firstThumbMedia[0].media_type == "mp4")
+                    {
+                        firstImageSource =  Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
+                    firstEmotionsImage.Source = firstImageSource;
 					firstEmotionsImage.ClassId = emotionsMasterList.event_details [index].event_id;
 					firstEmotionsImage.GestureRecognizers.Add (  tap);
 					firstEmotionsImage.Aspect = Aspect.Fill;
@@ -293,10 +297,14 @@ namespace PurposeColor.screens
 					firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform (25, 22, 18) / 100;
 					firstEmotionsImage.ClassId = goalsMasterList.action_details [index].goalaction_id;
                     string actionID = goalsMasterList.action_details[index].goalaction_id;
-                    List<ActionMedia> SecondThumbMedia = goalsMasterList.action_media.FindAll(itm => itm.goalaction_id == actionID).ToList();
+                    List<ActionMedia> FirstThumbMedia = goalsMasterList.action_media.FindAll(itm => itm.goalaction_id == actionID).ToList();
 					firstEmotionsImage.GestureRecognizers.Add ( tap );
-                    bool firstImageValidity = (SecondThumbMedia != null && SecondThumbMedia.Count > 0 && !string.IsNullOrEmpty(SecondThumbMedia[0].event_media)) ? true : false;
-                    string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + goalsMediaThumbPath + SecondThumbMedia[0].event_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
+                    bool firstImageValidity = (FirstThumbMedia != null && FirstThumbMedia.Count > 0 && !string.IsNullOrEmpty(FirstThumbMedia[0].action_media)) ? true : false;
+                    string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + goalsMediaThumbPath + FirstThumbMedia[0].action_media : Constants.SERVICE_BASE_URL + goalsNoMediaPath;
+                    if ( FirstThumbMedia!= null && FirstThumbMedia[0].media_type == "mp4")
+                    {
+                        firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
 

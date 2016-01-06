@@ -26,8 +26,9 @@ namespace PurposeColor.Model
 
 	public class EventMedia
 	{
-		public string event_id { get; set; }
-		public string event_media { get; set; }
+        public string event_id { get; set; }
+        public string media_type { get; set; }
+        public string event_media { get; set; }
 	}
 
     public class GemsEmotionsDetails
@@ -70,8 +71,9 @@ namespace PurposeColor.Model
 
 	public class ActionMedia
 	{
-		public string goalaction_id { get; set; }
-		public string event_media { get; set; }
+        public string goalaction_id { get; set; }
+        public string media_type { get; set; }
+        public string action_media { get; set; }
 	}
 
     public class GemsGoalsDetails

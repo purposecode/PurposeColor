@@ -498,6 +498,12 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\bg.png" />
     <AndroidResource Include="Resources\drawable\bottom_menu_icon.png" />
     <AndroidResource Include="Resources\drawable\audio.png" />
+    <AndroidResource Include="Resources\drawable\favoriteIcon.png" />
+    <AndroidResource Include="Resources\drawable\icon_cmnt.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon_cmnt.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon_cmnt.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon_cmnt.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\icon_cmnt.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

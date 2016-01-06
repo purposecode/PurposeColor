@@ -1246,7 +1246,7 @@ namespace PurposeColor.Service
             return "400";
         }
 
-        public static async Task<string> AddComment(string userId, string goalEventId, string commentTxt, string shareComment)
+        public static async Task<string> AddComment(string userId, string commentTxt, string shareComment, string goalId, string eventId, string actionId)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
@@ -1265,9 +1265,17 @@ namespace PurposeColor.Service
 
                 MultipartFormDataContent content = new MultipartFormDataContent();
 
-                if (!string.IsNullOrEmpty(goalEventId))
+                if (!string.IsNullOrEmpty(goalId))
                 {
-                    content.Add(new StringContent(goalEventId, Encoding.UTF8), "goal_id");
+                    content.Add(new StringContent(goalId, Encoding.UTF8), "goal_id");
+                }
+                if (!string.IsNullOrEmpty(eventId))
+                {
+                    content.Add(new StringContent(eventId, Encoding.UTF8), "event_id");
+                }
+                if (!string.IsNullOrEmpty(actionId))
+                {
+                    content.Add(new StringContent(actionId, Encoding.UTF8), "goalaction_id");
                 }
 
                 if (!string.IsNullOrEmpty(commentTxt))
@@ -1283,6 +1291,62 @@ namespace PurposeColor.Service
                 if (!string.IsNullOrEmpty(userId))
                 {
                     content.Add(new StringContent(userId, Encoding.UTF8), "user_id");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "400";
+        }
+
+        public static async Task<string> ShareToCommunity(string goalId, string eventId, string actionId)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "404";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=sharetocommunity";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                if (!string.IsNullOrEmpty(goalId))
+                {
+                    content.Add(new StringContent(goalId, Encoding.UTF8), "goal_id");
+                }
+
+                if (!string.IsNullOrEmpty(actionId))
+                {
+                    content.Add(new StringContent(actionId, Encoding.UTF8), "goalaction_id");
+                }
+
+                if (!string.IsNullOrEmpty(eventId))
+                {
+                    content.Add(new StringContent(eventId, Encoding.UTF8), "event_id");
                 }
 
                 HttpResponseMessage response = await client.PostAsync(url, content);

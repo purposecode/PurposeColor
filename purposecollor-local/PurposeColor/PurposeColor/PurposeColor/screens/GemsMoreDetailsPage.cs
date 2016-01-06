@@ -49,8 +49,16 @@ namespace PurposeColor.screens
             mainTitleBar = new GemsPageTitleBarWithBack(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
 			{
-				Navigation.PopAsync();
+                try
+                {
+                    Navigation.PopAsync();
+                }
+                catch (Exception)
+                {
+                    
+                }
 			};
+
             if (emotionsMasterList != null)
             {
                 mainTitleBar.title.Text = emotionsMasterList.emotion_title;
@@ -378,7 +386,7 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
-					await Navigation.PushAsync (new GemsDetailsPage(null, media, goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details, goalsMediaPath, goalsNoMediaPath, eventDetail.goalaction_id));
+					await Navigation.PushAsync (new GemsDetailsPage(null, media, goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details, goalsMediaPath, goalsNoMediaPath, eventDetail.goalaction_id, GemType.Action));
 
 					eventDetail = null;
 					eventTitle = null;
@@ -410,7 +418,7 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
-					await Navigation.PushAsync (new GemsDetailsPage(media, null, emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, eventDetail.event_id));
+                    await Navigation.PushAsync(new GemsDetailsPage(media, null, emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, eventDetail.event_id, GemType.Event));
 
 
 					eventDetail = null;

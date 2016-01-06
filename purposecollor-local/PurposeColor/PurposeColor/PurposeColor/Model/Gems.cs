@@ -26,9 +26,9 @@ namespace PurposeColor.Model
 
 	public class EventMedia
 	{
-        public string event_id { get; set; }
+		public string event_id { get; set; }
         public string media_type { get; set; }
-        public string event_media { get; set; }
+		public string event_media { get; set; }
 	}
 
     public class GemsEmotionsDetails
@@ -94,6 +94,14 @@ namespace PurposeColor.Model
 			public string mediapath { get; set; }
 			public string mediathumbpath { get; set; }
 			public List<GemsGoalsDetails> resultarray { get; set; }
+    }
+
+    public enum GemType
+    {
+        Goal = 1,
+        Event = 2,
+        Action = 3,
+        Emotion = 4
     }
 
 }

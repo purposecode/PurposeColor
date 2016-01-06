@@ -241,8 +241,8 @@ namespace PurposeColor
                     videoTap.Tapped += OnActionVideoTapped;
 
                     Image img = new Image();
-                    bool isValidUrl = (actionMediaList[index].event_media != null && !string.IsNullOrEmpty(actionMediaList[index].event_media)) ? true : false;
-                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    bool isValidUrl = (actionMediaList[index].action_media != null && !string.IsNullOrEmpty(actionMediaList[index].action_media)) ? true : false;
+                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].action_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     img.WidthRequest = App.screenWidth * 90 / 100;
@@ -311,6 +311,7 @@ namespace PurposeColor
 
             }
         }
+
 
         void OnEventVideoTapped(object sender, EventArgs e)
         {

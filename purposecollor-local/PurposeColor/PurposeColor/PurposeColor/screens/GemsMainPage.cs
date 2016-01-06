@@ -193,7 +193,11 @@ namespace PurposeColor.screens
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
 				string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : "no_image_found.jpg";
-                firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+                if ( item.event_media[0] != null && item.event_media[0].media_type == "mp4")
+                {
+                    firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                firstEmotionsImage.Source = firstImageSource;
 				firstEmotionsImage.GestureRecognizers.Add ( titleTap );
 				//firstEmotionsImage.Source = "manali.jpg";
                 //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
@@ -236,7 +240,11 @@ namespace PurposeColor.screens
                 secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
 				string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : "no_image_found.jpg";
-                secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
+                if ( item.event_media[1] != null && item.event_media[1].media_type == "mp4")
+                {
+                    secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                secondEmotionsImage.Source = secondImageSource;
                 //secondEmotionsImage.Source = "manali.jpg"; 
 
 
@@ -381,7 +389,11 @@ namespace PurposeColor.screens
                 bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty(item.action_media[0].action_media)) ? true : false;
 				//string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
                 string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[0].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
-                firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
+                if (item.action_media[0] != null && item.action_media[0].media_type == "mp4")
+                {
+                    firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                firstEmotionsImage.Source = firstImageSource;
                 //firstEmotionsImage.Source = "manali.jpg";
 
 
@@ -424,7 +436,11 @@ namespace PurposeColor.screens
                 bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty(item.action_media[1].action_media)) ? true : false;
                 string secondImageSource = (secondImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[1].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
                 //secondEmotionsImage.Source = "manali.jpg"; 
-                secondEmotionsImage.Source = Device.OnPlatform(secondImageSource, secondImageSource, secondImageSource);
+                if ( item.action_media[1] != null && item.action_media[1].media_type == "mp4")
+                {
+                    secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                secondEmotionsImage.Source = secondImageSource;
 
 
 				CustomImageButton moreButton = new CustomImageButton();

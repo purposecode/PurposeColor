@@ -49,7 +49,7 @@ namespace PurposeColor.iOS
 				}
 
 				MBHUDView.HudWithBody (
-					body: "Downloading video....",
+					body: "Downloading Media....",
 					aType: MBAlertViewHUDType.ActivityIndicator, 
 					delay: 120, 
 					showNow: true

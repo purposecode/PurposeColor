@@ -241,8 +241,11 @@ namespace PurposeColor.screens
 
                 StackLayout viewContainer = new StackLayout();
                 viewContainer.WidthRequest = App.screenWidth * 90 / 100;
-                viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
+                viewContainer.HeightRequest = 175;
                 viewContainer.BackgroundColor = Color.White;
+
+                customLayout.WidthRequest = screenWidth;
+                customLayout.HeightRequest = 200;
 
                 Image divider = new Image();
                 divider.Source = "line_seperate.png";
@@ -253,7 +256,7 @@ namespace PurposeColor.screens
                 customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
                 customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
                 customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
-                customLayout.AddChildToLayout(divider, 5, 14);
+
 
                 if( item.event_details.Count > 1 )
                 {
@@ -320,16 +323,17 @@ namespace PurposeColor.screens
                     moreButton.ClassId = item.emotion_id.ToString();
                     moreButton.Clicked += OnEmotionsMoreButtonClicked;
 
+                    customLayout.AddChildToLayout(divider, 5, 14);
                     customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
                     customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
                     customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(14, 16, 12));
                     customLayout.AddChildToLayout(moreButton, Device.OnPlatform(77, 75, 75), Device.OnPlatform(24, 27, 19));
                 }
-
-
-
-                customLayout.WidthRequest = screenWidth;
-                customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
+                else
+                {
+                     viewContainer.HeightRequest = 95;
+                     customLayout.HeightRequest = 115;
+                }
 
 
 

@@ -163,6 +163,7 @@
     <None Include="Assets\noimage.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\audio.png" />
     <Content Include="Assets\bottom_menu_icon.png" />
     <Content Include="Assets\like.png" />
     <Content Include="Assets\share.png" />

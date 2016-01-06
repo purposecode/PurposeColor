@@ -38,6 +38,16 @@ namespace PurposeColor.iOS
 		{
 			try
 			{
+
+				string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+				string downloadFilePath = Path.Combine(downloadPath, filename);
+
+				if (System.IO.File.Exists(downloadFilePath))
+				{
+					PlayVideo( downloadFilePath );
+					return true;
+				}
+
 				MBHUDView.HudWithBody (
 					body: "Downloading video....",
 					aType: MBAlertViewHUDType.ActivityIndicator, 

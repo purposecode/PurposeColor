@@ -26,6 +26,7 @@ namespace PurposeColor.screens
 		public string goalsMediaThumbPath;
 		public string goalsNoMediaPath;
 		public string eventsNoMediaPath;
+		static bool isFirstTime;
 		public GemsMoreDetailsPage(GemsEmotionsDetails emotionsList, GemsGoalsDetails goalsList, string eventMedia, string eventMediaThumb, string eventNoMedia, string goalsMedia, string goalsMediaThumb, string goalsNoMedia)
         {
 
@@ -41,6 +42,7 @@ namespace PurposeColor.screens
 			eventsNoMediaPath = eventNoMedia;
             emotionsMasterList = emotionsList;
 			goalsMasterList = goalsList;
+			isFirstTime = true;
 
 
             // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
@@ -88,6 +90,8 @@ namespace PurposeColor.screens
         async void OnAppearing(object sender, EventArgs e)
         {
 
+			if (!isFirstTime)
+				return;
 
             // this.Animate("", (s) => Layout(new Rectangle(X, (1 - s) * Height, Width, Height)), 0, 1000, Easing.SpringIn, null, null); // slide up
         
@@ -213,6 +217,7 @@ namespace PurposeColor.screens
 
 					masterStack.Children.Add (customLayout);
 				}
+				isFirstTime = false;
 			} 
 			else if (goalsMasterList != null) 
 			{
@@ -330,6 +335,8 @@ namespace PurposeColor.screens
 
 					masterStack.Children.Add(customLayout);
 				}
+
+				isFirstTime = false;
 			}
            
         }

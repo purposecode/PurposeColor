@@ -15,6 +15,7 @@ using Java.IO;
 using Xamarin.Forms;
 using Android.Database;
 using AndroidHUD;
+using System.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidVideoPlayer))]
 namespace PurposeColor.Droid.Dependency
@@ -24,6 +25,18 @@ namespace PurposeColor.Droid.Dependency
         public async Task<bool> Download(string uri, string filename)
         {
 
+            string downloadedFolder = "/storage/emulated/0/Download/";
+            if (System.IO.File.Exists(downloadedFolder +"/" + filename))
+            {
+                string downloadedUri = "file:///storage/emulated/0/Download/";
+                Java.IO.File file = new Java.IO.File(new Java.Net.URI(downloadedUri + "/" + filename));
+                Intent videoPlayerActivity = new Intent(Intent.ActionView);
+                videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
+                Activity activity = Forms.Context as Activity;
+                activity.StartActivity(videoPlayerActivity);
+                return true;
+            }
+          
             App.DownloadID = 0;
 
             AndHUD.Shared.Show(MainActivity.GetMainActivity(), "Dowloading video...", -1, MaskType.Clear  );

@@ -185,9 +185,13 @@ namespace PurposeColor.screens
                     List<EventMedia> firstThumbMedia = emotionsMasterList.event_media.FindAll(itm => itm.event_id == eventID).ToList();
                     bool firstImageValidity = (firstThumbMedia != null && firstThumbMedia.Count > 0 && !string.IsNullOrEmpty(firstThumbMedia[0].event_media)) ? true : false;
                     string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + eventsMediaThumbPath + firstThumbMedia[0].event_media : Constants.SERVICE_BASE_URL + eventsNoMediaPath;
-                    if (firstThumbMedia != null && firstThumbMedia[0].media_type == "mp4" || firstThumbMedia[0].media_type == "3gpp")
+                    if (firstThumbMedia != null && firstThumbMedia[0].media_type == "mp4" )
                     {
-                        firstImageSource =  Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                        firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
+                    else if (firstThumbMedia[0].media_type == "3gpp")
+                    {
+                        firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }
                     firstEmotionsImage.Source = firstImageSource;
 					firstEmotionsImage.ClassId = emotionsMasterList.event_details [index].event_id;
@@ -309,6 +313,10 @@ namespace PurposeColor.screens
                     if ( FirstThumbMedia!= null && FirstThumbMedia[0].media_type == "mp4")
                     {
                         firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
+                    else if (FirstThumbMedia[0].media_type == "3gpp")
+                    {
+                        firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }
 					firstEmotionsImage.Source = Device.OnPlatform(firstImageSource, firstImageSource, firstImageSource);
 					//firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");

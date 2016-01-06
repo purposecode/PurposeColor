@@ -216,15 +216,25 @@ namespace PurposeColor
                     videoTap.Tapped += OnEventVideoTapped;
                     bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
                     string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : comment.BackGroundImageName = Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
-                    string fileExtenstion = Path.GetExtension(source);
-                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+                 
                     Image img = new Image();
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
                     img.Aspect = Aspect.AspectFill;
-                    img.Source = (isImage) ? source : "video.png";
+                    img.ClassId = null;
+                    if (mediaList[index] != null && mediaList[index].media_type == "mp4")
+                    {
+                        img.ClassId = source;
+                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
+                    else if (mediaList[index] != null && mediaList[index].media_type == "3gpp")
+                    {
+                        img.ClassId = source;
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                    }
+                    img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
-                    img.ClassId = (!isImage) ? source : null;
+                   
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
@@ -248,7 +258,18 @@ namespace PurposeColor
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
                     img.Aspect = Aspect.AspectFill;
-                    img.Source = (isImage) ? source : "video.png";
+                    img.ClassId = null;
+                    if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
+                    {
+                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                        img.ClassId = source;
+                    }
+                    else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
+                    {
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                        img.ClassId = source;
+                    }
+                    img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
                     img.ClassId = (!isImage) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };

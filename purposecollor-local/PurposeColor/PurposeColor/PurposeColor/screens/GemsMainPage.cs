@@ -197,6 +197,10 @@ namespace PurposeColor.screens
                 {
                     firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
+                else if (item.event_media[0] != null && item.event_media[0].media_type == "3gpp")
+                {
+                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                }
                 firstEmotionsImage.Source = firstImageSource;
 				firstEmotionsImage.GestureRecognizers.Add ( titleTap );
 				//firstEmotionsImage.Source = "manali.jpg";
@@ -243,6 +247,10 @@ namespace PurposeColor.screens
                 if ( item.event_media[1] != null && item.event_media[1].media_type == "mp4")
                 {
                     secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                else if (item.event_media[1] != null && item.event_media[1].media_type == "3gpp")
+                {
+                    secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }
                 secondEmotionsImage.Source = secondImageSource;
                 //secondEmotionsImage.Source = "manali.jpg"; 
@@ -393,6 +401,11 @@ namespace PurposeColor.screens
                 {
                     firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
+                else if (item.action_media[0] != null && item.action_media[0].media_type == "3gpp")
+                {
+                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                }
+
                 firstEmotionsImage.Source = firstImageSource;
                 //firstEmotionsImage.Source = "manali.jpg";
 
@@ -439,6 +452,10 @@ namespace PurposeColor.screens
                 if ( item.action_media[1] != null && item.action_media[1].media_type == "mp4")
                 {
                     secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                }
+                else if (item.action_media[1] != null && item.action_media[1].media_type == "3gpp")
+                {
+                    secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }
                 secondEmotionsImage.Source = secondImageSource;
 

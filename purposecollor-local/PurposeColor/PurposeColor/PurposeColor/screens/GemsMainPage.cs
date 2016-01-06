@@ -197,7 +197,7 @@ namespace PurposeColor.screens
                 {
                     firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
-                else if (item.event_media[0] != null && item.event_media[0].media_type == "3gpp")
+                else if (item.event_media[0] != null && (item.event_media[0].media_type == "3gpp" || item.event_media[0].media_type == "wav"))
                 {
                     firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }
@@ -248,7 +248,7 @@ namespace PurposeColor.screens
                 {
                     secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
-                else if (item.event_media[1] != null && item.event_media[1].media_type == "3gpp")
+                else if (item.event_media[1] != null && (item.event_media[1].media_type == "3gpp" || item.event_media[1].media_type == "wav"))
                 {
                     secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }
@@ -401,7 +401,7 @@ namespace PurposeColor.screens
                 {
                     firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
-                else if (item.action_media[0] != null && item.action_media[0].media_type == "3gpp")
+                else if (item.action_media[0] != null && (item.action_media[0].media_type == "3gpp" || item.action_media[0].media_type == "wav"))
                 {
                     firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }
@@ -453,7 +453,7 @@ namespace PurposeColor.screens
                 {
                     secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                 }
-                else if (item.action_media[1] != null && item.action_media[1].media_type == "3gpp")
+                else if (item.action_media[1] != null && (item.action_media[1].media_type == "3gpp" || item.action_media[1].media_type == "3gpp"))
                 {
                     secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                 }

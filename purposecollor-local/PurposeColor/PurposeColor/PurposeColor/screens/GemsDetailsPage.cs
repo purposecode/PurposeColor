@@ -227,7 +227,7 @@ namespace PurposeColor
                         img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (mediaList[index] != null && mediaList[index].media_type == "3gpp")
+                    else if (mediaList[index] != null && ( mediaList[index].media_type == "3gpp" || mediaList[index].media_type == "wav") )
                     {
                         img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -264,7 +264,7 @@ namespace PurposeColor
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                         img.ClassId = source;
                     }
-                    else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
+                    else if (actionMediaList[index] != null && (actionMediaList[index].media_type == "3gpp" || actionMediaList[index].media_type == "wav"))
                     {
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                         img.ClassId = source;

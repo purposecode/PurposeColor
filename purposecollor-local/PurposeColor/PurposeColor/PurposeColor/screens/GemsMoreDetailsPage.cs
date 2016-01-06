@@ -47,6 +47,10 @@ namespace PurposeColor.screens
 
             // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar = new GemsPageTitleBarWithBack(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				Navigation.PopAsync();
+			};
             if (emotionsMasterList != null)
             {
                 mainTitleBar.title.Text = emotionsMasterList.emotion_title;

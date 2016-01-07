@@ -338,9 +338,9 @@ namespace PurposeColor.screens
                     }
                     else
                     {
-                        customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 8, 8));
-                        customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 15, 13));
-                        customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 9, 6));
+                        customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
+                        customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
+                        customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
                     }
 
 
@@ -566,9 +566,9 @@ namespace PurposeColor.screens
                     }
                     else
                     {
-                        customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 8, 8));
-                        customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 15, 13));
-                        customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 9, 6));
+						customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
+						customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
+						customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
                     }
 
 
@@ -633,6 +633,8 @@ namespace PurposeColor.screens
                 goalsList.Add(gemsGoalsObject.resultarray[index + 2]);
             }
             RefreshView();
+
+			masterScroll.ScrollToAsync( masterStack.Children[ masterStack.Children.Count - 1 ], ScrollToPosition.End, true );
         }
 
         void OnShowMoreEmotionsClicked(object sender, EventArgs e)
@@ -659,6 +661,7 @@ namespace PurposeColor.screens
                     emotionList.Add(gemsEmotionsObject.resultarray[index + 2]);
                 }
                 RefreshView();
+
             }
             catch (Exception ex)
             {

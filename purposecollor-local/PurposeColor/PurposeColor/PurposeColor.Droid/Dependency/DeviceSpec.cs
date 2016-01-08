@@ -41,5 +41,10 @@ namespace Cross.Store
             var dp = (int)((pixelValue) / Resources.System.DisplayMetrics.Density);
             return dp;
         }
+
+        public void ExitApp()
+        {
+            Android.OS.Process.KillProcess(Android.OS.Process.MyPid());
+        }
     }
 }

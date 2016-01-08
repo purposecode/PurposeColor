@@ -11,5 +11,6 @@ namespace Cross
          double ScreenWidth { get;  }
          double ScreenHeight { get;  }
          double ScreenDensity { get;  }
+         void ExitApp();
     }
 }

@@ -366,6 +366,15 @@ namespace PurposeColor.screens
 
 				isFirstTime = false;
 			}
+
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                StackLayout spaceOffsetlayout = new StackLayout();
+                spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
+                spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 0, 100);
+                spaceOffsetlayout.BackgroundColor = Color.Transparent;
+                masterStack.Children.Add(spaceOffsetlayout);
+            }
            
         }
 
@@ -386,8 +395,10 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
+                    IProgressBar progess = DependencyService.Get< IProgressBar>();
+                    progess.ShowProgressbar( "Loading details..." );
 					await Navigation.PushAsync (new GemsDetailsPage(null, media, goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details, goalsMediaPath, goalsNoMediaPath, eventDetail.goalaction_id, GemType.Action));
-
+                    progess.HideProgressbar();
 					eventDetail = null;
 					eventTitle = null;
 					media = null;
@@ -418,9 +429,10 @@ namespace PurposeColor.screens
 				//	title = emotionList.eve
 				if (media != null) 
 				{
+                    IProgressBar progess = DependencyService.Get<IProgressBar>();
+                    progess.ShowProgressbar("Loading details...");
                     await Navigation.PushAsync(new GemsDetailsPage(media, null, emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, eventDetail.event_id, GemType.Event));
-
-
+                    progess.HideProgressbar();
 					eventDetail = null;
 					eventTitle = null;
 					media = null;

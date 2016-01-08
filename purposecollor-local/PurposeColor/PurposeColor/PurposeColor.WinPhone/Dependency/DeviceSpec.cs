@@ -36,5 +36,10 @@ namespace Cross.Store
                 return density;
             }
         }
+
+        public void ExitApp()
+        {
+            System.Windows.Application.Current.Terminate();
+        }
     }
 }

@@ -398,11 +398,8 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    if (Device.OS != TargetPlatform.WinPhone)
-                    {
-                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                        videoDownload.Download(img.ClassId, fileName);
-                    }
+                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                    videoDownload.Download(img.ClassId, fileName);
 
                 }
 
@@ -417,11 +414,8 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    if (Device.OS != TargetPlatform.WinPhone)
-                    {
-                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                        videoDownload.Download(img.ClassId, fileName);
-                    }
+                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                    videoDownload.Download(img.ClassId, fileName);
                 }
 
             }

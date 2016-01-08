@@ -17,6 +17,7 @@ namespace PurposeColor
 {
     public class App : Application
     {
+        public static string WindowsDownloadedMedia { get; set; }
         public static long DownloadID{ get; set;}
         public static bool IsLoggedIn { get; set; }
         public static INavigation Navigator { get; set; }

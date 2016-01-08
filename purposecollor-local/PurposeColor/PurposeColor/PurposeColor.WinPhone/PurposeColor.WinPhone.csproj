@@ -96,6 +96,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
+    <Compile Include="CrossVideoPlayer\WinVideoPlayer.xaml.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\CameraCapture.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="Dependency\DeviceSpec.cs" />
     <Compile Include="Dependency\FileBrowser.cs" />
     <Compile Include="Dependency\ProgressBarImpl.cs" />
+    <Compile Include="Dependency\WinMediaDownloader.cs" />
     <Compile Include="Dependency\WinReminderImpl.cs" />
     <Compile Include="Dependency\WinResize.cs" />
     <Compile Include="GoogleScopes.cs" />
@@ -127,6 +129,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="sample.xaml.cs">
+      <DependentUpon>sample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TokenPair.cs" />
     <Compile Include="VideoCamera.xaml.cs">
       <DependentUpon>VideoCamera.xaml</DependentUpon>
@@ -137,11 +142,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="CrossVideoPlayer\WinVideoPlayer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="sample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -407,7 +420,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
+    <SDKReference Include="SQLite.WP80, Version=3.9.2">
       <Name>SQLite for Windows Phone</Name>
     </SDKReference>
   </ItemGroup>

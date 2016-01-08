@@ -1371,5 +1371,127 @@ namespace PurposeColor.Service
             return "400";
         }
 
+        public static async Task<List<Comment>> GetComments(string gemId, GemType gemType, bool isCommunityGem = false)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return null;
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=getcomments";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+
+                switch (gemType)
+                {
+                    case GemType.Goal:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "goal_id");
+                        break;
+                    case GemType.Event:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "event_id");
+                        break;
+                    case GemType.Action:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "goalaction_id");
+                        break;
+                    case GemType.Emotion:
+                        break;
+                    default:
+                        break;
+                }
+
+                if (isCommunityGem)
+                {
+                    content.Add(new StringContent("1", Encoding.UTF8), "share_comment");
+                }
+                else
+                {
+                    content.Add(new StringContent("0", Encoding.UTF8), "share_comment");
+                }
+
+                HttpResponseMessage response = await client.PostAsync(url, content);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<GetCommentsResult>(eventsJson);
+                    if (rootobject != null && rootobject.resultarray != null)
+                    {
+                        client.Dispose();
+                        return rootobject.resultarray;
+                    }
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return null;
+        }
+
+		public static async Task<string> RemoveComment(string commentId)
+		{
+			if (!CrossConnectivity.Current.IsConnected)
+			{
+				return "404";
+			}
+
+			try
+			{
+				string result = String.Empty;
+				var client = new HttpClient();
+				client.Timeout = new TimeSpan(0, 15, 0);
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+				var url = "api.php?action=removecomment";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				if (!string.IsNullOrEmpty(commentId))
+				{
+					content.Add(new StringContent(commentId, Encoding.UTF8), "comment_id");
+				}
+                HttpResponseMessage response = null;
+                try
+                {
+				    response = await client.PostAsync(url, content);
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+                    return "200"; // for testing only // test
+                    //var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    //var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    //if (rootobject != null && rootobject.code != null)
+                    //{
+                    //    client.Dispose();
+                    //    return rootobject.code;
+                    //}
+				}
+				client.Dispose();
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+
+			return "404";
+		}
+
     }
 }

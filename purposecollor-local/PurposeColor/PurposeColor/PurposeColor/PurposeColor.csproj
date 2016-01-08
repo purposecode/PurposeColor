@@ -81,6 +81,7 @@
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\ApplicationSettingsPage.cs" />
     <Compile Include="screens\CheckItem.cs" />
+    <Compile Include="screens\CommentsView.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\CustomeMultiSelectionList.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />

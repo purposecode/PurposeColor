@@ -23,8 +23,7 @@ namespace PurposeColor
         Label description;
         List<EventMedia> mediaList { get; set; }
         List<ActionMedia> actionMediaList { get; set; }
-        List<string> CommentsList = null;
-        string GoalEventId = string.Empty;
+        string CurrentGemId = string.Empty;
         GemType CurrentGemType = GemType.Goal;
         PurposeColorTitleBar mainTitleBar;
         PurposeColorSubTitleBar subTitleBar;
@@ -33,7 +32,7 @@ namespace PurposeColor
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
 
-        public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string goalEventId, GemType gemType)
+        public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
@@ -46,49 +45,31 @@ namespace PurposeColor
             masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
             mediaList = mediaArray;
             actionMediaList = actionMediaArray;
-            GoalEventId = goalEventId;
+            CurrentGemId = gemId;
             CurrentGemType = gemType;
+            User user = null;
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
             subTitleBar.BackButtonTapRecognizer.Tapped += (object sender, EventArgs e) =>
             {
-                try
-                {
-                    Navigation.PopAsync();
-                }
-                catch (Exception)
-                {
+                try{
+                    Navigation.PopModalAsync();
+                }catch (Exception){
                 }
             };
-            User user = null;
+            
 			try {
 				user = App.Settings.GetUser ();
 
+                ////////////// for testing only // test //////////////
+                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
+                ////////////// for testing only // test //////////////
+
+
 			} catch (Exception ex) {
-				// if error navigate back.
-                try
-                {
-                    Navigation.PopAsync();
-                }
-                catch (Exception)
-                {
-                }
+                var test = ex.Message;
 			}
-
-			// if user is null, navigate back.
-            if (user == null)
-            {
-                try
-                {
-                    Navigation.PopAsync();
-                }
-                catch (Exception)
-                {
-                }
-            }
-
-            CommentsList = new List<string>();
 
             Label pageTitle = new Label();
             pageTitle.Text = pageTitleVal;
@@ -135,23 +116,27 @@ namespace PurposeColor
             toolsLayout.Children.Add(favoriteButton);
             toolsLayout.Children.Add(favoriteLabel);
 
-            Image shareButton = new Image();
-            shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
-            shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
-            shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
-			shareButton.VerticalOptions = LayoutOptions.Center;
-            shareLabel = new Label
+            if (user.AllowCommunitySharing)
             {
-				Text = "Share",
-				VerticalOptions = LayoutOptions.Center
-            };
-            shareButtonTap = new TapGestureRecognizer();
-            shareButtonTap.Tapped += ShareButtonTapped;
-            shareButton.GestureRecognizers.Add(shareButtonTap);
-            shareLabel.GestureRecognizers.Add(shareButtonTap);
-
-            toolsLayout.Children.Add(shareButton);
-            toolsLayout.Children.Add(shareLabel);
+                Image shareButton = new Image();
+                shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+                shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+                shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+                shareButton.VerticalOptions = LayoutOptions.Center;
+                shareLabel = new Label
+                {
+                    Text = "Share",
+                    VerticalOptions = LayoutOptions.Center
+                };
+                shareButtonTap = new TapGestureRecognizer();
+                shareButtonTap.Tapped += ShareButtonTapped;
+                shareButton.GestureRecognizers.Add(shareButtonTap);
+                shareLabel.GestureRecognizers.Add(shareButtonTap);
+                toolsLayout.Children.Add(shareButton);
+                toolsLayout.Children.Add(shareLabel);
+            }
+            
+            
 
             Image commentButton = new Image();
             commentButton.Source = Device.OnPlatform("icon_cmnt.png", "icon_cmnt.png", "//Assets//icon_cmnt.png");
@@ -323,10 +308,24 @@ namespace PurposeColor
 
             //show comments popup
 			try {
+                progressBar.ShowProgressbar("Loading..");
+
+                List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
+                progressBar.HideProgressbar();
+
+                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false);
+                commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
+                commentsView.HeightRequest = App.screenHeight;
+                commentsView.WidthRequest = App.screenWidth;
+                masterLayout.AddChildToLayout(commentsView, 0, 0);
 				
-			} catch (Exception ex) {
-				
+			} 
+            catch (Exception ex) 
+            {
+                progressBar.HideProgressbar();
+                DisplayAlert(Constants.ALERT_TITLE, "Could not fetch comments, Please try again later.", Constants.ALERT_OK);
 			}
+            progressBar.HideProgressbar();
         }
 
         async void ShareButtonTapped(object sender, EventArgs e)
@@ -344,13 +343,13 @@ namespace PurposeColor
 				//goal_id,event_id or goalaction_id 
 				switch (CurrentGemType) {
 				case GemType.Goal:
-					goalId = GoalEventId;
+					goalId = CurrentGemId;
 					break;
 				case GemType.Event:
-					eventId = GoalEventId;
+					eventId = CurrentGemId;
 					break;
 				case GemType.Action:
-					actionId = GoalEventId;
+					actionId = CurrentGemId;
 					break;
 				case GemType.Emotion:
 					break;
@@ -398,8 +397,11 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
+                    if (Device.OS != TargetPlatform.WinPhone)
+                    {
+                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                        videoDownload.Download(img.ClassId, fileName);
+                    }
 
                 }
 
@@ -414,8 +416,11 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
+                    if (Device.OS != TargetPlatform.WinPhone)
+                    {
+                        IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+                        videoDownload.Download(img.ClassId, fileName);
+                    }
                 }
 
             }
@@ -424,7 +429,6 @@ namespace PurposeColor
 
         protected override bool OnBackButtonPressed ()
 		{
-			Dispose ();
 			return base.OnBackButtonPressed ();
 		}
 
@@ -442,13 +446,19 @@ namespace PurposeColor
 			actionMediaList = null;
 			this.Content = null;
 			shareLabel = null;
-
-			shareButtonTap.Tapped -= ShareButtonTapped;
-			commentButtonTap.Tapped -= CommentButtonTapped;
-			favoriteButtonTap.Tapped -= FavoriteButtonTapped;
-			shareButtonTap = null;
-			commentButtonTap = null;
-			favoriteButtonTap = null;
+            if (shareButtonTap != null)
+            {
+                shareButtonTap.Tapped -= ShareButtonTapped;
+                shareButtonTap = null;
+            }
+            if (commentButtonTap!= null)
+            {
+                commentButtonTap.Tapped -= CommentButtonTapped;
+                favoriteButtonTap.Tapped -= FavoriteButtonTapped;
+                commentButtonTap = null;
+                favoriteButtonTap = null;
+            }
+			
 
 			GC.Collect ();
         }

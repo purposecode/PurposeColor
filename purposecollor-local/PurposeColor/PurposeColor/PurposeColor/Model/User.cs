@@ -71,7 +71,7 @@ namespace PurposeColor.Model
 
         public string Email { get; set; }
 
-		public int ShareToCommunity { get; set; }
+		public bool AllowCommunitySharing { get; set; }
 
         /// <summary>
         /// Gets or sets the PreferredGEMS

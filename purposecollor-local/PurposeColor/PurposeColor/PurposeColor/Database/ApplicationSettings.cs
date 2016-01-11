@@ -412,74 +412,82 @@ namespace PurposeColor.Database
 
 		public GemsGoalsObject GetGemsGoalsObject()
 		{
-			GemsGoalsObject masterObject = new GemsGoalsObject();
+            try
+            {
+                GemsGoalsObject masterObject = new GemsGoalsObject();
 
 
-			List<ActionTitle> listActionTitle = new List<ActionTitle>();
-			List<ActionDetail> listActionDetails = new List<ActionDetail>();
-			List<ActionMedia> listActionMedia = new List<ActionMedia>();
-			List<ActionDatetime> listActionDatetime = new List<ActionDatetime>();
-			List<GemsGoalsDetailsDB> listGoals = new List<GemsGoalsDetailsDB>();
-			List<GemsGoalsDetails> gemsGoals = new List<GemsGoalsDetails>();
+                List<ActionTitle> listActionTitle = new List<ActionTitle>();
+                List<ActionDetail> listActionDetails = new List<ActionDetail>();
+                List<ActionMedia> listActionMedia = new List<ActionMedia>();
+                List<ActionDatetime> listActionDatetime = new List<ActionDatetime>();
+                List<GemsGoalsDetailsDB> listGoals = new List<GemsGoalsDetailsDB>();
+                List<GemsGoalsDetails> gemsGoals = new List<GemsGoalsDetails>();
 
-			listActionTitle = (from t in Connection.Table<ActionTitle>() select t).ToList();
-			listActionDetails = (from t in Connection.Table<ActionDetail>() select t).ToList();
-			listActionMedia = (from t in Connection.Table<ActionMedia>() select t).ToList();
-			listActionDatetime = (from t in Connection.Table<ActionDatetime>() select t).ToList();
-			listGoals = (from t in Connection.Table<GemsGoalsDetailsDB>() select t).ToList();
+                listActionTitle = (from t in Connection.Table<ActionTitle>() select t).ToList();
+                listActionDetails = (from t in Connection.Table<ActionDetail>() select t).ToList();
+                listActionMedia = (from t in Connection.Table<ActionMedia>() select t).ToList();
+                listActionDatetime = (from t in Connection.Table<ActionDatetime>() select t).ToList();
+                listGoals = (from t in Connection.Table<GemsGoalsDetailsDB>() select t).ToList();
 
-			masterObject.resultarray = new List<GemsGoalsDetails>();
-			foreach (var item in listGoals)
-			{
-				GemsGoalsDetails resultArray = new GemsGoalsDetails();
+                masterObject.resultarray = new List<GemsGoalsDetails>();
+                foreach (var item in listGoals)
+                {
+                    GemsGoalsDetails resultArray = new GemsGoalsDetails();
 
-				resultArray.user_id = item.user_id;
-				resultArray.goal_id = item.goal_id;
-				resultArray.goal_title = item.goal_title;
+                    resultArray.user_id = item.user_id;
+                    resultArray.goal_id = item.goal_id;
+                    resultArray.goal_title = item.goal_title;
 
-				resultArray.action_title = new List<ActionTitle>();
-				resultArray.action_details = new List<ActionDetail>();
-				resultArray.action_datetime = new List<ActionDatetime>();
-				resultArray.action_media = new List<ActionMedia>();
+                    resultArray.action_title = new List<ActionTitle>();
+                    resultArray.action_details = new List<ActionDetail>();
+                    resultArray.action_datetime = new List<ActionDatetime>();
+                    resultArray.action_media = new List<ActionMedia>();
 
-				// Title
-				foreach (var titeObject in listActionTitle)
-				{
-					if( titeObject.goal_id == item.goal_id )
-						resultArray.action_title.Add( titeObject );
-				}
+                    // Title
+                    foreach (var titeObject in listActionTitle)
+                    {
+                        if (titeObject.goal_id == item.goal_id)
+                            resultArray.action_title.Add(titeObject);
+                    }
 
-				// Details
-				foreach (var detailsObject in listActionDetails)
-				{
-					if( detailsObject.goal_id == item.goal_id )
-						resultArray.action_details.Add(detailsObject);
-				}
+                    // Details
+                    foreach (var detailsObject in listActionDetails)
+                    {
+                        if (detailsObject.goal_id == item.goal_id)
+                            resultArray.action_details.Add(detailsObject);
+                    }
 
-				// date and time
-				foreach (var dateObject in listActionDatetime)
-				{
-					if( dateObject.goal_id == item.goal_id )
-						resultArray.action_datetime.Add(dateObject);
-				}
+                    // date and time
+                    foreach (var dateObject in listActionDatetime)
+                    {
+                        if (dateObject.goal_id == item.goal_id)
+                            resultArray.action_datetime.Add(dateObject);
+                    }
 
-				// media
-				foreach (var mediaObject in listActionMedia)
-				{
-					if( mediaObject.goal_id == item.goal_id )
-						resultArray.action_media.Add(mediaObject);
-				}
+                    // media
+                    foreach (var mediaObject in listActionMedia)
+                    {
+                        if (mediaObject.goal_id == item.goal_id)
+                            resultArray.action_media.Add(mediaObject);
+                    }
 
-				masterObject.resultarray.Add(resultArray);
-			}
+                    masterObject.resultarray.Add(resultArray);
+                }
 
 
-			masterObject.code = (listGoals != null && listGoals.Count > 0) ? listGoals[0].code : "";
-			masterObject.noimageurl = (listGoals != null && listGoals.Count > 0) ? listGoals[0].noimageurl : "";
-			masterObject.mediapath = (listGoals != null && listGoals.Count > 0) ? listGoals[0].mediapath : "";
-			masterObject.mediathumbpath = (listGoals != null && listGoals.Count > 0) ? listGoals[0].mediathumbpath : "";
-			return masterObject;
-
+                masterObject.code = (listGoals != null && listGoals.Count > 0) ? listGoals[0].code : "";
+                masterObject.noimageurl = (listGoals != null && listGoals.Count > 0) ? listGoals[0].noimageurl : "";
+                masterObject.mediapath = (listGoals != null && listGoals.Count > 0) ? listGoals[0].mediapath : "";
+                masterObject.mediathumbpath = (listGoals != null && listGoals.Count > 0) ? listGoals[0].mediathumbpath : "";
+                return masterObject;
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+		
 		}
 
 
@@ -596,75 +604,83 @@ namespace PurposeColor.Database
 			}
 		}
 
+
 		public GemsEmotionsObject GetGemsEmotionsObject()
 		{
-			GemsEmotionsObject masterObject = new GemsEmotionsObject();
+            try
+            {
+                GemsEmotionsObject masterObject = new GemsEmotionsObject();
+
+                List<EventTitle> listEventTitle = new List<EventTitle>();
+                List<EventDetail> listEventDetails = new List<EventDetail>();
+                List<EventMedia> listEventMedia = new List<EventMedia>();
+                List<EventDatetime> listEventDatetime = new List<EventDatetime>();
+                List<GemsEmotionsDetailsDB> listEmotions = new List<GemsEmotionsDetailsDB>();
+                List<GemsEmotionsDetails> gemsEmotions = new List<GemsEmotionsDetails>();
+
+                listEventTitle = (from t in Connection.Table<EventTitle>() select t).ToList();
+                listEventDetails = (from t in Connection.Table<EventDetail>() select t).ToList();
+                listEventMedia = (from t in Connection.Table<EventMedia>() select t).ToList();
+                listEventDatetime = (from t in Connection.Table<EventDatetime>() select t).ToList();
+                listEmotions = (from t in Connection.Table<GemsEmotionsDetailsDB>() select t).ToList();
+
+                masterObject.resultarray = new List<GemsEmotionsDetails>();
+                foreach (var item in listEmotions)
+                {
+                    GemsEmotionsDetails resultArray = new GemsEmotionsDetails();
+
+                    resultArray.user_id = item.user_id;
+                    resultArray.emotion_id = item.emotion_id;
+                    resultArray.emotion_title = item.emotion_title;
+
+                    resultArray.event_title = new List<EventTitle>();
+                    resultArray.event_details = new List<EventDetail>();
+                    resultArray.event_datetime = new List<EventDatetime>();
+                    resultArray.event_media = new List<EventMedia>();
+
+                    // Title
+                    foreach (var titeObject in listEventTitle)
+                    {
+                        if (titeObject.emotion_id == item.emotion_id)
+                            resultArray.event_title.Add(titeObject);
+                    }
+
+                    // Details
+                    foreach (var detailsObject in listEventDetails)
+                    {
+                        if (detailsObject.emotion_id == item.emotion_id)
+                            resultArray.event_details.Add(detailsObject);
+                    }
+
+                    // date and time
+                    foreach (var dateObject in listEventDatetime)
+                    {
+                        if (dateObject.emotion_id == item.emotion_id)
+                            resultArray.event_datetime.Add(dateObject);
+                    }
+
+                    // media
+                    foreach (var mediaObject in listEventMedia)
+                    {
+                        if (mediaObject.emotion_id == item.emotion_id)
+                            resultArray.event_media.Add(mediaObject);
+                    }
+
+                    masterObject.resultarray.Add(resultArray);
+                }
 
 
-			List<EventTitle> listEventTitle = new List<EventTitle>();
-			List<EventDetail> listEventDetails = new List<EventDetail>();
-			List<EventMedia> listEventMedia = new List<EventMedia>();
-			List<EventDatetime> listEventDatetime = new List<EventDatetime>();
-			List<GemsEmotionsDetailsDB> listEmotions = new List<GemsEmotionsDetailsDB>();
-			List<GemsEmotionsDetails> gemsEmotions = new List<GemsEmotionsDetails>();
-
-			listEventTitle = (from t in Connection.Table<EventTitle>() select t).ToList();
-			listEventDetails = (from t in Connection.Table<EventDetail>() select t).ToList();
-			listEventMedia = (from t in Connection.Table<EventMedia>() select t).ToList();
-			listEventDatetime = (from t in Connection.Table<EventDatetime>() select t).ToList();
-			listEmotions = (from t in Connection.Table<GemsEmotionsDetailsDB>() select t).ToList();
-
-			masterObject.resultarray = new List<GemsEmotionsDetails>();
-			foreach (var item in listEmotions)
-			{
-				GemsEmotionsDetails resultArray = new GemsEmotionsDetails();
-
-				resultArray.user_id = item.user_id;
-				resultArray.emotion_id = item.emotion_id;
-				resultArray.emotion_title = item.emotion_title;
-
-				resultArray.event_title = new List<EventTitle>();
-				resultArray.event_details = new List<EventDetail>();
-				resultArray.event_datetime = new List<EventDatetime>();
-				resultArray.event_media = new List<EventMedia>();
-
-				// Title
-				foreach (var titeObject in listEventTitle)
-				{
-					if( titeObject.emotion_id == item.emotion_id )
-						resultArray.event_title.Add( titeObject );
-				}
-
-				// Details
-				foreach (var detailsObject in listEventDetails)
-				{
-					if( detailsObject.emotion_id == item.emotion_id )
-						resultArray.event_details.Add(detailsObject);
-				}
-
-				// date and time
-				foreach (var dateObject in listEventDatetime)
-				{
-					if( dateObject.emotion_id == item.emotion_id )
-						resultArray.event_datetime.Add(dateObject);
-				}
-
-				// media
-				foreach (var mediaObject in listEventMedia)
-				{
-					if( mediaObject.emotion_id == item.emotion_id )
-						resultArray.event_media.Add(mediaObject);
-				}
-
-				masterObject.resultarray.Add(resultArray);
-			}
-
-
-			masterObject.code = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].code : "";
-			masterObject.noimageurl = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].noimageurl : "";
-			masterObject.mediapath = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].mediapath : "";
-			masterObject.mediathumbpath = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].mediathumbpath : "";
-			return masterObject;
+                masterObject.code = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].code : "";
+                masterObject.noimageurl = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].noimageurl : "";
+                masterObject.mediapath = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].mediapath : "";
+                masterObject.mediathumbpath = (listEmotions != null && listEmotions.Count > 0) ? listEmotions[0].mediathumbpath : "";
+                return masterObject;
+            }
+            catch (Exception)
+            {
+                
+                return null;
+            }
 
 		}
 
@@ -745,7 +761,7 @@ namespace PurposeColor.Database
 			catch (Exception ex)
 			{
 
-				throw;
+				return false;
 			}
 
 		}

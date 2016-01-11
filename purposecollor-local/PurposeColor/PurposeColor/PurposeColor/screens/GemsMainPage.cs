@@ -83,6 +83,7 @@ namespace PurposeColor.screens
 				} 
 				else
 				{
+                    if( Device.OS != TargetPlatform.WinPhone )
 					gemsEmotionsObject = App.Settings.GetGemsEmotionsObject ();
 					progress.HideProgressbar ();
 				}
@@ -90,8 +91,12 @@ namespace PurposeColor.screens
 			}
 			else
 			{
-				App.Settings.DeleteAllGemsEvents ();
-				App.Settings.SaveAllEmotionGems (gemsEmotionsObject);
+                if (Device.OS != TargetPlatform.WinPhone)
+                {
+                    App.Settings.DeleteAllGemsEvents();
+                    App.Settings.SaveAllEmotionGems(gemsEmotionsObject);
+                }
+
 			}
 
 			if (gemsGoalsObject == null)
@@ -104,6 +109,7 @@ namespace PurposeColor.screens
 				} 
 				else 
 				{
+                    if (Device.OS != TargetPlatform.WinPhone)
 					gemsGoalsObject = App.Settings.GetGemsGoalsObject ();
 					progress.HideProgressbar ();
 				}
@@ -111,8 +117,12 @@ namespace PurposeColor.screens
 			} 
 			else
 			{
-				App.Settings.DeleteAllGemsActions ();
-				App.Settings.SaveAllGoalsGems ( gemsGoalsObject );
+                if (Device.OS != TargetPlatform.WinPhone)
+                {
+                    App.Settings.DeleteAllGemsActions();
+                    App.Settings.SaveAllGoalsGems(gemsGoalsObject);
+                }
+
 			}
 
             emotionList = new ObservableCollection<GemsEmotionsDetails>();

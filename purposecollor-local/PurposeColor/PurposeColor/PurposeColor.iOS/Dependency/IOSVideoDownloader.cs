@@ -10,6 +10,7 @@ using AlertView;
 using MediaPlayer;
 using Foundation;
 using System.Linq;
+using BigTed;
 
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOSVideoDownloader))]
@@ -17,6 +18,7 @@ namespace PurposeColor.iOS
 {
 	public class IOSVideoDownloader : IVideoDownloader
 	{
+		WebClient webClient ;
 		public IOSVideoDownloader ()
 		{
 		}
@@ -48,18 +50,18 @@ namespace PurposeColor.iOS
 					return true;
 				}
 
-				MBHUDView.HudWithBody (
-					body: "Downloading Media....",
-					aType: MBAlertViewHUDType.ActivityIndicator, 
-					delay: 120, 
-					showNow: true
-				);
+		
 
-				var webClient = new WebClient();
+				webClient = new WebClient();
 
 				webClient.DownloadDataCompleted += async (s, e) =>
 				{
-
+					if( e.Cancelled )
+					{
+						BTProgressHUD.Dismiss();
+						webClient.Dispose();
+						return;
+					}
 					var bytes = e.Result; // get the downloaded data
 					string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 					string localFilename = filename;
@@ -69,15 +71,14 @@ namespace PurposeColor.iOS
 					ALAssetsLibrary videoLibrary = new ALAssetsLibrary();
 					await videoLibrary.WriteVideoToSavedPhotosAlbumAsync( new Foundation.NSUrl( localPath ));
 
-					MBHUDView.DismissCurrentHUD();
-
-
+					BTProgressHUD.Dismiss();
 					PlayVideo( localPath );
-
-
+					webClient.Dispose();
 
 				};
 
+
+				BTProgressHUD.Show("cancel", OnCancelDownload, "Downloading Media....",-1, ProgressHUD.MaskType.Black );
 				var url = new Uri(uri);
 
 				webClient.DownloadDataAsync(url);
@@ -88,6 +89,12 @@ namespace PurposeColor.iOS
 				return false;
 			}
 
+		}
+
+		private void  OnCancelDownload()
+		{
+			webClient.CancelAsync ();
+			BTProgressHUD.Dismiss(); 
 		}
 
 		void OnDownloadVideoCompleted (object sender, DownloadDataCompletedEventArgs e)

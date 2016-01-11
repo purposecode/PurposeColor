@@ -362,6 +362,9 @@
     <Reference Include="Plugin.Contacts">
       <HintPath>..\..\packages\Xam.Plugin.Contacts.2.0.0-beta1\lib\Xamarin.iOS10\Plugin.Contacts.dll</HintPath>
     </Reference>
+    <Reference Include="BTProgressHUD">
+      <HintPath>..\..\packages\BTProgressHUD.1.0.0\lib\Xamarin.iOS10\BTProgressHUD.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="PushNotificationApplicationDelegate.txt" />

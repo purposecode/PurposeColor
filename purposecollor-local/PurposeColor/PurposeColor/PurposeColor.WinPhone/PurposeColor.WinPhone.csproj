@@ -96,7 +96,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
-    <Compile Include="CrossVideoPlayer\WinVideoPlayer.xaml.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\CameraCapture.cs" />
     <Compile Include="Dependency\DBConnection.cs" />
@@ -142,10 +141,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Page Include="CrossVideoPlayer\WinVideoPlayer.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -32,12 +32,15 @@ namespace PurposeColor.Droid
 
                 Android.Net.Uri downloadedFileUri = dm.GetUriForDownloadedFile(App.DownloadID);
 
+                if( downloadedFileUri != null )
+                {
+                    File file = new File(new Java.Net.URI(downloadedFileUri.ToString()));
+                    Intent videoPlayerActivity = new Intent(Intent.ActionView);
+                    videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
+                    Activity activity = Forms.Context as Activity;
+                    activity.StartActivity(videoPlayerActivity);
+                }
 
-                File file = new File(new Java.Net.URI(downloadedFileUri.ToString()));
-                Intent videoPlayerActivity = new Intent(Intent.ActionView);
-                videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
-                Activity activity = Forms.Context as Activity;
-                activity.StartActivity(videoPlayerActivity);
             }
             catch (Exception ex)
             {

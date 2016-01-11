@@ -22,6 +22,8 @@ namespace PurposeColor.Droid.Dependency
 {
     class AndroidVideoPlayer : IVideoDownloader
     {
+
+
         public async Task<bool> Download(string uri, string filename)
         {
 
@@ -39,7 +41,7 @@ namespace PurposeColor.Droid.Dependency
           
             App.DownloadID = 0;
 
-            AndHUD.Shared.Show(MainActivity.GetMainActivity(), "Dowloading video...", -1, MaskType.Clear  );
+       
 
             Android.Net.Uri contentUri = Android.Net.Uri.Parse(uri);
 
@@ -56,8 +58,20 @@ namespace PurposeColor.Droid.Dependency
 
             App.DownloadID = dm.Enqueue(r);
 
+            AndHUD.Shared.Show(MainActivity.GetMainActivity(), "Dowloading video...", -1, MaskType.Clear, null, () => { dm.Remove(App.DownloadID); }, true, () => { dm.Remove(App.DownloadID); });
+
 
             return true;
+        }
+
+        void OnProgresClick()
+        {
+            string test = "click";
+        }
+
+        void OnProgresCancel()
+        {
+            string test = "cancel";
         }
 
         public void PlayVideo(string path)

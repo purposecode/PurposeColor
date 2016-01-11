@@ -367,8 +367,8 @@ namespace PurposeColor.screens
 
 
 
-                if (emotionIndex == 0)
-                    headerLayout.Children.Add(mainTitle);
+               /* if (emotionIndex == 0)
+                    headerLayout.Children.Add(mainTitle);*/
                 headerLayout.Children.Add(subTitle);
 
 
@@ -814,12 +814,12 @@ namespace PurposeColor.screens
         {
             System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
 
-            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 600 )
+            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 570 )
             {
 				if( mainTitleBar.title.Text != "My Supporting Emotions" )
                 mainTitleBar.title.Text = "My Supporting Emotions";
             }
-            else if (masterScroll.ScrollY > 600 && masterScroll.ScrollY < 900)
+            else if (masterScroll.ScrollY > 570 && masterScroll.ScrollY < 900)
             {
                 if( mainTitleBar.title.Text != "My Goals and Dreams")
 					mainTitleBar.title.Text = "My Goals and Dreams";

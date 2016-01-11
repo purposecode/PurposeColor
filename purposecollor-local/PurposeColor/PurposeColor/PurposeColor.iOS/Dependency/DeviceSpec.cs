@@ -39,6 +39,10 @@ namespace PurposeColor.iOS
 			var dp = 100; //(int)((pixelValue) / Resources.System.DisplayMetrics.Density);
 			return dp;
 		}
+
+		public void ExitApp()
+		{
+		}
 	}
 }
 

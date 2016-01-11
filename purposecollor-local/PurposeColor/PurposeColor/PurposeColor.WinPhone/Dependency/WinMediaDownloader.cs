@@ -23,6 +23,8 @@ namespace PurposeColor.WinPhone.Dependency
     {
         private PhoneApplicationFrame frame;
         string downloadedDirectory;
+        ProgressBarImpl progress;
+
         public void PlayVideo(string path)
         {
             MediaElement player = new MediaElement();
@@ -33,22 +35,11 @@ namespace PurposeColor.WinPhone.Dependency
 
         public async Task<bool> Download(string uri, string filename)
         {
+
             frame = (PhoneApplicationFrame)(System.Windows.Application.Current.RootVisual);
             await DownloadFileFromWeb(new Uri(uri), filename, CancellationToken.None);
 
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-                try
-                {
-                    frame.Navigate(new Uri("/sample.xaml", UriKind.Relative));
-                   // frame.Navigate(new Uri("/WinVideoPlayer.xaml?msg=" + file.Name, UriKind.Relative));
-                }
-                catch (Exception ex)
-                {
-                    tcs.SetException(ex);
-                }
-            });
+
 
             return true;
         }
@@ -65,17 +56,32 @@ namespace PurposeColor.WinPhone.Dependency
         }
 
 
-        public static Task<Stream> DownloadFile(Uri url)
+        public Task<Stream> DownloadFile(Uri url)
         {
             var tcs = new TaskCompletionSource<Stream>();
             var wc = new WebClient();
             wc.OpenReadCompleted += (s, e) =>
             {
-                if (e.Error != null) tcs.TrySetException(e.Error);
-                else if (e.Cancelled) tcs.TrySetCanceled();
+                if (e.Error != null)
+                {
+                    tcs.TrySetException(e.Error);
+                    return;
+                }
+                else if (e.Cancelled)
+                {
+                    tcs.TrySetCanceled();
+                    return;
+                }
                 else tcs.TrySetResult(e.Result);
             };
             wc.OpenReadAsync(url);
+            MessageBoxResult result = MessageBox.Show("Started downloading media. Do you like to stop the download ?", "Purpose Color", MessageBoxButton.OKCancel);
+            if( result == MessageBoxResult.OK )
+            {
+                progress.HideProgressbar();
+                wc.CancelAsync();
+                return null;
+            }
             return tcs.Task;
         }
 
@@ -83,10 +89,12 @@ namespace PurposeColor.WinPhone.Dependency
         public async Task<Problem> DownloadFileFromWeb(Uri uriToDownload, string fileName, CancellationToken cToken)
         {
 
-            ProgressBarImpl progress = new ProgressBarImpl();
+            progress = new ProgressBarImpl();
             try
             {
                 progress.ShowProgressbar("Downloading media....");
+
+            
 
                 using (IsolatedStorageFileStream testfile = IsolatedStorageFile.GetUserStoreForApplication().CreateFile("test.txt"))
                 {
@@ -105,8 +113,13 @@ namespace PurposeColor.WinPhone.Dependency
                         return Problem.Other;
                     }
                 }
- 
-                using (Stream mystr = await DownloadFile(uriToDownload))
+
+                Stream mystr = await DownloadFile(uriToDownload);
+                if( mystr == null )
+                {
+                    progress.HideProgressbar();
+                    return Problem.Cancelled;
+                }
                 using (IsolatedStorageFile ISF = IsolatedStorageFile.GetUserStoreForApplication())
                 {
 
@@ -125,6 +138,22 @@ namespace PurposeColor.WinPhone.Dependency
 
                         PurposeColor.App.WindowsDownloadedMedia = file.Name;
                         progress.HideProgressbar();
+
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
+                            try
+                            {
+                                frame.Navigate(new Uri("/sample.xaml", UriKind.Relative));
+                                // frame.Navigate(new Uri("/WinVideoPlayer.xaml?msg=" + file.Name, UriKind.Relative));
+                            }
+                            catch (Exception ex)
+                            {
+                                tcs.SetException(ex);
+                            }
+                        });
+
+                        mystr = null;
                     }
                 }
                 progress.HideProgressbar();

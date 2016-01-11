@@ -73,30 +73,47 @@ namespace PurposeColor.screens
             progress.ShowProgressbar( "Loading gems.." );
             gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
             gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
-            if (gemsEmotionsObject == null)
-            {
-                var success = await DisplayAlert( Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY );
-                if (!success)
-                {
-                    OnAppearing(sender, EventArgs.Empty);
-                    return;
-                }
-                else
-                {
-                    progress.HideProgressbar();
-                    return;
-                }
-                   
-            }
+			if (gemsEmotionsObject == null) 
+			{
+				var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
+				if (!success) 
+				{
+					OnAppearing (sender, EventArgs.Empty);
+					return;
+				} 
+				else
+				{
+					gemsEmotionsObject = App.Settings.GetGemsEmotionsObject ();
+					progress.HideProgressbar ();
+				}
 
-            if (gemsGoalsObject == null)
-            {
-                var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
-                if (!success)
-                    OnAppearing(sender, EventArgs.Empty);
-                else
-                    return;
-            }
+			}
+			else
+			{
+				App.Settings.DeleteAllGemsEvents ();
+				App.Settings.SaveAllEmotionGems (gemsEmotionsObject);
+			}
+
+			if (gemsGoalsObject == null)
+			{
+				var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
+				if (!success) 
+				{
+					OnAppearing (sender, EventArgs.Empty);
+					return;
+				} 
+				else 
+				{
+					gemsGoalsObject = App.Settings.GetGemsGoalsObject ();
+					progress.HideProgressbar ();
+				}
+
+			} 
+			else
+			{
+				App.Settings.DeleteAllGemsActions ();
+				App.Settings.SaveAllGoalsGems ( gemsGoalsObject );
+			}
 
             emotionList = new ObservableCollection<GemsEmotionsDetails>();
             if (gemsEmotionsObject.resultarray != null && gemsEmotionsObject.resultarray.Count > 1)
@@ -253,9 +270,6 @@ namespace PurposeColor.screens
                 divider.WidthRequest = App.screenWidth * 85 / 100;
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-                customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
 
 
                 if( item.event_details.Count > 1 )
@@ -323,7 +337,12 @@ namespace PurposeColor.screens
                     moreButton.ClassId = item.emotion_id.ToString();
                     moreButton.Clicked += OnEmotionsMoreButtonClicked;
 
-                    customLayout.AddChildToLayout(divider, 5, 14);
+					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
+					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
+					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
+
+					customLayout.AddChildToLayout(divider, 5, 14);
+
                     customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
                     customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
                     customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(14, 16, 12));
@@ -331,8 +350,9 @@ namespace PurposeColor.screens
                 }
                 else
                 {
-                     viewContainer.HeightRequest = 95;
-                     customLayout.HeightRequest = 115;
+					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
+					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
+					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
                 }
 
 
@@ -477,10 +497,7 @@ namespace PurposeColor.screens
                 divider.WidthRequest = App.screenWidth * 85 / 100;
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-                customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-                customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
-
+      
                 if(  item.action_details.Count > 1 )
                 {
                     Label secondDetailsInfo = new Label();
@@ -547,7 +564,13 @@ namespace PurposeColor.screens
                     moreButton.ClassId = item.goal_id.ToString();
                     moreButton.Clicked += OnGoalsMore;
 
+
+					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
+					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
+					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
+
                     customLayout.AddChildToLayout(divider, 5, 14);
+
                     customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
                     customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
                     customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(14, 16, 12));
@@ -555,8 +578,9 @@ namespace PurposeColor.screens
                 }
                 else
                 {
-                    viewContainer.HeightRequest = 95;
-                    customLayout.HeightRequest = 115;
+					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
+					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
+					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
                 }
 
 

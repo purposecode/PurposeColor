@@ -509,6 +509,20 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icon_send.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon_send.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon_send.png" />
+    <AndroidResource Include="Resources\drawable\goals_badge_blue.png" />
+    <AndroidResource Include="Resources\drawable\goals_badge_red.png" />
+    <AndroidResource Include="Resources\drawable\tic_active.png" />
+    <AndroidResource Include="Resources\drawable\tick_box.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\goals_badge_blue.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\goals_badge_red.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tic_active.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\tick_box.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\goals_badge_blue.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\goals_badge_red.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\goals_badge_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\goals_badge_red.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\goals_badge_blue.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\goals_badge_red.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

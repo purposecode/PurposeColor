@@ -23,6 +23,7 @@ namespace PurposeColor.screens
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
+     //   StackLayout cellContainer;
         public GoalsMainPage()
         {
 
@@ -39,12 +40,17 @@ namespace PurposeColor.screens
 
 
             masterScroll = new ScrollView();
-            masterScroll.WidthRequest = App.screenWidth;
+            masterScroll.WidthRequest = App.screenWidth - 20;
             masterScroll.HeightRequest = App.screenHeight * 85 / 100;
+            masterScroll.BackgroundColor = Color.FromRgb( 244, 244, 244 );
 
             masterStack = new StackLayout();
             masterStack.Orientation = StackOrientation.Vertical;
-            masterStack.BackgroundColor = Color.Transparent;
+            masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
+            masterStack.Spacing = 0;
+            //masterStack.Padding = new Thickness( 10, 10, 10, 10 );
+
+
 
 
         }
@@ -58,35 +64,22 @@ namespace PurposeColor.screens
             {
                 for (int index = 0; index < 3; index++)
                 {
-                    StackLayout cellMasterLayout = new StackLayout();
-                    cellMasterLayout.Orientation = StackOrientation.Vertical;
-                    cellMasterLayout.BackgroundColor = Color.White;
 
-
-                    StackLayout headerLayout = new StackLayout();
-                    headerLayout.Orientation = StackOrientation.Vertical;
-                    headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+                    StackLayout cellContainer = new StackLayout();
+                    cellContainer.Orientation = StackOrientation.Vertical;
+                    cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
+                    cellContainer.Spacing = 0;
+                    cellContainer.Padding = new Thickness(10, 10, 10, 10);
 
                     CustomLayout customLayout = new CustomLayout();
                     customLayout.BackgroundColor = Color.White;
+                    customLayout.WidthRequest = App.screenWidth * 90 / 100;
                     double screenWidth = App.screenWidth;
                     double screenHeight = App.screenHeight;
 
-                    CustomImageButton mainTitle = new CustomImageButton();
-                    //  mainTitle.IsEnabled = false;
-                    mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-                    mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                    mainTitle.Text = "sample title";
-                    mainTitle.TextColor = Color.White;
-                    mainTitle.FontSize = Device.OnPlatform(12, 12, 18);
-                    mainTitle.WidthRequest = App.screenWidth;
-                    mainTitle.TextOrientation = TextOrientation.Middle;
-                    headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
-                    mainTitle.HeightRequest = 80;
-
 
                     Label subTitle = new Label();
-                    subTitle.Text = "Sub Title";
+                    subTitle.Text = "Pending";
                     subTitle.TextColor = Color.Gray;
                     subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                     subTitle.XAlign = TextAlignment.Center;
@@ -94,12 +87,17 @@ namespace PurposeColor.screens
                     subTitle.VerticalOptions = LayoutOptions.Center;
                     subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
                     subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                    headerLayout.HorizontalOptions = LayoutOptions.Center;
+                   // headerLayout.HorizontalOptions = LayoutOptions.Center;
                     subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
                     Label firstDetailsInfo = new Label();
-                    firstDetailsInfo.Text = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
-                    //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
+                    string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
+                    if (firstDetails.Length > 130)
+                    {
+                        firstDetails = firstDetails.Substring(0, 130);
+                        firstDetails += "....";
+                    }
+                    firstDetailsInfo.Text = firstDetails;
                     firstDetailsInfo.TextColor = Color.Gray;
                     firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                     firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
@@ -107,41 +105,71 @@ namespace PurposeColor.screens
                     int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
                     firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
-                    customLayout.WidthRequest = screenWidth;
-                    //   customLayout.HeightRequest = 200;//screenHeight * Device.OnPlatform(30, 31, 7) / 100;
+
+                    Image goalImage = new Image();
+                    goalImage.Source = "goals_badge_blue.png";
+                    goalImage.HeightRequest = 100;
+                    goalImage.WidthRequest = 30;
+                    goalImage.Aspect = Aspect.Fill;
 
 
-                    StackLayout viewContainer = new StackLayout();
-                    viewContainer.WidthRequest = App.screenWidth;
-                    viewContainer.HeightRequest = 175;//screenHeight * Device.OnPlatform(30, 27, 7) / 100;
-                    viewContainer.BackgroundColor = Color.White;
+                    Image mediaImage = new Image();
+                    mediaImage.Source = "avatar.jpg";
+                    mediaImage.HeightRequest = 80;
+                    mediaImage.WidthRequest = 80;
 
 
-                    headerLayout.Children.Add(mainTitle);
-                    headerLayout.Children.Add(subTitle);
+                    StackLayout firstRow = new StackLayout();
+                    firstRow.Orientation = StackOrientation.Horizontal;
+                    firstRow.BackgroundColor = Color.White;
+                    firstRow.WidthRequest = App.screenWidth - 20;
+                    firstRow.Padding = new Thickness(0, 10, 0, 10);
 
-                    var items = new List<CheckItem>();
-                    items.Add(new CheckItem { Name = "Xamarin.com" });
-                    items.Add(new CheckItem { Name = "Twitter" });
-                    items.Add(new CheckItem { Name = "Facebook" });
-                    items.Add(new CheckItem { Name = "Xamarin.com" });
-                    items.Add(new CheckItem { Name = "Twitter" });
-                    items.Add(new CheckItem { Name = "Facebook" });
-                    items.Add(new CheckItem { Name = "Xamarin.com" });
+                    firstRow.Children.Add(goalImage);
+                    firstRow.Children.Add(firstDetailsInfo);
+                    firstRow.Children.Add(mediaImage);
 
-                    var multiPage = new SelectMultipleBasePage<CheckItem>(items);
-                    multiPage.HeightRequest = items.Count * 50;
+                    cellContainer.Children.Add(firstRow);
 
-                    //  customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-                    customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-                    customLayout.AddChildToLayout(multiPage, 5, Device.OnPlatform(-3, 10, 20));
 
-                    masterStack.Children.Add(headerLayout);
-                    masterStack.Children.Add(customLayout);
 
-                    // masterStack.Children.Add( cellMasterLayout );
+                    for (int pendingIndex = 0; pendingIndex < 5; pendingIndex++)
+                    {
+                        Image bgImage = new Image();
+                        bgImage.Source = "select_box_whitebg.png";
+                        bgImage.WidthRequest = App.screenWidth - 40;
+                        bgImage.HeightRequest = 50;
+
+                        Label pendingGoalTitle = new Label();
+                        pendingGoalTitle.TextColor = Color.Black;
+                        pendingGoalTitle.XAlign = TextAlignment.Center;
+                        pendingGoalTitle.FontSize = 15;
+                        pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
+                        pendingGoalTitle.Text = "Go to gym";
+
+                        Switch goalDoneSwitch = new Switch();
+                        goalDoneSwitch.BackgroundColor = Color.Transparent;
+                        goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
+
+                        CustomLayout pendingRow = new CustomLayout();
+                        pendingRow.WidthRequest = App.screenWidth * 90 / 100;
+                        pendingRow.HeightRequest = 50;
+                        pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                        pendingRow.AddChildToLayout(goalDoneSwitch, 5, 20, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                        pendingRow.AddChildToLayout(pendingGoalTitle, 20, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                        cellContainer.Children.Add(pendingRow);
+                    }
+
+                    masterStack.Children.Add(cellContainer);
+
+                    StackLayout trans = new StackLayout();
+                    trans.BackgroundColor = Color.FromRgb(244, 244, 244);
+                    trans.HeightRequest = 30;
+                    trans.WidthRequest = App.screenWidth;
+                    masterStack.Children.Add(trans);
                 }
 
+                masterScroll.Padding = new Thickness(10, 10, 10, 0);
                 masterScroll.Scrolled += OnScroll;
                 masterScroll.Content = masterStack;
 

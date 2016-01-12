@@ -280,7 +280,7 @@ namespace PurposeColor.screens
                 Image divider = new Image();
                 divider.Source = "line_seperate.png";
                 divider.BackgroundColor = Color.Transparent;
-                divider.WidthRequest = App.screenWidth * 85 / 100;
+                divider.WidthRequest = App.screenWidth * 80 / 100;
 
                 customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
 
@@ -375,12 +375,36 @@ namespace PurposeColor.screens
                     headerLayout.Children.Add(mainTitle);*/
                 headerLayout.Children.Add(subTitle);
 
+                if (emotionIndex == 0)
+                {
+                    StackLayout whiteBorder = new StackLayout();
+                    whiteBorder.BackgroundColor = Color.White;
+                    whiteBorder.HeightRequest = 10;
+                    whiteBorder.WidthRequest = App.screenWidth;
+                  //  whiteBorder.TranslationY = 20;
+                    masterStack.Children.Add( whiteBorder );
+
+                    //customLayout.AddChildToLayout(whiteBorder, Device.OnPlatform(0, 0, 0), Device.OnPlatform(40, 40, 40));
+                }
+                    
 
                 double paddingLeft = App.screenWidth * 5 / 100;
                 customLayout.Padding = new Thickness(paddingLeft, 0, paddingLeft, 0);
 
                 masterStack.Children.Add(headerLayout);
                 masterStack.Children.Add(customLayout);
+
+                if (emotionIndex == 0)
+                {
+                    StackLayout whiteBorder = new StackLayout();
+                    whiteBorder.BackgroundColor = Color.White;
+                    whiteBorder.HeightRequest = 10;
+                    whiteBorder.WidthRequest = App.screenWidth;
+                    masterStack.Children.Add(whiteBorder);
+
+                    //customLayout.AddChildToLayout(whiteBorder, Device.OnPlatform(0, 0, 0), Device.OnPlatform(40, 40, 40));
+                }
+
                 emotionIndex++;
                 // masterStack.Children.Add( cellMasterLayout );
             }

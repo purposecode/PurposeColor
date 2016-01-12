@@ -149,9 +149,10 @@ namespace PurposeColor.screens
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new GemsMainPage());
                 }
-                else if ("GOALS & DREAMS" == selItem.Name)
+                else if ("Goals & Dreams" == selItem.Name)
                 {
-
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new GoalsMainPage());
                 }
                 else if ("EMOTIONAL INTELLIGENCE" == selItem.Name)
                 {

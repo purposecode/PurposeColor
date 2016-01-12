@@ -161,7 +161,9 @@ namespace PurposeColor.screens
 
         void RefreshView()
         {
-            masterStack.Children.Clear();
+            try
+            {
+                  masterStack.Children.Clear();
 
             int emotionIndex = 0;
             foreach (var item in emotionList)
@@ -248,7 +250,8 @@ namespace PurposeColor.screens
                 firstEmotionsImage.Aspect = Aspect.Fill;
                 firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : "no_image_found.jpg";
+                //string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : "no_image_found.jpg";
+                string firstImageSource = (item.event_media != null && item.event_media.Count > 0 && !string.IsNullOrEmpty(item.event_media[0].event_media)) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : Constants.SERVICE_BASE_URL + gemsEmotionsObject.noimageurl;
                 if (item.event_media[0] != null && item.event_media[0].media_type == "mp4")
                 {
                     firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
@@ -319,7 +322,8 @@ namespace PurposeColor.screens
                     secondEmotionsImage.Aspect = Aspect.Fill;
                     secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                     secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                    string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : "no_image_found.jpg";
+                    //string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : "no_image_found.jpg";
+                    string secondImageSource = (item.event_media != null && item.event_media.Count > 1 && !string.IsNullOrEmpty(item.event_media[1].event_media)) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : Constants.SERVICE_BASE_URL + gemsEmotionsObject.noimageurl;
                     if (item.event_media[1] != null && item.event_media[1].media_type == "mp4")
                     {
                         secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
@@ -476,6 +480,7 @@ namespace PurposeColor.screens
                 firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
                 bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty(item.action_media[0].action_media)) ? true : false;
                 //string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
+               // string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[0].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
                 string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[0].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
                 if (item.action_media[0] != null && item.action_media[0].media_type == "mp4")
                 {
@@ -546,6 +551,7 @@ namespace PurposeColor.screens
                     secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
                     secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
                     bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty(item.action_media[1].action_media)) ? true : false;
+                    //string secondImageSource = (secondImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[1].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
                     string secondImageSource = (secondImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[1].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
                     //secondEmotionsImage.Source = "manali.jpg"; 
                     if (item.action_media[1] != null && item.action_media[1].media_type == "mp4")
@@ -616,6 +622,22 @@ namespace PurposeColor.screens
             showMoreGoals.BackgroundColor = Color.Transparent;
             showMoreGoals.Clicked += OnShowMoreGoalslicked;
             masterStack.Children.Add(showMoreGoals);
+
+
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                StackLayout spaceOffsetlayout = new StackLayout();
+                spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
+                spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 0, 100);
+                spaceOffsetlayout.BackgroundColor = Color.Transparent;
+                masterStack.Children.Add(spaceOffsetlayout);
+            }
+            }
+            catch (Exception ex)
+            {
+                
+               DisplayAlert(Constants.ALERT_TITLE, "Error in getting gems", Constants.ALERT_OK);
+            }
         }
 
         void OnShowMoreGoalslicked(object sender, EventArgs e)

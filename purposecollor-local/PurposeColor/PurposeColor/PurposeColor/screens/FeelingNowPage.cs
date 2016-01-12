@@ -294,7 +294,8 @@ namespace PurposeColor
 				}
 				else
 				{
-                    await Navigation.PushModalAsync(new FeelingsSecondPage());
+                    this.subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;
+                    await Navigation.PushAsync(new FeelingsSecondPage());
                     return;
 				}
             }

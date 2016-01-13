@@ -1,4 +1,5 @@
-﻿using CustomControls;
+﻿using Cross;
+using CustomControls;
 using PurposeColor.CustomControls;
 using PurposeColor.interfaces;
 using PurposeColor.Model;
@@ -9,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PurposeColor.screens
@@ -876,6 +878,37 @@ namespace PurposeColor.screens
         void NextButtonTapRecognizer_Tapped(object sender, EventArgs e)
         {
            
+        }
+
+
+        protected override bool OnBackButtonPressed()
+        {
+            //var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
+
+            Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
+            action.ContinueWith(task =>
+            {
+                bool val = task.Result;
+                if (task.Result)
+                {
+                    CloseAllPages();
+
+                }
+
+            });
+
+            return true;
+
+        }
+
+        private void CloseAllPages()
+        {
+            if (Device.OS != TargetPlatform.iOS)
+            {
+                IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
+                device.ExitApp();
+            }
+
         }
 
         public void Dispose()

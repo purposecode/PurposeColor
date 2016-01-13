@@ -761,7 +761,7 @@ namespace PurposeColor.screens
 				{
                     try
                     {
-                        await Navigation.PushModalAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id, GemType.Event));
+						await Navigation.PushAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id, GemType.Event));
                     }
                     catch (Exception)
                     {
@@ -818,7 +818,7 @@ namespace PurposeColor.screens
 				{
                     try
                     {
-                        await Navigation.PushModalAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id, GemType.Action));
+						await Navigation.PushAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id, GemType.Action));
                     }
                     catch (Exception)
                     {

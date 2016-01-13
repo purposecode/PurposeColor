@@ -51,11 +51,13 @@ namespace PurposeColor
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
-            subTitleBar.BackButtonTapRecognizer.Tapped += (object sender, EventArgs e) =>
+            subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
-                try{
-                    Navigation.PopModalAsync();
-                }catch (Exception){
+                try
+				{
+					await Navigation.PopAsync();
+                }
+				catch (Exception){
                 }
             };
             

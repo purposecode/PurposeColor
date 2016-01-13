@@ -1543,15 +1543,15 @@ namespace PurposeColor.Service
 
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
-                    return "200"; // for testing only // test
-                    //var eventsJson = response.Content.ReadAsStringAsync().Result;
-                    //var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
-                    //if (rootobject != null && rootobject.code != null)
-                    //{
-                    //    client.Dispose();
-                    //    return rootobject.code;
-                    //}
+                    var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    if (rootobject.code != null)
+                    {
+                        client.Dispose();
+                        return rootobject.code;
+                    }
                 }
+
                 client.Dispose();
             }
             catch (Exception ex)

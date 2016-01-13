@@ -382,6 +382,7 @@ namespace PurposeColor
 				progressBar.ShowToast ("Could not process your request");
 			} else {
 				progressBar.ShowToast ("Network error, Please try again later.");
+                shareButtonTap.Tapped += ShareButtonTapped;
 			}
 		}
 
@@ -393,6 +394,10 @@ namespace PurposeColor
                 progressBar.ShowProgressbar("Requesting..");
                 User user = App.Settings.GetUser();
 
+
+                /////////////// for testing /////////////
+                user = new User { UserId = 2, DisplayName = "TestUser"};
+                /////////////// for testing /////////////
                 if (user == null)
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
@@ -422,7 +427,6 @@ namespace PurposeColor
 
             progressBar.HideProgressbar();
         }
-
 
         void OnActionVideoTapped(object sender, EventArgs e)
         {

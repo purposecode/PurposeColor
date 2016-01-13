@@ -197,12 +197,12 @@ namespace PurposeColor.screens
                 {
                     TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
                     checkboxTap.Tapped += OnCheckboxTapTapped;
+
                     Image bgImage = new Image();
                     bgImage.Source = "select_box_whitebg.png";
                     bgImage.WidthRequest = App.screenWidth - 40;
                     bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
                     bgImage.Aspect = Aspect.Fill;
-                    bgImage.GestureRecognizers.Add( checkboxTap );
 
                     Label pendingGoalTitle = new Label();
                     pendingGoalTitle.TextColor = Color.Black;
@@ -210,25 +210,39 @@ namespace PurposeColor.screens
                     pendingGoalTitle.FontSize = 15;
                     pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
                     pendingGoalTitle.Text = "Go to gym";
-                    pendingGoalTitle.GestureRecognizers.Add(checkboxTap);
+                    pendingGoalTitle.IsEnabled = false;
 
                     Switch goalDoneSwitch = new Switch();
                     goalDoneSwitch.BackgroundColor = Color.White;
                     goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
                     goalDoneSwitch.WidthRequest = 50;
 
+                    StackLayout trasprntClickLayout = new StackLayout();
+                    trasprntClickLayout.WidthRequest = 50;
+                    trasprntClickLayout.HeightRequest = 50;
+                    trasprntClickLayout.BackgroundColor = Color.Transparent;
+                    trasprntClickLayout.VerticalOptions = LayoutOptions.Center;
+                    trasprntClickLayout.GestureRecognizers.Add(checkboxTap);
+
                     Image tickImage = new Image();
+                    tickImage.IsEnabled = false;
                     tickImage.Source = "tick_box.png";
                     tickImage.Aspect = Aspect.Fill;
                     tickImage.WidthRequest = 20;
                     tickImage.HeightRequest = 20;
-                    tickImage.GestureRecognizers.Add(checkboxTap);
+                    tickImage.ClassId = "off";
+                    tickImage.HorizontalOptions = LayoutOptions.Center;
+                    tickImage.VerticalOptions = LayoutOptions.End;
+                    tickImage.TranslationY = 15;
+                    trasprntClickLayout.Children.Add(tickImage);
+                    
 
                     CustomLayout pendingRow = new CustomLayout();
                     pendingRow.WidthRequest = App.screenWidth * 90 / 100;
                     pendingRow.HeightRequest = 50;
                     pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(goalDoneSwitch, 2, 22, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    //pendingRow.AddChildToLayout(tickImage, 2, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
                     pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(22, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
                     cellContainer.Children.Add(pendingRow);
                 }
@@ -245,7 +259,21 @@ namespace PurposeColor.screens
 
         void OnCheckboxTapTapped(object sender, EventArgs e)
         {
-            
+            StackLayout layout = sender as StackLayout;
+            if( layout != null && layout.Children != null && layout.Children.Count > 0 )
+            {
+                Image img = (Image)layout.Children[0];
+                if (img != null && img.ClassId == "off")
+                {
+                    img.Source = "tic_active.png";
+                    img.ClassId = "on";
+                }
+                else if( img != null && img.ClassId == "on" )
+                {
+                    img.Source = "tick_box.png";
+                    img.ClassId = "off";
+                }
+            }
         }
 
 

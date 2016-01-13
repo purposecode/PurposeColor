@@ -523,6 +523,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\goals_badge_red.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\goals_badge_blue.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\goals_badge_red.png" />
+    <AndroidResource Include="Resources\drawable\sec_bg.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\sec_bg.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\sec_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\sec_bg.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\sec_bg.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -1,4 +1,5 @@
-﻿using CustomControls;
+﻿using Cross;
+using CustomControls;
 using Multiselect;
 using PurposeColor.CustomControls;
 using PurposeColor.interfaces;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PurposeColor.screens
@@ -57,119 +59,26 @@ namespace PurposeColor.screens
 
         async void OnAppearing(object sender, EventArgs e)
         {
+
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar("Loading gems..");
 
             try
             {
-                for (int index = 0; index < 3; index++)
-                {
+                #region PENDING GOALS
+                CreateGoalsPage( true );
+                #endregion
 
-                    StackLayout cellContainer = new StackLayout();
-                    cellContainer.Orientation = StackOrientation.Vertical;
-                    cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
-                    cellContainer.Spacing = 0;
-                    cellContainer.Padding = new Thickness(10, 10, 10, 10);
+                #region ALL GOALS HEADING
+                CreateAllGoalsHeading();
+                #endregion
 
-                    CustomLayout customLayout = new CustomLayout();
-                    customLayout.BackgroundColor = Color.White;
-                    customLayout.WidthRequest = App.screenWidth * 90 / 100;
-                    double screenWidth = App.screenWidth;
-                    double screenHeight = App.screenHeight;
+                #region ALL GOALS
+                CreateGoalsPage(false);
+                #endregion
 
 
-                    Label subTitle = new Label();
-                    subTitle.Text = "Pending";
-                    subTitle.TextColor = Color.Gray;
-                    subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    subTitle.XAlign = TextAlignment.Center;
-                    int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                    subTitle.VerticalOptions = LayoutOptions.Center;
-                    subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                    subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                   // headerLayout.HorizontalOptions = LayoutOptions.Center;
-                    subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
-                    Label firstDetailsInfo = new Label();
-                    string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
-                    if (firstDetails.Length > 130)
-                    {
-                        firstDetails = firstDetails.Substring(0, 130);
-                        firstDetails += "....";
-                    }
-                    firstDetailsInfo.Text = firstDetails;
-                    firstDetailsInfo.TextColor = Color.Gray;
-                    firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                    firstDetailsInfo.HeightRequest = 45;
-                    int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
-                    firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-
-
-                    Image goalImage = new Image();
-                    goalImage.Source = "goals_badge_blue.png";
-                    goalImage.HeightRequest = 100;
-                    goalImage.WidthRequest = 30;
-                    goalImage.Aspect = Aspect.Fill;
-
-
-                    Image mediaImage = new Image();
-                    mediaImage.Source = "avatar.jpg";
-                    mediaImage.HeightRequest = 80;
-                    mediaImage.WidthRequest = 80;
-
-
-                    StackLayout firstRow = new StackLayout();
-                    firstRow.Orientation = StackOrientation.Horizontal;
-                    firstRow.BackgroundColor = Color.White;
-                    firstRow.WidthRequest = App.screenWidth - 20;
-                    firstRow.Padding = new Thickness(0, 10, 0, 10);
-
-                    firstRow.Children.Add(goalImage);
-                    firstRow.Children.Add(firstDetailsInfo);
-                    firstRow.Children.Add(mediaImage);
-
-                    cellContainer.Children.Add(firstRow);
-
-
-
-                    for (int pendingIndex = 0; pendingIndex < 5; pendingIndex++)
-                    {
-                        Image bgImage = new Image();
-                        bgImage.Source = "select_box_whitebg.png";
-                        bgImage.WidthRequest = App.screenWidth - 40;
-                        bgImage.HeightRequest = 50;
-
-                        Label pendingGoalTitle = new Label();
-                        pendingGoalTitle.TextColor = Color.Black;
-                        pendingGoalTitle.XAlign = TextAlignment.Center;
-                        pendingGoalTitle.FontSize = 15;
-                        pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
-                        pendingGoalTitle.Text = "Go to gym";
-
-                        Switch goalDoneSwitch = new Switch();
-                        goalDoneSwitch.BackgroundColor = Color.Transparent;
-                        goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
-
-                        CustomLayout pendingRow = new CustomLayout();
-                        pendingRow.WidthRequest = App.screenWidth * 90 / 100;
-                        pendingRow.HeightRequest = 50;
-                        pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                        pendingRow.AddChildToLayout(goalDoneSwitch, 5, 20, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                        pendingRow.AddChildToLayout(pendingGoalTitle, 20, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                        cellContainer.Children.Add(pendingRow);
-                    }
-
-                    masterStack.Children.Add(cellContainer);
-
-                    StackLayout trans = new StackLayout();
-                    trans.BackgroundColor = Color.FromRgb(244, 244, 244);
-                    trans.HeightRequest = 30;
-                    trans.WidthRequest = App.screenWidth;
-                    masterStack.Children.Add(trans);
-                }
-
-                masterScroll.Padding = new Thickness(10, 10, 10, 0);
+                    masterScroll.Padding = new Thickness(10, 10, 10, 0);
                 masterScroll.Scrolled += OnScroll;
                 masterScroll.Content = masterStack;
 
@@ -185,6 +94,190 @@ namespace PurposeColor.screens
                 
             }
             progress.HideProgressbar();
+        }
+
+        private  void CreateAllGoalsHeading()
+        {
+            Image bgImage = new Image();
+            bgImage.Source = "sec_bg.png";
+            bgImage.WidthRequest = App.screenWidth - 20;
+            bgImage.HeightRequest = 80;
+            bgImage.Aspect = Aspect.Fill;
+
+            Label pendingGoalTitle = new Label();
+            pendingGoalTitle.TextColor = Color.Black;
+            pendingGoalTitle.XAlign = TextAlignment.Center;
+            pendingGoalTitle.FontSize = 15;
+            pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
+            pendingGoalTitle.Text = "All Goals and Dreams";
+
+            CustomLayout headingLayout = new CustomLayout();
+            headingLayout.WidthRequest = App.screenWidth * 90 / 100;
+            headingLayout.HeightRequest = 50;
+            headingLayout.AddChildToLayout(bgImage, 0, 0, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(pendingGoalTitle, 20, 25, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            masterStack.Children.Add(headingLayout);
+        }
+
+        void CreateGoalsPage( bool pendingGoals )
+        {
+            // Pending goals
+            for (int index = 0; index < 3; index++)
+            {
+
+                StackLayout cellContainer = new StackLayout();
+                cellContainer.Orientation = StackOrientation.Vertical;
+                cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
+                cellContainer.Spacing = 0;
+                cellContainer.Padding = new Thickness(10, 10, 10, 10);
+
+                CustomLayout customLayout = new CustomLayout();
+                customLayout.BackgroundColor = Color.White;
+                customLayout.WidthRequest = App.screenWidth * 90 / 100;
+                double screenWidth = App.screenWidth;
+                double screenHeight = App.screenHeight;
+
+
+                Label subTitle = new Label();
+                subTitle.Text = "Pending";
+                subTitle.TextColor = Color.Gray;
+                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                subTitle.XAlign = TextAlignment.Center;
+                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+                subTitle.VerticalOptions = LayoutOptions.Center;
+                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
+                subTitle.WidthRequest = App.screenWidth * 90 / 100;
+                // headerLayout.HorizontalOptions = LayoutOptions.Center;
+                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
+
+                Label firstDetailsInfo = new Label();
+                string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
+                if (firstDetails.Length > 130)
+                {
+                    firstDetails = firstDetails.Substring(0, 130);
+                    firstDetails += "....";
+                }
+                firstDetailsInfo.Text = firstDetails;
+                firstDetailsInfo.TextColor = Color.Gray;
+                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+                firstDetailsInfo.HeightRequest = 45;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
+                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+
+
+                Image goalImage = new Image();
+                goalImage.Source = (pendingGoals) ? "goals_badge_red.png" : "goals_badge_blue.png";
+                goalImage.HeightRequest = 100;
+                goalImage.WidthRequest = 30;
+                goalImage.Aspect = Aspect.Fill;
+
+
+                Image mediaImage = new Image();
+                mediaImage.Source = "avatar.jpg";
+                mediaImage.HeightRequest = 80;
+                mediaImage.WidthRequest = 80;
+
+
+                StackLayout firstRow = new StackLayout();
+                firstRow.Orientation = StackOrientation.Horizontal;
+                firstRow.BackgroundColor = Color.White;
+                firstRow.WidthRequest = App.screenWidth - 20;
+                firstRow.Padding = new Thickness(0, 10, 0, 10);
+
+                firstRow.Children.Add(goalImage);
+                firstRow.Children.Add(firstDetailsInfo);
+                firstRow.Children.Add(mediaImage);
+
+                cellContainer.Children.Add(firstRow);
+
+
+
+                for (int pendingIndex = 0; pendingIndex < 5; pendingIndex++)
+                {
+                    TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
+                    checkboxTap.Tapped += OnCheckboxTapTapped;
+                    Image bgImage = new Image();
+                    bgImage.Source = "select_box_whitebg.png";
+                    bgImage.WidthRequest = App.screenWidth - 40;
+                    bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
+                    bgImage.Aspect = Aspect.Fill;
+                    bgImage.GestureRecognizers.Add( checkboxTap );
+
+                    Label pendingGoalTitle = new Label();
+                    pendingGoalTitle.TextColor = Color.Black;
+                    pendingGoalTitle.XAlign = TextAlignment.Center;
+                    pendingGoalTitle.FontSize = 15;
+                    pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
+                    pendingGoalTitle.Text = "Go to gym";
+                    pendingGoalTitle.GestureRecognizers.Add(checkboxTap);
+
+                    Switch goalDoneSwitch = new Switch();
+                    goalDoneSwitch.BackgroundColor = Color.White;
+                    goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
+                    goalDoneSwitch.WidthRequest = 50;
+
+                    Image tickImage = new Image();
+                    tickImage.Source = "tick_box.png";
+                    tickImage.Aspect = Aspect.Fill;
+                    tickImage.WidthRequest = 20;
+                    tickImage.HeightRequest = 20;
+                    tickImage.GestureRecognizers.Add(checkboxTap);
+
+                    CustomLayout pendingRow = new CustomLayout();
+                    pendingRow.WidthRequest = App.screenWidth * 90 / 100;
+                    pendingRow.HeightRequest = 50;
+                    pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    pendingRow.AddChildToLayout(goalDoneSwitch, 2, 22, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(22, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    cellContainer.Children.Add(pendingRow);
+                }
+
+                masterStack.Children.Add(cellContainer);
+
+                StackLayout trans = new StackLayout();
+                trans.BackgroundColor = Color.FromRgb(244, 244, 244);
+                trans.HeightRequest = 30;
+                trans.WidthRequest = App.screenWidth;
+                masterStack.Children.Add(trans);
+            }
+        }
+
+        void OnCheckboxTapTapped(object sender, EventArgs e)
+        {
+            
+        }
+
+
+
+        protected override bool OnBackButtonPressed()
+        {
+            //var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
+
+            Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
+            action.ContinueWith(task =>
+            {
+                bool val = task.Result;
+                if (task.Result)
+                {
+                    CloseAllPages();
+
+                }
+
+            });
+
+            return true;
+
+        }
+
+        private void CloseAllPages()
+        {
+            if (Device.OS != TargetPlatform.iOS)
+            {
+                IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
+                device.ExitApp();
+            }
+
         }
 
         void OnScroll(object sender, ScrolledEventArgs e)

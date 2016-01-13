@@ -99,7 +99,7 @@ namespace PurposeColor.screens
         private  void CreateAllGoalsHeading()
         {
             Image bgImage = new Image();
-            bgImage.Source = "sec_bg.png";
+            bgImage.Source = Device.OnPlatform("sec_bg.png", "sec_bg.png", "//Assets//sec_bg.png");
             bgImage.WidthRequest = App.screenWidth - 20;
             bgImage.HeightRequest = 80;
             bgImage.Aspect = Aspect.Fill;
@@ -167,14 +167,21 @@ namespace PurposeColor.screens
 
 
                 Image goalImage = new Image();
-                goalImage.Source = (pendingGoals) ? "goals_badge_red.png" : "goals_badge_blue.png";
+                if( pendingGoals )
+                {
+                    goalImage.Source = Device.OnPlatform("goals_badge_red.png", "goals_badge_red.png", "//Assets//goals_badge_red.png"); 
+                }
+                else
+                {
+                    goalImage.Source = Device.OnPlatform("goals_badge_blue.png", "goals_badge_blue.png", "//Assets//goals_badge_blue.png"); 
+                }
                 goalImage.HeightRequest = 100;
                 goalImage.WidthRequest = 30;
                 goalImage.Aspect = Aspect.Fill;
 
 
                 Image mediaImage = new Image();
-                mediaImage.Source = "avatar.jpg";
+                mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg"); 
                 mediaImage.HeightRequest = 80;
                 mediaImage.WidthRequest = 80;
 
@@ -199,7 +206,7 @@ namespace PurposeColor.screens
                     checkboxTap.Tapped += OnCheckboxTapTapped;
 
                     Image bgImage = new Image();
-                    bgImage.Source = "select_box_whitebg.png";
+                    bgImage.Source = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
                     bgImage.WidthRequest = App.screenWidth - 40;
                     bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
                     bgImage.Aspect = Aspect.Fill;
@@ -226,7 +233,7 @@ namespace PurposeColor.screens
 
                     Image tickImage = new Image();
                     tickImage.IsEnabled = false;
-                    tickImage.Source = "tick_box.png";
+                    tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png"); 
                     tickImage.Aspect = Aspect.Fill;
                     tickImage.WidthRequest = 20;
                     tickImage.HeightRequest = 20;
@@ -265,12 +272,12 @@ namespace PurposeColor.screens
                 Image img = (Image)layout.Children[0];
                 if (img != null && img.ClassId == "off")
                 {
-                    img.Source = "tic_active.png";
+                    img.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
                     img.ClassId = "on";
                 }
                 else if( img != null && img.ClassId == "on" )
                 {
-                    img.Source = "tick_box.png";
+                    img.Source = img.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png"); 
                     img.ClassId = "off";
                 }
             }

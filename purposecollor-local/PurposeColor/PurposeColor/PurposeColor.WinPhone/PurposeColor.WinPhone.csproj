@@ -174,9 +174,12 @@
     <Content Include="Assets\audio.png" />
     <Content Include="Assets\bottom_menu_icon.png" />
     <Content Include="Assets\favoriteIcon.png" />
+    <Content Include="Assets\goals_badge_blue.png" />
+    <Content Include="Assets\goals_badge_red.png" />
     <Content Include="Assets\icon_cmnt.png" />
     <Content Include="Assets\icon_send.png" />
     <Content Include="Assets\like.png" />
+    <Content Include="Assets\sec_bg.png" />
     <Content Include="Assets\share.png" />
     <Content Include="Assets\comnt_box.png" />
     <Content Include="Assets\noimage.png" />
@@ -234,7 +237,9 @@
     <Content Include="Assets\settings.png" />
     <Content Include="Assets\text_box.png" />
     <Content Include="Assets\tick_blue.png" />
+    <Content Include="Assets\tick_box.png" />
     <Content Include="Assets\tick_with_bg.png" />
+    <Content Include="Assets\tic_active.png" />
     <Content Include="Assets\top_bg.png" />
     <Content Include="Assets\top_seperate.png" />
     <Content Include="Assets\turn_off_mic.png" />

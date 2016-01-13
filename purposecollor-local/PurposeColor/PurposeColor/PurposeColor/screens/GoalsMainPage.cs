@@ -25,7 +25,6 @@ namespace PurposeColor.screens
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
-     //   StackLayout cellContainer;
         public GoalsMainPage()
         {
 
@@ -36,7 +35,6 @@ namespace PurposeColor.screens
 
 
             this.Appearing += OnAppearing;
-            // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
 
 
@@ -309,6 +307,8 @@ namespace PurposeColor.screens
         {
             if (Device.OS != TargetPlatform.iOS)
             {
+                Dispose();
+                GC.Collect();
                 IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
                 device.ExitApp();
             }
@@ -351,7 +351,14 @@ namespace PurposeColor.screens
 
         public void Dispose()
         {
-
+            masterLayout = null;
+            progressBar = null;
+            listContainer = null;
+            gemsList = null;
+            mainTitleBar = null;
+            masterScroll = null;
+            masterStack = null;
+            GC.Collect();
         }
 
         public void ScrollVisibleItems(int visbleIndex)
@@ -383,35 +390,6 @@ namespace PurposeColor.screens
             }
             catch (Exception)
             {
-            }
-        }
-    }
-
-
-  
-
-
-    public class GoalsPageInfo
-    {
-        public string MainTitle { get; set; }
-        public string SubTitle { get; set; }
-        public string FirstDetailsInfo { get; set; }
-        public string FirstDateInfo { get; set; }
-        public string SecondDetailsInfo { get; set; }
-        public string SecondDateInfo { get; set; }
-        public string FirstImage { get; set; }
-        public string SecondImage { get; set; }
-        public bool IsMainTitleVisible { get; set; }
-        public string TrimmedFirstDetailsInfo
-        {
-            get
-            {
-                if (FirstDetailsInfo != null && FirstDetailsInfo.Length > 50)
-                {
-                    string trimmedInfo = FirstDetailsInfo.Substring(0, 50);
-                    return trimmedInfo + "....";
-                }
-                return FirstDetailsInfo;
             }
         }
     }

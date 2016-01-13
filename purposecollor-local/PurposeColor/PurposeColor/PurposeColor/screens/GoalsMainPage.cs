@@ -25,6 +25,7 @@ namespace PurposeColor.screens
         GemsPageTitleBar mainTitleBar;
         ScrollView masterScroll;
         StackLayout masterStack;
+        CustomLayout headingLayout;
         public GoalsMainPage()
         {
 
@@ -103,17 +104,17 @@ namespace PurposeColor.screens
             bgImage.Aspect = Aspect.Fill;
 
             Label pendingGoalTitle = new Label();
-            pendingGoalTitle.TextColor = Color.Black;
+            pendingGoalTitle.TextColor = Color.Gray;
             pendingGoalTitle.XAlign = TextAlignment.Center;
-            pendingGoalTitle.FontSize = 15;
+            pendingGoalTitle.FontSize = Device.OnPlatform( 15, 20, 15 );
             pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
             pendingGoalTitle.Text = "All Goals and Dreams";
 
-            CustomLayout headingLayout = new CustomLayout();
+            headingLayout = new CustomLayout();
             headingLayout.WidthRequest = App.screenWidth * 90 / 100;
             headingLayout.HeightRequest = 50;
             headingLayout.AddChildToLayout(bgImage, 0, 0, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
-            headingLayout.AddChildToLayout(pendingGoalTitle, 20, 25, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(pendingGoalTitle, 20, Device.OnPlatform( 25, 25, 25 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
             masterStack.Children.Add(headingLayout);
         }
 
@@ -320,22 +321,19 @@ namespace PurposeColor.screens
             try
             {
 
-                System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
+              /*  System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
+                System.Diagnostics.Debug.WriteLine("headingLayout y :" + headingLayout.Y);*/
 
-                if (masterScroll.ScrollY > 1 && masterScroll.ScrollY < 307)
+                if (masterScroll.ScrollY > headingLayout.Y )
                 {
-                    if (mainTitleBar.title.Text != "0 th Menu")
-                        mainTitleBar.title.Text = "0 th Menu";
+                    if (mainTitleBar.title.Text != "All Goals and Dreams")
+                        mainTitleBar.title.Text = "All Goals and Dreams";
                 }
-                else if (masterScroll.ScrollY > 307 && masterScroll.ScrollY < 610)
+
+                else
                 {
-                    if (mainTitleBar.title.Text != "1 th Menu")
-                        mainTitleBar.title.Text = "1 th Menu";
-                }
-                else if (masterScroll.ScrollY > 610 && masterScroll.ScrollY < 900)
-                {
-                    if (mainTitleBar.title.Text != "2 th Menu")
-                        mainTitleBar.title.Text = "2 th Menu";
+                    if (mainTitleBar.title.Text != "Pending")
+                        mainTitleBar.title.Text = "Pending";
                 }
 
             }

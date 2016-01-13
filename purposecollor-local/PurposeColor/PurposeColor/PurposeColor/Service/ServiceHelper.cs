@@ -1493,5 +1493,73 @@ namespace PurposeColor.Service
 			return "404";
 		}
 
+        public static async Task<string> AddToFavorite(string userId, string gemId, GemType gemType)
+        {
+            if (!CrossConnectivity.Current.IsConnected)
+            {
+                return "404";
+            }
+
+            try
+            {
+                string result = String.Empty;
+                var client = new HttpClient();
+                client.Timeout = new TimeSpan(0, 15, 0);
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+                var url = "api.php?action=addtofavorite";
+
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                content.Add(new StringContent(userId, Encoding.UTF8), "user_id");
+
+                switch (gemType)
+                {
+                    case GemType.Goal:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "goal_id");
+                        break;
+                    case GemType.Event:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "event_id");
+                        break;
+                    case GemType.Action:
+                        content.Add(new StringContent(gemId, Encoding.UTF8), "goalaction_id");
+                        break;
+                    case GemType.Emotion:
+                        break;
+                    default:
+                        break;
+                }
+
+                HttpResponseMessage response = null;
+                try
+                {
+                    response = await client.PostAsync(url, content);
+                }
+                catch (Exception ex)
+                {
+                    var test = ex.Message;
+                }
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    return "200"; // for testing only // test
+                    //var eventsJson = response.Content.ReadAsStringAsync().Result;
+                    //var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
+                    //if (rootobject != null && rootobject.code != null)
+                    //{
+                    //    client.Dispose();
+                    //    return rootobject.code;
+                    //}
+                }
+                client.Dispose();
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "404";
+        }
     }
 }

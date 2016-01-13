@@ -390,13 +390,37 @@ namespace PurposeColor
             // mark it as fav
 			try {
 				favoriteButtonTap.Tapped -= FavoriteButtonTapped;
+                progressBar.ShowProgressbar("Requesting..");
+                User user = App.Settings.GetUser();
 
+                if (user == null)
+                {
+                    await DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
+                }
+                else
+                {
+                    string responceCode = await PurposeColor.Service.ServiceHelper.AddToFavorite(user.UserId.ToString(), CurrentGemId, CurrentGemType);
+                    if (responceCode == "200")
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "GEM added to favourites.", Constants.ALERT_OK);
+                    }
+                    else if (responceCode == "401")
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Current GEM is alredy added to favourites.", Constants.ALERT_OK);
+                    }
+                    else
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Network error, Could not process the request.", Constants.ALERT_OK);
+                    }
+                }
 
 			} catch (Exception ex) {
 				favoriteButtonTap.Tapped += FavoriteButtonTapped;
+                progressBar.HideProgressbar();
+                DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
 			}
 
-
+            progressBar.HideProgressbar();
         }
 
 

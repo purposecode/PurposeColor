@@ -76,6 +76,7 @@ namespace PurposeColor
             Label pageTitle = new Label();
             pageTitle.Text = pageTitleVal;
             pageTitle.TextColor = Color.Black;
+            pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             pageTitle.FontAttributes = FontAttributes.Bold;
             pageTitle.WidthRequest = App.screenWidth * 90 / 100;
             pageTitle.HeightRequest = 50;
@@ -111,6 +112,8 @@ namespace PurposeColor
             Label favoriteLabel = new Label
             {
 				Text = "Favorite",
+                FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+                TextColor = Color.Gray,
 				VerticalOptions = LayoutOptions.Center
             };
             favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
@@ -128,6 +131,8 @@ namespace PurposeColor
                 shareLabel = new Label
                 {
                     Text = "Share",
+                    FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+                    TextColor = Color.Gray,
                     VerticalOptions = LayoutOptions.Center
                 };
                 shareButtonTap = new TapGestureRecognizer();
@@ -148,7 +153,9 @@ namespace PurposeColor
             Label commentsLabel = new Label
             {
 				Text = "Comment",
-				VerticalOptions = LayoutOptions.Center
+				VerticalOptions = LayoutOptions.Center,
+                FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+                TextColor = Color.Gray
             };
 
             commentButtonTap = new TapGestureRecognizer();
@@ -187,11 +194,13 @@ namespace PurposeColor
 			title.TextColor = Color.Black;
 			title.WidthRequest = App.screenWidth * 90 / 100;
 			title.FontSize = Device.OnPlatform (12, 12, 12);
+            title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
 			description = new Label ();
 			description.WidthRequest = App.screenWidth * 90 / 100;
 			description.Text = desc;
 			description.TextColor = Color.Black;
+            description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
 			masterStack.Children.Add (pageTitle);
 			masterStack.Children.Add (title);
@@ -290,11 +299,11 @@ namespace PurposeColor
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-            spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 100, 200);
+            spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 100, 250);
             spaceOffsetlayout.BackgroundColor = Color.Transparent;
             masterStack.Children.Add(spaceOffsetlayout);
 
-            masterScroll.HeightRequest = App.screenHeight - 10;
+            masterScroll.HeightRequest = App.screenHeight - 20;
             masterScroll.WidthRequest = App.screenWidth * 90 / 100;
 
             masterScroll.Content = masterStack;
@@ -435,7 +444,6 @@ namespace PurposeColor
             masterLayout = null;
 			progressBar = null;
 			masterStack = null;
-			masterScroll = null;
 			title = null;
 			description = null;
 			mediaList = null;

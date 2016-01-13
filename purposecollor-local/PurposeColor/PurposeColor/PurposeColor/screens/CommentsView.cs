@@ -79,6 +79,7 @@ namespace PurposeColor.screens
             layout.Opacity = .5;
             layout.WidthRequest = App.screenWidth;
             layout.HeightRequest = App.screenHeight;
+
             masterLayout.AddChildToLayout(layout, 0, 0);
 
             TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
@@ -110,8 +111,8 @@ namespace PurposeColor.screens
             listTitle.Text = "Comments";
             listTitle.TextColor = Color.White;
             listTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            listTitle.FontSize = Device.OnPlatform(15, 15, 24);
-            masterLayout.AddChildToLayout(listTitle, Device.OnPlatform(3, 3, 3), (heightSpacing - topSpacing - 6));
+            listTitle.FontSize = Device.OnPlatform(15, 15, 20);
+            masterLayout.AddChildToLayout(listTitle, Device.OnPlatform(3, 3, 3), (heightSpacing - topSpacing - Device.OnPlatform(6, 6, 5)));
 
             int fontSize = 15;
             if (App.screenDensity > 1.5)
@@ -123,7 +124,7 @@ namespace PurposeColor.screens
                 fontSize = 15;
             }
 
-            listTitle.FontSize = Device.OnPlatform(fontSize, fontSize, 24);
+            listTitle.FontSize = Device.OnPlatform(fontSize, fontSize, 20);
 
             #endregion
 
@@ -131,19 +132,25 @@ namespace PurposeColor.screens
             listContainer.BackgroundColor = Color.White;
             listContainer.WidthRequest = App.screenWidth * 96 / 100;
 			listContainer.Orientation = StackOrientation.Vertical;
-			//listContainer.Spacing = 5;
             
 			#region COMMENTS VIEW GENERATING
 
 
-			if (Comments == null || Comments.Count < 1) {
+			if (Comments == null || Comments.Count < 1) 
+            {
 				listContainer.Children.Add (new StackLayout {
 					Padding = 10,
 					HeightRequest = 30,
 					BackgroundColor = Color.White,
 					WidthRequest = 100,
-					Children = { new Label { Text = "No comments to display" } }
+                    ClassId = "NoCommentContainer",
+					Children = { new Label { Text = "Add your first comment..", 
+                                            TextColor = Color.Gray,
+                                            FontFamily = Constants.HELVERTICA_NEUE_LT_STD
+                                            }
+                    }
 				});
+                
 			} else {
 				foreach (var comment in Comments) {
 					GenerateCommentView(comment);
@@ -156,26 +163,27 @@ namespace PurposeColor.screens
             newCommentEntry = new PurposeColor.CustomControls.CustomEditor
             {
                 Placeholder = "Add new comment",
-                HeightRequest = 50,
-                BackgroundColor = Color.White,
+                HeightRequest = Device.OnPlatform(50, 50, 72),
+                BackgroundColor = Color.Transparent,//Color.White,
                 WidthRequest = App.screenWidth * .80,
-                HorizontalOptions = LayoutOptions.Start
+                HorizontalOptions = LayoutOptions.Start,
+                Text = Device.OnPlatform(string.Empty, string.Empty,"Add new Comment..")
+                
             };
 
             addCommentButton = new Image();
             addCommentButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
-            //addCommentButton.WidthRequest = Device.OnPlatform(15, 20, 15);
-            //addCommentButton.HeightRequest = Device.OnPlatform(15, 20, 15);
+            
             addCommentButton.VerticalOptions = LayoutOptions.Center;
-            addCommentButton.HorizontalOptions = LayoutOptions.End;
+            addCommentButton.HorizontalOptions = LayoutOptions.Center;
             addCommentButtonTap = new TapGestureRecognizer();
             addCommentButtonTap.Tapped += addCommentButtonTapped;
             addCommentButton.GestureRecognizers.Add(addCommentButtonTap);
 
             StackLayout inputCountainer = new StackLayout
             {
-                Spacing = 5,
-                Padding = 5,
+                Spacing = Device.OnPlatform(5, 5, 1),
+                Padding = Device.OnPlatform(5, 5, 5),
                 Orientation = StackOrientation.Horizontal,
                 BackgroundColor = Color.White,
                 Children = { newCommentEntry, addCommentButton }
@@ -189,22 +197,30 @@ namespace PurposeColor.screens
             ScrollView scrollView = new ScrollView
             {
                 Content = listContainer,
-//                BackgroundColor = Color.White,
-                HeightRequest = (App.screenHeight * topSpacing / 100) - Device.OnPlatform(90, 90, 100),
+                //BackgroundColor = Color.White,
+                HeightRequest = (App.screenHeight * topSpacing / 100) - Device.OnPlatform(90, 90, 180),
                 IsClippedToBounds = true
             };
 
             StackLayout commentsAndInputs = new StackLayout
             {
                 Spacing = 1,
+                //Children = { new StackLayout { BackgroundColor = Color.White, Children = { scrollView, inputCountainer } }, new StackLayout { WidthRequest = App.screenWidth * 96, HeightRequest = 30, BackgroundColor = Color.Transparent } },
                 Children = { scrollView, inputCountainer },
 				BackgroundColor = Color.White,
+                WidthRequest = App.screenWidth * .96, // should be same width as popup title bar.
                 Orientation = StackOrientation.Vertical
             };
 
             masterLayout.AddChildToLayout(commentsAndInputs, 2, heightSpacing - topSpacing - Device.OnPlatform(1, 1, 1));
             
             #endregion
+
+            if (Device.OS == TargetPlatform.WinPhone)
+            {
+                addCommentButton.WidthRequest = 60;
+                addCommentButton.HeightRequest = 60;
+            }
 
             Content = masterLayout;
         }
@@ -325,6 +341,14 @@ namespace PurposeColor.screens
 						comment_datetime = DateTime.Now.ToLocalTime().ToString("f")
 					};
 
+                    //firstComment
+                    var noCommentsLabel = listContainer.Children.FirstOrDefault(s => s.ClassId == "NoCommentContainer");
+                    if (noCommentsLabel != null)
+                    {
+                        listContainer.Children.Remove(noCommentsLabel);
+                        noCommentsLabel = null;
+                    }
+
 					GenerateCommentView(newComment);
                     
 				} catch (Exception ex) {
@@ -347,7 +371,7 @@ namespace PurposeColor.screens
 					Orientation = StackOrientation.Vertical,
 					Spacing = 0,
 					HorizontalOptions = LayoutOptions.End,
-                    Padding = new Thickness(0,20,0,0)
+                    Padding = new Thickness(0,10,0,0)
 				};
 
 				if (!string.IsNullOrEmpty (comment.comment_txt)) {
@@ -378,7 +402,7 @@ namespace PurposeColor.screens
 
                     commentLayout.Children.Add(new StackLayout
                     {
-                        Padding = new Thickness(5, 0, 5, 0),
+                        Padding = new Thickness(5, Device.OnPlatform(-10, -10, -18), 5, 0),
                         VerticalOptions = LayoutOptions.Start,
                         HorizontalOptions = LayoutOptions.Start,
                         HeightRequest = App.screenHeight * .12,
@@ -390,7 +414,7 @@ namespace PurposeColor.screens
 					Label commentTextLabel = new Label {
 						Text = comment.comment_txt,
 						TextColor = Color.Gray,
-						FontSize = 14,
+                        FontSize = Device.OnPlatform(14, 14, 18),
 						WidthRequest = App.screenWidth * .70,
 						HorizontalOptions = LayoutOptions.Start
 					};
@@ -400,7 +424,7 @@ namespace PurposeColor.screens
 						Label nameText = new Label {
 							Text = comment.firstname,
 							TextColor = Color.Black,
-							FontSize = 16,
+							FontSize = Device.OnPlatform(16 ,16 ,21),
 							HorizontalOptions = LayoutOptions.Start
 						};
 						TextHolderStack.Children.Add (nameText);
@@ -413,14 +437,14 @@ namespace PurposeColor.screens
 						Label dateText = new Label {
 							Text = comment.comment_datetime,
 							TextColor = Color.Gray,
-							FontSize = 8,
+							FontSize = Device.OnPlatform(8, 8, 12),
 							HorizontalOptions = LayoutOptions.Start
 						};
 						if (currentUserId == comment.user_id) {
 							Label removeLabel = new Label {
 								Text = "remove",
 								TextColor = Color.FromRgb (30, 126, 210),
-								FontSize = 8,
+                                FontSize = Device.OnPlatform(8, 8, 12),
 								HorizontalOptions = LayoutOptions.Start,
 								ClassId = comment.comment_id
 							};

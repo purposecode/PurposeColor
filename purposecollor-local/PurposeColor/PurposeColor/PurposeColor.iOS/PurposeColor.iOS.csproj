@@ -126,7 +126,6 @@
     <None Include="Resources\like.png" />
     <None Include="Resources\like%402x.png" />
     <None Include="Resources\like%403x.png" />
-    <None Include="Resources\share.png" />
     <None Include="Resources\share%402x.png" />
     <None Include="Resources\share%403x.png" />
     <None Include="Resources\comnt_box.png" />
@@ -250,6 +249,7 @@
     <BundleResource Include="Resources\turn_off_mic%402x.png" />
     <BundleResource Include="Resources\turn_off_mic%403x.png" />
     <BundleResource Include="Resources\app_icon_120X120.png" />
+    <BundleResource Include="Resources\share.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

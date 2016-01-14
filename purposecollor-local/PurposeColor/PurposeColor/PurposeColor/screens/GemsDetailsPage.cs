@@ -114,7 +114,8 @@ namespace PurposeColor
 				Text = "Favorite",
                 FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                 TextColor = Color.Gray,
-				VerticalOptions = LayoutOptions.Center
+				VerticalOptions = LayoutOptions.Center,
+				FontSize = Device.OnPlatform(12,12,15)
             };
             favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
 
@@ -133,7 +134,8 @@ namespace PurposeColor
                     Text = "Share",
                     FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                     TextColor = Color.Gray,
-                    VerticalOptions = LayoutOptions.Center
+                    VerticalOptions = LayoutOptions.Center,
+					FontSize = Device.OnPlatform(12,12,15)
                 };
                 shareButtonTap = new TapGestureRecognizer();
                 shareButtonTap.Tapped += ShareButtonTapped;
@@ -155,7 +157,8 @@ namespace PurposeColor
 				Text = "Comment",
 				VerticalOptions = LayoutOptions.Center,
                 FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-                TextColor = Color.Gray
+                TextColor = Color.Gray,
+				FontSize = Device.OnPlatform(12,12,15)
             };
 
             commentButtonTap = new TapGestureRecognizer();
@@ -319,7 +322,7 @@ namespace PurposeColor
 
             //show comments popup
 			try {
-                progressBar.ShowProgressbar("Loading..");
+                progressBar.ShowProgressbar("Loading comments");
 
                 List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
                 progressBar.HideProgressbar();
@@ -345,7 +348,7 @@ namespace PurposeColor
 
             try {
 				
-				progressBar.ShowProgressbar ("Sharing..");
+				progressBar.ShowProgressbar ("Sharing to community");
 				shareButtonTap.Tapped -= ShareButtonTapped;
 
 				string actionId = "0";
@@ -391,7 +394,7 @@ namespace PurposeColor
             // mark it as fav
 			try {
 				favoriteButtonTap.Tapped -= FavoriteButtonTapped;
-                progressBar.ShowProgressbar("Requesting..");
+                progressBar.ShowProgressbar("Requesting...   ");
                 User user = App.Settings.GetUser();
 
 
@@ -405,6 +408,9 @@ namespace PurposeColor
                 else
                 {
                     string responceCode = await PurposeColor.Service.ServiceHelper.AddToFavorite(user.UserId.ToString(), CurrentGemId, CurrentGemType);
+
+					progressBar.HideProgressbar();
+
                     if (responceCode == "200")
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "GEM added to favourites.", Constants.ALERT_OK);

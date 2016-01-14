@@ -37,7 +37,7 @@ namespace PurposeColor.screens
 
             this.Appearing += OnAppearing;
             mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
-
+            mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 
 
             masterScroll = new ScrollView();
@@ -54,6 +54,11 @@ namespace PurposeColor.screens
 
 
 
+        }
+
+        void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)
+        {
+            App.masterPage.IsPresented = !App.masterPage.IsPresented;
         }
 
         async void OnAppearing(object sender, EventArgs e)
@@ -115,6 +120,7 @@ namespace PurposeColor.screens
             headingLayout.HeightRequest = 50;
             headingLayout.AddChildToLayout(bgImage, 0, 0, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
             headingLayout.AddChildToLayout(pendingGoalTitle, 20, Device.OnPlatform( 25, 25, 25 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.Scale = 1.10;
             masterStack.Children.Add(headingLayout);
         }
 
@@ -151,9 +157,9 @@ namespace PurposeColor.screens
 
                 Label firstDetailsInfo = new Label();
                 string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
-                if (firstDetails.Length > 130)
+                if (firstDetails.Length > 120)
                 {
-                    firstDetails = firstDetails.Substring(0, 130);
+                    firstDetails = firstDetails.Substring(0, 120);
                     firstDetails += "....";
                 }
                 firstDetailsInfo.Text = firstDetails;
@@ -161,7 +167,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
                 firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
                 firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 17, 13) : 15;
+                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
 
 
@@ -213,10 +219,16 @@ namespace PurposeColor.screens
                     Label pendingGoalTitle = new Label();
                     pendingGoalTitle.TextColor = Color.Black;
                     pendingGoalTitle.XAlign = TextAlignment.Center;
-                    pendingGoalTitle.FontSize = 15;
-                    pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
-                    pendingGoalTitle.Text = "Go to gym";
-                    pendingGoalTitle.IsEnabled = false;
+                    pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
+                    pendingGoalTitle.WidthRequest = App.screenWidth * 60 / 100;
+                    //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
+                    pendingGoalTitle.Text = "Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
+
+                    if (pendingGoalTitle.Text.Length > 25)
+                    {
+                        pendingGoalTitle.Text = pendingGoalTitle.Text.Substring(0, 25);
+                        pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
+                    }
 
                     Switch goalDoneSwitch = new Switch();
                     goalDoneSwitch.BackgroundColor = Color.White;

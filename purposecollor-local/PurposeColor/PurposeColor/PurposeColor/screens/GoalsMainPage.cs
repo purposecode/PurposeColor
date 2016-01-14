@@ -111,17 +111,33 @@ namespace PurposeColor.screens
             Label pendingGoalTitle = new Label();
             pendingGoalTitle.TextColor = Color.Gray;
             pendingGoalTitle.XAlign = TextAlignment.Center;
-            pendingGoalTitle.FontSize = Device.OnPlatform( 15, 20, 15 );
+            pendingGoalTitle.FontSize = Device.OnPlatform( 15, 18, 22 );
             pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
             pendingGoalTitle.Text = "All Goals and Dreams";
 
+            TapGestureRecognizer addGestureRecz = new TapGestureRecognizer();
+            addGestureRecz.Tapped += OnAddGoals;
+            Image addGoals = new Image();
+            addGoals.Source = Device.OnPlatform("add_btn.png", "add_btn.png", "//Assets//add_btn.png");
+            addGoals.WidthRequest = App.screenWidth * 15 / 100;
+            addGoals.HeightRequest = App.screenHeight * 5 / 100;
+            addGoals.Aspect = Aspect.Fill;
+            addGoals.GestureRecognizers.Add( addGestureRecz );
+            
+
             headingLayout = new CustomLayout();
             headingLayout.WidthRequest = App.screenWidth * 90 / 100;
-            headingLayout.HeightRequest = 50;
+            headingLayout.HeightRequest = Device.OnPlatform( 50, 50, 80 );
             headingLayout.AddChildToLayout(bgImage, 0, 0, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
-            headingLayout.AddChildToLayout(pendingGoalTitle, 20, Device.OnPlatform( 25, 25, 25 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(pendingGoalTitle, Device.OnPlatform( 20, 15, 20 ), Device.OnPlatform( 25, 25, 30 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(addGoals, Device.OnPlatform( 70, 83, 83 ), Device.OnPlatform(25, 20, 25), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
             headingLayout.Scale = 1.10;
             masterStack.Children.Add(headingLayout);
+        }
+
+        async void OnAddGoals(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new AddEventsSituationsOrThoughts( Constants.ADD_GOALS ));
         }
 
         void CreateGoalsPage( bool pendingGoals )

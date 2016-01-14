@@ -528,6 +528,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\sec_bg.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\sec_bg.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\sec_bg.png" />
+    <AndroidResource Include="Resources\drawable\add_btn.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\add_btn.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\add_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\add_btn.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\add_btn.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -245,7 +245,7 @@ namespace PurposeColor.screens
                     pendingGoalTitle.TextColor = Color.Black;
                     pendingGoalTitle.XAlign = TextAlignment.Center;
                     pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
-                    pendingGoalTitle.WidthRequest = App.screenWidth * 60 / 100;
+					pendingGoalTitle.WidthRequest = App.screenWidth * Device.OnPlatform( 65, 60, 60 ) / 100;
                     //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
                     pendingGoalTitle.Text =  goalsObject.resultarray[index].action_title[pendingIndex].action_title; //"Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
 
@@ -284,9 +284,9 @@ namespace PurposeColor.screens
                     pendingRow.WidthRequest = App.screenWidth * 90 / 100;
                     pendingRow.HeightRequest = 50;
                     pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    //pendingRow.AddChildToLayout(tickImage, 2, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(22, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    pendingRow.AddChildToLayout(tickImage, 2, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(10, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
                     cellContainer.Children.Add(pendingRow);
                 }
 
@@ -400,7 +400,7 @@ namespace PurposeColor.screens
                     pendingGoalTitle.TextColor = Color.Black;
                     pendingGoalTitle.XAlign = TextAlignment.Center;
                     pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
-                    pendingGoalTitle.WidthRequest = App.screenWidth * 60 / 100;
+					pendingGoalTitle.WidthRequest = App.screenWidth * Device.OnPlatform( 65, 60, 60 ) / 100;
                     //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
                     pendingGoalTitle.Text = "Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
 
@@ -418,7 +418,7 @@ namespace PurposeColor.screens
                     StackLayout trasprntClickLayout = new StackLayout();
                     trasprntClickLayout.WidthRequest = 50;
                     trasprntClickLayout.HeightRequest = 50;
-                    trasprntClickLayout.BackgroundColor = Color.Transparent;
+					trasprntClickLayout.BackgroundColor = Color.Transparent;
                     trasprntClickLayout.VerticalOptions = LayoutOptions.Center;
                     trasprntClickLayout.GestureRecognizers.Add(checkboxTap);
 
@@ -440,8 +440,8 @@ namespace PurposeColor.screens
                     pendingRow.HeightRequest = 50;
                     pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
                     pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    //pendingRow.AddChildToLayout(tickImage, 2, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(22, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+                    pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
                     cellContainer.Children.Add(pendingRow);
                 }
 

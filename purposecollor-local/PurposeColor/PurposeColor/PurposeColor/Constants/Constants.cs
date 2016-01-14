@@ -54,6 +54,8 @@ namespace PurposeColor
 
         public static Color MAIN_MENU_TEXT_COLOR = Color.FromHex("#42464d");
 
+		public static Color INPUT_GRAY_LINE_COLOR = Color.FromHex("#f2f2f2");
+
         //public const string emailRegexString = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
         public const string emailRegexString = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 

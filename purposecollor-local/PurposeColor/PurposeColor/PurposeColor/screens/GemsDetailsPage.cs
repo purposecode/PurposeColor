@@ -299,7 +299,7 @@ namespace PurposeColor
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-            spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 100, 250);
+            spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
             spaceOffsetlayout.BackgroundColor = Color.Transparent;
             masterStack.Children.Add(spaceOffsetlayout);
 

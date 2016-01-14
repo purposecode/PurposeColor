@@ -82,7 +82,7 @@ namespace PurposeColor.screens
                 #endregion
 
 
-                    masterScroll.Padding = new Thickness(10, 10, 10, 0);
+                masterScroll.Padding = new Thickness(10, 10, 10, 0);
                 masterScroll.Scrolled += OnScroll;
                 masterScroll.Content = masterStack;
 
@@ -135,6 +135,7 @@ namespace PurposeColor.screens
             masterStack.Children.Add(headingLayout);
         }
 
+
         async void OnAddGoals(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new AddEventsSituationsOrThoughts( Constants.ADD_GOALS ));
@@ -171,6 +172,8 @@ namespace PurposeColor.screens
                 // headerLayout.HorizontalOptions = LayoutOptions.Center;
                 subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
 
+                TapGestureRecognizer goalsTap = new TapGestureRecognizer();
+                goalsTap.Tapped += OnGoalsTapped;
                 Label firstDetailsInfo = new Label();
                 string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
                 if (firstDetails.Length > 120)
@@ -185,6 +188,7 @@ namespace PurposeColor.screens
                 firstDetailsInfo.HeightRequest = 45;
                 int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
                 firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+                firstDetailsInfo.GestureRecognizers.Add( goalsTap );
 
 
                 Image goalImage = new Image();
@@ -199,6 +203,7 @@ namespace PurposeColor.screens
                 goalImage.HeightRequest = 100;
                 goalImage.WidthRequest = 30;
                 goalImage.Aspect = Aspect.Fill;
+                goalImage.GestureRecognizers.Add(goalsTap);
 
 
                 Image mediaImage = new Image();
@@ -289,6 +294,12 @@ namespace PurposeColor.screens
                 trans.WidthRequest = App.screenWidth;
                 masterStack.Children.Add(trans);
             }
+        }
+
+
+        async void OnGoalsTapped(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
         }
 
         void OnCheckboxTapTapped(object sender, EventArgs e)

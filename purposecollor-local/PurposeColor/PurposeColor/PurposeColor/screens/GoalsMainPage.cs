@@ -238,11 +238,15 @@ namespace PurposeColor.screens
                     TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
                     checkboxTap.Tapped += OnCheckboxTapTapped;
 
+					TapGestureRecognizer actionTap = new TapGestureRecognizer ();
+					actionTap.Tapped += OnActionTapped;
                     Image bgImage = new Image();
                     bgImage.Source = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
                     bgImage.WidthRequest = App.screenWidth - 40;
                     bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
                     bgImage.Aspect = Aspect.Fill;
+					bgImage.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
+					bgImage.GestureRecognizers.Add ( actionTap );
 
                     Label pendingGoalTitle = new Label();
                     pendingGoalTitle.TextColor = Color.Black;
@@ -303,6 +307,35 @@ namespace PurposeColor.screens
                 trans.WidthRequest = App.screenWidth;
                 masterStack.Children.Add(trans);
             }
+        }
+
+        async void OnActionTapped (object sender, EventArgs e)
+        {
+			Image img = sender as Image;
+	
+			if (img != null && img.ClassId != null)
+			{
+				string[] delimiters = { "&&" };
+				string[] clasIDArray = img.ClassId.Split(delimiters, StringSplitOptions.None);
+				string selectedGoalID = clasIDArray [0];
+				string selectedActionID = clasIDArray [1];
+
+				GemsGoalsDetails selectedGoal = gemsGoalsObject.resultarray.FirstOrDefault (item => item.goal_id == selectedGoalID);
+				if (selectedGoal != null ) 
+				{
+					List<ActionMedia> actionMediaList = selectedGoal.action_media.FindAll (item => item.goalaction_id == selectedActionID).ToList ();
+					ActionTitle actionTitle = selectedGoal.action_title.FirstOrDefault ( item => item.goalaction_id == selectedActionID );
+					string title = (actionTitle != null && actionTitle.action_title != null) ? actionTitle.action_title : "";
+					ActionDetail actionDetail = selectedGoal.action_details.FirstOrDefault ( item => item.goalaction_id == selectedActionID );
+					string details = (actionDetail != null && actionDetail.action_details != null) ? actionDetail.action_details : "";
+					await Navigation.PushAsync (new GemsDetailsPage (null, actionMediaList, "Action Details", title, details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, actionTitle.goalaction_id ,GemType.Action));
+				}
+				else
+				{
+					DisplayAlert ( Constants.ALERT_TITLE, "No informations about selected action", "cancel" );
+				}
+
+			}
         }
 
         void CreateGoalsPage( bool pendingGoals )

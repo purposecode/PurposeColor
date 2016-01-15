@@ -270,22 +270,23 @@ namespace PurposeColor
                     img.ClassId = null;
                     if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
                     {
+						img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
-                        img.ClassId = source;
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
                     {
+						img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                        img.ClassId = source;
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "wav")
                     {
+						img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                        img.ClassId = source;
                     }
                     img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
-                    img.ClassId = (!isImage) ? source : null;
+
+
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;

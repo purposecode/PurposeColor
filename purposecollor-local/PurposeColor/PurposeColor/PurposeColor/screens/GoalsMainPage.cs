@@ -245,8 +245,8 @@ namespace PurposeColor.screens
                     bgImage.WidthRequest = App.screenWidth - 40;
                     bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
                     bgImage.Aspect = Aspect.Fill;
-					bgImage.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
-					bgImage.GestureRecognizers.Add ( actionTap );
+					//bgImage.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
+					//bgImage.GestureRecognizers.Add ( actionTap );
 
                     Label pendingGoalTitle = new Label();
                     pendingGoalTitle.TextColor = Color.Black;
@@ -290,7 +290,9 @@ namespace PurposeColor.screens
                     CustomLayout pendingRow = new CustomLayout();
                     pendingRow.WidthRequest = App.screenWidth * 90 / 100;
                     pendingRow.HeightRequest = 50;
+					pendingRow.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
 
+					pendingRow.GestureRecognizers.Add(actionTap);
 					pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
 
 					//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
@@ -311,12 +313,12 @@ namespace PurposeColor.screens
 
         async void OnActionTapped (object sender, EventArgs e)
         {
-			Image img = sender as Image;
+			CustomLayout clikedLayout = sender as CustomLayout;
 	
-			if (img != null && img.ClassId != null)
+			if (clikedLayout != null && clikedLayout.ClassId != null)
 			{
 				string[] delimiters = { "&&" };
-				string[] clasIDArray = img.ClassId.Split(delimiters, StringSplitOptions.None);
+				string[] clasIDArray = clikedLayout.ClassId.Split(delimiters, StringSplitOptions.None);
 				string selectedGoalID = clasIDArray [0];
 				string selectedActionID = clasIDArray [1];
 
@@ -442,9 +444,9 @@ namespace PurposeColor.screens
                     //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
                     pendingGoalTitle.Text = "Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
 
-                    if (pendingGoalTitle.Text.Length > 25)
+                    if (pendingGoalTitle.Text.Length > 20)
                     {
-                        pendingGoalTitle.Text = pendingGoalTitle.Text.Substring(0, 25);
+                        pendingGoalTitle.Text = pendingGoalTitle.Text.Substring(0, 20);
                         pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
                     }
 

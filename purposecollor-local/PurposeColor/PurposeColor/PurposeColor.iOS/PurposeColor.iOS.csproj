@@ -250,6 +250,8 @@
     <BundleResource Include="Resources\turn_off_mic%403x.png" />
     <BundleResource Include="Resources\app_icon_120X120.png" />
     <BundleResource Include="Resources\share.png" />
+    <BundleResource Include="Resources\tic_active.png" />
+    <BundleResource Include="Resources\tick_box.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

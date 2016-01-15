@@ -64,9 +64,12 @@ namespace PurposeColor.screens
 
         async void OnAppearing(object sender, EventArgs e)
         {
+			if (gemsGoalsObject != null && gemsGoalsObject.resultarray != null && gemsGoalsObject.resultarray.Count > 0)
+				return;
 
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             progress.ShowProgressbar("Loading gems..");
+
 
             try
             {
@@ -114,8 +117,8 @@ namespace PurposeColor.screens
             Label pendingGoalTitle = new Label();
             pendingGoalTitle.TextColor = Color.Gray;
             pendingGoalTitle.XAlign = TextAlignment.Center;
-            pendingGoalTitle.FontSize = Device.OnPlatform( 15, 18, 22 );
-            pendingGoalTitle.HeightRequest = Device.OnPlatform(15, 25, 25);
+            pendingGoalTitle.FontSize = Device.OnPlatform( 18, 18, 22 );
+            pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 25, 25);
             pendingGoalTitle.Text = "All Goals and Dreams";
 
             TapGestureRecognizer addGestureRecz = new TapGestureRecognizer();
@@ -132,8 +135,8 @@ namespace PurposeColor.screens
             headingLayout.WidthRequest = App.screenWidth * 90 / 100;
             headingLayout.HeightRequest = Device.OnPlatform( 50, 50, 80 );
             headingLayout.AddChildToLayout(bgImage, 0, 0, (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
-            headingLayout.AddChildToLayout(pendingGoalTitle, Device.OnPlatform( 20, 15, 20 ), Device.OnPlatform( 25, 25, 30 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
-            headingLayout.AddChildToLayout(addGoals, Device.OnPlatform( 70, 83, 83 ), Device.OnPlatform(25, 20, 25), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(pendingGoalTitle, Device.OnPlatform( 20, 15, 20 ), Device.OnPlatform( 30, 25, 30 ), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
+            headingLayout.AddChildToLayout(addGoals, Device.OnPlatform( 83, 83, 83 ), Device.OnPlatform(25, 20, 25), (int)headingLayout.WidthRequest, (int)headingLayout.HeightRequest);
             headingLayout.Scale = 1.10;
             masterStack.Children.Add(headingLayout);
         }
@@ -283,11 +286,13 @@ namespace PurposeColor.screens
                     CustomLayout pendingRow = new CustomLayout();
                     pendingRow.WidthRequest = App.screenWidth * 90 / 100;
                     pendingRow.HeightRequest = 50;
-                    pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+
+					pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+
+					//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
 					pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(tickImage, 2, 25, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-					pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(10, 20, 20), Device.OnPlatform(28, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    cellContainer.Children.Add(pendingRow);
+					pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					cellContainer.Children.Add(pendingRow);
                 }
 
                 masterStack.Children.Add(cellContainer);
@@ -438,11 +443,12 @@ namespace PurposeColor.screens
                     CustomLayout pendingRow = new CustomLayout();
                     pendingRow.WidthRequest = App.screenWidth * 90 / 100;
                     pendingRow.HeightRequest = 50;
-                    pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-					pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-                    cellContainer.Children.Add(pendingRow);
+					pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+
+					//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+					cellContainer.Children.Add(pendingRow);
                 }
 
                 masterStack.Children.Add(cellContainer);

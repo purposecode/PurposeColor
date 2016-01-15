@@ -85,6 +85,7 @@
     <Compile Include="screens\CommentsView.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
     <Compile Include="screens\CustomeMultiSelectionList.cs" />
+    <Compile Include="screens\CustomListMenu.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />
     <Compile Include="screens\FeelingsSecondPage.cs" />
     <Compile Include="screens\ForgotPassword.cs" />

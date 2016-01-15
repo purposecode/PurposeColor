@@ -35,10 +35,6 @@ namespace PurposeColor.screens
 
 		public CommentsView(CustomLayout parentLayout, List<Comment> allComments, string gemId, GemType gemType, bool isCommunityGem)
 		{
-
-			/// for testing only /
-			//allComments = null;
-
 			pageContainedLayout = parentLayout;
 			currentGemId = gemId;
 			curentGemType = gemType;
@@ -144,8 +140,8 @@ namespace PurposeColor.screens
 				HideCommentsPopup();
 			};
 
-			masterLayout.AddChildToLayout(closeButton, 83, (popupHeightValue - Device.OnPlatform(7, 8, 8))); //5
-
+            masterLayout.AddChildToLayout(closeButton, 83, (popupHeightValue - Device.OnPlatform(7, 8, 8))); //x and y percentage.. // hv to correct pixel by TranslationY.
+            closeButton.TranslationY = Device.OnPlatform(2, 2, 2);
 			#endregion
 
 			listContainer = new StackLayout();

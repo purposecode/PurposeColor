@@ -534,6 +534,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\add_btn.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\add_btn.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\add_btn.png" />
+    <AndroidResource Include="Resources\drawable\downarrow.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\downarrow.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\downarrow.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\downarrow.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\downarrow.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

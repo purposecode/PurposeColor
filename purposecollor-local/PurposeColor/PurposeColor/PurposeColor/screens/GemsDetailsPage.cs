@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Xamarin.Forms;
 using CustomControls;
 using PurposeColor.interfaces;
@@ -10,14 +9,15 @@ using PurposeColor.CustomControls;
 using System.Diagnostics;
 using Xam.Plugin.DownloadManager.Abstractions;
 using System.IO;
+using System.Linq;
 
 namespace PurposeColor
 {
     public class GemsDetailsPage : ContentPage, IDisposable
     {
-        CustomLayout masterLayout;
+        CustomLayout masterLayout = null;
         IProgressBar progressBar;
-        StackLayout masterStack;
+        CustomLayout masterStack;
         ScrollView masterScroll;
         Label title;
         Label description;
@@ -31,6 +31,7 @@ namespace PurposeColor
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
+        StackLayout gemMenuContainer;
 
         public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         {
@@ -40,8 +41,8 @@ namespace PurposeColor
             masterScroll = new ScrollView();
             masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
-            masterStack = new StackLayout();
-            masterStack.Orientation = StackOrientation.Vertical;
+            masterStack = new CustomLayout();
+            //masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
             mediaList = mediaArray;
             actionMediaList = actionMediaArray;
@@ -78,16 +79,16 @@ namespace PurposeColor
             pageTitle.TextColor = Color.Black;
             pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             pageTitle.FontAttributes = FontAttributes.Bold;
-            pageTitle.WidthRequest = App.screenWidth * 90 / 100;
+            pageTitle.WidthRequest = App.screenWidth * 80 / 100;
             pageTitle.HeightRequest = 50;
             pageTitle.XAlign = TextAlignment.Start;
-            pageTitle.YAlign = TextAlignment.Center;
+            pageTitle.YAlign = TextAlignment.Start;
             pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
 
             StackLayout emptyLayout = new StackLayout();
-            emptyLayout.BackgroundColor = Color.White;
+            emptyLayout.BackgroundColor = Color.Transparent;
             emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
-            emptyLayout.HeightRequest = 60;
+            emptyLayout.HeightRequest = 30;
 
             #region TOOLS LAYOUT
 
@@ -96,9 +97,9 @@ namespace PurposeColor
             toolsLayout.Spacing = 10;
             toolsLayout.Orientation = StackOrientation.Horizontal;
             toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
-            toolsLayout.Padding = new Thickness(10, 0, 10, 0);
-            toolsLayout.TranslationY = -55;
-            toolsLayout.HeightRequest = 50;
+            toolsLayout.Padding = new Thickness(10, 10, 10, 10);
+            //toolsLayout.TranslationY = -55;
+            //toolsLayout.HeightRequest = 50;
 
 			Image favoriteButton = new Image();
 			favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
@@ -204,10 +205,42 @@ namespace PurposeColor
 			description.Text = desc;
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+            
+            CustomImageButton menuButton = new CustomImageButton
+            {
+                ImageName = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
+                Text = string.Empty,
+                HorizontalOptions = LayoutOptions.End,
+                BackgroundColor = Color.Transparent,
+                WidthRequest = 40,
+                HeightRequest = 30
+            };
+            menuButton.Clicked += GemMenuButton_Clicked;
 
-			masterStack.Children.Add (pageTitle);
-			masterStack.Children.Add (title);
-			masterStack.Children.Add (description);
+            //gemMenuContainer = new StackLayout
+            //{
+            //    Orientation = StackOrientation.Vertical,
+            //    BackgroundColor = Color.Yellow,
+            //    //WidthRequest = App.screenWidth * 55,
+            //    Spacing = 1,
+            //    Children = { menuButton}
+            //};
+
+
+            //StackLayout GemTitleAndMenuContainer = new StackLayout
+            //{
+            //    Orientation = StackOrientation.Horizontal,
+            //    Spacing = 0,
+            //    Children = { pageTitle, gemMenuContainer }
+            //};
+			//masterStack.Children.Add (pageTitle);
+//            masterStack.AddChildToLayout(GemTitleAndMenuContainer,5,20);
+
+            masterStack.AddChildToLayout(pageTitle, 1, 1);
+            masterStack.AddChildToLayout(menuButton, 79, 1);
+            
+            masterStack.AddChildToLayout(title,1,7);
+            masterStack.AddChildToLayout(description, 1, 10);
 			#endregion
 
             #region MEDIA LIST
@@ -247,8 +280,8 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.Children.Add(indicator);
-                    masterStack.Children.Add(img);
+                    masterStack.AddChildToLayout(indicator, 40, 30);
+                    masterStack.AddChildToLayout(img, 1, 15);
                 }
             }
 
@@ -270,42 +303,41 @@ namespace PurposeColor
                     img.ClassId = null;
                     if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
                     {
-						img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                        img.ClassId = source;
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
                     {
-						img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                        img.ClassId = source;
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "wav")
                     {
-						img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                        img.ClassId = source;
                     }
                     img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
-
-
+                    img.ClassId = (!isImage) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.Children.Add(indicator);
-                    masterStack.Children.Add(img);
-                    //masterStack.Children.Add(img);
+                    masterStack.AddChildToLayout(indicator, 40, 30);
+                    masterStack.AddChildToLayout(img, 1, 15);
                 }
             }
             
             #endregion
 
-            masterStack.Children.Add(emptyLayout);
-            masterStack.Children.Add(toolsLayout);
+
+            masterStack.AddChildToLayout(toolsLayout,1,65);
+            masterStack.AddChildToLayout(emptyLayout,1,75);
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
             spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
             spaceOffsetlayout.BackgroundColor = Color.Transparent;
-            masterStack.Children.Add(spaceOffsetlayout);
+            //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
 
             masterScroll.HeightRequest = App.screenHeight - 20;
             masterScroll.WidthRequest = App.screenWidth * 90 / 100;
@@ -315,7 +347,79 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 5, 18);
+
+            #region CUSTOM LIST MENU
+
+            //new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  }
+            
+            #endregion
             Content = masterLayout;
+        }
+
+        void GemMenuButton_Clicked(object sender, EventArgs e)
+        {
+            View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
+            if (menuView != null)
+            {
+                HideCommentsPopup();
+                return;
+            }
+            
+            List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
+            menuItems.Add(new CustomListViewItem { Name = "Edit", EmotionID = CurrentGemId.ToString(),EventID = string.Empty, SliderValue = 0 });
+            menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
+            menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
+
+            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, gemMenuContainer, menuItems, 0, 10, 50);
+            //GemMenu.WidthRequest = App.screenWidth * .50;
+            //GemMenu.HeightRequest = App.screenHeight * .40;
+            GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
+            GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
+            masterStack.AddChildToLayout(GemMenu, 50, 6);
+        }
+
+        void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            try
+            {
+
+                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+                if (item.Name == "Delete")
+                {
+                    // do call the delete gem api
+                    // pass gem type and gem id to service helper . 
+                }
+                else if (item.Name == "Hide")
+                {
+                    // remove the community sharing of current gem
+                }
+                else if (item.Name == "Edit")
+                {
+
+                }
+
+                HideCommentsPopup();
+
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        void HideCommentsPopup()
+        {
+            try
+            {
+                View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
+                if (menuView != null)
+                {
+                    masterStack.Children.Remove(menuView);
+                    menuView = null;
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
 
         async void CommentButtonTapped(object sender, EventArgs e)
@@ -398,10 +502,10 @@ namespace PurposeColor
                 progressBar.ShowProgressbar("Requesting...   ");
                 User user = App.Settings.GetUser();
 
-
                 /////////////// for testing /////////////
                 user = new User { UserId = 2, DisplayName = "TestUser"};
                 /////////////// for testing /////////////
+
                 if (user == null)
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);

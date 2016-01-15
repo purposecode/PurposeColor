@@ -31,7 +31,7 @@ namespace PurposeColor.screens
 		string currentUserId = "2"; ///  = 2 for testing
 		User currentUser;
 		Button closeButton;
-		int popupHeightValue = 100;
+		int popupHeightValue = 10;
 
 		public CommentsView(CustomLayout parentLayout, List<Comment> allComments, string gemId, GemType gemType, bool isCommunityGem)
 		{
@@ -51,8 +51,8 @@ namespace PurposeColor.screens
 					topSpacing = 95;
 					bottomSpacing = 45;
 				} else {
-					topSpacing = 95;
-					bottomSpacing = 90;
+                    topSpacing = Device.OnPlatform(95, 100, 100);
+                    bottomSpacing = Device.OnPlatform(90, 90, 90);
 				}
 
 				Comments = allComments;
@@ -87,7 +87,7 @@ namespace PurposeColor.screens
 			layout.WidthRequest = App.screenWidth;
 			layout.HeightRequest = App.screenHeight + 20;
 
-			masterLayout.AddChildToLayout(layout, 0, -10);
+            masterLayout.AddChildToLayout(layout, 0, Device.OnPlatform(-10, 0, 0));
 
 			TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
 			emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
@@ -127,13 +127,15 @@ namespace PurposeColor.screens
 
 
 			closeButton = new Button{
-				Text = "    X",
+				Text = Device.OnPlatform("    X","  X","  X"),
 				BackgroundColor  = Color.Transparent,
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 				TextColor = Color.White,
-				WidthRequest = App.screenWidth * Device.OnPlatform(.15, .15, .15),
-				HeightRequest = App.screenHeight * Device.OnPlatform(.06, .05, .06),
-				FontSize = Device.OnPlatform(17, 12, 17)
+				WidthRequest = App.screenWidth * Device.OnPlatform(.15, .15, .16),
+				HeightRequest = App.screenHeight * Device.OnPlatform(.06, .07, .07),
+				FontSize = Device.OnPlatform(17, 16, 21),
+                BorderColor = Color.Transparent,
+                BorderWidth = 0
 
 			};
 
@@ -142,7 +144,7 @@ namespace PurposeColor.screens
 				HideCommentsPopup();
 			};
 
-			masterLayout.AddChildToLayout(closeButton, 83, (popupHeightValue - Device.OnPlatform(7, 6, 5)));
+			masterLayout.AddChildToLayout(closeButton, 83, (popupHeightValue - Device.OnPlatform(7, 8, 8))); //5
 
 			#endregion
 
@@ -217,7 +219,7 @@ namespace PurposeColor.screens
 			{
 				Content = listContainer,
 				//BackgroundColor = Color.White,
-				HeightRequest = (App.screenHeight * bottomSpacing / 100) - Device.OnPlatform(90, 90, 180),
+				HeightRequest = (App.screenHeight * bottomSpacing / 100) - Device.OnPlatform(90, 90, 250), // adjusts the bottom spacing. // set bottomspacing
 				IsClippedToBounds = true
 			};
 
@@ -406,8 +408,8 @@ namespace PurposeColor.screens
 					Image profileIcone = new Image {
 						HorizontalOptions = LayoutOptions.Start,
 						VerticalOptions = LayoutOptions.Start,
-						HeightRequest = App.screenHeight * Device.OnPlatform(.13,.15,.15),
-						WidthRequest = App.screenWidth * Device.OnPlatform(.13,.15,.15)
+						HeightRequest = App.screenHeight * Device.OnPlatform(.13,.13,.14),
+						WidthRequest = App.screenWidth * Device.OnPlatform(.13,.13,.14)
 					};
 
 					if (!string.IsNullOrEmpty (comment.profileurl)) {
@@ -420,7 +422,7 @@ namespace PurposeColor.screens
 
 					commentLayout.Children.Add(new StackLayout
 						{
-							Padding = new Thickness(5, Device.OnPlatform(-3, -10, -18), 5, 0),
+							Padding = new Thickness(5, Device.OnPlatform(-3, -5, -10), 5, 0),
 							VerticalOptions = LayoutOptions.Start,
 							HorizontalOptions = LayoutOptions.Start,
 							//HeightRequest = App.screenHeight * Device.OnPlatform(.15,.12,.12),

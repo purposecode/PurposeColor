@@ -1668,6 +1668,11 @@ namespace PurposeColor.screens
                             }
 
 
+                            IMediaVIew mediaView = DependencyService.Get<IMediaVIew>();
+                            await mediaView.FixOrientationAsync(file);
+                            mediaView = null;
+
+
                             MemoryStream ms = new MemoryStream();
                             file.GetStream().CopyTo(ms);
                             ms.Position = 0;

@@ -208,6 +208,7 @@
     <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
     <Compile Include="Dependency\AndroidContactsImpl.cs" />
     <Compile Include="Dependency\AndroidLocalNotificationImpl.cs" />
+    <Compile Include="Dependency\AndroidMediaView.cs" />
     <Compile Include="Dependency\AndroidResize.cs" />
     <Compile Include="Dependency\AndroidVideoPlayer.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />

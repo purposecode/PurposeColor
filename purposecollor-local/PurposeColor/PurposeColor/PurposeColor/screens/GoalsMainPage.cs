@@ -210,13 +210,13 @@ namespace PurposeColor.screens
                 goalImage.HeightRequest = 100;
                 goalImage.WidthRequest = 30;
                 goalImage.Aspect = Aspect.Fill;
-                goalImage.GestureRecognizers.Add(goalsTap);
 
 
                 Image mediaImage = new Image();
                 mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
                 mediaImage.HeightRequest = 80;
                 mediaImage.WidthRequest = 80;
+				mediaImage.GestureRecognizers.Add(goalsTap);
 
 
                 StackLayout firstRow = new StackLayout();
@@ -367,13 +367,13 @@ namespace PurposeColor.screens
                 goalImage.HeightRequest = 100;
                 goalImage.WidthRequest = 30;
                 goalImage.Aspect = Aspect.Fill;
-                goalImage.GestureRecognizers.Add(goalsTap);
 
 
                 Image mediaImage = new Image();
                 mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
                 mediaImage.HeightRequest = 80;
                 mediaImage.WidthRequest = 80;
+				mediaImage.GestureRecognizers.Add(goalsTap);
 
 
                 StackLayout firstRow = new StackLayout();

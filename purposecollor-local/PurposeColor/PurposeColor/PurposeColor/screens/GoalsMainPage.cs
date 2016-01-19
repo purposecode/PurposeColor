@@ -407,9 +407,6 @@ namespace PurposeColor.screens
                     cellContainer.Spacing = 0;
                     cellContainer.Padding = new Thickness(10, 10, 10, 10);
 
-                    CustomLayout customLayout = new CustomLayout();
-                    customLayout.BackgroundColor = Color.White;
-                    customLayout.WidthRequest = App.screenWidth * 90 / 100;
                     double screenWidth = App.screenWidth;
                     double screenHeight = App.screenHeight;
 
@@ -596,6 +593,34 @@ namespace PurposeColor.screens
             await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
         }
 
+        private void DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)
+        {
+            PendingGoalsDetails selgoal = pendingGoalsObject.resultarray.FirstOrDefault(itm => itm.goal_id == selectedGoalID);
+            if (selgoal != null)
+            {
+                foreach (var item in selgoal.pending_action_title)
+                {
+                    View selView = masterStack.Children.FirstOrDefault(itm => itm.ClassId == item.savedgoal_id);
+                    if (selView != null)
+                    {
+                        StackLayout selLayout = selView as StackLayout;
+                        View layView = selLayout.Children.FirstOrDefault(itm => itm.ClassId == selectedSavedGoalID);
+                        if (layView != null)
+                        {
+                            //await layView.TranslateTo(100, 0, 500, Easing.BounceOut);
+                            selLayout.Children.Remove(layView);
+                            if (selLayout.Children.Count == 1)
+                            {
+                                //selLayout.TranslateTo(100, 0, 500, Easing.BounceOut);
+                                selLayout.Children.Clear();
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
         async void OnPendingGoalsTapped(object sender, EventArgs e)
         {
             StackLayout layout = sender as StackLayout;
@@ -611,9 +636,9 @@ namespace PurposeColor.screens
 
 					if (!string.IsNullOrEmpty (selectedSavedGoalID)) 
 					{
+
 						IProgressBar progress = DependencyService.Get<IProgressBar> ();
 						progress.ShowProgressbar ( "Completing action...." );
-
 
 						var change = await ServiceHelper.ChangePendingActionStatus ( selectedSavedGoalID );
 						if (!change) 
@@ -623,17 +648,7 @@ namespace PurposeColor.screens
 						} 
 						else
 						{
-                            PendingGoalsDetails goal = pendingGoalsObject.resultarray.FirstOrDefault(itm => itm.goal_id == selectedGoalID);
-                            if (goal != null)
-                            {
-                                goal.pending_action_title.RemoveAll(itm => itm.savedgoal_id == selectedSavedGoalID);
-                                if (goal.pending_action_title.Count == 0)
-                                {
-                                    pendingGoalsObject.resultarray.Remove(goal);
-                                }
-                            }
-
-                            RefreshPendingGoalsView(selectedSavedGoalID);
+                            DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
 						}
 						progress.HideProgressbar ();
 					}

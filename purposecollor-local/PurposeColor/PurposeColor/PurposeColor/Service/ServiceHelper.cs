@@ -1561,5 +1561,60 @@ namespace PurposeColor.Service
 
             return "404";
         }
+
+
+		public static async Task<PendingGoalsObject> GetAllPendingGoalsAndActions()
+		{
+			try
+			{
+				User user = new User { UserId = 2, UserName = "sam" };
+
+				if (user == null)
+				{
+					return null;
+				}
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=getallmypendinggoal&user_id=" + user.UserId.ToString();
+
+				var response = await client.GetAsync(uriString);
+
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+					var rootobject = JsonConvert.DeserializeObject<PendingGoalsObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject; 
+					}
+					client.Dispose();
+					return null;
+
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

@@ -27,6 +27,7 @@ namespace PurposeColor.screens
         StackLayout masterStack;
         CustomLayout headingLayout;
         GemsGoalsObject gemsGoalsObject;
+		PendingGoalsObject pendingGoalsObject;
         public GoalsMainPage()
         {
 
@@ -73,10 +74,25 @@ namespace PurposeColor.screens
 
             try
             {
+			    pendingGoalsObject = await ServiceHelper.GetAllPendingGoalsAndActions ();
+				if( pendingGoalsObject == null || pendingGoalsObject.resultarray == null )
+				{
+					var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching Pending goals", Constants.ALERT_OK, Constants.ALERT_RETRY);
+					if (!success) 
+					{
+						OnAppearing (sender, EventArgs.Empty);
+						return;
+					} 
+					else
+					{
+						progress.HideProgressbar ();
+					}
+				}
+
                 gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
 
                 #region PENDING GOALS
-                CreateGoalsPage( true );
+                CreatePendingGoalsView( true );
                 #endregion
 
                 #region ALL GOALS HEADING
@@ -84,7 +100,7 @@ namespace PurposeColor.screens
                 #endregion
 
                 #region ALL GOALS
-                CreateGoalsPage(false, gemsGoalsObject);
+                CreatePendingGoalsView(false, gemsGoalsObject);
                 #endregion
 
 
@@ -148,7 +164,7 @@ namespace PurposeColor.screens
         }
 
 
-        void CreateGoalsPage( bool pendingGoals, GemsGoalsObject goalsObject )
+        void CreatePendingGoalsView( bool pendingGoals, GemsGoalsObject goalsObject )
         {
 
             for (int index = 0; index < goalsObject.resultarray.Count; index++)
@@ -340,10 +356,19 @@ namespace PurposeColor.screens
 			}
         }
 
-        void CreateGoalsPage( bool pendingGoals )
+        void CreatePendingGoalsView( bool pendingGoals )
         {
+			if (pendingGoalsObject == null || pendingGoalsObject.resultarray == null)
+				return;
+
+			if (pendingGoalsObject.resultarray.Count < 1)
+			{
+				DisplayAlert ( Constants.ALERT_TITLE, "You have no pending goals !.", Constants.ALERT_OK );
+				return;
+			}
+
             // Pending goals
-            for (int index = 0; index < 3; index++)
+			foreach (var item in pendingGoalsObject.resultarray)
             {
 
                 StackLayout cellContainer = new StackLayout();
@@ -374,7 +399,7 @@ namespace PurposeColor.screens
                 TapGestureRecognizer goalsTap = new TapGestureRecognizer();
                 goalsTap.Tapped += OnGoalsTapped;
                 Label firstDetailsInfo = new Label();
-                string firstDetails = "The meaning of life, or the answer to the question What is the meaning of life?, pertains to the significance of living or existence in general. Many other questions also seek the meaning of life, including What should I do?";
+				string firstDetails = (item.goal_details != null) ? item.goal_details : "";
                 if (firstDetails.Length > 120)
                 {
                     firstDetails = firstDetails.Substring(0, 120);
@@ -424,8 +449,7 @@ namespace PurposeColor.screens
                 cellContainer.Children.Add(firstRow);
 
 
-
-                for (int pendingIndex = 0; pendingIndex < 5; pendingIndex++)
+				foreach (var pendingItem in item.pending_action_title ) 
                 {
                     TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
                     checkboxTap.Tapped += OnCheckboxTapTapped;
@@ -442,7 +466,7 @@ namespace PurposeColor.screens
                     pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
 					pendingGoalTitle.WidthRequest = App.screenWidth * Device.OnPlatform( 65, 60, 60 ) / 100;
                     //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
-                    pendingGoalTitle.Text = "Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
+					pendingGoalTitle.Text = (pendingItem != null && pendingItem.action_title != null ) ? pendingItem.action_title : "";
 
                     if (pendingGoalTitle.Text.Length > 20)
                     {

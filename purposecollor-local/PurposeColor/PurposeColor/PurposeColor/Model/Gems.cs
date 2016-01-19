@@ -135,4 +135,70 @@ namespace PurposeColor.Model
 		Emotion = 4
 	}
 
+
+	public class PendingActionTitle
+	{
+		public string goal_id { get; set; }
+		public string savedgoal_id { get; set; }
+		public string actionstatus_id { get; set; }
+		public string goalaction_id { get; set; }
+		public string action_title { get; set; }
+	}
+
+	public class PendingActionDetail
+	{
+		public string goal_id { get; set; }
+		public string savedgoal_id { get; set; }
+		public string actionstatus_id { get; set; }
+		public string goalaction_id { get; set; }
+		public string action_details { get; set; }
+	}
+
+	public class PendingActionDatetime
+	{
+		public string goal_id { get; set; }
+		public string savedgoal_id { get; set; }
+		public string actionstatus_id { get; set; }
+		public string goalaction_id { get; set; }
+		public string action_datetime { get; set; }
+	}
+
+	public class PendingShareStatu
+	{
+		public string goal_id { get; set; }
+		public string savedgoal_id { get; set; }
+		public string actionstatus_id { get; set; }
+		public string goalaction_id { get; set; }
+		public string share_status { get; set; }
+	}
+
+	public class PendingActionMedia
+	{
+		public string goal_id { get; set; }
+		public string goalaction_id { get; set; }
+		public string media_type { get; set; }
+		public string action_media { get; set; }
+	}
+
+	public class PendingGoalsDetails
+	{
+		public string user_id { get; set; }
+		public string goal_id { get; set; }
+		public string goal_title { get; set; }
+		public string goal_details { get; set; }
+		public List<PendingActionTitle> pending_action_title { get; set; }
+		public List<PendingActionDetail> pending_action_details { get; set; }
+		public List<PendingActionDatetime> pending_action_datetime { get; set; }
+		public List<PendingShareStatu> pending_share_status { get; set; }
+		public List<PendingActionMedia> pending_action_media { get; set; }
+	}
+
+	public class PendingGoalsObject
+	{
+		public string code { get; set; }
+		public string noimageurl { get; set; }
+		public string mediapath { get; set; }
+		public string mediathumbpath { get; set; }
+		public List<PendingGoalsDetails> resultarray { get; set; }
+	}
 }

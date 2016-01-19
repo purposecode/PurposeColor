@@ -1616,5 +1616,61 @@ namespace PurposeColor.Service
 				throw;
 			}
 		}
+
+
+
+		public static async Task<GemsGoalsObject> GetAllMyGoals()
+		{
+			try
+			{
+				User user = new User { UserId = 2, UserName = "sam" };
+
+				if (user == null)
+				{
+					return null;
+				}
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=getallmygoals&user_id=" + user.UserId.ToString();
+
+				var response = await client.GetAsync(uriString);
+
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+					var rootobject = JsonConvert.DeserializeObject<GemsGoalsObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject; 
+					}
+					client.Dispose();
+					return null;
+
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

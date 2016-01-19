@@ -89,7 +89,21 @@ namespace PurposeColor.screens
 					}
 				}
 
-                gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
+				gemsGoalsObject = await ServiceHelper.GetAllMyGoals();
+				if( gemsGoalsObject == null || gemsGoalsObject.resultarray == null )
+				{
+					var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching all goals", Constants.ALERT_OK, Constants.ALERT_RETRY);
+					if (!success) 
+					{
+						OnAppearing (sender, EventArgs.Empty);
+						return;
+					} 
+					else
+					{
+						progress.HideProgressbar ();
+					}
+				}
+				
 
                 #region PENDING GOALS
                 CreatePendingGoalsView( true );
@@ -100,7 +114,7 @@ namespace PurposeColor.screens
                 #endregion
 
                 #region ALL GOALS
-                CreatePendingGoalsView(false, gemsGoalsObject);
+				CreateAllGoalsView();
                 #endregion
 
 
@@ -164,167 +178,180 @@ namespace PurposeColor.screens
         }
 
 
-        void CreatePendingGoalsView( bool pendingGoals, GemsGoalsObject goalsObject )
+        void CreateAllGoalsView()
         {
+			try 
+			{
+				if (gemsGoalsObject.resultarray == null)
+					return;
 
-            for (int index = 0; index < goalsObject.resultarray.Count; index++)
-            {
+				if( gemsGoalsObject.resultarray.Count < 1 )
+				{
+					DisplayAlert ( Constants.ALERT_TITLE, "No goals present", Constants.ALERT_OK );
+					return;
+				}
 
-                StackLayout cellContainer = new StackLayout();
-                cellContainer.Orientation = StackOrientation.Vertical;
-                cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
-                cellContainer.Spacing = 0;
-                cellContainer.Padding = new Thickness(10, 10, 10, 10);
+				foreach (var item in gemsGoalsObject.resultarray) 
+				{
 
-                CustomLayout customLayout = new CustomLayout();
-                customLayout.BackgroundColor = Color.White;
-                customLayout.WidthRequest = App.screenWidth * 90 / 100;
-                double screenWidth = App.screenWidth;
-                double screenHeight = App.screenHeight;
+					StackLayout cellContainer = new StackLayout();
+					cellContainer.Orientation = StackOrientation.Vertical;
+					cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
+					cellContainer.Spacing = 0;
+					cellContainer.Padding = new Thickness(10, 10, 10, 10);
 
-
-                Label subTitle = new Label();
-                subTitle.Text = "Pending";
-                subTitle.TextColor = Color.Gray;
-                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                subTitle.XAlign = TextAlignment.Center;
-                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                subTitle.VerticalOptions = LayoutOptions.Center;
-                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                // headerLayout.HorizontalOptions = LayoutOptions.Center;
-                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
-                TapGestureRecognizer goalsTap = new TapGestureRecognizer();
-                goalsTap.Tapped += OnGoalsTapped;
-                Label firstDetailsInfo = new Label();
-                string firstDetails = "goal desripton will replace this area. now this is a dummy text to fill the empty place"; //goalsObject.resultarray[index].goal_title;
-                if (firstDetails.Length > 120)
-                {
-                    firstDetails = firstDetails.Substring(0, 120);
-                    firstDetails += "....";
-                }
-                firstDetailsInfo.Text = firstDetails;
-                firstDetailsInfo.TextColor = Color.Gray;
-                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
-                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-                firstDetailsInfo.GestureRecognizers.Add(goalsTap);
+					CustomLayout customLayout = new CustomLayout();
+					customLayout.BackgroundColor = Color.White;
+					customLayout.WidthRequest = App.screenWidth * 90 / 100;
+					double screenWidth = App.screenWidth;
+					double screenHeight = App.screenHeight;
 
 
-                Image goalImage = new Image();
-                if (pendingGoals)
-                {
-                    goalImage.Source = Device.OnPlatform("goals_badge_red.png", "goals_badge_red.png", "//Assets//goals_badge_red.png");
-                }
-                else
-                {
-                    goalImage.Source = Device.OnPlatform("goals_badge_blue.png", "goals_badge_blue.png", "//Assets//goals_badge_blue.png");
-                }
-                goalImage.HeightRequest = 100;
-                goalImage.WidthRequest = 30;
-                goalImage.Aspect = Aspect.Fill;
+					Label subTitle = new Label();
+					subTitle.Text = "Pending";
+					subTitle.TextColor = Color.Gray;
+					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+					subTitle.XAlign = TextAlignment.Center;
+					int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
+					subTitle.VerticalOptions = LayoutOptions.Center;
+					subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
+					subTitle.WidthRequest = App.screenWidth * 90 / 100;
+					// headerLayout.HorizontalOptions = LayoutOptions.Center;
+					subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
+
+					TapGestureRecognizer goalsTap = new TapGestureRecognizer();
+					goalsTap.Tapped += OnGoalsTapped;
+					Label firstDetailsInfo = new Label();
+					string firstDetails = (item.goal_title != null) ? item.goal_title : "";
+					if (firstDetails.Length > 120)
+					{
+						firstDetails = firstDetails.Substring(0, 120);
+						firstDetails += "....";
+					}
+					firstDetailsInfo.Text = firstDetails;
+					firstDetailsInfo.TextColor = Color.Gray;
+					firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+					firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
+					firstDetailsInfo.HeightRequest = 45;
+					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
+					firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+					firstDetailsInfo.GestureRecognizers.Add(goalsTap);
 
 
-                Image mediaImage = new Image();
-                mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
-                mediaImage.HeightRequest = 80;
-                mediaImage.WidthRequest = 80;
-				mediaImage.GestureRecognizers.Add(goalsTap);
+					Image goalImage = new Image();
+					goalImage.Source = Device.OnPlatform("goals_badge_blue.png", "goals_badge_blue.png", "//Assets//goals_badge_blue.png");
+					goalImage.HeightRequest = 100;
+					goalImage.WidthRequest = 30;
+					goalImage.Aspect = Aspect.Fill;
 
 
-                StackLayout firstRow = new StackLayout();
-                firstRow.Orientation = StackOrientation.Horizontal;
-                firstRow.BackgroundColor = Color.White;
-                firstRow.WidthRequest = App.screenWidth - 20;
-                firstRow.Padding = new Thickness(0, 10, 0, 10);
-
-                firstRow.Children.Add(goalImage);
-                firstRow.Children.Add(firstDetailsInfo);
-                firstRow.Children.Add(mediaImage);
-
-                cellContainer.Children.Add(firstRow);
+					Image mediaImage = new Image();
+					mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
+					mediaImage.HeightRequest = 80;
+					mediaImage.WidthRequest = 80;
+					mediaImage.GestureRecognizers.Add(goalsTap);
 
 
-                int actionTitleCount = ( goalsObject.resultarray[index].action_title != null && goalsObject.resultarray[index].action_title.Count > 0 ) ? goalsObject.resultarray[index].action_title.Count : 0;
-                for (int pendingIndex = 0; pendingIndex < actionTitleCount; pendingIndex++)
-                {
-                    TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
-                    checkboxTap.Tapped += OnCheckboxTapTapped;
+					StackLayout firstRow = new StackLayout();
+					firstRow.Orientation = StackOrientation.Horizontal;
+					firstRow.BackgroundColor = Color.White;
+					firstRow.WidthRequest = App.screenWidth - 20;
+					firstRow.Padding = new Thickness(0, 10, 0, 10);
 
-					TapGestureRecognizer actionTap = new TapGestureRecognizer ();
-					actionTap.Tapped += OnActionTapped;
-                    Image bgImage = new Image();
-                    bgImage.Source = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
-                    bgImage.WidthRequest = App.screenWidth - 40;
-                    bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
-                    bgImage.Aspect = Aspect.Fill;
-					//bgImage.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
-					//bgImage.GestureRecognizers.Add ( actionTap );
+					firstRow.Children.Add(goalImage);
+					firstRow.Children.Add(firstDetailsInfo);
+					firstRow.Children.Add(mediaImage);
 
-                    Label pendingGoalTitle = new Label();
-                    pendingGoalTitle.TextColor = Color.Black;
-                    pendingGoalTitle.XAlign = TextAlignment.Center;
-                    pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
-					pendingGoalTitle.WidthRequest = App.screenWidth * Device.OnPlatform( 65, 60, 60 ) / 100;
-                    //  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
-                    pendingGoalTitle.Text =  goalsObject.resultarray[index].action_title[pendingIndex].action_title; //"Go to gym Go to gym Go to gym Go to gymGo to gymGo to gymGo to gymGo to gymGo to gymGo to gym Go to gymGo to gym";
-
-                    if (pendingGoalTitle.Text.Length > 25)
-                    {
-                        pendingGoalTitle.Text = pendingGoalTitle.Text.Substring(0, 25);
-                        pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
-                    }
-
-                    Switch goalDoneSwitch = new Switch();
-                    goalDoneSwitch.BackgroundColor = Color.White;
-                    goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
-                    goalDoneSwitch.WidthRequest = 50;
-
-                    StackLayout trasprntClickLayout = new StackLayout();
-                    trasprntClickLayout.WidthRequest = 50;
-                    trasprntClickLayout.HeightRequest = 50;
-                    trasprntClickLayout.BackgroundColor = Color.Transparent;
-                    trasprntClickLayout.VerticalOptions = LayoutOptions.Center;
-                    trasprntClickLayout.GestureRecognizers.Add(checkboxTap);
-
-                    Image tickImage = new Image();
-                    tickImage.IsEnabled = false;
-                    tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
-                    tickImage.Aspect = Aspect.Fill;
-                    tickImage.WidthRequest = 20;
-                    tickImage.HeightRequest = 20;
-                    tickImage.ClassId = "off";
-                    tickImage.HorizontalOptions = LayoutOptions.Center;
-                    tickImage.VerticalOptions = LayoutOptions.End;
-                    tickImage.TranslationY = 15;
-                    trasprntClickLayout.Children.Add(tickImage);
+					cellContainer.Children.Add(firstRow);
 
 
-                    CustomLayout pendingRow = new CustomLayout();
-                    pendingRow.WidthRequest = App.screenWidth * 90 / 100;
-                    pendingRow.HeightRequest = 50;
-					pendingRow.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
+					//int actionTitleCount = ( item.action_title != null  && item.action_title.Count > 0 ) ? goalsObject.resultarray[index].action_title.Count : 0;
+					if( item.action_title != null )
+					{
+						foreach (var itemAction in item.action_title)
+						{
+							TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
+							checkboxTap.Tapped += OnCheckboxTapTapped;
 
-					pendingRow.GestureRecognizers.Add(actionTap);
-					pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+							TapGestureRecognizer actionTap = new TapGestureRecognizer ();
+							actionTap.Tapped += OnActionTapped;
+							Image bgImage = new Image();
+							bgImage.Source = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
+							bgImage.WidthRequest = App.screenWidth - 40;
+							bgImage.HeightRequest = Device.OnPlatform(50, 50, 50);
+							bgImage.Aspect = Aspect.Fill;
+							//bgImage.ClassId = goalsObject.resultarray [index].goal_id + "&&" + goalsObject.resultarray [index].action_title [pendingIndex].goalaction_id;
+							//bgImage.GestureRecognizers.Add ( actionTap );
 
-					//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-					pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-					pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
-					cellContainer.Children.Add(pendingRow);
-                }
+							Label pendingGoalTitle = new Label();
+							pendingGoalTitle.TextColor = Color.Black;
+							pendingGoalTitle.XAlign = TextAlignment.Center;
+							pendingGoalTitle.FontSize = Device.OnPlatform(15, 15, 18);
+							pendingGoalTitle.WidthRequest = App.screenWidth * Device.OnPlatform( 65, 60, 60 ) / 100;
+							//  pendingGoalTitle.HeightRequest = Device.OnPlatform(25, 20, 40);
+							pendingGoalTitle.Text =  ( itemAction != null && itemAction.action_title != null ) ? itemAction.action_title : "";
 
-                masterStack.Children.Add(cellContainer);
+							if (pendingGoalTitle.Text.Length > 25)
+							{
+								pendingGoalTitle.Text = pendingGoalTitle.Text.Substring(0, 25);
+								pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
+							}
 
-                StackLayout trans = new StackLayout();
-                trans.BackgroundColor = Color.FromRgb(244, 244, 244);
-                trans.HeightRequest = 30;
-                trans.WidthRequest = App.screenWidth;
-                masterStack.Children.Add(trans);
-            }
+							Switch goalDoneSwitch = new Switch();
+							goalDoneSwitch.BackgroundColor = Color.White;
+							goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
+							goalDoneSwitch.WidthRequest = 50;
+
+							StackLayout trasprntClickLayout = new StackLayout();
+							trasprntClickLayout.WidthRequest = 50;
+							trasprntClickLayout.HeightRequest = 50;
+							trasprntClickLayout.BackgroundColor = Color.Transparent;
+							trasprntClickLayout.VerticalOptions = LayoutOptions.Center;
+							trasprntClickLayout.GestureRecognizers.Add(checkboxTap);
+
+							Image tickImage = new Image();
+							tickImage.IsEnabled = false;
+							tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+							tickImage.Aspect = Aspect.Fill;
+							tickImage.WidthRequest = 20;
+							tickImage.HeightRequest = 20;
+							tickImage.ClassId = "off";
+							tickImage.HorizontalOptions = LayoutOptions.Center;
+							tickImage.VerticalOptions = LayoutOptions.End;
+							tickImage.TranslationY = 15;
+							trasprntClickLayout.Children.Add(tickImage);
+
+
+							CustomLayout pendingRow = new CustomLayout();
+							pendingRow.WidthRequest = App.screenWidth * 90 / 100;
+							pendingRow.HeightRequest = 50;
+							pendingRow.ClassId = item.goal_id + "&&" + itemAction.goalaction_id;
+
+							pendingRow.GestureRecognizers.Add(actionTap);
+							pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+
+							//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+							pendingRow.AddChildToLayout(trasprntClickLayout, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+							pendingRow.AddChildToLayout(pendingGoalTitle, Device.OnPlatform(15, 20, 20), Device.OnPlatform(31, 25, 25), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
+							cellContainer.Children.Add(pendingRow);
+						}
+
+						masterStack.Children.Add(cellContainer);
+
+						StackLayout trans = new StackLayout();
+						trans.BackgroundColor = Color.FromRgb(244, 244, 244);
+						trans.HeightRequest = 30;
+						trans.WidthRequest = App.screenWidth;
+						masterStack.Children.Add(trans);
+					}
+
+				}
+			} 
+			catch (Exception ex) 
+			{
+				System.Diagnostics.Debug.WriteLine ( ex.Message );
+			}
+		
         }
 
         async void OnActionTapped (object sender, EventArgs e)

@@ -1672,5 +1672,55 @@ namespace PurposeColor.Service
 				throw;
 			}
 		}
+
+
+		public static async Task<bool> ChangePendingActionStatus(string savedGoalID )
+		{
+			if (!CrossConnectivity.Current.IsConnected)
+			{
+				return false;
+			}
+
+			try
+			{
+				string url = "http://purposecodes.com/pc/api.php?action=changeactionstatus";
+				string result = String.Empty;
+
+				using (var client = new HttpClient())
+				{
+					var content = new FormUrlEncodedContent(new[]
+						{
+							new KeyValuePair<string, string>("savedgoal_id", savedGoalID)
+						});
+
+					HttpResponseMessage response = await client.PostAsync(url, content);
+					if (response != null && response.StatusCode == HttpStatusCode.OK)
+					{
+						var eventsJson = response.Content.ReadAsStringAsync().Result;
+						var rootobject = JsonConvert.DeserializeObject<ChangePendingGoalReturn>(eventsJson);
+						if (rootobject != null)
+						{
+
+							if (rootobject.code == "200")
+							{
+								client.Dispose();
+								return true;
+							}
+						}
+					}
+					else
+					{
+						client.Dispose();
+						return false;
+					}
+				}
+				return true;
+			}
+			catch (Exception ex)
+			{
+
+				return false;
+			}
+		}
     }
 }

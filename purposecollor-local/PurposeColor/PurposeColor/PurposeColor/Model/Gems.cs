@@ -201,4 +201,10 @@ namespace PurposeColor.Model
 		public string mediathumbpath { get; set; }
 		public List<PendingGoalsDetails> resultarray { get; set; }
 	}
+
+    public class ChangePendingGoalReturn
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+    }
 }

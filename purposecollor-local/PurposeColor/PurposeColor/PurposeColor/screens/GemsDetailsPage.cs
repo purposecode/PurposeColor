@@ -341,6 +341,48 @@ namespace PurposeColor
                     bottomAndLowerControllStack.Children.Add(img);
                 }
             }
+
+
+            if (model.goal_media != null)
+            {
+                for (int index = 0; index < model.goal_media.Count; index++)
+                {
+                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
+                    videoTap.Tapped += OnActionVideoTapped;
+
+                    Image img = new Image();
+                    bool isValidUrl = (model.goal_media[index].goal_media != null && !string.IsNullOrEmpty(model.goal_media[index].goal_media)) ? true : false;
+                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string fileExtenstion = Path.GetExtension(source);
+                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+                    img.WidthRequest = App.screenWidth * 90 / 100;
+                    img.HeightRequest = App.screenWidth * 90 / 100;
+                    img.Aspect = Aspect.AspectFill;
+                    img.ClassId = null;
+                    if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
+                    {
+                        img.ClassId = source;
+                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+                    }
+                    else if (model.goal_media[index] != null && model.goal_media[index].media_type == "3gpp")
+                    {
+                        img.ClassId = source;
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                    }
+                    else if (model.goal_media[index] != null && model.goal_media[index].media_type == "wav")
+                    {
+                        img.ClassId = source;
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+                    }
+                    img.Source = source;
+                    img.GestureRecognizers.Add(videoTap);
+                    var indicator = new ActivityIndicator { Color = new Color(.5), };
+                    indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+                    indicator.BindingContext = img;
+                    masterStack.AddChildToLayout(indicator, 40, 30);
+                    bottomAndLowerControllStack.Children.Add(img);
+                }
+            }
             
             #endregion
 

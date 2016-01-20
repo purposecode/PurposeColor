@@ -255,7 +255,7 @@ namespace PurposeColor
                     {
                     }
                     progressBar.HideProgressbar();
-                    await Navigation.PushModalAsync(new FeelingNowPage());
+                    await Navigation.PushAsync(new FeelingNowPage());
                     return;
 				}
 			} 

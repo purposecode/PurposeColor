@@ -48,6 +48,7 @@ namespace PurposeColor.Service
                         listItem.SliderValue = sliderValue;
                         emotionsList.Add(listItem);
                     }
+                    client.Dispose();
                 }
                 return emotionsList;
             }
@@ -95,6 +96,7 @@ namespace PurposeColor.Service
                             listItem.SliderValue = Convert.ToInt32(item.emotion_value);
                             emotionsList.Add(listItem);
                         }
+                        client.Dispose();
                     }
                     return emotionsList;
                 }
@@ -169,6 +171,7 @@ namespace PurposeColor.Service
                         listItem.EventID = item.goal_id;
                         goalsList.Add(listItem);
                     }
+                    client.Dispose();
                 }
 
                 return goalsList;
@@ -222,6 +225,7 @@ namespace PurposeColor.Service
                                 listItem.Name = item.formatted_address;
                                 App.nearByLocationsSource.Add(listItem);
                             }
+                            client.Dispose();
                         }
 
                        return true;
@@ -279,6 +283,7 @@ namespace PurposeColor.Service
                                 listItem.Name = item.name;
                                 App.nearByLocationsSource.Add( listItem );
                             }
+                            client.Dispose();
                         }
 
                        return true;
@@ -338,6 +343,7 @@ namespace PurposeColor.Service
                                 listItem.EventID = item.event_id;
                                 eventsList.Add(listItem);
                             }
+                            client.Dispose();
                         }
                         return eventsList;
                     }
@@ -392,6 +398,7 @@ namespace PurposeColor.Service
                         listItem.EventID = item.goalaction_id;
                         actionsList.Add(listItem);
                     }
+                    client.Dispose();
                 }
                 return actionsList;
             }
@@ -1722,5 +1729,61 @@ namespace PurposeColor.Service
 				return false;
 			}
 		}
+
+
+        public static async Task<SelectedGoal> GetSelectedGoalDetails(  string selectedGoalID )
+        {
+            try
+            {
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    return null;
+                }
+
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return null;
+                }
+
+                var client = new System.Net.Http.HttpClient();
+
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+                string uriString = "api.php?action=getgoal&goal_id=" + selectedGoalID;
+
+                var response = await client.GetAsync(uriString);
+
+                if (response != null && response.Content != null)
+                {
+                    var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+                    var rootobject = JsonConvert.DeserializeObject<SelectedGoal>(actionsJson);
+                    if (rootobject != null && rootobject.resultarray != null)
+                    {
+                        client.Dispose();
+                        return rootobject;
+                    }
+                    client.Dispose();
+                    return null;
+
+                }
+                else
+                {
+                    client.Dispose();
+                    return null;
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

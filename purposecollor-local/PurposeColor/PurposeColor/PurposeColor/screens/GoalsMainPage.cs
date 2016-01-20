@@ -204,19 +204,6 @@ namespace PurposeColor.screens
 					double screenWidth = App.screenWidth;
 					double screenHeight = App.screenHeight;
 
-
-					Label subTitle = new Label();
-					subTitle.Text = "Pending";
-					subTitle.TextColor = Color.Gray;
-					subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-					subTitle.XAlign = TextAlignment.Center;
-					int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-					subTitle.VerticalOptions = LayoutOptions.Center;
-					subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-					subTitle.WidthRequest = App.screenWidth * 90 / 100;
-					// headerLayout.HorizontalOptions = LayoutOptions.Center;
-					subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
 					TapGestureRecognizer goalsTap = new TapGestureRecognizer();
 					goalsTap.Tapped += OnGoalsTapped;
 					Label firstDetailsInfo = new Label();
@@ -420,6 +407,7 @@ namespace PurposeColor.screens
                     firstDetailsInfo.HeightRequest = 45;
                     int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
                     firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+                    firstDetailsInfo.ClassId = item.goal_id;
                     firstDetailsInfo.GestureRecognizers.Add(goalsTap);
 
 
@@ -442,6 +430,7 @@ namespace PurposeColor.screens
                     mediaImage.HeightRequest = 80;
                     mediaImage.WidthRequest = 100;
                     mediaImage.GestureRecognizers.Add(goalsTap);
+                    mediaImage.ClassId = item.goal_id;
                     mediaImage.Aspect = Aspect.Fill;
 
 
@@ -567,7 +556,19 @@ namespace PurposeColor.screens
 
         async void OnGoalsTapped(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
+            Label detailslabel = sender as Label;
+            Image mediaImg = sender as Image;
+            string goalID = "";
+            if( detailslabel != null )
+            {
+                goalID = detailslabel.ClassId;
+            }
+            else if( mediaImg != null )
+            {
+                goalID = mediaImg.ClassId;
+            }
+            SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails(goalID);
+           // await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
         }
 
         private async  Task<bool> DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)
@@ -586,19 +587,23 @@ namespace PurposeColor.screens
                         {
                             await layView.TranslateTo(200, 0, 500, Easing.BounceOut);
                             selLayout.Children.Remove(layView);
-                           /* if (selLayout.Children.Count == 1)
+                            if (selLayout.Children.Count == 1)
                             {
-                                //await selLayout.TranslateTo(200, 0, 500, Easing.BounceOut);
+                                await selLayout.TranslateTo(1000, 0, 500, Easing.BounceOut);
                                 selLayout.Children.Clear();
                                 int index = masterStack.Children.IndexOf( selView );
                                 if( index > -1 && (index + 1) < masterStack.Children.Count )
                                 {
                                     View trans = masterStack.Children[ index + 1 ];
                                     if (trans != null)
-                                        masterStack.Children.Remove( trans );
+                                    {
+                                        await trans.TranslateTo(1000, 0, 500, Easing.BounceOut);
+                                        masterStack.Children.Remove(trans);
+                                    }
+                                        
                                 }
                                
-                            }*/
+                            }
                         }
                     }
                 }
@@ -621,6 +626,9 @@ namespace PurposeColor.screens
 					string[] clasIDArray = img.ClassId.Split(delimiters, StringSplitOptions.None);
 					string selectedSavedGoalID = clasIDArray [1];
 					string selectedGoalID = clasIDArray [0];
+
+                    await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
+                    return;
 
 					if (!string.IsNullOrEmpty (selectedSavedGoalID)) 
 					{

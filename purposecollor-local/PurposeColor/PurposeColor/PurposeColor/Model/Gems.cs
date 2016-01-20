@@ -210,4 +210,42 @@ namespace PurposeColor.Model
         public string code { get; set; }
         public string text { get; set; }
     }
+
+
+    public class SelectedGoalMedia
+    {
+        public string goal_id { get; set; }
+        public string media_type { get; set; }
+        public string goal_media { get; set; }
+    }
+
+    public class SelectedGoalDetails
+    {
+        public string goal_title { get; set; }
+        public string goal_details { get; set; }
+        public string goal_datetime { get; set; }
+        public string user_id { get; set; }
+        public string share_status { get; set; }
+        public List<SelectedGoalMedia> goal_media { get; set; }
+    }
+
+    public class SelectedGoal
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+        public SelectedGoalDetails resultarray { get; set; }
+    }
+
+    public class DetailsPageModel
+    {
+        List<EventMedia> mediaArray { get; set; }
+        List<ActionMedia> actionMediaArray { get; set; }
+        string pageTitleVal { get; set; }
+        string titleVal { get; set; }
+        string desc { get; set; }
+        string Media { get; set; }
+        string NoMedia { get; set; }
+        string gemId { get; set; }
+        GemType gemType { get; set; }
+    }
 }

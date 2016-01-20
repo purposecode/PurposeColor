@@ -31,6 +31,7 @@ namespace PurposeColor
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
+        StackLayout gemMenuContainer;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )

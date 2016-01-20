@@ -79,6 +79,7 @@
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\Media.cs" />
     <Compile Include="Model\Preview.cs" />
+    <Compile Include="Model\ResponseModel.cs" />
     <Compile Include="Push\CrossPushNotificationListener.cs" />
     <Compile Include="screens\ApplicationSettingsPage.cs" />
     <Compile Include="screens\CheckItem.cs" />

@@ -539,6 +539,11 @@
     <AndroidResource Include="Resources\drawable-xhdpi\downarrow.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\downarrow.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\downarrow.png" />
+    <AndroidResource Include="Resources\drawable\arrow_box.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_box.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\arrow_box.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_box.png" />
+    <AndroidResource Include="Resources\drawable-xxxhdpi\arrow_box.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -229,11 +229,6 @@ namespace PurposeColor
             bool isValueSaved = false;
 			try 
 			{
-                var test1 = slider.Value.ToString();
-                var test2 = App.newEmotionId;
-                var test3 = selectedGoal.EventID;
-                var test4 = selectedActions;
-
 				isValueSaved = await ServiceHelper.SaveGoalsAndActions (slider.Value.ToString (), App.newEmotionId, selectedGoal.EventID, selectedActions);
 				if (!isValueSaved) 
 				{
@@ -255,7 +250,9 @@ namespace PurposeColor
                     {
                     }
                     progressBar.HideProgressbar();
-                    await Navigation.PushAsync(new FeelingNowPage());
+                    App.masterPage.IsPresented = false;
+                    App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+                    
                     return;
 				}
 			} 
@@ -516,9 +513,14 @@ namespace PurposeColor
                 pickView = null;
                 actionPickerButton.IsVisible = true;
                 selectedGoal = item;
-
-                selectedActions.Clear();
-				actionPreviewListSource.Clear();
+                if (selectedActions != null)
+                {
+                    selectedActions.Clear();
+                }
+                if (actionPreviewListSource != null)
+                {
+                    actionPreviewListSource.Clear();
+                }
                 OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
 
             }

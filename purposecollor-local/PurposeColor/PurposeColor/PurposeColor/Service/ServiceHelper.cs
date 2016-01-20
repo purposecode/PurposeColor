@@ -1253,11 +1253,11 @@ namespace PurposeColor.Service
             return "400";
         }
 
-        public static async Task<string> AddComment(string userId, string commentTxt, string shareComment, string goalId, string eventId, string actionId)
+        public static async Task<AddCommentsResponse> AddComment(string userId, string commentTxt, string shareComment, string goalId, string eventId, string actionId)
         {
             if (!CrossConnectivity.Current.IsConnected)
             {
-                return "400";
+                return null;
             }
 
             try
@@ -1305,11 +1305,11 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var eventsJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
-                    if (rootobject.code != null)
+                    var rootobject = JsonConvert.DeserializeObject<AddCommentsResponse>(eventsJson);
+                    if (rootobject != null)
                     {
                         client.Dispose();
-                        return rootobject.code;
+                        return rootobject;
                     }
                 }
                 client.Dispose();
@@ -1319,7 +1319,7 @@ namespace PurposeColor.Service
                 var test = ex.Message;
             }
 
-            return "400";
+            return null;
         }
 
         public static async Task<string> ShareToCommunity(string goalId, string eventId, string actionId)
@@ -1453,44 +1453,23 @@ namespace PurposeColor.Service
 				return "404";
 			}
 
-			try
+            try
 			{
-				string result = String.Empty;
-				var client = new HttpClient();
-				client.Timeout = new TimeSpan(0, 15, 0);
-				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+                var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.Add("Post", "application/json");
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-				var url = "api.php?action=removecomment";
-
-				MultipartFormDataContent content = new MultipartFormDataContent();
-
-				if (!string.IsNullOrEmpty(commentId))
-				{
-					content.Add(new StringContent(commentId, Encoding.UTF8), "comment_id");
-				}
-                HttpResponseMessage response = null;
-                try
+                string uriString = "api.php?action=removecomment&commentId=" + commentId;
+                var response = await client.GetAsync(uriString);
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
-				    response = await client.PostAsync(url, content);
+                    var responseJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    if (rootobject != null && rootobject.code != null)
+                    {
+                        return rootobject.code;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    var test = ex.Message;
-                }
-
-				if (response != null && response.StatusCode == HttpStatusCode.OK)
-				{
-                    return "200"; // for testing only // test
-                    //var eventsJson = response.Content.ReadAsStringAsync().Result;
-                    //var rootobject = JsonConvert.DeserializeObject<ResultJSon>(eventsJson);
-                    //if (rootobject != null && rootobject.code != null)
-                    //{
-                    //    client.Dispose();
-                    //    return rootobject.code;
-                    //}
-				}
-				client.Dispose();
 			}
 			catch (Exception ex)
 			{
@@ -1569,7 +1548,6 @@ namespace PurposeColor.Service
             return "404";
         }
 
-
 		public static async Task<PendingGoalsObject> GetAllPendingGoalsAndActions()
 		{
 			try
@@ -1623,8 +1601,6 @@ namespace PurposeColor.Service
 				throw;
 			}
 		}
-
-
 
 		public static async Task<GemsGoalsObject> GetAllMyGoals()
 		{
@@ -1680,7 +1656,6 @@ namespace PurposeColor.Service
 			}
 		}
 
-
 		public static async Task<bool> ChangePendingActionStatus(string savedGoalID )
 		{
 			if (!CrossConnectivity.Current.IsConnected)
@@ -1729,7 +1704,6 @@ namespace PurposeColor.Service
 				return false;
 			}
 		}
-
 
         public static async Task<SelectedGoal> GetSelectedGoalDetails(  string selectedGoalID )
         {
@@ -1785,5 +1759,59 @@ namespace PurposeColor.Service
             }
         }
 
+        public static async Task<string> DeleteGem(string gemId, GemType gemtype)
+        {
+            try
+            {
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return "404";
+                }
+
+                var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.Add("Post", "application/json");
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                string gemIdString = string.Empty;
+
+                switch (gemtype)
+                {
+                    case GemType.Goal:
+                        gemIdString = "&goal_id=";
+                        break;
+                    case GemType.Event:
+                        gemIdString = "&event_id=";
+                        break;
+                    case GemType.Action:
+                        gemIdString = "&goalaction_id=";
+                        break;
+                    case GemType.Emotion:
+                        gemIdString = "&emotion_id=";
+                        break;
+                    default:
+                        break;
+                }
+
+                string uriString = "api.php?action=deletegem&" + gemIdString + gemId;
+
+                var response = await client.GetAsync(uriString);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    if (rootobject != null && rootobject.code != null)
+                    {
+                        return rootobject.code;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "404";
+        }
     }
 }

@@ -31,7 +31,6 @@ namespace PurposeColor
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
-        StackLayout gemMenuContainer;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )
@@ -51,6 +50,18 @@ namespace PurposeColor
             CurrentGemType = model.gemType;
             User user = null;
 
+            try
+            {
+                user = App.Settings.GetUser();
+                ////////////// for testing only // test //////////////
+                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
+                ////////////// for testing only // test //////////////
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
@@ -63,17 +74,6 @@ namespace PurposeColor
                 }
             };
             
-			try {
-				user = App.Settings.GetUser ();
-
-                ////////////// for testing only // test //////////////
-                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
-                ////////////// for testing only // test //////////////
-
-
-			} catch (Exception ex) {
-                var test = ex.Message;
-			}
 
             Label pageTitle = new Label();
             pageTitle.Text = model.pageTitleVal;
@@ -202,7 +202,7 @@ namespace PurposeColor
             title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
 			description = new Label ();
-			description.WidthRequest = App.screenWidth * 90 / 100;
+			description.WidthRequest = App.screenWidth * .80;
 			description.Text = model.desc;
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -213,8 +213,8 @@ namespace PurposeColor
                 Text = string.Empty,
                 HorizontalOptions = LayoutOptions.End,
                 BackgroundColor = Color.Transparent,
-                WidthRequest = 40,
-                HeightRequest = 30
+                WidthRequest = 30,
+                HeightRequest = 20
             };
             menuButton.Clicked += GemMenuButton_Clicked;
 
@@ -241,8 +241,19 @@ namespace PurposeColor
             masterStack.AddChildToLayout(menuButton, 79, 1);
             
             masterStack.AddChildToLayout(title,1,7);
-            masterStack.AddChildToLayout(description, 1, 10);
+            //masterStack.AddChildToLayout(description, 1, 10);
 			#endregion
+
+            StackLayout bottomAndLowerControllStack = new StackLayout
+            {
+                Orientation = StackOrientation.Vertical,
+                BackgroundColor = Color.Transparent,
+                Spacing = 1,
+                Padding = new Thickness(0, 5, 0, 5),
+                WidthRequest = App.screenWidth * .90
+            };
+            bottomAndLowerControllStack.Children.Add(new StackLayout { WidthRequest = App.screenWidth * .80, Children = { description } });
+            
 
             #region MEDIA LIST
 
@@ -282,7 +293,8 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
                     masterStack.AddChildToLayout(indicator, 40, 30);
-                    masterStack.AddChildToLayout(img, 1, 15);
+                    //masterStack.AddChildToLayout(img, 1, 15);
+                    bottomAndLowerControllStack.Children.Add(img);
                 }
             }
 
@@ -304,18 +316,18 @@ namespace PurposeColor
                     img.ClassId = null;
                     if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
                     {
-                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                         img.ClassId = source;
+                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
                     {
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                         img.ClassId = source;
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }
                     else if (actionMediaList[index] != null && actionMediaList[index].media_type == "wav")
                     {
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                         img.ClassId = source;
+                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }
                     img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
@@ -324,21 +336,25 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
                     masterStack.AddChildToLayout(indicator, 40, 30);
-                    masterStack.AddChildToLayout(img, 1, 15);
+                    //masterStack.AddChildToLayout(img, 1, 15);
+                    bottomAndLowerControllStack.Children.Add(img);
                 }
             }
             
             #endregion
 
-
-            masterStack.AddChildToLayout(toolsLayout,1,65);
-            masterStack.AddChildToLayout(emptyLayout,1,75);
+            //masterStack.AddChildToLayout(toolsLayout,1,65);
+            //masterStack.AddChildToLayout(emptyLayout,1,75);
+            bottomAndLowerControllStack.Children.Add(toolsLayout);
+            bottomAndLowerControllStack.Children.Add(emptyLayout);
+            masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
             spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
             spaceOffsetlayout.BackgroundColor = Color.Transparent;
             //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
+            bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
             masterScroll.HeightRequest = App.screenHeight - 20;
             masterScroll.WidthRequest = App.screenWidth * 90 / 100;
@@ -376,10 +392,10 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-            masterStack.AddChildToLayout(GemMenu, 50, 6);
+            masterStack.AddChildToLayout(GemMenu, 52, 3);
         }
 
-        void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
@@ -388,7 +404,30 @@ namespace PurposeColor
                 if (item.Name == "Delete")
                 {
                     // do call the delete gem api
-                    // pass gem type and gem id to service helper . 
+                    // pass gem type and gem id to service helper .
+
+                    string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
+                    if (responceCode == "200")
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
+                        try
+                        {
+                            await Navigation.PopAsync();
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                    else if (responceCode == "404")
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
+                    }
+                    else
+                    {
+                        await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+                    }
+
+
                 }
                 else if (item.Name == "Hide")
                 {

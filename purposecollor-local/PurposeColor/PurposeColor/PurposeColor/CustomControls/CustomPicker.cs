@@ -57,7 +57,7 @@ namespace PurposeColor.CustomControls
         public CustomListViewCellItem()
         {
             CustomLayout masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Constants.LIST_BG_COLOR;
+            masterLayout.BackgroundColor = Color.White;//Constants.LIST_BG_COLOR;
             double screenWidth = App.screenWidth;
             double screenHeight = App.screenHeight;
             Label name = new Label();
@@ -79,7 +79,7 @@ namespace PurposeColor.CustomControls
             StackLayout divider = new StackLayout();
             divider.WidthRequest = screenWidth;
             divider.HeightRequest = 1;
-            divider.BackgroundColor =  Color.FromRgb(220, 220, 220);
+            divider.BackgroundColor = Color.White; //Color.FromRgb(220, 220, 220);
 
             masterLayout.WidthRequest = screenWidth * 60 / 100;
             masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 7) / 100;
@@ -116,7 +116,7 @@ namespace PurposeColor.CustomControls
         {
             pageContainedLayout = containerLayout;
             masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.Transparent;
+            masterLayout.BackgroundColor = Color.White;//Transparent
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
             string trimmedPageTitle = string.Empty;

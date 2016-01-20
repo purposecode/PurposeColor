@@ -12,25 +12,45 @@ namespace PurposeColor.screens
     {
         CustomLayout masterLayout;
         CustomLayout pageContainedLayout;
-        
+
         public ListView listView;
         public CustomListMenu(CustomLayout containerLayout, StackLayout parentStack, List<PurposeColor.CustomControls.CustomListViewItem> itemSource, int menuXpercent, int menuYpercent, int menuWidthPercent)
         {
             pageContainedLayout = containerLayout;
+            this.BackgroundColor = Color.Transparent;
             masterLayout = new CustomLayout();
+            masterLayout.BackgroundColor = Color.Transparent;
 
             #region LIST VIEW
             listView = new ListView();
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(PurposeColor.CustomControls.CustomListViewCellItem));
-            listView.WidthRequest = App.screenWidth * .45;
-            listView.HeightRequest = App.screenHeight * .20;
-            listView.HorizontalOptions = LayoutOptions.Start;
+            listView.WidthRequest = App.screenWidth * .30;
+            listView.HeightRequest = itemSource.Count * 45; // 70
+            listView.SeparatorColor = Color.Gray;
+            //listView.HorizontalOptions = LayoutOptions.Center;
+            listView.VerticalOptions = LayoutOptions.Start;
             listView.BackgroundColor = Color.White;
             listView.Opacity = 1;
+
             #endregion
 
-            Content = new StackLayout { BackgroundColor = Color.White, Children = { listView }, HeightRequest = App.screenHeight * .20 };
+            Image bg = new Image
+            {
+                 WidthRequest = App.screenWidth * .33,
+                HeightRequest = itemSource.Count * 52,
+                Source = Device.OnPlatform("arrow_box.png", "arrow_box.png", "//Assets//arrow_box.png"),
+                VerticalOptions = LayoutOptions.Start,
+                Aspect = Aspect.Fill
+            };
+
+            masterLayout.AddChildToLayout(bg, 0, 0);
+            masterLayout.AddChildToLayout(listView, 1, 3);
+            masterLayout.HeightRequest = itemSource.Count * 65;
+            masterLayout.WidthRequest = App.screenWidth * .34;
+
+
+            Content = new StackLayout { Padding = 1, BackgroundColor = Color.Transparent, Children = { masterLayout }, HeightRequest = itemSource.Count * 70 };//App.screenHeight * .21
         }
 
         void HideCommentsPopup()

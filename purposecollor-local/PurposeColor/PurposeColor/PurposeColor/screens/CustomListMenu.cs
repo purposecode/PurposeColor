@@ -27,10 +27,10 @@ namespace PurposeColor.screens
             listView.ItemTemplate = new DataTemplate(typeof(PurposeColor.CustomControls.CustomListViewCellItem));
             listView.WidthRequest = App.screenWidth * .30;
             listView.HeightRequest = itemSource.Count * 45; // 70
-            listView.SeparatorColor = Color.Gray;
+            //listView.SeparatorColor = Color.Gray;
             listView.HorizontalOptions = LayoutOptions.Center;
             listView.VerticalOptions = LayoutOptions.Center;
-            listView.BackgroundColor = Color.White;
+            listView.BackgroundColor = Color.Transparent;
             listView.Opacity = 1;
 
             #endregion

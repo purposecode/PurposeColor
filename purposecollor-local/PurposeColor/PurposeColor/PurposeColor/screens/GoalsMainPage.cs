@@ -654,8 +654,6 @@ namespace PurposeColor.screens
 					string selectedSavedGoalID = clasIDArray [1];
 					string selectedGoalID = clasIDArray [0];
 
-                    await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
-                    return;
 
 					if (!string.IsNullOrEmpty (selectedSavedGoalID)) 
 					{

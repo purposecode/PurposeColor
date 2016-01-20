@@ -252,5 +252,6 @@ namespace PurposeColor.Model
         public string gemId { get; set; }
         public GemType gemType { get; set; }
 		public bool fromGEMSPage {get; set; }
+		public List<SelectedGoalMedia> goal_media { get; set; }
     }
 }

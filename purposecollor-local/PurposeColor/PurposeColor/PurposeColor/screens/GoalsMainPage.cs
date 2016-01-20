@@ -258,11 +258,7 @@ namespace PurposeColor.screens
 					{
 						foreach (var itemAction in item.action_title)
 						{
-							TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
-							//checkboxTap.Tapped += OnPendingGoalsTapped;
 
-							TapGestureRecognizer actionTap = new TapGestureRecognizer ();
-							actionTap.Tapped += OnActionTapped;
 							Image bgImage = new Image();
 							bgImage.Source = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "//Assets//select_box_whitebg.png");
 							bgImage.WidthRequest = App.screenWidth - 40;
@@ -291,11 +287,11 @@ namespace PurposeColor.screens
 							trasprntClickLayout.HeightRequest = 50;
 							trasprntClickLayout.BackgroundColor = Color.Transparent;
 							trasprntClickLayout.VerticalOptions = LayoutOptions.Center;
-							trasprntClickLayout.GestureRecognizers.Add(checkboxTap);
+
 
 							Image tickImage = new Image();
 							tickImage.IsEnabled = false;
-							tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+                            tickImage.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
 							tickImage.Aspect = Aspect.Fill;
 							tickImage.WidthRequest = 20;
 							tickImage.HeightRequest = 20;
@@ -311,7 +307,6 @@ namespace PurposeColor.screens
 							pendingRow.HeightRequest = 50;
 							pendingRow.ClassId = item.goal_id + "&&" + itemAction.goalaction_id;
 
-							pendingRow.GestureRecognizers.Add(actionTap);
 							pendingRow.AddChildToLayout(bgImage, 0, 0, (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
 
 							//pendingRow.AddChildToLayout(tickImage, Device.OnPlatform( 4, 2, 2 ), Device.OnPlatform( -5, 25, 25 ), (int)pendingRow.WidthRequest, (int)pendingRow.HeightRequest);
@@ -588,6 +583,7 @@ namespace PurposeColor.screens
                 model.titleVal = goalInfo.resultarray.goal_title;
                 model.desc = goalInfo.resultarray.goal_details;
                 model.gemType = GemType.Goal;
+                model.gemId = goalID;
                 progress.HideProgressbar();
                 await Navigation.PushAsync(new GemsDetailsPage(model));
             }

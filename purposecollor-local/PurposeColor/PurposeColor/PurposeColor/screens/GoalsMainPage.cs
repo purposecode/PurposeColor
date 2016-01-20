@@ -220,6 +220,7 @@ namespace PurposeColor.screens
 					firstDetailsInfo.HeightRequest = 45;
 					int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(17, 15, 13) : 20;
 					firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
+                    firstDetailsInfo.ClassId = item.goal_id;
 					firstDetailsInfo.GestureRecognizers.Add(goalsTap);
 
 
@@ -234,6 +235,7 @@ namespace PurposeColor.screens
                     mediaImage.Source = Constants.SERVICE_BASE_URL + item.goal_media;//Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
                     mediaImage.HeightRequest = 80;
                     mediaImage.WidthRequest = 100;
+                    mediaImage.ClassId = item.goal_id;
                     mediaImage.GestureRecognizers.Add(goalsTap);
                     mediaImage.Aspect = Aspect.Fill;
 
@@ -559,6 +561,8 @@ namespace PurposeColor.screens
 
         async void OnGoalsTapped(object sender, EventArgs e)
         {
+            IProgressBar progress = DependencyService.Get<IProgressBar>();
+            progress.ShowProgressbar( "Detailed view is loading...." );
             Label detailslabel = sender as Label;
             Image mediaImg = sender as Image;
             string goalID = "";
@@ -570,10 +574,28 @@ namespace PurposeColor.screens
             {
                 goalID = mediaImg.ClassId;
             }
-            SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails(goalID);
-           // await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
-            DetailsPageModel model = new DetailsPageModel();
-            await Navigation.PushAsync(new GemsDetailsPage(model));
+
+            if( !string.IsNullOrEmpty( goalID ) )
+            {
+                SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails(goalID);
+                DetailsPageModel model = new DetailsPageModel();
+                model.actionMediaArray = null;
+                model.mediaArray = null;
+                model.goal_media = goalInfo.resultarray.goal_media;
+                model.Media = null;
+                model.NoMedia = null;
+                model.pageTitleVal = "Goal Details";
+                model.titleVal = goalInfo.resultarray.goal_title;
+                model.desc = goalInfo.resultarray.goal_details;
+                model.gemType = GemType.Goal;
+                progress.HideProgressbar();
+                await Navigation.PushAsync(new GemsDetailsPage(model));
+            }
+            else
+            {
+                DisplayAlert(Constants.ALERT_TITLE, "Not a valid goal", Constants.ALERT_OK);
+            }
+
         }
 
         private async  Task<bool> DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)

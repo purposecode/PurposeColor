@@ -32,6 +32,7 @@ namespace PurposeColor
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
         StackLayout gemMenuContainer;
+		bool IsNavigationFrfomGEMS = false;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )
@@ -50,7 +51,7 @@ namespace PurposeColor
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
             User user = null;
-
+			IsNavigationFrfomGEMS = model.fromGEMSPage;
             try
             {
                 user = App.Settings.GetUser();
@@ -255,7 +256,6 @@ namespace PurposeColor
             };
             bottomAndLowerControllStack.Children.Add(new StackLayout { WidthRequest = App.screenWidth * .80, Children = { description } });
             
-
             #region MEDIA LIST
 
             if (mediaList != null)
@@ -393,7 +393,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-            masterStack.AddChildToLayout(GemMenu, 52, 3);
+            masterStack.AddChildToLayout(GemMenu, 52, 4);
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -406,29 +406,40 @@ namespace PurposeColor
                 {
                     // do call the delete gem api
                     // pass gem type and gem id to service helper .
-
-                    string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
-                    if (responceCode == "200")
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
-                        try
-                        {
-                            await Navigation.PopAsync();
-                        }
-                        catch (Exception)
-                        {
-                        }
-                    }
-                    else if (responceCode == "404")
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
-                    }
-                    else
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
-                    }
-
-
+					var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", Constants.ALERT_OK, "Cancel");
+					if (alert)
+					{
+						string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
+						if (responceCode == "200")
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
+							try
+							{
+								if (IsNavigationFrfomGEMS) {
+									//nav to gems main page
+									//await Navigation.PopAsync();
+									App.masterPage.IsPresented = false;
+									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
+								}else
+								{
+									// nav to goals n dreams
+									App.masterPage.IsPresented = false;
+									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
+								}
+							}
+							catch (Exception)
+							{
+							}
+						}
+						else if (responceCode == "404")
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
+						}
+						else
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+						}
+					}
                 }
                 else if (item.Name == "Hide")
                 {

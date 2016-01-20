@@ -28,8 +28,8 @@ namespace PurposeColor.screens
             listView.WidthRequest = App.screenWidth * .30;
             listView.HeightRequest = itemSource.Count * 45; // 70
             listView.SeparatorColor = Color.Gray;
-            //listView.HorizontalOptions = LayoutOptions.Center;
-            listView.VerticalOptions = LayoutOptions.Start;
+            listView.HorizontalOptions = LayoutOptions.Center;
+            listView.VerticalOptions = LayoutOptions.Center;
             listView.BackgroundColor = Color.White;
             listView.Opacity = 1;
 
@@ -37,18 +37,17 @@ namespace PurposeColor.screens
 
             Image bg = new Image
             {
-                 WidthRequest = App.screenWidth * .33,
-                HeightRequest = itemSource.Count * 52,
+				WidthRequest = (App.screenWidth * .31) + 2,
+                HeightRequest = itemSource.Count * 50,
                 Source = Device.OnPlatform("arrow_box.png", "arrow_box.png", "//Assets//arrow_box.png"),
                 VerticalOptions = LayoutOptions.Start,
                 Aspect = Aspect.Fill
             };
 
             masterLayout.AddChildToLayout(bg, 0, 0);
-            masterLayout.AddChildToLayout(listView, 1, 3);
+            masterLayout.AddChildToLayout(listView, 1, 2);
             masterLayout.HeightRequest = itemSource.Count * 65;
             masterLayout.WidthRequest = App.screenWidth * .34;
-
 
             Content = new StackLayout { Padding = 1, BackgroundColor = Color.Transparent, Children = { masterLayout }, HeightRequest = itemSource.Count * 70 };//App.screenHeight * .21
         }

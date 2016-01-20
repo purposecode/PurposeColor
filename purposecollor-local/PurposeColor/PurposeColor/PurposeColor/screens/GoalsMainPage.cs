@@ -201,9 +201,6 @@ namespace PurposeColor.screens
 					cellContainer.Spacing = 0;
 					cellContainer.Padding = new Thickness(10, 10, 10, 10);
 
-					CustomLayout customLayout = new CustomLayout();
-					customLayout.BackgroundColor = Color.White;
-					customLayout.WidthRequest = App.screenWidth * 90 / 100;
 					double screenWidth = App.screenWidth;
 					double screenHeight = App.screenHeight;
 
@@ -246,11 +243,12 @@ namespace PurposeColor.screens
 					goalImage.Aspect = Aspect.Fill;
 
 
-					Image mediaImage = new Image();
-					mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
-					mediaImage.HeightRequest = 80;
-					mediaImage.WidthRequest = 80;
-					mediaImage.GestureRecognizers.Add(goalsTap);
+                    Image mediaImage = new Image();
+                    mediaImage.Source = Constants.SERVICE_BASE_URL + item.goal_media;//Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
+                    mediaImage.HeightRequest = 80;
+                    mediaImage.WidthRequest = 100;
+                    mediaImage.GestureRecognizers.Add(goalsTap);
+                    mediaImage.Aspect = Aspect.Fill;
 
 
 					StackLayout firstRow = new StackLayout();
@@ -272,7 +270,7 @@ namespace PurposeColor.screens
 						foreach (var itemAction in item.action_title)
 						{
 							TapGestureRecognizer checkboxTap = new TapGestureRecognizer();
-							checkboxTap.Tapped += OnPendingGoalsTapped;
+							//checkboxTap.Tapped += OnPendingGoalsTapped;
 
 							TapGestureRecognizer actionTap = new TapGestureRecognizer ();
 							actionTap.Tapped += OnActionTapped;
@@ -298,10 +296,6 @@ namespace PurposeColor.screens
 								pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
 							}
 
-							Switch goalDoneSwitch = new Switch();
-							goalDoneSwitch.BackgroundColor = Color.White;
-							goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
-							goalDoneSwitch.WidthRequest = 50;
 
 							StackLayout trasprntClickLayout = new StackLayout();
 							trasprntClickLayout.WidthRequest = 50;
@@ -410,19 +404,6 @@ namespace PurposeColor.screens
                     double screenWidth = App.screenWidth;
                     double screenHeight = App.screenHeight;
 
-
-                    Label subTitle = new Label();
-                    subTitle.Text = "Pending";
-                    subTitle.TextColor = Color.Gray;
-                    subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    subTitle.XAlign = TextAlignment.Center;
-                    int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                    subTitle.VerticalOptions = LayoutOptions.Center;
-                    subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                    subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                    // headerLayout.HorizontalOptions = LayoutOptions.Center;
-                    subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
                     TapGestureRecognizer goalsTap = new TapGestureRecognizer();
                     goalsTap.Tapped += OnGoalsTapped;
                     Label firstDetailsInfo = new Label();
@@ -457,10 +438,11 @@ namespace PurposeColor.screens
 
 
                     Image mediaImage = new Image();
-                    mediaImage.Source = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
+                    mediaImage.Source =  Constants.SERVICE_BASE_URL +  item.goal_media;//Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg");
                     mediaImage.HeightRequest = 80;
-                    mediaImage.WidthRequest = 80;
+                    mediaImage.WidthRequest = 100;
                     mediaImage.GestureRecognizers.Add(goalsTap);
+                    mediaImage.Aspect = Aspect.Fill;
 
 
                     StackLayout firstRow = new StackLayout();
@@ -502,11 +484,6 @@ namespace PurposeColor.screens
                                 pendingGoalTitle.Text = pendingGoalTitle.Text + "....";
                             }
 
-                            Switch goalDoneSwitch = new Switch();
-                            goalDoneSwitch.BackgroundColor = Color.White;
-                            goalDoneSwitch.VerticalOptions = LayoutOptions.Center;
-                            goalDoneSwitch.WidthRequest = 50;
-
                             StackLayout trasprntClickLayout = new StackLayout();
                             trasprntClickLayout.WidthRequest = 50;
                             trasprntClickLayout.HeightRequest = 50;
@@ -545,7 +522,7 @@ namespace PurposeColor.screens
                         trans.BackgroundColor = Color.FromRgb(244, 244, 244);
                         trans.HeightRequest = 30;
                         trans.WidthRequest = App.screenWidth;
-                        trans.ClassId = "pendinggoalsstack";
+                        trans.ClassId = "translayout";
                         masterStack.Children.Add(trans);
                     }
 
@@ -593,7 +570,7 @@ namespace PurposeColor.screens
             await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
         }
 
-        private void DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)
+        private async  Task<bool> DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)
         {
             PendingGoalsDetails selgoal = pendingGoalsObject.resultarray.FirstOrDefault(itm => itm.goal_id == selectedGoalID);
             if (selgoal != null)
@@ -607,18 +584,29 @@ namespace PurposeColor.screens
                         View layView = selLayout.Children.FirstOrDefault(itm => itm.ClassId == selectedSavedGoalID);
                         if (layView != null)
                         {
-                            //await layView.TranslateTo(100, 0, 500, Easing.BounceOut);
+                            await layView.TranslateTo(200, 0, 500, Easing.BounceOut);
                             selLayout.Children.Remove(layView);
-                            if (selLayout.Children.Count == 1)
+                           /* if (selLayout.Children.Count == 1)
                             {
-                                //selLayout.TranslateTo(100, 0, 500, Easing.BounceOut);
+                                //await selLayout.TranslateTo(200, 0, 500, Easing.BounceOut);
                                 selLayout.Children.Clear();
-                            }
+                                int index = masterStack.Children.IndexOf( selView );
+                                if( index > -1 && (index + 1) < masterStack.Children.Count )
+                                {
+                                    View trans = masterStack.Children[ index + 1 ];
+                                    if (trans != null)
+                                        masterStack.Children.Remove( trans );
+                                }
+                               
+                            }*/
                         }
                     }
                 }
 
             }
+
+            var returmn = true;
+            return returmn;
         }
 
         async void OnPendingGoalsTapped(object sender, EventArgs e)
@@ -648,7 +636,7 @@ namespace PurposeColor.screens
 						} 
 						else
 						{
-                            DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
+                            await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
 						}
 						progress.HideProgressbar ();
 					}

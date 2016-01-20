@@ -100,6 +100,8 @@ namespace PurposeColor.Model
 		public string user_id { get; set; }
 		public string goal_id { get; set; }
 		public string goal_title { get; set; }
+        public string goal_media { get; set; }
+        public string goal_details { get; set; }
 		public List<ActionTitle> action_title { get; set; }
 		public List<ActionDetail> action_details { get; set; }
 		public List<ActionDatetime> action_datetime { get; set; }
@@ -186,6 +188,7 @@ namespace PurposeColor.Model
 		public string goal_id { get; set; }
 		public string goal_title { get; set; }
 		public string goal_details { get; set; }
+        public string goal_media { get; set; }
 		public List<PendingActionTitle> pending_action_title { get; set; }
 		public List<PendingActionDetail> pending_action_details { get; set; }
 		public List<PendingActionDatetime> pending_action_datetime { get; set; }

@@ -761,7 +761,9 @@ namespace PurposeColor.screens
 				{
                     try
                     {
-						await Navigation.PushAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id, GemType.Event));
+                        DetailsPageModel model = new DetailsPageModel() { mediaArray = media, actionMediaArray = null, pageTitleVal = selectedEmotionName, titleVal = eventTitle.event_title, desc = eventDetail.event_details, Media = gemsEmotionsObject.mediapath, NoMedia = gemsEmotionsObject.noimageurl, gemId = eventDetail.event_id, gemType = GemType.Event };
+						//await Navigation.PushAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id, GemType.Event));
+                        await Navigation.PushAsync(new GemsDetailsPage(model));
                     }
                     catch (Exception)
                     {
@@ -818,7 +820,9 @@ namespace PurposeColor.screens
 				{
                     try
                     {
-						await Navigation.PushAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id, GemType.Action));
+                        DetailsPageModel model = new DetailsPageModel() { mediaArray = null, actionMediaArray = media, pageTitleVal = "", titleVal = eventTitle.action_title, desc = eventDetail.action_details, Media = gemsGoalsObject.mediapath, NoMedia = gemsGoalsObject.noimageurl, gemId = eventDetail.goalaction_id, gemType = GemType.Action };
+						//await Navigation.PushAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id, GemType.Action));
+                        await Navigation.PushAsync(new GemsDetailsPage(model));
                     }
                     catch (Exception)
                     {

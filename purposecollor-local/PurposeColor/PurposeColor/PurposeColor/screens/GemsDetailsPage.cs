@@ -33,7 +33,8 @@ namespace PurposeColor
 		Label shareLabel;
         StackLayout gemMenuContainer;
 
-        public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
+        //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
+        public GemsDetailsPage( DetailsPageModel model )
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
@@ -44,10 +45,10 @@ namespace PurposeColor
             masterStack = new CustomLayout();
             //masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
-            mediaList = mediaArray;
-            actionMediaList = actionMediaArray;
-            CurrentGemId = gemId;
-            CurrentGemType = gemType;
+            mediaList = model.mediaArray;
+            actionMediaList = model.actionMediaArray;
+            CurrentGemId = model.gemId;
+            CurrentGemType = model.gemType;
             User user = null;
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
@@ -75,7 +76,7 @@ namespace PurposeColor
 			}
 
             Label pageTitle = new Label();
-            pageTitle.Text = pageTitleVal;
+            pageTitle.Text = model.pageTitleVal;
             pageTitle.TextColor = Color.Black;
             pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             pageTitle.FontAttributes = FontAttributes.Bold;
@@ -194,7 +195,7 @@ namespace PurposeColor
 
 			#region  title, description
 			title = new Label ();
-			title.Text = titleVal;
+			title.Text = model.titleVal;
 			title.TextColor = Color.Black;
 			title.WidthRequest = App.screenWidth * 90 / 100;
 			title.FontSize = Device.OnPlatform (12, 12, 12);
@@ -202,7 +203,7 @@ namespace PurposeColor
 
 			description = new Label ();
 			description.WidthRequest = App.screenWidth * 90 / 100;
-			description.Text = desc;
+			description.Text = model.desc;
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             
@@ -252,7 +253,7 @@ namespace PurposeColor
                     TapGestureRecognizer videoTap = new TapGestureRecognizer();
                     videoTap.Tapped += OnEventVideoTapped;
                     bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
-                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + model.Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 
                     Image img = new Image();
                     img.WidthRequest = App.screenWidth * 90 / 100;
@@ -294,7 +295,7 @@ namespace PurposeColor
 
                     Image img = new Image();
                     bool isValidUrl = (actionMediaList[index].action_media != null && !string.IsNullOrEmpty(actionMediaList[index].action_media)) ? true : false;
-                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + model.Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     img.WidthRequest = App.screenWidth * 90 / 100;

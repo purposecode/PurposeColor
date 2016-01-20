@@ -238,14 +238,18 @@ namespace PurposeColor.Model
 
     public class DetailsPageModel
     {
-        List<EventMedia> mediaArray { get; set; }
-        List<ActionMedia> actionMediaArray { get; set; }
-        string pageTitleVal { get; set; }
-        string titleVal { get; set; }
-        string desc { get; set; }
-        string Media { get; set; }
-        string NoMedia { get; set; }
-        string gemId { get; set; }
-        GemType gemType { get; set; }
+        public DetailsPageModel()
+        {
+
+        }
+        public List<EventMedia> mediaArray { get; set; }
+        public List<ActionMedia> actionMediaArray { get; set; }
+        public string pageTitleVal { get; set; }
+        public string titleVal { get; set; }
+        public string desc { get; set; }
+        public string Media { get; set; }
+        public string NoMedia { get; set; }
+        public string gemId { get; set; }
+        public GemType gemType { get; set; }
     }
 }

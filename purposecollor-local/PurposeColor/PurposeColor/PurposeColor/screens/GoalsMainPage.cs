@@ -355,7 +355,10 @@ namespace PurposeColor.screens
 					string title = (actionTitle != null && actionTitle.action_title != null) ? actionTitle.action_title : "";
 					ActionDetail actionDetail = selectedGoal.action_details.FirstOrDefault ( item => item.goalaction_id == selectedActionID );
 					string details = (actionDetail != null && actionDetail.action_details != null) ? actionDetail.action_details : "";
-					await Navigation.PushAsync (new GemsDetailsPage (null, actionMediaList, "Action Details", title, details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, actionTitle.goalaction_id ,GemType.Action));
+
+                    DetailsPageModel model = new DetailsPageModel() { mediaArray = null, actionMediaArray = actionMediaList, pageTitleVal = "Action Details", titleVal = title, desc = details, Media = gemsGoalsObject.mediapath, NoMedia = gemsGoalsObject.noimageurl, gemId = actionTitle.goalaction_id, gemType = GemType.Action };
+					//await Navigation.PushAsync (new GemsDetailsPage (null, actionMediaList, "Action Details", title, details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, actionTitle.goalaction_id ,GemType.Action));
+                    await Navigation.PushAsync(new GemsDetailsPage(model));
 				}
 				else
 				{
@@ -569,6 +572,8 @@ namespace PurposeColor.screens
             }
             SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails(goalID);
            // await Navigation.PushAsync(new GemsDetailsPage(null, null, "", "", "", "", "", "", GemType.Action));
+            DetailsPageModel model = new DetailsPageModel();
+            await Navigation.PushAsync(new GemsDetailsPage(model));
         }
 
         private async  Task<bool> DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)

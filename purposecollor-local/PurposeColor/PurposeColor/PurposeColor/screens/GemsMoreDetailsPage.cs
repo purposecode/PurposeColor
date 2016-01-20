@@ -397,7 +397,9 @@ namespace PurposeColor.screens
 				{
                     IProgressBar progess = DependencyService.Get< IProgressBar>();
                     progess.ShowProgressbar( "Loading details..." );
-					await Navigation.PushAsync (new GemsDetailsPage(null, media, goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details, goalsMediaPath, goalsNoMediaPath, eventDetail.goalaction_id, GemType.Action));
+                    DetailsPageModel model = new DetailsPageModel() { mediaArray = null, actionMediaArray = media, pageTitleVal = goalsMasterList.goal_title, titleVal = eventTitle.action_title, desc = eventDetail.action_details, Media = goalsMediaPath, NoMedia = goalsNoMediaPath, gemId = eventDetail.goalaction_id, gemType = GemType.Action };
+					//await Navigation.PushAsync (new GemsDetailsPage(null, media, goalsMasterList.goal_title, eventTitle.action_title, eventDetail.action_details, goalsMediaPath, goalsNoMediaPath, eventDetail.goalaction_id, GemType.Action));
+                    await Navigation.PushAsync(new GemsDetailsPage(model));
                     progess.HideProgressbar();
 					eventDetail = null;
 					eventTitle = null;
@@ -431,7 +433,9 @@ namespace PurposeColor.screens
 				{
                     IProgressBar progess = DependencyService.Get<IProgressBar>();
                     progess.ShowProgressbar("Loading details...");
-                    await Navigation.PushAsync(new GemsDetailsPage(media, null, emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, eventDetail.event_id, GemType.Event));
+                    DetailsPageModel model = new DetailsPageModel() { mediaArray = media, actionMediaArray = null, pageTitleVal = emotionsMasterList.emotion_title, titleVal = eventTitle.event_title, desc = eventDetail.event_details, Media = eventsMediaPath, NoMedia = eventsNoMediaPath, gemId = eventDetail.event_id, gemType = GemType.Event };
+                    //await Navigation.PushAsync(new GemsDetailsPage(media, null, emotionsMasterList.emotion_title, eventTitle.event_title, eventDetail.event_details, eventsMediaPath, eventsNoMediaPath, eventDetail.event_id, GemType.Event));
+                    await Navigation.PushAsync(new GemsDetailsPage( model ));
                     progess.HideProgressbar();
 					eventDetail = null;
 					eventTitle = null;

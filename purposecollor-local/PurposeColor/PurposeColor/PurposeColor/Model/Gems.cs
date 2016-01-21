@@ -138,6 +138,15 @@ namespace PurposeColor.Model
 	}
 
 
+    public class CompletedActionTitle
+    {
+        public string goal_id { get; set; }
+        public string savedgoal_id { get; set; }
+        public string actionstatus_id { get; set; }
+        public string goalaction_id { get; set; }
+        public string action_title { get; set; }
+    }
+
 	public class PendingActionTitle
 	{
 		public string goal_id { get; set; }
@@ -184,6 +193,20 @@ namespace PurposeColor.Model
 
 
     public class PendingGoalsDetailsDB
+    {
+        public string user_id { get; set; }
+        public string goal_id { get; set; }
+        public string goal_title { get; set; }
+        public string goal_details { get; set; }
+        public string goal_media { get; set; }
+        public string code { get; set; }
+        public string noimageurl { get; set; }
+        public string mediapath { get; set; }
+        public string mediathumbpath { get; set; }
+    }
+
+
+    public class CompletedGoalsDetailsDB
     {
         public string user_id { get; set; }
         public string goal_id { get; set; }

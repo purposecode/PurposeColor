@@ -108,9 +108,16 @@ namespace PurposeColor.screens
 					} 
 					else
 					{
-						progress.HideProgressbar ();
+                        if (Device.OS != TargetPlatform.WinPhone)
+                            gemsGoalsObject = App.Settings.GetCompletedGoalsObject();
+                        progress.HideProgressbar();
 					}
 				}
+                else
+                {
+                    App.Settings.DeleteAllCompletedGoals();
+                    App.Settings.SaveCompletedGoalsDetails(gemsGoalsObject);
+                }
 				
 
                 #region PENDING GOALS
@@ -676,6 +683,7 @@ namespace PurposeColor.screens
 						var change = await ServiceHelper.ChangePendingActionStatus ( selectedSavedGoalID );
 						if (!change) 
 						{
+                            progress.HideProgressbar();
 							DisplayAlert (Constants.ALERT_OK, "Failed to complete action", Constants.ALERT_OK);
 							return;
 						} 

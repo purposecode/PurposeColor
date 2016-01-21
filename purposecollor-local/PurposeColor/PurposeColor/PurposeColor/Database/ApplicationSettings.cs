@@ -118,6 +118,17 @@ namespace PurposeColor.Database
                     Connection.CreateTable<PendingActionTitle>();
                 }
 
+                var completedGoals = Connection.GetTableInfo("CompletedGoalsDetailsDB");
+                if (completedGoals == null || completedGoals.Count < 1)
+                {
+                    Connection.CreateTable<CompletedGoalsDetailsDB>();
+                }
+
+                var completedActionTitle = Connection.GetTableInfo("CompletedActionTitle");
+                if (completedActionTitle == null || completedActionTitle.Count < 1)
+                {
+                    Connection.CreateTable<CompletedActionTitle>();
+                }
             }
             catch (Exception ex)
             {
@@ -713,6 +724,19 @@ namespace PurposeColor.Database
         }
 
 
+        public void DeleteAllCompletedGoals()
+        {
+            try
+            {
+                Connection.DeleteAll<CompletedActionTitle>();
+                Connection.DeleteAll<CompletedGoalsDetailsDB>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("DeleteAllEvents :: " + ex.Message);
+            }
+        }
+
         public PendingGoalsObject GetPendingGoalsObject()
         {
             try
@@ -769,6 +793,63 @@ namespace PurposeColor.Database
 
         }
 
+
+        public GemsGoalsObject GetCompletedGoalsObject()
+        {
+            try
+            {
+                GemsGoalsObject masterObject = new GemsGoalsObject();
+
+                List<CompletedActionTitle> listCompletedActionTitle = new List<CompletedActionTitle>();
+                List<CompletedGoalsDetailsDB> listCompletedDetailsDB = new List<CompletedGoalsDetailsDB>();
+
+                listCompletedActionTitle = (from t in Connection.Table<CompletedActionTitle>() select t).ToList();
+                listCompletedDetailsDB = (from t in Connection.Table<CompletedGoalsDetailsDB>() select t).ToList();
+
+                masterObject.resultarray = new List<GemsGoalsDetails>();
+
+                foreach (var item in listCompletedDetailsDB)
+                {
+                    GemsGoalsDetails resultArray = new GemsGoalsDetails();
+                    resultArray.action_title = new List<ActionTitle>();
+
+                    resultArray.user_id = item.user_id;
+                    resultArray.goal_id = item.goal_id;
+                    resultArray.goal_title = item.goal_title;
+                    resultArray.goal_details = item.goal_details;
+                    resultArray.goal_media = item.goal_media;
+                    masterObject.code = item.code;
+                    masterObject.mediapath = item.mediapath;
+                    masterObject.mediathumbpath = item.mediathumbpath;
+                    masterObject.noimageurl = item.noimageurl;
+
+
+                    // Title
+                    foreach (var titeObject in listCompletedActionTitle)
+                    {
+                        ActionTitle title = new ActionTitle() { action_title = titeObject.action_title, goal_id = titeObject.goal_id, goalaction_id = titeObject.goalaction_id };
+                        if (titeObject.goal_id == item.goal_id)
+                            resultArray.action_title.Add(title);
+                    }
+
+                    masterObject.resultarray.Add(resultArray);
+                }
+
+
+                masterObject.code = (listCompletedDetailsDB != null && listCompletedDetailsDB.Count > 0) ? listCompletedDetailsDB[0].code : "";
+                masterObject.noimageurl = (listCompletedDetailsDB != null && listCompletedDetailsDB.Count > 0) ? listCompletedDetailsDB[0].noimageurl : "";
+                masterObject.mediapath = (listCompletedDetailsDB != null && listCompletedDetailsDB.Count > 0) ? listCompletedDetailsDB[0].mediapath : "";
+                masterObject.mediathumbpath = (listCompletedDetailsDB != null && listCompletedDetailsDB.Count > 0) ? listCompletedDetailsDB[0].mediathumbpath : "";
+                return masterObject;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
         public bool SavePendingGoalsDetails(PendingGoalsObject pendingGoals)
         {
             try
@@ -813,6 +894,63 @@ namespace PurposeColor.Database
 
                 listPendingActionTitle = null;
                 listPendingGoalsDetails = null;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+        }
+
+
+        public bool SaveCompletedGoalsDetails(GemsGoalsObject completedGoals)
+        {
+            try
+            {
+                if (completedGoals == null || completedGoals.resultarray == null)
+                {
+                    return false;
+                }
+
+                List<CompletedGoalsDetailsDB> listCompletedGoalsDetails = new List<CompletedGoalsDetailsDB>();
+                List<CompletedActionTitle> listCompletedActionTitle = new List<CompletedActionTitle>();
+
+                foreach (var item in completedGoals.resultarray)
+                {
+
+                    // goals details
+                    CompletedGoalsDetailsDB goal = new CompletedGoalsDetailsDB()
+                    {
+                        goal_details = item.goal_details,
+                        goal_id = item.goal_id,
+                        goal_media = item.goal_media,
+                        user_id = item.user_id,
+                        code = completedGoals.code,
+                        mediapath = completedGoals.mediapath,
+                        mediathumbpath = completedGoals.mediathumbpath,
+                        noimageurl = completedGoals.noimageurl
+                    };
+                    listCompletedGoalsDetails.Add(goal);
+
+                    foreach (var itemTitle in item.action_title)
+                    {
+                        CompletedActionTitle title = new CompletedActionTitle() { goal_id = itemTitle.goal_id,  goalaction_id = itemTitle.goalaction_id, action_title = itemTitle.action_title };
+                        listCompletedActionTitle.Add(title);
+                    }
+
+                }
+
+                Connection.InsertAll(listCompletedGoalsDetails);
+                Connection.InsertAll(listCompletedActionTitle);
+
+                listCompletedActionTitle.Clear();
+                listCompletedGoalsDetails.Clear();
+
+                listCompletedActionTitle = null;
+                listCompletedGoalsDetails = null;
 
                 return true;
             }

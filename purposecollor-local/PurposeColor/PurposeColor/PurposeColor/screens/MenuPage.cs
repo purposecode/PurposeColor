@@ -160,9 +160,10 @@ namespace PurposeColor.screens
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new GraphPage());
                 }
-                else if ("COMMUNITY GEMs" == selItem.Name)
+                else if ("Community GEMs" == selItem.Name)
                 {
-
+                  //  App.masterPage.IsPresented = false;
+                  //  App.masterPage.Detail = new NavigationPage(new CommunityGems());
                 }
                 else if (Constants.APPLICATION_SETTTINGS == selItem.Name)
                 {

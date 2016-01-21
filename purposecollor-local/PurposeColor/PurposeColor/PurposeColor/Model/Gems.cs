@@ -182,6 +182,20 @@ namespace PurposeColor.Model
 		public string action_media { get; set; }
 	}
 
+
+    public class PendingGoalsDetailsDB
+    {
+        public string user_id { get; set; }
+        public string goal_id { get; set; }
+        public string goal_title { get; set; }
+        public string goal_details { get; set; }
+        public string goal_media { get; set; }
+        public string code { get; set; }
+        public string noimageurl { get; set; }
+        public string mediapath { get; set; }
+        public string mediathumbpath { get; set; }
+    }
+
 	public class PendingGoalsDetails
 	{
 		public string user_id { get; set; }

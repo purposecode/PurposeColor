@@ -104,6 +104,20 @@ namespace PurposeColor.Database
 				{
 					Connection.CreateTable<GemsGoalsDetailsDB>();
 				}
+
+
+                var pendingGoals = Connection.GetTableInfo("PendingGoalsDetailsDB");
+                if (pendingGoals == null || pendingGoals.Count < 1)
+                {
+                    Connection.CreateTable<PendingGoalsDetailsDB>();
+                }
+
+                var pendingActionTitle = Connection.GetTableInfo("PendingActionTitle");
+                if (pendingActionTitle == null || pendingActionTitle.Count < 1)
+                {
+                    Connection.CreateTable<PendingActionTitle>();
+                }
+
             }
             catch (Exception ex)
             {
@@ -684,6 +698,134 @@ namespace PurposeColor.Database
 
 		}
 
+
+        public void DeleteAllPendingGoals()
+        {
+            try
+            {
+                Connection.DeleteAll<PendingGoalsDetailsDB>();
+                Connection.DeleteAll<PendingActionTitle>();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("DeleteAllEvents :: " + ex.Message);
+            }
+        }
+
+
+        public PendingGoalsObject GetPendingGoalsObject()
+        {
+            try
+            {
+                PendingGoalsObject masterObject = new PendingGoalsObject();
+
+                List<PendingActionTitle> listPendingActionTitle = new List<PendingActionTitle>();
+                List<PendingGoalsDetailsDB> listPendingDetailsDB = new List<PendingGoalsDetailsDB>();
+
+                listPendingActionTitle = (from t in Connection.Table<PendingActionTitle>() select t).ToList();
+                listPendingDetailsDB = (from t in Connection.Table<PendingGoalsDetailsDB>() select t).ToList();
+
+                masterObject.resultarray = new List<PendingGoalsDetails>();
+
+                foreach (var item in listPendingDetailsDB)
+                {
+                    PendingGoalsDetails resultArray = new PendingGoalsDetails();
+                    resultArray.pending_action_title = new List<PendingActionTitle>();
+
+                    resultArray.user_id = item.user_id;
+                    resultArray.goal_id = item.goal_id;
+                    resultArray.goal_title = item.goal_title;
+                    resultArray.goal_details = item.goal_details;
+                    resultArray.goal_media = item.goal_media;
+                    masterObject.code = item.code;
+                    masterObject.mediapath = item.mediapath;
+                    masterObject.mediathumbpath = item.mediathumbpath;
+                    masterObject.noimageurl = item.noimageurl;
+
+                    resultArray.pending_action_title = new List<PendingActionTitle>();
+
+                    // Title
+                    foreach (var titeObject in listPendingActionTitle)
+                    {
+                        if (titeObject.goal_id == item.goal_id)
+                            resultArray.pending_action_title.Add(titeObject);
+                    }
+
+                    masterObject.resultarray.Add(resultArray);
+                }
+
+
+                masterObject.code = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].code : "";
+                masterObject.noimageurl = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].noimageurl : "";
+                masterObject.mediapath = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].mediapath : "";
+                masterObject.mediathumbpath = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].mediathumbpath : "";
+                return masterObject;
+            }
+            catch (Exception)
+            {
+
+                return null;
+            }
+
+        }
+
+        public bool SavePendingGoalsDetails(PendingGoalsObject pendingGoals)
+        {
+            try
+            {
+                if (pendingGoals == null || pendingGoals.resultarray == null  )
+                {
+                    return false;
+                }
+
+                List<PendingGoalsDetailsDB> listPendingGoalsDetails = new List<PendingGoalsDetailsDB>();
+                List<PendingActionTitle> listPendingActionTitle = new List<PendingActionTitle>();
+
+                foreach (var item in pendingGoals.resultarray)
+                {
+
+                    // Emotion details
+                    PendingGoalsDetailsDB goal = new PendingGoalsDetailsDB()
+                    {
+                        goal_details = item.goal_details,
+                        goal_id = item.goal_id,
+                        goal_media = item.goal_media,
+                        user_id = item.user_id,
+                        code = pendingGoals.code,
+                        mediapath = pendingGoals.mediapath,
+                        mediathumbpath = pendingGoals.mediathumbpath,
+                        noimageurl = pendingGoals.noimageurl
+                    };
+                    listPendingGoalsDetails.Add(goal);
+
+                    foreach (var itemTitle in item.pending_action_title)
+                    {
+                        listPendingActionTitle.Add(itemTitle);
+                    }
+                    
+                }
+
+                Connection.InsertAll(listPendingGoalsDetails);
+                Connection.InsertAll(listPendingActionTitle);
+
+                listPendingActionTitle.Clear();
+                listPendingGoalsDetails.Clear();
+
+                listPendingActionTitle = null;
+                listPendingGoalsDetails = null;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+        }
+
+
+
 		public bool SaveAllEmotionGems(  GemsEmotionsObject gemsEmotions )
 		{
 			try
@@ -766,6 +908,12 @@ namespace PurposeColor.Database
 
 		}
 		#endregion
+
+
+
+
+
+
 
     }
 }

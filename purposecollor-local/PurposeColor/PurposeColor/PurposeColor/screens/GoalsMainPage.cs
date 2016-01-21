@@ -86,9 +86,16 @@ namespace PurposeColor.screens
 					} 
 					else
 					{
+                        if (Device.OS != TargetPlatform.WinPhone)
+                            pendingGoalsObject = App.Settings.GetPendingGoalsObject();
 						progress.HideProgressbar ();
 					}
 				}
+                else
+                {
+                    App.Settings.DeleteAllPendingGoals();
+                    App.Settings.SavePendingGoalsDetails( pendingGoalsObject );
+                }
 
 				gemsGoalsObject = await ServiceHelper.GetAllMyGoals();
 				if( gemsGoalsObject == null || gemsGoalsObject.resultarray == null )
@@ -207,7 +214,7 @@ namespace PurposeColor.screens
 					TapGestureRecognizer goalsTap = new TapGestureRecognizer();
 					goalsTap.Tapped += OnGoalsTapped;
 					Label firstDetailsInfo = new Label();
-					string firstDetails = (item.goal_title != null) ? item.goal_title : "";
+                    string firstDetails = (item.goal_details != null) ? item.goal_details : "";
 					if (firstDetails.Length > 120)
 					{
 						firstDetails = firstDetails.Substring(0, 120);
@@ -573,22 +580,31 @@ namespace PurposeColor.screens
             if( !string.IsNullOrEmpty( goalID ) )
             {
                 SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails(goalID);
-                DetailsPageModel model = new DetailsPageModel();
-                model.actionMediaArray = null;
-                model.mediaArray = null;
-                model.goal_media = goalInfo.resultarray.goal_media;
-                model.Media = null;
-                model.NoMedia = null;
-                model.pageTitleVal = "Goal Details";
-                model.titleVal = goalInfo.resultarray.goal_title;
-                model.desc = goalInfo.resultarray.goal_details;
-                model.gemType = GemType.Goal;
-                model.gemId = goalID;
-                progress.HideProgressbar();
-                await Navigation.PushAsync(new GemsDetailsPage(model));
+                if( goalInfo != null )
+                {
+                    DetailsPageModel model = new DetailsPageModel();
+                    model.actionMediaArray = null;
+                    model.mediaArray = null;
+                    model.goal_media = goalInfo.resultarray.goal_media;
+                    model.Media = null;
+                    model.NoMedia = null;
+                    model.pageTitleVal = "Goal Details";
+                    model.titleVal = goalInfo.resultarray.goal_title;
+                    model.desc = goalInfo.resultarray.goal_details;
+                    model.gemType = GemType.Goal;
+                    model.gemId = goalID;
+                    progress.HideProgressbar();
+                    await Navigation.PushAsync(new GemsDetailsPage(model));
+                }
+                else
+                {
+                    progress.HideProgressbar();
+                    DisplayAlert(Constants.ALERT_TITLE, "Error in getting goals details", Constants.ALERT_OK);
+                }
             }
             else
             {
+                progress.HideProgressbar();
                 DisplayAlert(Constants.ALERT_TITLE, "Not a valid goal", Constants.ALERT_OK);
             }
 
@@ -749,6 +765,9 @@ namespace PurposeColor.screens
             mainTitleBar = null;
             masterScroll = null;
             masterStack = null;
+            headingLayout = null;
+            gemsGoalsObject = null;
+            pendingGoalsObject = null;
             GC.Collect();
         }
 

@@ -126,6 +126,7 @@ namespace PurposeColor.screens
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness");
 
             gemsSource = new List<Gems>();
+
             Gems gemItems = new Gems();
             gemItems.ArrowImage = "";
             gemItems.DateInfo = "2015 Janury 30";
@@ -153,12 +154,14 @@ namespace PurposeColor.screens
             gemItem3.ProfilePhoto = Device.OnPlatform("avatar.jpg", "avatar.jpg", "//Assets//avatar.jpg"); 
             gemItem3.GemInfo = "This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how This is just a dummy page to check how ";
 
+            for (int index = 0; index < 50; index++ )
+            {
+                gemsSource.Add(gemItems);
+                gemsSource.Add(gemItem2);
+                gemsSource.Add(gemItem3);
+                gemsSource.Add(gemItems);
+            }
 
-            gemsSource.Add(gemItems);
-            gemsSource.Add(gemItem2);
-            gemsSource.Add(gemItem3);
-            gemsSource.Add(gemItems);
-      
 
             ListView gemsList = new ListView();
             gemsList.ItemTemplate = new DataTemplate(typeof(GemsCell));

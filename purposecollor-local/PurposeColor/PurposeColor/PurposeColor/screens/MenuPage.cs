@@ -168,7 +168,7 @@ namespace PurposeColor.screens
                    IProgressBar progress = DependencyService.Get<IProgressBar>();
                    progress.ShowProgressbar( "Loading community gems" );
                    App.masterPage.IsPresented = false;
-                   SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("37");
+                   SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("42");
                    if (goalInfo != null)
                    {
                        DetailsPageModel model = new DetailsPageModel();

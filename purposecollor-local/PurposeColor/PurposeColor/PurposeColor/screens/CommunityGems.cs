@@ -10,6 +10,9 @@ using System.Diagnostics;
 using Xam.Plugin.DownloadManager.Abstractions;
 using System.IO;
 using System.Linq;
+using CustomLayouts.ViewModels;
+using CustomLayouts.Controls;
+using CustomLayouts;
 
 namespace PurposeColor
 {
@@ -96,11 +99,11 @@ namespace PurposeColor
             masterStackLayout.Orientation = StackOrientation.Vertical;
 
 
-            for (int mainIndex = 0; mainIndex < 100; mainIndex++)
+            for (int mainIndex = 0; mainIndex < 50; mainIndex++)
             {
 
                 masterStack = new CustomLayout();
-                masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
+                masterStack.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
 
                 #region TOOLS LAYOUT
 
@@ -226,8 +229,9 @@ namespace PurposeColor
 
                 masterStack.AddChildToLayout(pageTitle, 1, 1);
                 masterStack.AddChildToLayout(menuButton, 79, 1);
-
-                masterStack.AddChildToLayout(title, 1, 7);
+                masterStack.AddChildToLayout( profileImage, 2, 1 );
+                masterStack.AddChildToLayout( userName, 25, 1 );
+                masterStack.AddChildToLayout(title, 25, 6);
                 #endregion
 
                 StackLayout bottomAndLowerControllStack = new StackLayout
@@ -242,9 +246,10 @@ namespace PurposeColor
 
                 #region MEDIA LIST
 
-                if (model.goal_media != null)
+                /*if (model.goal_media != null)
                 {
-                    for (int index = 0; index < model.goal_media.Count; index++)
+
+                  for (int index = 0; index < model.goal_media.Count; index++)
                     {
                         TapGestureRecognizer videoTap = new TapGestureRecognizer();
                         videoTap.Tapped += OnActionVideoTapped;
@@ -281,14 +286,14 @@ namespace PurposeColor
                         masterStack.AddChildToLayout(indicator, 40, 30);
                         bottomAndLowerControllStack.Children.Add(img);
                     }
-                }
+                }*/
 
                 #endregion
 
                 //masterStack.AddChildToLayout(toolsLayout,1,65);
                 //masterStack.AddChildToLayout(emptyLayout,1,75);
                 bottomAndLowerControllStack.Children.Add(toolsLayout);
-                bottomAndLowerControllStack.Children.Add(emptyLayout);
+               // bottomAndLowerControllStack.Children.Add(emptyLayout);
                 masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
 
                 StackLayout spaceOffsetlayout = new StackLayout();
@@ -296,7 +301,7 @@ namespace PurposeColor
                 spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
                 spaceOffsetlayout.BackgroundColor = Color.Transparent;
                 //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
-                bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
+               /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
                 masterScroll.HeightRequest = App.screenHeight - 20;
                 masterScroll.WidthRequest = App.screenWidth * 90 / 100;
@@ -319,6 +324,35 @@ namespace PurposeColor
 
             #endregion
             Content = masterLayout;
+        }
+
+
+        CarouselLayout CreatePagesCarousel( List<SelectedGoalMedia> media )
+        {
+            List<CarousalViewModel> Pages = new List<CarousalViewModel>();
+
+            foreach (var item in media)
+            {
+                CarousalViewModel caros = new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = Constants.SERVICE_BASE_URL + item.goal_media };
+                Pages.Add( caros );
+            }
+           /* List<CarousalViewModel> Pages = new List<CarousalViewModel>() {
+				new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = "icon.png" },
+				new CarousalViewModel { Title = "2", Background = Color.Red, ImageSource = "icon.png" },
+				new CarousalViewModel { Title = "3", Background = Color.Blue, ImageSource = "one.jpeg" },
+				new CarousalViewModel { Title = "4", Background = Color.Yellow, ImageSource = "icon.png" },
+			};*/
+
+            CarouselLayout carousel = new CarouselLayout
+            {
+                IndicatorStyle = CustomLayouts.Controls.CarouselLayout.IndicatorStyleEnum.Dots,
+                ItemTemplate = new DataTemplate(typeof(CarousalTemplate))
+            };
+            carousel.ItemsSource = Pages;
+            //carousel.SetBinding(CarouselLayout.ItemsSourceProperty, "Pages");
+            //carousel.SetBinding(CarouselLayout.SelectedItemProperty, "CurrentPage", BindingMode.TwoWay);
+
+            return carousel;
         }
 
         void GemMenuButton_Clicked(object sender, EventArgs e)

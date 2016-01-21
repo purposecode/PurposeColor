@@ -37,6 +37,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Carousal\BaseViewModel.cs" />
+    <Compile Include="Carousal\CarousalTemplate.cs" />
+    <Compile Include="Carousal\CarouselLayout.cs" />
+    <Compile Include="Carousal\PagerIndicatorTabs.cs" />
+    <Compile Include="Carousal\SwitcherPageViewModel.cs" />
     <Compile Include="Constants\Constants.cs" />
     <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
     <Compile Include="CustomControls\AddContentSubTitlebar.cs" />

@@ -377,7 +377,7 @@ namespace PurposeColor.screens
                             user_id = currentUserId,
                             firstname = user.UserName,
                             profileurl = string.IsNullOrEmpty(user.ProfileImageUrl) ? "admin/uploads/default/noprofile.png" : user.ProfileImageUrl,// profile picture should be of this person// can take it from local. ==>  user.prfilePicUrl
-                            comment_datetime = DateTime.Now.ToLocalTime().ToString("f")
+                            comment_datetime = DateTime.UtcNow.ToLocalTime().ToString("f")
                         };
 
                         //firstComment

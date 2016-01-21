@@ -48,6 +48,7 @@ namespace PurposeColor.screens
         string pageTitle;
         bool isAudioRecording = false;
         PurposeColor.interfaces.IAudioRecorder audioRecorder;
+        bool isUpdatePage = false;
 
         //IDeviceSpec deviceSpec;
         string lattitude;
@@ -72,9 +73,11 @@ namespace PurposeColor.screens
         CustomPicker ePicker;
         Image audioRecodeOffButton = null;
         int Seconds = 0;
+        string currentGemId;
+        GemType currentGemType;
         #endregion
 
-        public AddEventsSituationsOrThoughts(string title)
+        public AddEventsSituationsOrThoughts(string title, DetailsPageModel detailsPageModel = null)
         {
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
@@ -105,7 +108,7 @@ namespace PurposeColor.screens
                 Children = { new BoxView { WidthRequest = screenWidth } }
             };
             masterLayout.AddChildToLayout(TopTitleBar, 0, 0);
-
+            
             string trimmedPageTitle = string.Empty;
 
             int titleMaxLength = 24;
@@ -147,6 +150,7 @@ namespace PurposeColor.screens
                 WidthRequest = (int)(devWidth * .90) // 90% of screen,
             };
 
+            
             //if (App.screenDensity > 1.5)
             //{
             //    eventTitle.HeightRequest = screenHeight * 6 / 100;
@@ -172,7 +176,42 @@ namespace PurposeColor.screens
 
             eventDescription.WidthRequest = textInputWidth;
 
+            if (detailsPageModel != null)
+            {
+                isUpdatePage = true;
+                currentGemId = detailsPageModel.gemId;
+                if (detailsPageModel.gemType != null)
+                {
+                    currentGemType = detailsPageModel.gemType;
+                    switch (currentGemType)
+                    {
+                        case GemType.Goal:
+                            pageTitle = Constants.EDIT_GOALS;
+                            break;
+                        case GemType.Event:
+                            pageTitle = Constants.EDIT_EVENTS;
+                            break;
+                        case GemType.Action:
+                            pageTitle = Constants.EDIT_ACTIONS;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                
+                if (detailsPageModel.titleVal != null)
+                {
+                    eventTitle.Text = detailsPageModel.titleVal;
+                }
+                if ( detailsPageModel.desc != null)
+	            {
+		             eventDescription.Text = detailsPageModel.desc;
+	            }
+            }
+
             #endregion
+
+            #region MEDIA INPUTS
 
             Image pinButton = new Image
             {
@@ -227,7 +266,7 @@ namespace PurposeColor.screens
             TapGestureRecognizer RecodeOffTapRecognizer = new TapGestureRecognizer();
             audioRecodeOffHolder.GestureRecognizers.Add(RecodeOffTapRecognizer);
 
-            audioRecodeOffHolder.TranslateTo(0, Device.OnPlatform(audioRecodeOffButton.Y + 60,audioRecodeOffButton.Y + 60,audioRecodeOffButton.Y + 50), 5, null);
+            audioRecodeOffHolder.TranslateTo(0, Device.OnPlatform(audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 50), 5, null);
             audioRecodeOnHolder.TranslateTo(0, Device.OnPlatform(audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 60, audioRecodeOffButton.Y + 50), 5, null);
 
             RecodeOnTapRecognizer.Tapped += RecodeOnTapRecognizer_Tapped;
@@ -253,75 +292,107 @@ namespace PurposeColor.screens
             locationInfo.TextColor = Constants.BLUE_BG_COLOR;
             locationInfo.BackgroundColor = Color.Transparent;
             locationInfo.FontSize = 12;
-			locationInfo.HeightRequest = Device.OnPlatform( 15, 25, 25 );
+            locationInfo.HeightRequest = Device.OnPlatform(15, 25, 25);
             locationInfo.GestureRecognizers.Add(locationlabelTap);
             locationlabelTap.Tapped += OnEditLocationInfo;
 
-			editLocationAndContactsStack = new StackLayout();
-			editLocationAndContactsStack.Padding = new Thickness(1, 1, 1, 1);
-			editLocationAndContactsStack.BackgroundColor = Color.FromRgb(30, 126, 210);
-			editLocationAndContactsStack.WidthRequest = App.screenWidth * 90 / 100;
-			editLocationAndContactsStack.IsVisible = false;
-			editLocationAndContactsStack.Orientation = StackOrientation.Horizontal;
+            editLocationAndContactsStack = new StackLayout();
+            editLocationAndContactsStack.Padding = new Thickness(1, 1, 1, 1);
+            editLocationAndContactsStack.BackgroundColor = Color.FromRgb(30, 126, 210);
+            editLocationAndContactsStack.WidthRequest = App.screenWidth * 90 / 100;
+            editLocationAndContactsStack.IsVisible = false;
+            editLocationAndContactsStack.Orientation = StackOrientation.Horizontal;
 
 
             locAndContactsEntry = new Entry();
             locAndContactsEntry.TextColor = Color.Black;
             locAndContactsEntry.BackgroundColor = Color.White;
             locAndContactsEntry.VerticalOptions = LayoutOptions.Center;
-			locAndContactsEntry.WidthRequest = App.screenWidth  * 80 / 100;
+            locAndContactsEntry.WidthRequest = App.screenWidth * 80 / 100;
             locAndContactsEntry.HeightRequest = 50;
 
             editLocationDoneButton = new CustomImageButton();
             editLocationDoneButton.VerticalOptions = LayoutOptions.Center;
-			editLocationDoneButton.ImageName = "icn_done.png";
+            editLocationDoneButton.ImageName = "icn_done.png";
             editLocationDoneButton.HeightRequest = 25;
-			editLocationDoneButton.WidthRequest = 25;
+            editLocationDoneButton.WidthRequest = 25;
             editLocationDoneButton.Clicked += OnLocationEditCompleted;
 
 
-			editLocationAndContactsStack.Children.Add ( locAndContactsEntry );
-			editLocationAndContactsStack.Children.Add ( editLocationDoneButton );
+            editLocationAndContactsStack.Children.Add(locAndContactsEntry);
+            editLocationAndContactsStack.Children.Add(editLocationDoneButton);
 
-			if (Device.OS == TargetPlatform.iOS) 
-			{
-				editLocationAndContactsStack.TranslationY = -30;
-			}
+            if (Device.OS == TargetPlatform.iOS)
+            {
+                editLocationAndContactsStack.TranslationY = -30;
+            }
 
             locLayout = new StackLayout();
             locLayout.Orientation = StackOrientation.Vertical;
             locLayout.BackgroundColor = Color.Transparent;
 
-     
 
-            locLayout.Children.Add( locationInfo );
 
-			TapGestureRecognizer contactsLabelTap = new TapGestureRecognizer();
-		    contactInfo = new Label();
-			contactInfo.TextColor = Constants.BLUE_BG_COLOR;
-			contactInfo.BackgroundColor = Color.Transparent;
-			contactInfo.FontSize = 12;
-			contactInfo.HeightRequest = Device.OnPlatform( 15, 25, 25 );
-			contactInfo.GestureRecognizers.Add (contactsLabelTap);
-			contactsLabelTap.Tapped += async (object sender, EventArgs e) => 
-			{
-				editLocationAndContactsStack.ClassId = "contactedit";
+            locLayout.Children.Add(locationInfo);
+
+            TapGestureRecognizer contactsLabelTap = new TapGestureRecognizer();
+            contactInfo = new Label();
+            contactInfo.TextColor = Constants.BLUE_BG_COLOR;
+            contactInfo.BackgroundColor = Color.Transparent;
+            contactInfo.FontSize = 12;
+            contactInfo.HeightRequest = Device.OnPlatform(15, 25, 25);
+            contactInfo.GestureRecognizers.Add(contactsLabelTap);
+            contactsLabelTap.Tapped += async (object sender, EventArgs e) =>
+            {
+                editLocationAndContactsStack.ClassId = "contactedit";
                 string spanContacts = "";
-                if ( contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
-                spanContacts = contactInfo.FormattedText.Spans[1].Text;
+                if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+                    spanContacts = contactInfo.FormattedText.Spans[1].Text;
                 locAndContactsEntry.Text = spanContacts;
-				editLocationAndContactsStack.IsVisible = true;
-				contactInfo.IsVisible = false;
-				iconContainerGrid.IsVisible = false;
+                editLocationAndContactsStack.IsVisible = true;
+                contactInfo.IsVisible = false;
+                iconContainerGrid.IsVisible = false;
                 locationInfo.IsVisible = true;
 
                 await editLocationAndContactsStack.TranslateTo(100, 0, 300, Easing.SinInOut);
                 await editLocationAndContactsStack.TranslateTo(0, 0, 300, Easing.SinIn);
 
-			};
+            };
 
-			locLayout.IsVisible = false;
-			contactInfo.IsVisible = false;
+            locLayout.IsVisible = false;
+            contactInfo.IsVisible = false;
+            
+            #endregion
+
+            if(detailsPageModel != null)
+            {
+                if (detailsPageModel.mediaArray!= null && detailsPageModel.mediaArray.Count > 0)
+                {
+                    foreach (EventMedia eventObj in detailsPageModel.mediaArray)
+                    {
+                        AddFilenameToMediaList(eventObj.event_media);
+                    }
+                }
+
+                if (detailsPageModel.goal_media != null && detailsPageModel.goal_media.Count > 0)
+                {
+                    foreach (SelectedGoalMedia goalObj in detailsPageModel.goal_media)
+                    {
+                        AddFilenameToMediaList(goalObj.goal_media);
+                    }
+                }
+
+                if (detailsPageModel.actionMediaArray != null && detailsPageModel.actionMediaArray.Count > 0)
+                {
+                    foreach (ActionMedia actionObj in detailsPageModel.actionMediaArray)
+                    {
+                        AddFilenameToMediaList(actionObj.action_media);
+                    }
+                }
+
+            }
+
+
 
             StackLayout entryAndLocContainer = new StackLayout();
             entryAndLocContainer.Orientation = StackOrientation.Vertical;
@@ -694,7 +765,7 @@ namespace PurposeColor.screens
             };
 
             Button createEvent = new Button();
-            if (pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS)
+            if (pageTitle == Constants.ADD_ACTIONS || pageTitle == Constants.ADD_GOALS || pageTitle == Constants.EDIT_ACTIONS || pageTitle == Constants.EDIT_GOALS)
             {
                 createEvent.BackgroundColor = Color.Transparent;
                 createEvent.TextColor = Constants.BLUE_BG_COLOR;
@@ -740,6 +811,24 @@ namespace PurposeColor.screens
             #endregion
 
             Content = masterLayout;
+        }
+
+        private void AddFilenameToMediaList(string fileName)
+        {
+            string imgType = System.IO.Path.GetExtension(fileName);
+            
+			if (imgType== ".png" || imgType== ".jpeg" || imgType== ".jpg" || imgType== ".bmp")
+	        {
+                AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Image);
+	        }
+			else if (imgType== ".3gpp" || imgType== ".wma" || imgType== ".mp3" || imgType== ".ogg"|| imgType== ".wav" || imgType== ".amr" || imgType== ".3gp")
+	        {
+                AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Audio);
+	        }
+			else if (imgType== ".mp4" || imgType== ".avi" || imgType== ".flv"|| imgType== ".wmv"|| imgType== ".ogg")
+	        {
+                AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Video);
+	        }
         }
 
 
@@ -926,8 +1015,8 @@ namespace PurposeColor.screens
                 CalendarView endCalendarView = new CalendarView()
                 {
                     BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                    MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
-                    MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                    MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
+                    MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
                     HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                     ShouldHighlightDaysOfWeekLabels = false,
                     SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
@@ -978,8 +1067,8 @@ namespace PurposeColor.screens
                 CalendarView calendarView = new CalendarView()
                 {
                     BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                    MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
-                    MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
+                    MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
+                    MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
                     HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                     ShouldHighlightDaysOfWeekLabels = false,
                     SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
@@ -1192,7 +1281,6 @@ namespace PurposeColor.screens
             }
         }
 
-
         public void DisplayAlert( string messege )
         {
             DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK);
@@ -1200,41 +1288,59 @@ namespace PurposeColor.screens
 
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
+            
+            IProgressBar progress = DependencyService.Get<IProgressBar>();
             try
             {
-
                 if (string.IsNullOrWhiteSpace(eventDescription.Text) || string.IsNullOrWhiteSpace(eventTitle.Text))
                 {
-                    DisplayAlert(pageTitle, "value cannot be empty", "ok");
+                    await DisplayAlert(Constants.ALERT_TITLE, "Value cannot be empty", Constants.ALERT_OK);
                 }
                 else
                 {
                     string input = pageTitle;
                     CustomListViewItem item = new CustomListViewItem { Name = eventDescription.Text };
-
-
-                    if (input == Constants.ADD_ACTIONS)
+                    bool serviceResultOK = false;
+                    if (input == Constants.ADD_ACTIONS || input == Constants.EDIT_ACTIONS)
                     {
-                        IProgressBar progress = DependencyService.Get<IProgressBar>();
-                        progress.ShowProgressbar("Creating new action..");
+                        #region ADD || EDIT ACTIONS
 
                         try
                         {
-
-
                             ActionModel details = new ActionModel();
+                            if (!isUpdatePage)
+                            {
+                                progress.ShowProgressbar("Creating new action..");
+                            }
+                            else
+                            {
+                                progress.ShowProgressbar("Updating the action..");
+                                details.action_id = currentGemId;
+                            }
                             details.action_title = eventTitle.Text;
                             details.action_details = eventDescription.Text;
-                            details.user_id = "2";
+                            details.user_id = "2";// for tezsting only // test
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
 
-                            details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
-                            details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
-                            details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
-                            details.end_time = DateTime.Now.AddHours(2).ToString("HH:mm"); //for testing only
-                            details.action_repeat = "0";
-                            details.action_alert = "0";
+                            //details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                            //details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
+                            //details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
+                            //details.end_time = DateTime.Now.AddHours(2).ToString("HH:mm"); //for testing only
+
+                            if (!string.IsNullOrEmpty(App.SelectedActionStartDate))
+                            {
+                                DateTime myDate = DateTime.UtcNow;//DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture);
+                                myDate = DateTime.Parse(App.SelectedActionStartDate);
+                                details.start_date = App.SelectedActionStartDate;
+                                details.end_date = App.SelectedActionEndDate;
+                                details.start_time = myDate.ToString("HH:mm");
+                                myDate = DateTime.Parse(App.SelectedActionEndDate);
+                                details.end_time = myDate.ToString("HH:mm");
+                                details.action_repeat = "0";
+                                details.action_alert = App.SelectedActionReminderValue.ToString();
+                            }
+                            
 
                             if (!string.IsNullOrEmpty(currentAddress))
                             {
@@ -1259,6 +1365,8 @@ namespace PurposeColor.screens
                                             App.actionsListSource.Add(action);
                                         }
                                     }
+
+                                    serviceResultOK = true;
                                 }
                                 catch (System.Exception)
                                 {
@@ -1267,26 +1375,35 @@ namespace PurposeColor.screens
                             }
 
                             ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                            notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
-
+                            if (!isUpdatePage)
+                            {
+                                notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text);
+                            }
+                            else
+                            {
+                                notfiy.ShowNotification("Purpose Color - Action Updated", eventTitle.Text);
+                            }
                         }
                         catch (Exception ex)
                         {
                             var test = ex.Message;
-                            progress.HideProgressbar();
                         }
 
                         progress.HideProgressbar();
+
+                        
+                        #endregion
                     }
-                    else if (input == Constants.ADD_EVENTS)
+                    else if (input == Constants.ADD_EVENTS || input == Constants.EDIT_EVENTS)
                     {
+                        #region ADD || EDIT EVENTS
+
                         try
                         {
-
                             EventDetails details = new EventDetails();
                             details.event_title = eventTitle.Text;
                             details.event_details = eventDescription.Text;
-                            details.user_id = "2";
+                            details.user_id = "2";// for tezsting only // test
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
                             if (!string.IsNullOrEmpty(locationInfo.Text))
@@ -1294,24 +1411,38 @@ namespace PurposeColor.screens
                                 details.location_address = locationInfo.Text;// currentAddress;
                             }
 
-                            IProgressBar progress = DependencyService.Get<IProgressBar>();
-                            progress.ShowProgressbar("Creating new event..");
+                            if (!isUpdatePage)
+                            {
+                                progress.ShowProgressbar("Creating new event..");
+                            }
+                            else
+                            {
+                                progress.ShowProgressbar("Updating the event..");
+                                details.event_id = currentGemId;
+                            }
+
                             if (!await ServiceHelper.AddEvent(details))
                             {
                                 await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
                             }
-                            await FeelingNowPage.DownloadAllEvents();
-
-                            progress.HideProgressbar();
-
+                            else
+                            {
+                                await FeelingNowPage.DownloadAllEvents();
+                                serviceResultOK = true;
+                            }
                         }
                         catch (Exception ex)
                         {
                             var test = ex.Message;
                         }
+                        progress.HideProgressbar();
+                        
+                        #endregion
                     }
-                    else if (input == Constants.ADD_GOALS)
+                    else if (input == Constants.ADD_GOALS || input == Constants.EDIT_GOALS)
                     {
+                        #region ADD || EDIT GOALS
+		
                         try
                         {
                             GoalDetails newGoal = new GoalDetails();
@@ -1322,15 +1453,28 @@ namespace PurposeColor.screens
                             newGoal.location_latitude = lattitude;
                             newGoal.location_longitude = longitude;
                             newGoal.category_id = "1";
-                            newGoal.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
-                            newGoal.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing onl
 
+                            if (!string.IsNullOrEmpty(App.SelectedActionStartDate))
+                            {
+                                newGoal.start_date = App.SelectedActionStartDate; //DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
+                                newGoal.end_date = App.SelectedActionEndDate; //DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing onl
+                            }
+                            
                             if (!string.IsNullOrEmpty(currentAddress))
                             {
                                 newGoal.location_address = currentAddress;
                             }
-                            IProgressBar progress = DependencyService.Get<IProgressBar>();
-                            progress.ShowProgressbar("Creating new goal..");
+
+                            if (!isUpdatePage)
+                            {
+                                progress.ShowProgressbar("Creating new goal..");
+                            }
+                            else
+                            {
+                                progress.ShowProgressbar("Updating the goal..");
+                                newGoal.goal_id = currentGemId;
+                            }
+
                             if (!await ServiceHelper.AddGoal(newGoal))
                             {
                                 await DisplayAlert(Constants.ALERT_TITLE, Constants.NETWORK_ERROR_MSG, Constants.ALERT_OK);
@@ -1349,25 +1493,51 @@ namespace PurposeColor.screens
                                             App.goalsListSource.Add(goal);
                                         }
                                     }
+                                    serviceResultOK = true;
                                 }
                                 catch (System.Exception)
                                 {
                                     DisplayAlert(Constants.ALERT_TITLE, "Error in retrieving goals list, Please try again", Constants.ALERT_OK);
                                 }
                             }
-
-                            progress.HideProgressbar();
                         }
                         catch (Exception ex)
                         {
                             DisplayAlert(Constants.ALERT_TITLE, ex.Message, Constants.ALERT_OK);
                         }
+                        progress.HideProgressbar();
+ 
+	                    #endregion
                     }
 
-                    //Navigation.PopAsync();
-                    Navigation.PopModalAsync();
-                }
+                    if (serviceResultOK)
+                    {
+                        //Navigation.PopAsync();
+                        if (!isUpdatePage)
+                        {
+                            await Navigation.PopModalAsync();
+                        }
+                        else
+                        {
+                            if (currentGemType == GemType.Goal)
+                            {
+                                // nav to goals n dreams main page
+                                App.masterPage.IsPresented = false;
+                                App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
+                                
+                                //await Navigation.PushModalAsync(new GoalsMainPage());
+                            }
+                            else
+                            {
+                                //nav to gems main page
+                                App.masterPage.IsPresented = false;
+                                App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
 
+                                //await Navigation.PushModalAsync(new GemsMainPage());
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1395,7 +1565,9 @@ namespace PurposeColor.screens
                 MediaPost mediaWeb = new MediaPost();
                 mediaWeb.event_details = string.IsNullOrWhiteSpace(eventDescription.Text) ? string.Empty : eventDescription.Text;
                 mediaWeb.event_title = string.IsNullOrWhiteSpace(eventTitle.Text) ? string.Empty : eventTitle.Text;
-                mediaWeb.user_id = 2;
+                
+                
+                mediaWeb.user_id = 2; /// for testing only// test
 
                 string imgType = System.IO.Path.GetExtension(path);
                 string fileName = System.IO.Path.GetFileName(path);
@@ -1413,60 +1585,72 @@ namespace PurposeColor.screens
                     App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
                 }
 
-                imgType = imgType.Replace(".", "");
-                if (mediaType == Constants.MediaType.Image)
+                #region MEDIA COMPRESSION AND SERIALISING
+
+                if (ms != null)
                 {
-                    MemoryStream compressedStream = new MemoryStream();
-                    IResize resize = DependencyService.Get<IResize>();
-                    Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenWidth * App.screenDensity));
-                    MemoryStream resizedStream = new MemoryStream(resizedOutput);
-                    compressedStream = resize.CompessImage(25, resizedStream);
+                    imgType = imgType.Replace(".", "");
+                    if (mediaType == Constants.MediaType.Image)
+                    {
+                        MemoryStream compressedStream = new MemoryStream();
+                        IResize resize = DependencyService.Get<IResize>();
+                        Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenWidth * App.screenDensity));
+                        MemoryStream resizedStream = new MemoryStream(resizedOutput);
+                        compressedStream = resize.CompessImage(25, resizedStream);
 
-                    Byte[] inArray = compressedStream.ToArray();
-                    Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
-                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                    string test2 = new string(outArray);
-                    App.ExtentionArray.Add(imgType);
-                    MediaItem item = new MediaItem();
-                    item.MediaString = test2;
-                    item.Name = fileName;
-                    App.MediaArray.Add(item);
+                        Byte[] inArray = compressedStream.ToArray();
+                        Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+                        Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                        string test2 = new string(outArray);
+                        App.ExtentionArray.Add(imgType);
+                        MediaItem item = new MediaItem();
+                        item.MediaString = test2;
+                        item.Name = fileName;
+                        App.MediaArray.Add(item);
 
-                    inArray = null;
-                    outArray = null;
-                    test2 = null;
-                    item = null;
-                    resizedOutput = null;
-                    GC.Collect();
+                        inArray = null;
+                        outArray = null;
+                        test2 = null;
+                        item = null;
+                        resizedOutput = null;
+                        GC.Collect();
+                    }
+                    else
+                    {
+                        Byte[] inArray = ms.ToArray();
+                        Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
+                        Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+                        string test2 = new string(outArray);
+                        App.ExtentionArray.Add(imgType);
+                        MediaItem item = new MediaItem();
+                        item.MediaString = test2;
+                        item.Name = fileName;
+                        App.MediaArray.Add(item);
+
+                        inArray = null;
+                        outArray = null;
+                        test2 = null;
+                        item = null;
+                        GC.Collect();
+                    }
+                    imgType = string.Empty;
+                    fileName = string.Empty;
+
                 }
-                else
-                {
-                    Byte[] inArray = ms.ToArray();
-                    Char[] outArray = new Char[(int)(ms.ToArray().Length * 1.34)];
-                    Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                    string test2 = new string(outArray);
-                    App.ExtentionArray.Add(imgType);
-                    MediaItem item = new MediaItem();
-                    item.MediaString = test2;
-                    item.Name = fileName;
-                    App.MediaArray.Add(item);
-
-                    inArray = null;
-                    outArray = null;
-                    test2 = null;
-                    item = null;
-                    GC.Collect();
-                }
-                imgType = string.Empty;
-                fileName = string.Empty;
+                
+                #endregion
 
                 StackLayout preview = (StackLayout)masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "preview");
-                masterLayout.Children.Remove(preview);
-                preview = null;
-                previewListView.ItemsSource = null;
-               
-                previewListView.ItemsSource = App.PreviewListSource;
-                masterLayout.AddChildToLayout(listContainer, 5, 60);
+                if (preview != null)
+                {
+                    masterLayout.Children.Remove(preview);
+                    preview = null;
+                    previewListView.ItemsSource = null;
+
+                    previewListView.ItemsSource = App.PreviewListSource;
+                    masterLayout.AddChildToLayout(listContainer, 5, 60);
+                }
+                
             }
             catch (Exception ex)
             {
@@ -1475,21 +1659,45 @@ namespace PurposeColor.screens
             }
         }
 
-
         public  async  void ShowAlert( string messege, PreviewItem toDelete )
         {
             try
             {
-
                 var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
                 if (alert)
                 {
-                    App.PreviewListSource.Remove(toDelete);
                     MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
-                    if (media != null)
-                        App.MediaArray.Remove(media);
-                }
 
+                    if (media == null || toDelete.Name == toDelete.Path)
+                    {
+                        #region DELETE FROM SERVER.
+                        // delete from view and delete from db by api call.
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowProgressbar("deleting media");
+                        string responseCode = await ServiceHelper.DeleteMediaFromGem(currentGemId, currentGemType, toDelete.Name);
+                        if (responseCode == "200")
+                        {
+                            App.PreviewListSource.Remove(toDelete);
+                            progress.HideProgressbar();
+                        }
+                        else
+                        {
+                            progress.HideProgressbar();
+                            progress.ShowToast("Could not delete the media now.");
+                        }
+
+                        #endregion
+                    }
+                    else
+                    {
+                        // delete from view and local memory
+                        App.PreviewListSource.Remove(toDelete);
+                        if (media != null)
+                        {
+                            App.MediaArray.Remove(media);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -1539,7 +1747,6 @@ namespace PurposeColor.screens
                 previewListView.ItemsSource = null;
                 previewListView.ItemsSource = App.PreviewListSource;
                 masterLayout.AddChildToLayout(listContainer, 5, 60);
-
 
                 GC.Collect();
             }

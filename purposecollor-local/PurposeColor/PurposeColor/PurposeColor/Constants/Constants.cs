@@ -23,15 +23,18 @@ namespace PurposeColor
         public const string HOW_YOU_ARE_FEELING = "Do you like how you are";
 
         public const string ADD_EVENTS = "Add Events, Situation or Thoughts";
+        public const string EDIT_EVENTS = "Edit Events, Situation or Thoughts";
 
         public const string ADD_GOALS = "Add Goals And Dreams";
+        public const string EDIT_GOALS = "Edit Goals And Dreams";
 
         public const string ADD_ACTIONS = "Add Supporting Actions";
+        public const string EDIT_ACTIONS = "Edit Supporting Actions";
 
         public const string ALERT_TITLE = "Purpose Color";
         public const string ALERT_OK = "Ok";
         public const string ALERT_RETRY = "Retry";
-        public const string NETWORK_ERROR_MSG = "Network error occured.";
+        public const string NETWORK_ERROR_MSG = "Network error occured. Please try again later.";
         public const string COMMENTS_VIEW_CLASS_ID = "commentsView";
         public const string CUSTOMLISTMENU_VIEW_CLASS_ID = "GemCustomListMenu";
         

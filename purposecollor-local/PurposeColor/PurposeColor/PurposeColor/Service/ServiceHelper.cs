@@ -532,6 +532,9 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(eventDetails.location_longitude, Encoding.UTF8), "location_longitude");
                 if (!string.IsNullOrEmpty(eventDetails.location_address))
                     content.Add(new StringContent(eventDetails.location_address, Encoding.UTF8), "location_address");
+                if (!string.IsNullOrEmpty(eventDetails.event_id))
+                    content.Add(new StringContent(eventDetails.event_id, Encoding.UTF8), "event_id");
+
 
                 HttpResponseMessage response = await client.PostAsync(url, content);
 
@@ -603,11 +606,12 @@ namespace PurposeColor.Service
                     }
                     content.Add(new StringContent(App.ContactsArray.Count.ToString(), Encoding.UTF8), "contact_count");
                 }
-
-                // date for testing only // test
-                content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "start_date");
-                content.Add(new StringContent(DateTime.Now.ToString("yyyy/MM/dd"), Encoding.UTF8), "end_date");
-
+                if (!string.IsNullOrEmpty(goalDetails.start_date))
+                {
+                    content.Add(new StringContent(goalDetails.start_date, Encoding.UTF8), "start_date");
+                    content.Add(new StringContent(goalDetails.end_date, Encoding.UTF8), "end_date");
+                }
+                
                 if (!string.IsNullOrEmpty(goalDetails.location_latitude))
                     content.Add(new StringContent(goalDetails.location_latitude, Encoding.UTF8), "location_latitude");
                 if (!string.IsNullOrEmpty(goalDetails.location_longitude))
@@ -621,6 +625,12 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(goalDetails.goal_details, Encoding.UTF8), "goal_details");
                     content.Add(new StringContent(goalDetails.user_id, Encoding.UTF8), "user_id");
                 }
+
+                if (!string.IsNullOrEmpty(goalDetails.goal_id))
+                {
+                    content.Add(new StringContent(goalDetails.goal_id, Encoding.UTF8), "goal_id");
+                }
+
                 content.Add(new StringContent("1", Encoding.UTF8), "actionstatus_id");//  to be confirmed - status id of new goal // for testing only // test
                 content.Add(new StringContent("1", Encoding.UTF8), "category_id"); // category_id = 1 for testing only // test
 
@@ -716,6 +726,11 @@ namespace PurposeColor.Service
                     content.Add(new StringContent(actionDetails.action_title, Encoding.UTF8), "action_title");
                     content.Add(new StringContent(actionDetails.action_details, Encoding.UTF8), "action_details");
                     content.Add(new StringContent(actionDetails.user_id, Encoding.UTF8), "user_id");
+                }
+
+                if (!string.IsNullOrEmpty(actionDetails.action_id))
+                {
+                    content.Add(new StringContent(actionDetails.action_id, Encoding.UTF8), "goalaction_id");
                 }
                 content.Add(new StringContent("1", Encoding.UTF8), "actionstatus_id");//  to be confirmed - status id of new goal // for testing only // test
                 content.Add(new StringContent("1", Encoding.UTF8), "category_id"); // category_id = 1 for testing only // test
@@ -881,7 +896,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
 
                 if (user == null)
                 {
@@ -926,8 +941,7 @@ namespace PurposeColor.Service
             }
             catch (Exception)
             {
-                
-                throw;
+				return null;
             }
         }
 
@@ -935,7 +949,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = 2, UserName = "sam" };// for testing only // testing
 
                 if (user == null)
                 {
@@ -978,8 +992,7 @@ namespace PurposeColor.Service
             }
             catch (Exception ex)
             {
-
-                throw;
+				return null;
             }
         }
 
@@ -1792,6 +1805,61 @@ namespace PurposeColor.Service
                 }
 
                 string uriString = "api.php?action=deletegem&" + gemIdString + gemId;
+
+                var response = await client.GetAsync(uriString);
+
+                if (response != null && response.StatusCode == HttpStatusCode.OK)
+                {
+                    var responseJson = response.Content.ReadAsStringAsync().Result;
+                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    if (rootobject != null && rootobject.code != null)
+                    {
+                        return rootobject.code;
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            return "404";
+        }
+
+        public static async Task<string> DeleteMediaFromGem(string gemId, GemType gemtype, string mediaName)
+        {
+            try
+            {
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return "404";
+                }
+
+                var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.Add("Post", "application/json");
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+                string gemIdString = string.Empty;
+
+                switch (gemtype)
+                {
+                    case GemType.Goal:
+                        gemIdString = "&goal_id=";
+                        break;
+                    case GemType.Event:
+                        gemIdString = "&event_id=";
+                        break;
+                    case GemType.Action:
+                        gemIdString = "&goalaction_id=";
+                        break;
+                    case GemType.Emotion:
+                        gemIdString = "&emotion_id=";
+                        break;
+                    default:
+                        break;
+                }
+
+                string uriString = "api.php?action=deletemedia&"+ gemIdString + gemId+"&media_file=" + mediaName ;
 
                 var response = await client.GetAsync(uriString);
 

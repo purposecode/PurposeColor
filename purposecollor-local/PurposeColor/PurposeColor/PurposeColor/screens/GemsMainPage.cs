@@ -73,8 +73,14 @@ namespace PurposeColor.screens
                 return;
 
             progress.ShowProgressbar( "Loading gems.." );
-            gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions();
-            gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals();
+
+			try {
+				gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions ();
+				gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals ();
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+
 			if (gemsEmotionsObject == null) 
 			{
 				var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
@@ -82,7 +88,7 @@ namespace PurposeColor.screens
 				{
 					OnAppearing (sender, EventArgs.Empty);
 					return;
-				} 
+				}
 				else
 				{
                     if( Device.OS != TargetPlatform.WinPhone )

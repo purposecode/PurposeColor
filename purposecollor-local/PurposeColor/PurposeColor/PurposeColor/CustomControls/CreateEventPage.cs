@@ -123,7 +123,7 @@ namespace PurposeColor.screens
 			{
                 try
                 {
-                    startDatePicker.Date = DateTime.Now.AddDays(1);
+                    startDatePicker.Date = DateTime.UtcNow.AddDays(1);
                     startDatePicker.Focus();
                 }
                 catch (Exception ex)
@@ -169,7 +169,7 @@ namespace PurposeColor.screens
 			{
                 try
                 {
-                    endDatePicker.Date = DateTime.Now.AddDays(1);
+                    endDatePicker.Date = DateTime.UtcNow.AddDays(1);
                     endDatePicker.Focus();
                 }
                 catch (Exception ex)
@@ -261,6 +261,10 @@ namespace PurposeColor.screens
                     DateTime startDateAndTime = new DateTime(startDatePicker.Date.Year, startDatePicker.Date.Month, startDatePicker.Date.Day, startTimePicker.Time.Hours, startTimePicker.Time.Minutes, 0);
                     DateTime endDateAndTime = new DateTime(endDatePicker.Date.Year, endDatePicker.Date.Month, endDatePicker.Date.Day, endTimePicker.Time.Hours, endTimePicker.Time.Minutes, 0);
 
+                    // add this to app datetime fields to serve to api.
+                    App.SelectedActionStartDate = startDateAndTime.ToString(); //to be converted into UTC
+                    App.SelectedActionEndDate = endDateAndTime.ToString(); //to be converted into UTC
+                    App.SelectedActionReminderValue = reminderValue;
                     if (!reminder.Remind(startDateAndTime, endDateAndTime, title.Text, messege.Text, reminderValue))
                     {
                         await DisplayAlert("Purpose Color", "Error in creating calendar event", Constants.ALERT_OK);

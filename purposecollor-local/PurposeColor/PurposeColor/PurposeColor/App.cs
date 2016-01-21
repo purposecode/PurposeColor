@@ -30,6 +30,7 @@ namespace PurposeColor
 		public static double Longitude;
         public static string SelectedActionStartDate { get; set; }
         public static string SelectedActionEndDate { get; set; }
+        public static int SelectedActionReminderValue { get; set; }
         static ApplicationSettings applicationSettings;
         public static List<CustomListViewItem> goalsListSource;
         public static List<CustomListViewItem> actionsListSource;

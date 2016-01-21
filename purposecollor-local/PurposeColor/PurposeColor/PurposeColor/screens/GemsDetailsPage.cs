@@ -33,11 +33,13 @@ namespace PurposeColor
 		Label shareLabel;
         StackLayout gemMenuContainer;
 		bool IsNavigationFrfomGEMS = false;
+        DetailsPageModel detailsPageModel;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )
         {
             NavigationPage.SetHasNavigationBar(this, false);
+            detailsPageModel = model;
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             masterScroll = new ScrollView();
@@ -254,7 +256,7 @@ namespace PurposeColor
                 Padding = new Thickness(0, 5, 0, 5),
                 WidthRequest = App.screenWidth * .90
             };
-            bottomAndLowerControllStack.Children.Add(new StackLayout { WidthRequest = App.screenWidth * .80, Children = { description } });
+            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(5, 0, 5, 0), Children = { description } });
             
             #region MEDIA LIST
 
@@ -293,7 +295,7 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.AddChildToLayout(indicator, 40, 30);
+                    masterStack.AddChildToLayout(indicator, 40, 40);
                     //masterStack.AddChildToLayout(img, 1, 15);
                     bottomAndLowerControllStack.Children.Add(img);
                 }
@@ -336,7 +338,7 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.AddChildToLayout(indicator, 40, 30);
+                    masterStack.AddChildToLayout(indicator, 40, 40);
                     //masterStack.AddChildToLayout(img, 1, 15);
                     bottomAndLowerControllStack.Children.Add(img);
                 }
@@ -446,20 +448,24 @@ namespace PurposeColor
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
                 if (item.Name == "Delete")
                 {
+                    #region DELETE GEM
+		
                     // do call the delete gem api
                     // pass gem type and gem id to service helper .
-					var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", Constants.ALERT_OK, "Cancel");
+					var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", "Delete", "Cancel");
 					if (alert)
 					{
+                        progressBar.ShowProgressbar("Deleting GEM");
 						string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
 						if (responceCode == "200")
 						{
+                            progressBar.HideProgressbar();
 							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
 							try
 							{
-								if (IsNavigationFrfomGEMS) {
+								if (IsNavigationFrfomGEMS) 
+                                {
 									//nav to gems main page
-									//await Navigation.PopAsync();
 									App.masterPage.IsPresented = false;
 									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
 								}else
@@ -481,7 +487,10 @@ namespace PurposeColor
 						{
 							await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
 						}
+                        progressBar.HideProgressbar();
 					}
+ 
+	#endregion
                 }
                 else if (item.Name == "Hide")
                 {
@@ -489,7 +498,8 @@ namespace PurposeColor
                 }
                 else if (item.Name == "Edit")
                 {
-
+                    //await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+                    await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
                 }
 
                 HideCommentsPopup();

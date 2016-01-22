@@ -36,6 +36,7 @@ namespace PurposeColor
         Label shareLabel;
         StackLayout gemMenuContainer;
         bool IsNavigationFrfomGEMS = false;
+        Label commentsLabel;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -168,7 +169,7 @@ namespace PurposeColor
                 commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                 commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
                 commentButton.VerticalOptions = LayoutOptions.Center;
-                Label commentsLabel = new Label
+                commentsLabel = new Label
                 {
                     Text = "Comment",
                     VerticalOptions = LayoutOptions.Center,
@@ -477,7 +478,7 @@ namespace PurposeColor
                 List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
                 progressBar.HideProgressbar();
 
-                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false);
+                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false, commentsLabel);
                 commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
                 commentsView.HeightRequest = App.screenHeight;
                 commentsView.WidthRequest = App.screenWidth;

@@ -34,6 +34,10 @@ namespace PurposeColor
         StackLayout gemMenuContainer;
 		bool IsNavigationFrfomGEMS = false;
         DetailsPageModel detailsPageModel;
+        int commentsCount = 0;
+        bool isSharedToCommunity = false;
+        bool isFavouriteGem = false;
+        Label commentsLabel;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )
@@ -77,7 +81,9 @@ namespace PurposeColor
 				catch (Exception){
                 }
             };
-            
+
+
+            this.Appearing += GemsDetailsPage_Appearing;
 
             Label pageTitle = new Label();
             pageTitle.Text = model.pageTitleVal;
@@ -103,8 +109,7 @@ namespace PurposeColor
             toolsLayout.Orientation = StackOrientation.Horizontal;
             toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
             toolsLayout.Padding = new Thickness(10, 10, 10, 10);
-            //toolsLayout.TranslationY = -55;
-            //toolsLayout.HeightRequest = 50;
+            toolsLayout.ClassId = "ToolsLayout";
 
 			Image favoriteButton = new Image();
 			favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
@@ -158,13 +163,14 @@ namespace PurposeColor
             commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
             commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 			commentButton.VerticalOptions = LayoutOptions.Center;
-            Label commentsLabel = new Label
+            commentsLabel = new Label
             {
-				Text = "Comment",
+				Text = "Comments",
 				VerticalOptions = LayoutOptions.Center,
                 FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                 TextColor = Color.Gray,
-				FontSize = Device.OnPlatform(12,12,15)
+				FontSize = Device.OnPlatform(12,12,15),
+                ClassId = "CommentLabel"
             };
 
             commentButtonTap = new TapGestureRecognizer();
@@ -175,26 +181,6 @@ namespace PurposeColor
             toolsLayout.Children.Add(commentButton);
             toolsLayout.Children.Add(commentsLabel);
             
-            #endregion
-
-            #region POST COMMENT
-            //Label postLabel = new Label
-            //{
-            //    Text = "post",
-            //    TextColor = Constants.BLUE_BG_COLOR,
-            //    BackgroundColor = Color.Transparent,
-            //    FontSize = Device.OnPlatform(12, 12, 15),
-            //    HeightRequest = Device.OnPlatform(15, 25, 25),
-            //    HorizontalOptions = LayoutOptions.End,
-            //    VerticalOptions = LayoutOptions.Center
-            //};
-            //toolsLayout.Children.Add(postLabel);
-            //TapGestureRecognizer postTap = new TapGestureRecognizer();
-            //bool isPosting = false;
-
-            
-            //postLabel.GestureRecognizers.Add(postTap);
-
             #endregion
 
 			#region  title, description
@@ -216,36 +202,14 @@ namespace PurposeColor
                 ImageName = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
                 Text = string.Empty,
                 HorizontalOptions = LayoutOptions.End,
-                BackgroundColor = Color.Transparent,
-                WidthRequest = 30,
-                HeightRequest = 20
+                BackgroundColor = Color.Gray,
+                WidthRequest = Device.OnPlatform(30, 30, 60),
+                HeightRequest = Device.OnPlatform(20, 20, 40)
             };
             menuButton.Clicked += GemMenuButton_Clicked;
-
-            //gemMenuContainer = new StackLayout
-            //{
-            //    Orientation = StackOrientation.Vertical,
-            //    BackgroundColor = Color.Yellow,
-            //    //WidthRequest = App.screenWidth * 55,
-            //    Spacing = 1,
-            //    Children = { menuButton}
-            //};
-
-
-            //StackLayout GemTitleAndMenuContainer = new StackLayout
-            //{
-            //    Orientation = StackOrientation.Horizontal,
-            //    Spacing = 0,
-            //    Children = { pageTitle, gemMenuContainer }
-            //};
-			//masterStack.Children.Add (pageTitle);
-//            masterStack.AddChildToLayout(GemTitleAndMenuContainer,5,20);
-
             masterStack.AddChildToLayout(pageTitle, 1, 1);
             masterStack.AddChildToLayout(menuButton, 79, 1);
-            
             masterStack.AddChildToLayout(title,1,7);
-            //masterStack.AddChildToLayout(description, 1, 10);
 			#endregion
 
             StackLayout bottomAndLowerControllStack = new StackLayout
@@ -254,7 +218,8 @@ namespace PurposeColor
                 BackgroundColor = Color.Transparent,
                 Spacing = 1,
                 Padding = new Thickness(0, 5, 0, 5),
-                WidthRequest = App.screenWidth * .90
+                WidthRequest = App.screenWidth * .90,
+                ClassId= "BottomNlowerStack"
             };
             bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(5, 0, 5, 0), Children = { description } });
             
@@ -418,6 +383,45 @@ namespace PurposeColor
             Content = masterLayout;
         }
 
+        async void GemsDetailsPage_Appearing(object sender, EventArgs e)
+        {
+            base.OnAppearing();
+            try
+            {
+                ShareStatusAndCommentsCount shareStatusResult = await PurposeColor.Service.ServiceHelper.GetShareStatusAndCommentsCount(CurrentGemId, CurrentGemType, "2");
+                if (shareStatusResult != null)
+                {
+                    if (shareStatusResult.share_status != null)
+                    {
+                        isSharedToCommunity = shareStatusResult.share_status == 0 ? false : true;
+                    }
+
+                    if (shareStatusResult.favourite_count != null)
+                    {
+                        isSharedToCommunity = shareStatusResult.favourite_count == 0 ? false : true;
+                    }
+
+                    if (shareStatusResult.comment_count != null)
+                    {
+                        commentsCount = shareStatusResult.comment_count;
+                        if (commentsCount > 0)
+                        {
+                            commentsLabel.Text = "Comments (" + commentsCount + ")";
+                        }
+                        else
+                        {
+                            commentsLabel.Text = "Comments";
+                        }
+                    }
+                    shareStatusResult = null;
+                    this.Appearing -= GemsDetailsPage_Appearing;
+                }
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         void GemMenuButton_Clicked(object sender, EventArgs e)
         {
             View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
@@ -536,7 +540,7 @@ namespace PurposeColor
                 List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
                 progressBar.HideProgressbar();
 
-                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false);
+                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false, commentsLabel);
                 commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
                 commentsView.HeightRequest = App.screenHeight;
                 commentsView.WidthRequest = App.screenWidth;
@@ -553,6 +557,11 @@ namespace PurposeColor
 
         async void ShareButtonTapped(object sender, EventArgs e)
         {
+            if (isSharedToCommunity)
+            {
+                return;
+            }
+
 			string statusCode = "404";
 
             try {
@@ -563,7 +572,7 @@ namespace PurposeColor
 				string actionId = "0";
 				string eventId = "0";
 				string goalId = "0";
-				//goal_id,event_id or goalaction_id 
+ 
 				switch (CurrentGemType) {
 				case GemType.Goal:
 					goalId = CurrentGemId;
@@ -590,17 +599,24 @@ namespace PurposeColor
 			progressBar.HideProgressbar();
 			if (statusCode == "200") {
 				progressBar.ShowToast ("GEM shard to community.");
+                isSharedToCommunity = true;
 			} else if (statusCode == "401") {
 				progressBar.ShowToast ("Could not process your request");
+                shareButtonTap.Tapped += ShareButtonTapped;
 			} else {
 				progressBar.ShowToast ("Network error, Please try again later.");
                 shareButtonTap.Tapped += ShareButtonTapped;
+                isSharedToCommunity = false;
 			}
 		}
 
         async void FavoriteButtonTapped(object sender, EventArgs e)
         {
-            // mark it as fav
+            if (isFavouriteGem)
+            {
+                return;
+            }
+
 			try {
 				favoriteButtonTap.Tapped -= FavoriteButtonTapped;
                 progressBar.ShowProgressbar("Requesting...   ");
@@ -623,13 +639,18 @@ namespace PurposeColor
                     if (responceCode == "200")
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "GEM added to favourites.", Constants.ALERT_OK);
+                        isFavouriteGem = true;
                     }
                     else if (responceCode == "401")
                     {
+                        isFavouriteGem = false;
+                        favoriteButtonTap.Tapped += FavoriteButtonTapped;
                         await DisplayAlert(Constants.ALERT_TITLE, "Current GEM is alredy added to favourites.", Constants.ALERT_OK);
                     }
                     else
                     {
+                        isFavouriteGem = false;
+                        favoriteButtonTap.Tapped += FavoriteButtonTapped;
                         await DisplayAlert(Constants.ALERT_TITLE, "Network error, Could not process the request.", Constants.ALERT_OK);
                     }
                 }
@@ -638,6 +659,7 @@ namespace PurposeColor
 				favoriteButtonTap.Tapped += FavoriteButtonTapped;
                 progressBar.HideProgressbar();
                 DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
+                isFavouriteGem = false;
 			}
 
             progressBar.HideProgressbar();

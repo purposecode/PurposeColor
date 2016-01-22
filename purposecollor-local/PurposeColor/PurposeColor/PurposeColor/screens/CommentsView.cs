@@ -32,10 +32,12 @@ namespace PurposeColor.screens
         User currentUser;
         Button closeButton;
         int popupHeightValue = 10;
+        Label commentLabel;
 
-        public CommentsView(CustomLayout parentLayout, List<Comment> allComments, string gemId, GemType gemType, bool isCommunityGem)
+        public CommentsView(CustomLayout parentLayout, List<Comment> allComments, string gemId, GemType gemType, bool isCommunityGem, Label commentsLabel = null)
         {
             pageContainedLayout = parentLayout;
+            commentLabel = commentsLabel != null ? commentsLabel : new Label();
             currentGemId = gemId;
             curentGemType = gemType;
 
@@ -278,12 +280,26 @@ namespace PurposeColor.screens
                 }
                 if (responceCode == "200")
                 {
+                    Comment comment = Comments.FirstOrDefault(c => c.comment_id == commentId);
+                    if (comment != null)
+                    {
+                        Comments.Remove(comment);
+                    }
                     // remove the corresponding comment from view
                     var commentStackForRemoval = listContainer.Children.FirstOrDefault(s => s.ClassId == commentId);
                     if (commentStackForRemoval != null)
                     {
                         listContainer.Children.Remove(commentStackForRemoval);
                         commentStackForRemoval = null;
+                    }
+
+                    if (Comments.Count > 0)
+                    {
+                        commentLabel.Text = "Comments(" + Comments.Count + ")";
+                    }
+                    else
+                    {
+                        commentLabel.Text = "Comments";
                     }
                 }
                 else
@@ -379,6 +395,7 @@ namespace PurposeColor.screens
                             profileurl = string.IsNullOrEmpty(user.ProfileImageUrl) ? "admin/uploads/default/noprofile.png" : user.ProfileImageUrl,// profile picture should be of this person// can take it from local. ==>  user.prfilePicUrl
                             comment_datetime = DateTime.UtcNow.ToLocalTime().ToString("f")
                         };
+                        Comments.Add(newComment);
 
                         //firstComment
                         var noCommentsLabel = listContainer.Children.FirstOrDefault(s => s.ClassId == "NoCommentContainer");
@@ -389,6 +406,16 @@ namespace PurposeColor.screens
                         }
 
                         GenerateCommentView(newComment);
+
+                        // update the label with current comment count.
+                        if (Comments.Count > 0)
+                        {
+                            commentLabel.Text = "Comments(" + Comments.Count + ")";
+                        }
+                        else
+                        {
+                            commentLabel.Text = "Comments";
+                        }
 
                     }
                     catch (Exception ex)

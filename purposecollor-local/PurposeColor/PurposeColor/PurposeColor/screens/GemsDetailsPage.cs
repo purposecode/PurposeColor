@@ -202,13 +202,13 @@ namespace PurposeColor
                 ImageName = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
                 Text = string.Empty,
                 HorizontalOptions = LayoutOptions.End,
-                BackgroundColor = Color.Gray,
-                WidthRequest = Device.OnPlatform(30, 30, 60),
-                HeightRequest = Device.OnPlatform(20, 20, 40)
+				BackgroundColor = Color.White,
+                WidthRequest = Device.OnPlatform(40, 30, 60),
+                HeightRequest = Device.OnPlatform(30, 20, 40)
             };
             menuButton.Clicked += GemMenuButton_Clicked;
             masterStack.AddChildToLayout(pageTitle, 1, 1);
-            masterStack.AddChildToLayout(menuButton, 79, 1);
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(78, 79, 79), 1);
             masterStack.AddChildToLayout(title,1,7);
 			#endregion
 
@@ -260,7 +260,7 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.AddChildToLayout(indicator, 40, 40);
+					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
                     if (isValidUrl)
                     {
                         bottomAndLowerControllStack.Children.Add(img);
@@ -305,7 +305,7 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.AddChildToLayout(indicator, 40, 40);
+					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
                     if (isValidUrl)
                     {
                         bottomAndLowerControllStack.Children.Add(img);
@@ -350,7 +350,7 @@ namespace PurposeColor
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
-                    masterStack.AddChildToLayout(indicator, 40, 30);
+					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
                     bottomAndLowerControllStack.Children.Add(img);
                 }
             }
@@ -445,7 +445,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-            masterStack.AddChildToLayout(GemMenu, 52, 4);
+			masterStack.AddChildToLayout(GemMenu, 52, Device.OnPlatform(2, 4, 4));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -506,8 +506,8 @@ namespace PurposeColor
                 }
                 else if (item.Name == "Edit")
                 {
-                    //await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
-                    await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+                    await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+                    //await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel)); // is working in Android.
                 }
 
                 HideCommentsPopup();

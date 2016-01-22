@@ -1192,6 +1192,7 @@ namespace PurposeColor.screens
                 var s = new FormattedString();
                 s.Spans.Add(new Span { Text = "   - at ", ForegroundColor = Color.Black });
                 s.Spans.Add(new Span { Text = item.Name });
+				currentAddress = item.Name;
                 locationInfo.FormattedText = s;
                 locLayout.IsVisible = true;
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
@@ -1326,7 +1327,10 @@ namespace PurposeColor.screens
                             details.user_id = "2";// for tezsting only // test
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
-
+							if(!string.IsNullOrEmpty(currentAddress))
+							{
+								details.location_address = currentAddress;
+							}
                             //details.start_date = DateTime.Now.ToString("yyyy/MM/dd"); // for testing only
                             //details.end_date = DateTime.Now.AddDays(1).ToString("yyyy/MM/dd"); // for testing only
                             //details.start_time = DateTime.Now.AddHours(1).ToString("HH:mm"); //for testing only
@@ -1410,11 +1414,11 @@ namespace PurposeColor.screens
                             details.user_id = "2";// for tezsting only // test
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
-                            if (!string.IsNullOrEmpty(locationInfo.Text))
-                            {
-                                details.location_address = locationInfo.Text;// currentAddress;
-                            }
-
+							if (!string.IsNullOrEmpty(currentAddress))
+							{
+								details.location_address = currentAddress;
+							}
+                            
                             if (!isUpdatePage)
                             {
                                 progress.ShowProgressbar("Creating new event..");

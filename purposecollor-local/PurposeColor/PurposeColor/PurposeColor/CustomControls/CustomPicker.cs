@@ -79,13 +79,14 @@ namespace PurposeColor.CustomControls
             StackLayout divider = new StackLayout();
             divider.WidthRequest = screenWidth;
             divider.HeightRequest = 1;
-            divider.BackgroundColor = Color.White;//FromRgb(220, 220, 220);
+            divider.BackgroundColor = Color.FromRgb(220, 220, 220);
 
             masterLayout.WidthRequest = screenWidth * 60 / 100;
             masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 7) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+
             this.View = masterLayout;
         }
 

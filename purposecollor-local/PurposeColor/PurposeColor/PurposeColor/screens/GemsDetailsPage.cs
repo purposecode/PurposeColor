@@ -445,7 +445,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-			masterStack.AddChildToLayout(GemMenu, 52, Device.OnPlatform(2, 4, 4));
+			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 52, 52), Device.OnPlatform(2, 4, 4));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)

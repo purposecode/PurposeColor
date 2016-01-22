@@ -25,9 +25,9 @@ namespace PurposeColor.screens
             listView = new ListView();
             listView.ItemsSource = itemSource;
             listView.ItemTemplate = new DataTemplate(typeof(PurposeColor.CustomControls.CustomListViewCellItem));
-            listView.WidthRequest = App.screenWidth * .30;
-            listView.HeightRequest = itemSource.Count * 45; // 70
-            //listView.SeparatorColor = Color.Gray;
+			listView.WidthRequest = Device.OnPlatform(App.screenWidth * .28, App.screenWidth * .30, App.screenWidth * .30);
+			listView.HeightRequest = Device.OnPlatform(itemSource.Count * 44,itemSource.Count * 45, itemSource.Count * 45);
+			listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.HorizontalOptions = LayoutOptions.Center;
             listView.VerticalOptions = LayoutOptions.Center;
             listView.BackgroundColor = Color.Transparent;
@@ -37,8 +37,8 @@ namespace PurposeColor.screens
 
             Image bg = new Image
             {
-				WidthRequest = (App.screenWidth * .31) + 2,
-                HeightRequest = itemSource.Count * 50,
+				WidthRequest = Device.OnPlatform((App.screenWidth * .30) + 2, (App.screenWidth * .31) + 2, (App.screenWidth * .31) + 2),
+				HeightRequest = Device.OnPlatform(itemSource.Count * 48,itemSource.Count * 50, itemSource.Count * 50),
                 Source = Device.OnPlatform("arrow_box.png", "arrow_box.png", "//Assets//arrow_box.png"),
                 VerticalOptions = LayoutOptions.Start,
                 Aspect = Aspect.Fill

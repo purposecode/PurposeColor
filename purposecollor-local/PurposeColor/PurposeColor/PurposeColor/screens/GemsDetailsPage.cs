@@ -261,8 +261,10 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
                     masterStack.AddChildToLayout(indicator, 40, 40);
-                    //masterStack.AddChildToLayout(img, 1, 15);
-                    bottomAndLowerControllStack.Children.Add(img);
+                    if (isValidUrl)
+                    {
+                        bottomAndLowerControllStack.Children.Add(img);
+                    }
                 }
             }
 
@@ -304,8 +306,10 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
                     masterStack.AddChildToLayout(indicator, 40, 40);
-                    //masterStack.AddChildToLayout(img, 1, 15);
-                    bottomAndLowerControllStack.Children.Add(img);
+                    if (isValidUrl)
+                    {
+                        bottomAndLowerControllStack.Children.Add(img);
+                    }
                 }
             }
 

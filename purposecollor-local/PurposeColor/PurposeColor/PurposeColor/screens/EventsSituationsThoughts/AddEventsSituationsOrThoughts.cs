@@ -909,41 +909,45 @@ namespace PurposeColor.screens
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 if (!isAudioRecording)
                 {
-                    audioRecodeOffHolder.IsVisible = true;
-                    audioRecodeOnHolder.IsVisible = false;
-                    isAudioRecording = true;
-                    Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
-                    {
-                        //RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
-                        //progress.ShowToast("Maximum duration has reached.");
-                        //return false;
-                        if (isAudioRecording)
-                        {
-                            if (Seconds >= 120) // for one minute// 120 * 500 = 60 Sec. //
-                            {
-                                RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
-                                progress.ShowToast("Maximum duration has reached.");
-                                Seconds = 0;
-                                return false;
-                            }
-                            else
-                            {
-                                Seconds++;
-                                AnimateMic();
-                                return true;
-                            }
-                        }
-                        Seconds = 0;
-                        return false;
-                        
-                    });
-
+                    
                     if (!audioRecorder.RecordAudio())
                     {
                         progress.ShowToast("Audio cannot be recorded, please try again later.");
+                        isAudioRecording = false;
+                        audioRecodeOffHolder.IsVisible = false;
+                        audioRecodeOnHolder.IsVisible = true;
                     }
                     else
                     {
+                        audioRecodeOffHolder.IsVisible = true;
+                        audioRecodeOnHolder.IsVisible = false;
+                        isAudioRecording = true;
+                        Device.StartTimer(TimeSpan.FromMilliseconds(500), () =>
+                        {
+                            //RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
+                            //progress.ShowToast("Maximum duration has reached.");
+                            //return false;
+                            if (isAudioRecording)
+                            {
+                                if (Seconds >= 120) // for one minute// 120 * 500 = 60 Sec. //
+                                {
+                                    RecodeOffTapRecognizer_Tapped(audioRecodeOnHolder, null);
+                                    progress.ShowToast("Maximum duration has reached.");
+                                    Seconds = 0;
+                                    return false;
+                                }
+                                else
+                                {
+                                    Seconds++;
+                                    AnimateMic();
+                                    return true;
+                                }
+                            }
+                            Seconds = 0;
+                            return false;
+
+                        });
+
                         progress.ShowToast("Audio recording started.");
                     }
                 }

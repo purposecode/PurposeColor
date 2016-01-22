@@ -99,7 +99,7 @@ namespace PurposeColor
             masterStackLayout.Orientation = StackOrientation.Vertical;
 
 
-            for (int mainIndex = 0; mainIndex < 50; mainIndex++)
+            for (int mainIndex = 0; mainIndex < 10; mainIndex++)
             {
 
                 masterStack = new CustomLayout();
@@ -227,7 +227,7 @@ namespace PurposeColor
                 };
                 menuButton.Clicked += GemMenuButton_Clicked;
 
-                masterStack.AddChildToLayout(pageTitle, 1, 1);
+               // masterStack.AddChildToLayout(pageTitle, 1, 1);
                 masterStack.AddChildToLayout(menuButton, 79, 1);
                 masterStack.AddChildToLayout( profileImage, 2, 1 );
                 masterStack.AddChildToLayout( userName, 25, 1 );
@@ -246,8 +246,13 @@ namespace PurposeColor
 
                 #region MEDIA LIST
 
-                /*if (model.goal_media != null)
+                if (model.goal_media != null)
                 {
+                    ScrollView imgScrollView = new ScrollView();
+                    imgScrollView.Orientation = ScrollOrientation.Horizontal;
+                    
+                    StackLayout horizmgConatiner = new StackLayout();
+                    horizmgConatiner.Orientation = StackOrientation.Horizontal;
 
                   for (int index = 0; index < model.goal_media.Count; index++)
                     {
@@ -284,9 +289,13 @@ namespace PurposeColor
                         indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                         indicator.BindingContext = img;
                         masterStack.AddChildToLayout(indicator, 40, 30);
-                        bottomAndLowerControllStack.Children.Add(img);
+                        horizmgConatiner.Children.Add(img);
+                      
                     }
-                }*/
+
+                  imgScrollView.Content = horizmgConatiner;
+                  bottomAndLowerControllStack.Children.Add(imgScrollView);
+                }
 
                 #endregion
 

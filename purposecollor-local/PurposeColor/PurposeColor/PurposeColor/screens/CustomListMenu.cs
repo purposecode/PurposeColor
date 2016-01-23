@@ -14,7 +14,7 @@ namespace PurposeColor.screens
         CustomLayout pageContainedLayout;
 
         public ListView listView;
-        public CustomListMenu(CustomLayout containerLayout, StackLayout parentStack, List<PurposeColor.CustomControls.CustomListViewItem> itemSource, int menuXpercent, int menuYpercent, int menuWidthPercent)
+        public CustomListMenu(CustomLayout containerLayout, List<PurposeColor.CustomControls.CustomListViewItem> itemSource)
         {
             pageContainedLayout = containerLayout;
             this.BackgroundColor = Color.Transparent;

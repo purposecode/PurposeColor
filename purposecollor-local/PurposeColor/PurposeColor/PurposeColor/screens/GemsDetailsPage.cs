@@ -31,7 +31,6 @@ namespace PurposeColor
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
-        StackLayout gemMenuContainer;
 		bool IsNavigationFrfomGEMS = false;
         DetailsPageModel detailsPageModel;
         int commentsCount = 0;
@@ -440,7 +439,7 @@ namespace PurposeColor
             menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
             menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
 
-            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, gemMenuContainer, menuItems, 0, 10, 50);
+            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
             //GemMenu.WidthRequest = App.screenWidth * .50;
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;

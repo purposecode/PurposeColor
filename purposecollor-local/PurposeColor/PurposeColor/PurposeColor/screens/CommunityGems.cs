@@ -322,27 +322,21 @@ namespace PurposeColor
                         indicator.BindingContext = img;
                         masterStack.AddChildToLayout(indicator, 40, 30);
 
-					/*	Image moreImg = new Image();
-						moreImg.Source = "more.png";
-						moreImg.HorizontalOptions = LayoutOptions.Center;
-						moreImg.VerticalOptions = LayoutOptions.Center;*/
+                        CustomLayout imgContainer = new CustomLayout();
+                        imgContainer.WidthRequest = App.screenWidth * 90 / 100;
+                        imgContainer.HeightRequest = App.screenWidth * 90 / 100;
+                        imgContainer.Children.Add(img);
+                        imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
 
-						bottomAndLowerControllStack.Children.Add(img);
-
-						//bottomAndLowerControllStack.Children.Add(moreImg);
-
-                      
-                    //}
-
-                /*  imgScrollView.Content = horizmgConatiner;
-                  bottomAndLowerControllStack.Children.Add(imgScrollView);*/
+                        bottomAndLowerControllStack.Children.Add(imgContainer);
                 }
 
                 #endregion
 
+
                 bottomAndLowerControllStack.Children.Add(toolsLayout);
                 masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
-					masterStack.AddChildToLayout( moreImg, 65, Device.OnPlatform( 30, 20, 20 ) );
+			  //  masterStack.AddChildToLayout( moreImg, 65, Device.OnPlatform( 30, 20, 20 ) );
 
                 //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
                /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);

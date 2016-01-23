@@ -91,6 +91,7 @@
     <Compile Include="screens\CommentsView.cs" />
     <Compile Include="screens\CommunityGems.cs" />
     <Compile Include="screens\CommunityGemsPage.cs" />
+    <Compile Include="screens\CommunityMediaViewer.cs" />
     <Compile Include="screens\CustomeMultiSelectionList.cs" />
     <Compile Include="screens\CustomListMenu.cs" />
     <Compile Include="screens\EventsSituationsThoughts\AddEventsSituationsOrThoughts.cs" />

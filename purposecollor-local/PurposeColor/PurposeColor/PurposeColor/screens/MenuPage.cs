@@ -143,7 +143,6 @@ namespace PurposeColor.screens
 
                 if ("Emotional Awareness" == selItem.Name)
                 {
-
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
                 }
@@ -165,10 +164,13 @@ namespace PurposeColor.screens
                 }
                 else if ("Community GEMs" == selItem.Name)
                 {
+					/*App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
+					App.masterPage.IsPresented = false;
+					return;*/
                    IProgressBar progress = DependencyService.Get<IProgressBar>();
                    progress.ShowProgressbar( "Loading community gems" );
                    App.masterPage.IsPresented = false;
-                   SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("42");
+                   SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("37");
                    if (goalInfo != null)
                    {
                        DetailsPageModel model = new DetailsPageModel();
@@ -183,7 +185,7 @@ namespace PurposeColor.screens
                        model.gemType = GemType.Goal;
                        model.gemId = "37";
                        progress.HideProgressbar();
-                       App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
+						App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
                      //  App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
                    }
 

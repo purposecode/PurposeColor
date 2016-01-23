@@ -79,6 +79,15 @@ namespace PurposeColor
 	        Image
         };
         #endregion
+
+        public class MediaDetails
+        {
+            public string ImageName { get; set; }
+            public string Url { get; set; }
+            public string Details { get; set; }
+            public string ID { get; set; }
+            public string MediaType { get; set; }
+        }
     }
 
 }

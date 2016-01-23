@@ -13,6 +13,7 @@ using System.Linq;
 using CustomLayouts.ViewModels;
 using CustomLayouts.Controls;
 using CustomLayouts;
+using PurposeColor.Service;
 
 namespace PurposeColor
 {
@@ -34,8 +35,8 @@ namespace PurposeColor
         TapGestureRecognizer commentButtonTap;
         TapGestureRecognizer favoriteButtonTap;
         Label shareLabel;
+        StackLayout gemMenuContainer;
         bool IsNavigationFrfomGEMS = false;
-        Label commentsLabel;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -90,7 +91,7 @@ namespace PurposeColor
             pageTitle.YAlign = TextAlignment.Start;
             pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
 
-            StackLayout emptyLayout = new StackLayout();
+			BoxView emptyLayout = new BoxView();
             emptyLayout.BackgroundColor = Color.Transparent;
             emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
             emptyLayout.HeightRequest = 30;
@@ -168,7 +169,7 @@ namespace PurposeColor
                 commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                 commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
                 commentButton.VerticalOptions = LayoutOptions.Center;
-                commentsLabel = new Label
+                Label commentsLabel = new Label
                 {
                     Text = "Comment",
                     VerticalOptions = LayoutOptions.Center,
@@ -232,6 +233,35 @@ namespace PurposeColor
                 masterStack.AddChildToLayout( profileImage, 2, 1 );
                 masterStack.AddChildToLayout( userName, 25, 1 );
                 masterStack.AddChildToLayout(title, 25, 6);
+
+				TapGestureRecognizer moreTap = new TapGestureRecognizer();
+				moreTap.Tapped += async (object sender, EventArgs e) => 
+				{
+
+					IProgressBar progress = DependencyService.Get<IProgressBar>();
+					progress.ShowProgressbar( "Loading community gems" );
+					App.masterPage.IsPresented = false;
+					SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("37");
+					if (goalInfo != null)
+					{
+						List<PurposeColor.Constants.MediaDetails> mediaPlayerList = new List<PurposeColor.Constants.MediaDetails>();
+						foreach (var item in goalInfo.resultarray.goal_media) 
+						{
+							mediaPlayerList.Add( new PurposeColor.Constants.MediaDetails(){ImageName = item.goal_media, ID = item.goal_id, MediaType = item.media_type } );
+						}
+						await Navigation.PushAsync( new CommunityMediaViewer( mediaPlayerList ) );
+						//  App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
+					}
+
+					progress.HideProgressbar();
+
+				};
+				Image moreImg = new Image();
+				moreImg.Source = "more.png";
+				moreImg.HorizontalOptions = LayoutOptions.End;
+				moreImg.VerticalOptions = LayoutOptions.End;
+				moreImg.GestureRecognizers.Add( moreTap );
+
                 #endregion
 
                 StackLayout bottomAndLowerControllStack = new StackLayout
@@ -248,14 +278,15 @@ namespace PurposeColor
 
                 if (model.goal_media != null)
                 {
-                    ScrollView imgScrollView = new ScrollView();
+                   /* ScrollView imgScrollView = new ScrollView();
                     imgScrollView.Orientation = ScrollOrientation.Horizontal;
                     
                     StackLayout horizmgConatiner = new StackLayout();
-                    horizmgConatiner.Orientation = StackOrientation.Horizontal;
+                    horizmgConatiner.Orientation = StackOrientation.Horizontal;*/
 
-                  for (int index = 0; index < model.goal_media.Count; index++)
-                    {
+               /*   for (int index = 0; index < model.goal_media.Count; index++)
+                    {*/
+					int index = 0;
                         TapGestureRecognizer videoTap = new TapGestureRecognizer();
                         videoTap.Tapped += OnActionVideoTapped;
 
@@ -289,26 +320,29 @@ namespace PurposeColor
                         indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                         indicator.BindingContext = img;
                         masterStack.AddChildToLayout(indicator, 40, 30);
-                        horizmgConatiner.Children.Add(img);
-                      
-                    }
 
-                  imgScrollView.Content = horizmgConatiner;
-                  bottomAndLowerControllStack.Children.Add(imgScrollView);
+					/*	Image moreImg = new Image();
+						moreImg.Source = "more.png";
+						moreImg.HorizontalOptions = LayoutOptions.Center;
+						moreImg.VerticalOptions = LayoutOptions.Center;*/
+
+						bottomAndLowerControllStack.Children.Add(img);
+
+						//bottomAndLowerControllStack.Children.Add(moreImg);
+
+                      
+                    //}
+
+                /*  imgScrollView.Content = horizmgConatiner;
+                  bottomAndLowerControllStack.Children.Add(imgScrollView);*/
                 }
 
                 #endregion
 
-                //masterStack.AddChildToLayout(toolsLayout,1,65);
-                //masterStack.AddChildToLayout(emptyLayout,1,75);
                 bottomAndLowerControllStack.Children.Add(toolsLayout);
-               // bottomAndLowerControllStack.Children.Add(emptyLayout);
                 masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
+				masterStack.AddChildToLayout( moreImg, 65, 20 );
 
-                StackLayout spaceOffsetlayout = new StackLayout();
-                spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-                spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
-                spaceOffsetlayout.BackgroundColor = Color.Transparent;
                 //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
                /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
@@ -378,7 +412,7 @@ namespace PurposeColor
             menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
             menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
 
-            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
+            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems );
             //GemMenu.WidthRequest = App.screenWidth * .50;
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
@@ -477,7 +511,7 @@ namespace PurposeColor
                 List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
                 progressBar.HideProgressbar();
 
-                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false, commentsLabel);
+                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false);
                 commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
                 commentsView.HeightRequest = App.screenHeight;
                 commentsView.WidthRequest = App.screenWidth;

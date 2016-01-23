@@ -201,7 +201,7 @@ namespace PurposeColor
                 userName.TextColor = Color.Black;
                 userName.WidthRequest = App.screenWidth * 90 / 100;
                 userName.FontAttributes = FontAttributes.Bold;
-                userName.FontSize = Device.OnPlatform(12, 15, 12);
+                userName.FontSize = Device.OnPlatform(14, 15, 12);
                 userName.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
                 title = new Label();
@@ -215,7 +215,8 @@ namespace PurposeColor
                 description.WidthRequest = App.screenWidth * .80;
                 description.Text = model.desc;
                 description.TextColor = Color.Black;
-                description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+				description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+				description.FontSize = Device.OnPlatform( 12, 15, 15 );
 
                 CustomImageButton menuButton = new CustomImageButton
                 {
@@ -231,8 +232,8 @@ namespace PurposeColor
                // masterStack.AddChildToLayout(pageTitle, 1, 1);
                 masterStack.AddChildToLayout(menuButton, 79, 1);
                 masterStack.AddChildToLayout( profileImage, 2, 1 );
-                masterStack.AddChildToLayout( userName, 25, 1 );
-                masterStack.AddChildToLayout(title, 25, 6);
+                masterStack.AddChildToLayout( userName, 23, 3 );
+                masterStack.AddChildToLayout(title, 23, 7);
 
 				TapGestureRecognizer moreTap = new TapGestureRecognizer();
 				moreTap.Tapped += async (object sender, EventArgs e) => 
@@ -256,7 +257,7 @@ namespace PurposeColor
 					progress.HideProgressbar();
 
 				};
-				Image moreImg = new Image();
+				Image  moreImg = new Image();
 				moreImg.Source = "more.png";
 				moreImg.HorizontalOptions = LayoutOptions.End;
 				moreImg.VerticalOptions = LayoutOptions.End;
@@ -341,7 +342,7 @@ namespace PurposeColor
 
                 bottomAndLowerControllStack.Children.Add(toolsLayout);
                 masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
-				masterStack.AddChildToLayout( moreImg, 65, 20 );
+					masterStack.AddChildToLayout( moreImg, 65, Device.OnPlatform( 30, 20, 20 ) );
 
                 //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
                /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);

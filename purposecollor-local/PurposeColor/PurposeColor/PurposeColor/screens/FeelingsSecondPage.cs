@@ -68,7 +68,8 @@ namespace PurposeColor
             Label secondLine = new Label();
             secondLine.Text = App.SelectedEmotion;
             secondLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            secondLine.TextColor = Color.FromRgb(40, 47, 50);
+            secondLine.FontAttributes = FontAttributes.Italic;
+            secondLine.TextColor = Constants.BLUE_BG_COLOR;//Color.FromRgb(40, 47, 50);
             secondLine.HeightRequest = screenHeight * 15 / 100;
             secondLine.HorizontalOptions = LayoutOptions.Center;
             secondLine.WidthRequest = screenWidth;
@@ -77,8 +78,8 @@ namespace PurposeColor
             Label thirdLine = new Label();
             thirdLine.Text = "support your goals and dreams?";
             thirdLine.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            thirdLine.TextColor = Color.FromRgb(40, 47, 50);
-            thirdLine.HeightRequest = screenHeight * 10 / 100;
+            thirdLine.TextColor = Color.FromRgb(40, 50, 50);
+            thirdLine.HeightRequest = screenHeight * 11 / 100;
             thirdLine.HorizontalOptions = LayoutOptions.Center;
             thirdLine.WidthRequest = screenWidth;
             thirdLine.XAlign = TextAlignment.Center;
@@ -112,18 +113,18 @@ namespace PurposeColor
 
             if (App.screenDensity > 1.5)
             {
-                firstLine.FontSize = Device.OnPlatform(20, 22, 30);
+                firstLine.FontSize = Device.OnPlatform(20, 20, 30);
                 secondLine.FontSize = Device.OnPlatform(20, 22, 30);
-                thirdLine.FontSize = Device.OnPlatform(20, 22, 30);
+                thirdLine.FontSize = Device.OnPlatform(20, 20, 30);
                 actionPickerButton.FontSize = 17;
                 actionPickerButton.HeightRequest = screenHeight * 6 / 100;
                 goalsAndDreamsPickerButton.HeightRequest = screenHeight * 6 / 100;
             }
             else
             {
-                firstLine.FontSize = Device.OnPlatform(16, 20, 26);
+                firstLine.FontSize = Device.OnPlatform(16, 18, 26);
                 secondLine.FontSize = Device.OnPlatform(16, 20, 26);
-                thirdLine.FontSize = Device.OnPlatform(16, 20, 26);
+                thirdLine.FontSize = Device.OnPlatform(16, 18, 26);
                 actionPickerButton.FontSize = 15;
                 actionPickerButton.HeightRequest = screenHeight * 9 / 100;
                 goalsAndDreamsPickerButton.HeightRequest = screenHeight * 9 / 100;

@@ -202,12 +202,12 @@ namespace PurposeColor
                 Text = string.Empty,
                 HorizontalOptions = LayoutOptions.End,
 				BackgroundColor = Color.White,
-                WidthRequest = Device.OnPlatform(40, 30, 60),
-                HeightRequest = Device.OnPlatform(30, 20, 40)
+                WidthRequest = Device.OnPlatform(40, 32, 60),
+                HeightRequest = Device.OnPlatform(30, 25, 40)
             };
             menuButton.Clicked += GemMenuButton_Clicked;
             masterStack.AddChildToLayout(pageTitle, 1, 1);
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(78, 79, 79), 1);
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 77, 79), 1);
             masterStack.AddChildToLayout(title,1,7);
 			#endregion
 

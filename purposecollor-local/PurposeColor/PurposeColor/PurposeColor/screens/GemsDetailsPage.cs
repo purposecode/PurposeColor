@@ -315,6 +315,12 @@ namespace PurposeColor
 
             if (model.goal_media != null)
             {
+                ScrollView imgScrollView = new ScrollView();
+                imgScrollView.Orientation = ScrollOrientation.Horizontal;
+
+                StackLayout horizmgConatiner = new StackLayout();
+                horizmgConatiner.Orientation = StackOrientation.Horizontal;
+
                 for (int index = 0; index < model.goal_media.Count; index++)
                 {
                     TapGestureRecognizer videoTap = new TapGestureRecognizer();
@@ -350,8 +356,12 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
 					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
-                    bottomAndLowerControllStack.Children.Add(img);
+                    horizmgConatiner.Children.Add(img);
+
                 }
+
+                imgScrollView.Content = horizmgConatiner;
+                bottomAndLowerControllStack.Children.Add(imgScrollView);
             }
             
             #endregion

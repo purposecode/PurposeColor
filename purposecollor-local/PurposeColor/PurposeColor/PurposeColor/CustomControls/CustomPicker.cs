@@ -85,7 +85,7 @@ namespace PurposeColor.CustomControls
             masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 7) / 100;
 
             masterLayout.AddChildToLayout(name, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(divider, (float)2, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+            masterLayout.AddChildToLayout(divider, 0, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
             this.View = masterLayout;
         }
@@ -208,7 +208,7 @@ namespace PurposeColor.CustomControls
            // listView.HeightRequest = screenHeight * 42 / 100;
 			listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.Opacity = 1;
-            listView.BackgroundColor = Constants.LIST_BG_COLOR;
+            listView.BackgroundColor = Color.White;//Constants.LIST_BG_COLOR;
             listView.WidthRequest = screenWidth * 60;
             StackLayout listViewSpacer = new StackLayout
             {

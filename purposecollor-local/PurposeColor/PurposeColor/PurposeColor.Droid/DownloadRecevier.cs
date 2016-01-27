@@ -32,6 +32,9 @@ namespace PurposeColor.Droid
 
                 Android.Net.Uri downloadedFileUri = dm.GetUriForDownloadedFile(App.DownloadID);
 
+
+                MessagingCenter.Send<MyTestReceiver, DateTime>(this, "boom", DateTime.Now);
+
                 if( downloadedFileUri != null )
                 {
                     File file = new File(new Java.Net.URI(downloadedFileUri.ToString()));

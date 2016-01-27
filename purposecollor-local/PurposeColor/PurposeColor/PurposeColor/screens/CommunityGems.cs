@@ -141,9 +141,10 @@ namespace PurposeColor
                 toolsLayout.Children.Add(likeButton);
                 toolsLayout.Children.Add(likeLabel);
 
+                Image shareButton = new Image();
                 if (user.AllowCommunitySharing)
                 {
-                    Image shareButton = new Image();
+                   
                     shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
                     shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
@@ -317,6 +318,8 @@ namespace PurposeColor
                         img.HeightRequest = App.screenWidth * 90 / 100;
                         img.Aspect = Aspect.AspectFill;
                         img.ClassId = null;
+                        shareButton.ClassId = source;
+                        shareLabel.ClassId = source;
                         if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
                         {
                             img.ClassId = source;
@@ -332,6 +335,8 @@ namespace PurposeColor
                             img.ClassId = source;
                             source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                         }
+
+
                         img.Source = source;
                         img.GestureRecognizers.Add(videoTap);
                         var indicator = new ActivityIndicator { Color = new Color(.5), };
@@ -581,52 +586,31 @@ namespace PurposeColor
 
             try
             {
-
-                progressBar.ShowProgressbar("Sharing to community");
-                shareButtonTap.Tapped -= ShareButtonTapped;
-
-                string actionId = "0";
-                string eventId = "0";
-                string goalId = "0";
-                //goal_id,event_id or goalaction_id 
-                switch (CurrentGemType)
+                string path = "";
+                Button button = sender as Button;
+                Label label = sender as Label;
+                if( button != null )
                 {
-                    case GemType.Goal:
-                        goalId = CurrentGemId;
-                        break;
-                    case GemType.Event:
-                        eventId = CurrentGemId;
-                        break;
-                    case GemType.Action:
-                        actionId = CurrentGemId;
-                        break;
-                    case GemType.Emotion:
-                        break;
-                    default:
-                        break;
+                    if (button.ClassId != null)
+                        path = button.ClassId;
                 }
 
-                statusCode = await PurposeColor.Service.ServiceHelper.ShareToCommunity(goalId, eventId, actionId);
+                if( label != null)
+                {
+                    if (label.ClassId != null)
+                        path = label.ClassId;
+                }
+
+                IShareVia share = DependencyService.Get<IShareVia>();
+                share.ShareMedia("Hello", path, Constants.MediaType.Image);
+             
             }
             catch (Exception)
             {
                 shareButtonTap.Tapped += ShareButtonTapped;
             }
 
-            progressBar.HideProgressbar();
-            if (statusCode == "200")
-            {
-                progressBar.ShowToast("GEM shard to community.");
-            }
-            else if (statusCode == "401")
-            {
-                progressBar.ShowToast("Could not process your request");
-            }
-            else
-            {
-                progressBar.ShowToast("Network error, Please try again later.");
-                shareButtonTap.Tapped += ShareButtonTapped;
-            }
+          
         }
 
         async void OnLikeButtonTapped(object sender, EventArgs e)
@@ -713,7 +697,6 @@ namespace PurposeColor
 
         public void Dispose()
         {
-
             masterLayout = null;
             progressBar = null;
             masterStack = null;

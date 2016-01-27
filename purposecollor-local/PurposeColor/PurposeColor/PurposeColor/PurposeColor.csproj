@@ -71,6 +71,7 @@
     <Compile Include="interfaces\IMediaVIew.cs" />
     <Compile Include="interfaces\IReminder.cs" />
     <Compile Include="interfaces\IResize.cs" />
+    <Compile Include="interfaces\IShareVia.cs" />
     <Compile Include="Model\ActionModel.cs" />
     <Compile Include="Model\Addresses.cs" />
     <Compile Include="Model\AppSettings.cs" />

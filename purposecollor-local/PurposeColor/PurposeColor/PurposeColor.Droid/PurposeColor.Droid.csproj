@@ -210,6 +210,7 @@
     <Compile Include="Dependency\AndroidLocalNotificationImpl.cs" />
     <Compile Include="Dependency\AndroidMediaView.cs" />
     <Compile Include="Dependency\AndroidResize.cs" />
+    <Compile Include="Dependency\AndroidShareVia.cs" />
     <Compile Include="Dependency\AndroidVideoPlayer.cs" />
     <Compile Include="Dependency\AudioRecorder.cs" />
     <Compile Include="Dependency\DBConnection.cs" />

@@ -14,6 +14,8 @@ using CustomLayouts.ViewModels;
 using CustomLayouts.Controls;
 using CustomLayouts;
 using PurposeColor.Service;
+using Cross;
+using System.Threading.Tasks;
 
 namespace PurposeColor
 {
@@ -385,6 +387,38 @@ namespace PurposeColor
         }
 
 
+        protected override bool OnBackButtonPressed()
+        {
+            //var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
+
+            Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
+            action.ContinueWith(task =>
+            {
+                bool val = task.Result;
+                if (task.Result)
+                {
+                    CloseAllPages();
+
+                }
+
+            });
+
+            return true;
+
+        }
+
+        private void CloseAllPages()
+        {
+            if (Device.OS != TargetPlatform.iOS)
+            {
+                Dispose();
+                GC.Collect();
+                IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
+                device.ExitApp();
+            }
+
+        }
+
         CarouselLayout CreatePagesCarousel( List<SelectedGoalMedia> media )
         {
             List<CarousalViewModel> Pages = new List<CarousalViewModel>();
@@ -675,15 +709,11 @@ namespace PurposeColor
 
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return base.OnBackButtonPressed();
-        }
+  
 
         public void Dispose()
         {
-            masterScroll = null;
-            Content = null;
+
             masterLayout = null;
             progressBar = null;
             masterStack = null;
@@ -691,7 +721,6 @@ namespace PurposeColor
             description = null;
             mediaList = null;
             actionMediaList = null;
-            this.Content = null;
             shareLabel = null;
             if (shareButtonTap != null)
             {
@@ -706,7 +735,7 @@ namespace PurposeColor
                 likeButtonTap = null;
             }
 
-
+            masterScroll = null;
             GC.Collect();
         }
     }

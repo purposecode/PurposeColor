@@ -631,11 +631,11 @@ namespace PurposeColor.screens
                         View layView = selLayout.Children.FirstOrDefault(itm => itm.ClassId == selectedSavedGoalID);
                         if (layView != null)
                         {
-                            await layView.TranslateTo(200, 0, 500, Easing.BounceOut);
+                            await layView.TranslateTo(300, 0, 200, Easing.BounceOut);
                             selLayout.Children.Remove(layView);
                             if (selLayout.Children.Count == 1)
                             {
-                                await selLayout.TranslateTo(1000, 0, 500, Easing.BounceOut);
+                                await selLayout.TranslateTo(1000, 0, 200, Easing.BounceOut);
                                 selLayout.Children.Clear();
                                 int index = masterStack.Children.IndexOf( selView );
                                 if( index > -1 && (index + 1) < masterStack.Children.Count )
@@ -643,7 +643,7 @@ namespace PurposeColor.screens
                                     View trans = masterStack.Children[ index + 1 ];
                                     if (trans != null)
                                     {
-                                        await trans.TranslateTo(1000, 0, 500, Easing.BounceOut);
+                                        await trans.TranslateTo(1000, 0, 200, Easing.BounceOut);
                                         masterStack.Children.Remove(trans);
                                     }
                                         

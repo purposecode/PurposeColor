@@ -33,7 +33,7 @@ namespace PurposeColor
         PurposeColorSubTitleBar subTitleBar;
         TapGestureRecognizer shareButtonTap;
         TapGestureRecognizer commentButtonTap;
-        TapGestureRecognizer favoriteButtonTap;
+        TapGestureRecognizer likeButtonTap;
         Label shareLabel;
         StackLayout gemMenuContainer;
         bool IsNavigationFrfomGEMS = false;
@@ -117,27 +117,27 @@ namespace PurposeColor
                 //toolsLayout.TranslationY = -55;
                 //toolsLayout.HeightRequest = 50;
 
-                Image favoriteButton = new Image();
-                favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
-                favoriteButton.WidthRequest = Device.OnPlatform(15, 20, 15);
-                favoriteButton.HeightRequest = Device.OnPlatform(15, 20, 15);
-                favoriteButton.VerticalOptions = LayoutOptions.Center;
-                favoriteButtonTap = new TapGestureRecognizer();
-                favoriteButtonTap.Tapped += FavoriteButtonTapped;
-                favoriteButton.GestureRecognizers.Add(favoriteButtonTap);
+                Image likeButton = new Image();
+                likeButton.Source = Device.OnPlatform("icn_like.png", "icn_like.png", "//Assets//icn_like.png");
+                likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+                likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+                likeButton.VerticalOptions = LayoutOptions.Center;
+                likeButtonTap = new TapGestureRecognizer();
+                likeButtonTap.Tapped += OnLikeButtonTapped;
+                likeButton.GestureRecognizers.Add(likeButtonTap);
 
-                Label favoriteLabel = new Label
+                Label likeLabel = new Label
                 {
-                    Text = "Favorite",
+                    Text = "Like",
                     FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                     TextColor = Color.Gray,
                     VerticalOptions = LayoutOptions.Center,
                     FontSize = Device.OnPlatform(12, 12, 15)
                 };
-                favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
+                likeLabel.GestureRecognizers.Add(likeButtonTap);
 
-                toolsLayout.Children.Add(favoriteButton);
-                toolsLayout.Children.Add(favoriteLabel);
+                toolsLayout.Children.Add(likeButton);
+                toolsLayout.Children.Add(likeLabel);
 
                 if (user.AllowCommunitySharing)
                 {
@@ -186,6 +186,21 @@ namespace PurposeColor
                 toolsLayout.Children.Add(commentButton);
                 toolsLayout.Children.Add(commentsLabel);
 
+
+
+                Label myGemsLabel = new Label
+                {
+                    Text = "My Gems",
+                    VerticalOptions = LayoutOptions.Center,
+                    FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+                    TextColor = Color.Gray,
+                    FontSize = Device.OnPlatform(12, 12, 15)
+                };
+
+                TapGestureRecognizer myGemsTap = new TapGestureRecognizer();
+                myGemsTap.Tapped += OnMyGemsTapped;
+                myGemsLabel.GestureRecognizers.Add(myGemsTap);
+                toolsLayout.Children.Add(myGemsLabel);
                 #endregion
 
 
@@ -362,6 +377,11 @@ namespace PurposeColor
 
             #endregion
             Content = masterLayout;
+        }
+
+        void OnMyGemsTapped(object sender, EventArgs e)
+        {
+            
         }
 
 
@@ -575,12 +595,12 @@ namespace PurposeColor
             }
         }
 
-        async void FavoriteButtonTapped(object sender, EventArgs e)
+        async void OnLikeButtonTapped(object sender, EventArgs e)
         {
             // mark it as fav
             try
             {
-                favoriteButtonTap.Tapped -= FavoriteButtonTapped;
+                likeButtonTap.Tapped -= OnLikeButtonTapped;
                 progressBar.ShowProgressbar("Requesting...   ");
                 User user = App.Settings.GetUser();
 
@@ -615,7 +635,7 @@ namespace PurposeColor
             }
             catch (Exception ex)
             {
-                favoriteButtonTap.Tapped += FavoriteButtonTapped;
+                likeButtonTap.Tapped += OnLikeButtonTapped;
                 progressBar.HideProgressbar();
                 DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
             }
@@ -681,9 +701,9 @@ namespace PurposeColor
             if (commentButtonTap != null)
             {
                 commentButtonTap.Tapped -= CommentButtonTapped;
-                favoriteButtonTap.Tapped -= FavoriteButtonTapped;
+                likeButtonTap.Tapped -= OnLikeButtonTapped;
                 commentButtonTap = null;
-                favoriteButtonTap = null;
+                likeButtonTap = null;
             }
 
 

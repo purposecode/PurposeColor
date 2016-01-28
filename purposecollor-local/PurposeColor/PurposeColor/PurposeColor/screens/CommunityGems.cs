@@ -229,7 +229,7 @@ namespace PurposeColor
                     VerticalOptions = LayoutOptions.Center,
                     FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                     TextColor = Color.Gray,
-                    FontSize = Device.OnPlatform(12, 12, 15)
+                    FontSize = Device.OnPlatform(10, 12, 15)
                 };
 
                 TapGestureRecognizer myGemsTap = new TapGestureRecognizer();

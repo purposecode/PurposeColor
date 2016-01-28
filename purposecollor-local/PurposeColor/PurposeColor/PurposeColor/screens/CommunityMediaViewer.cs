@@ -79,7 +79,7 @@ namespace PurposeColor
 					string fileExtenstion = Path.GetExtension (source);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 					img.WidthRequest = App.screenWidth * 90 / 100;
-					img.HeightRequest = App.screenWidth * 90 / 100;
+					img.HeightRequest = App.screenWidth * 80 / 100;
 					img.Aspect = Aspect.AspectFill;
 					img.ClassId = null;
 					if (item != null && item.MediaType == "mp4") 
@@ -166,6 +166,7 @@ namespace PurposeColor
 
 		protected override bool OnBackButtonPressed ()
 		{
+            Dispose();
 			return base.OnBackButtonPressed ();
 		}
 

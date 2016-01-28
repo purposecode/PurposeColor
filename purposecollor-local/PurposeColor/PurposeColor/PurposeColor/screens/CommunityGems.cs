@@ -41,6 +41,7 @@ namespace PurposeColor
         bool IsNavigationFrfomGEMS = false;
         DetailsPageModel modelObject;
         StackLayout masterStackLayout;
+        CommunityGemsObject communityGems;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -60,7 +61,7 @@ namespace PurposeColor
 
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
                 try
@@ -107,6 +108,9 @@ namespace PurposeColor
 
        async  void OnAppearing(object sender, EventArgs e)
         {
+            if (communityGems != null)
+                return;
+
             User user = null;
             IsNavigationFrfomGEMS = modelObject.fromGEMSPage;
             try
@@ -121,7 +125,7 @@ namespace PurposeColor
                 var test = ex.Message;
             }
 
-            CommunityGemsObject communityGems = await ServiceHelper.GetCommunityGemsDetails();
+            communityGems = await ServiceHelper.GetCommunityGemsDetails();
             if (communityGems == null)
             {
                 var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
@@ -176,21 +180,22 @@ namespace PurposeColor
                 Image shareButton = new Image();
                 if (user.AllowCommunitySharing)
                 {
-
                     shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
                     shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.VerticalOptions = LayoutOptions.Center;
+                    shareButton.ClassId = item.gem_id;
                     shareLabel = new Label
                     {
                         Text = "Share",
                         FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                         TextColor = Color.Gray,
                         VerticalOptions = LayoutOptions.Center,
-                        FontSize = Device.OnPlatform(12, 12, 15)
+                        FontSize = Device.OnPlatform(12, 12, 15),
+                        ClassId = item.gem_id
                     };
                     shareButtonTap = new TapGestureRecognizer();
-                    shareButtonTap.Tapped += ShareButtonTapped;
+                    shareButtonTap.Tapped += OnShareButtonTapped;
                     shareButton.GestureRecognizers.Add(shareButtonTap);
                     shareLabel.GestureRecognizers.Add(shareButtonTap);
                     toolsLayout.Children.Add(shareButton);
@@ -344,11 +349,9 @@ namespace PurposeColor
                         string fileExtenstion = Path.GetExtension(source);
                         bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                         img.WidthRequest = App.screenWidth * 90 / 100;
-                        img.HeightRequest = App.screenWidth * 90 / 100;
-                        img.Aspect = Aspect.AspectFill;
+                        img.HeightRequest = App.screenWidth * 80 / 100;
+                        img.Aspect = Aspect.Fill;
                         img.ClassId = null;
-                        shareButton.ClassId = source;
-                        shareLabel.ClassId = source;
                         if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
                         {
                             img.ClassId = source;
@@ -603,34 +606,40 @@ namespace PurposeColor
             progressBar.HideProgressbar();
         }
 
-        async void ShareButtonTapped(object sender, EventArgs e)
+        async void OnShareButtonTapped(object sender, EventArgs e)
         {
             string statusCode = "404";
 
             try
             {
-                string path = "";
+                string gemID = "";
                 Button button = sender as Button;
                 Label label = sender as Label;
                 if (button != null)
                 {
                     if (button.ClassId != null)
-                        path = button.ClassId;
+                        gemID = button.ClassId;
                 }
 
                 if (label != null)
                 {
                     if (label.ClassId != null)
-                        path = label.ClassId;
+                        gemID = label.ClassId;
                 }
 
-                IShareVia share = DependencyService.Get<IShareVia>();
-                share.ShareMedia("Hello", path, Constants.MediaType.Image);
+                CommunityGemsDetails gemInfo = communityGems.resultarray.FirstOrDefault(itm => itm.gem_id == gemID );
+
+                if( gemInfo != null )
+                {
+                    IShareVia share = DependencyService.Get<IShareVia>();
+                    string mediaPath = (gemInfo.gem_media != null && gemInfo.gem_media.Count > 0) ?  Constants.SERVICE_BASE_URL +  gemInfo.gem_media[0].gem_media : null;
+                    share.ShareMedia(gemInfo.gem_details, mediaPath, Constants.MediaType.Image);
+                }
 
             }
             catch (Exception)
             {
-                shareButtonTap.Tapped += ShareButtonTapped;
+                shareButtonTap.Tapped += OnShareButtonTapped;
             }
 
 
@@ -730,7 +739,7 @@ namespace PurposeColor
             shareLabel = null;
             if (shareButtonTap != null)
             {
-                shareButtonTap.Tapped -= ShareButtonTapped;
+                shareButtonTap.Tapped -= OnShareButtonTapped;
                 shareButtonTap = null;
             }
             if (commentButtonTap != null)
@@ -741,7 +750,10 @@ namespace PurposeColor
                 likeButtonTap = null;
             }
 
-            masterScroll = null;
+            gemMenuContainer = null;
+            modelObject = null;
+            masterStackLayout = null;
+            communityGems = null;
             GC.Collect();
         }
     }

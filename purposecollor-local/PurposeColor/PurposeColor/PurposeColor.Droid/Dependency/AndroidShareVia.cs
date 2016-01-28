@@ -86,7 +86,7 @@ namespace PurposeColor.Droid.Dependency
                 shareIntent.SetType("audio/*");
             }
 
-            MessagingCenter.Unsubscribe<MyTestReceiver, DateTime>(this, "boom");
+            MessagingCenter.Unsubscribe<MyTestReceiver, string>(this, "boom");
             MainActivity.GetMainActivity().StartActivity(Intent.CreateChooser(shareIntent, "Share image via:"));
         }
     }

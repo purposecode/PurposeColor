@@ -28,10 +28,15 @@ namespace PurposeColor.Droid.Dependency
         {
 
             string downloadedFolder = "/storage/emulated/0/Download/";
-            if (System.IO.File.Exists(downloadedFolder +"/" + filename))
+            if (App.DownloadsPath != null && !string.IsNullOrEmpty(App.DownloadsPath))
             {
-                string downloadedUri = "file:///storage/emulated/0/Download/";
-                Java.IO.File file = new Java.IO.File(new Java.Net.URI(downloadedUri + "/" + filename));
+                downloadedFolder = App.DownloadsPath + "/";
+            }
+
+            if (System.IO.File.Exists(downloadedFolder + filename))
+            {
+                string downloadedUri = "file://" + downloadedFolder + filename;
+                Java.IO.File file = new Java.IO.File(new Java.Net.URI( downloadedUri ));
                 Intent videoPlayerActivity = new Intent(Intent.ActionView);
                 videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
                 Activity activity = Forms.Context as Activity;
@@ -41,14 +46,12 @@ namespace PurposeColor.Droid.Dependency
           
             App.DownloadID = 0;
 
-       
-
             Android.Net.Uri contentUri = Android.Net.Uri.Parse(uri);
 
             Android.App.DownloadManager.Request r = new Android.App.DownloadManager.Request(contentUri);
 
 
-            r.SetDestinationInExternalPublicDir(Android.OS.Environment.DirectoryDownloads, filename);
+            r.SetDestinationInExternalPublicDir(Android.OS.Environment.ExternalStorageDirectory.ToString(), filename);
 
             r.AllowScanningByMediaScanner();
 
@@ -58,7 +61,7 @@ namespace PurposeColor.Droid.Dependency
 
             App.DownloadID = dm.Enqueue(r);
 
-            AndHUD.Shared.Show(MainActivity.GetMainActivity(), "Dowloading video...", -1, MaskType.Clear, null, () => { dm.Remove(App.DownloadID); }, true, () => { dm.Remove(App.DownloadID); });
+            AndHUD.Shared.Show(MainActivity.GetMainActivity(), "Dowloading Media...", -1, MaskType.Clear, null, () => { dm.Remove(App.DownloadID); }, true, () => { dm.Remove(App.DownloadID); });
 
 
             return true;

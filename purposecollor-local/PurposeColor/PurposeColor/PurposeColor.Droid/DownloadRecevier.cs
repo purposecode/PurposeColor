@@ -54,6 +54,8 @@ namespace PurposeColor.Droid
                     videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
                     Activity activity = Forms.Context as Activity;
                     activity.StartActivity(videoPlayerActivity);
+                    string filePath = downloadedFileUri.ToString().Remove(0, 7);
+                    App.DownloadsPath = Path.GetDirectoryName(filePath);
                 }
                 App.DownloadID = 0;
 

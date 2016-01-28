@@ -39,6 +39,8 @@ namespace PurposeColor
         Label shareLabel;
         StackLayout gemMenuContainer;
         bool IsNavigationFrfomGEMS = false;
+        DetailsPageModel modelObject;
+        StackLayout masterStackLayout;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -50,23 +52,12 @@ namespace PurposeColor
             masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
 
+            modelObject = model;
             mediaList = model.mediaArray;
             actionMediaList = model.actionMediaArray;
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
-            User user = null;
-            IsNavigationFrfomGEMS = model.fromGEMSPage;
-            try
-            {
-                user = App.Settings.GetUser();
-                ////////////// for testing only // test //////////////
-                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
-                ////////////// for testing only // test //////////////
-            }
-            catch (Exception ex)
-            {
-                var test = ex.Message;
-            }
+
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
@@ -82,6 +73,8 @@ namespace PurposeColor
             };
 
 
+            this.Appearing += OnAppearing;
+
             Label pageTitle = new Label();
             pageTitle.Text = model.pageTitleVal;
             pageTitle.TextColor = Color.Black;
@@ -93,18 +86,59 @@ namespace PurposeColor
             pageTitle.YAlign = TextAlignment.Start;
             pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
 
-			BoxView emptyLayout = new BoxView();
+            BoxView emptyLayout = new BoxView();
             emptyLayout.BackgroundColor = Color.Transparent;
             emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
             emptyLayout.HeightRequest = 30;
 
-            StackLayout masterStackLayout = new StackLayout();
+            masterStackLayout = new StackLayout();
             masterStackLayout.Orientation = StackOrientation.Vertical;
 
 
-            for (int mainIndex = 0; mainIndex < 10; mainIndex++)
-            {
+            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+            masterLayout.AddChildToLayout(masterScroll, 5, 18);
 
+
+            Content = masterLayout;
+        }
+
+
+
+       async  void OnAppearing(object sender, EventArgs e)
+        {
+            User user = null;
+            IsNavigationFrfomGEMS = modelObject.fromGEMSPage;
+            try
+            {
+                user = App.Settings.GetUser();
+                ////////////// for testing only // test //////////////
+                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
+                ////////////// for testing only // test //////////////
+            }
+            catch (Exception ex)
+            {
+                var test = ex.Message;
+            }
+
+            CommunityGemsObject communityGems = await ServiceHelper.GetCommunityGemsDetails();
+            if (communityGems == null)
+            {
+                var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
+                if (!success)
+                {
+                    OnAppearing(sender, EventArgs.Empty);
+                    return;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+
+            foreach (var item in communityGems.resultarray )
+            {
                 masterStack = new CustomLayout();
                 masterStack.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
 
@@ -116,8 +150,6 @@ namespace PurposeColor
                 toolsLayout.Orientation = StackOrientation.Horizontal;
                 toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
                 toolsLayout.Padding = new Thickness(10, 10, 10, 10);
-                //toolsLayout.TranslationY = -55;
-                //toolsLayout.HeightRequest = 50;
 
                 Image likeButton = new Image();
                 likeButton.Source = Device.OnPlatform("icn_like.png", "icn_like.png", "//Assets//icn_like.png");
@@ -144,7 +176,7 @@ namespace PurposeColor
                 Image shareButton = new Image();
                 if (user.AllowCommunitySharing)
                 {
-                   
+
                     shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
                     shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
@@ -209,13 +241,13 @@ namespace PurposeColor
 
                 #region  title, description
                 Image profileImage = new Image();
-                profileImage.Source = "avatar.jpg";
+                profileImage.Source = (item.profileimg != null) ? Constants.SERVICE_BASE_URL + item.profileimg : "avatar.jpg";
                 profileImage.WidthRequest = 60;
                 profileImage.HeightRequest = 60;
                 profileImage.Aspect = Aspect.Fill;
 
                 Label userName = new Label();
-                userName.Text = "Big CEO";
+                userName.Text = item.firstname;
                 userName.TextColor = Color.Black;
                 userName.WidthRequest = App.screenWidth * 90 / 100;
                 userName.FontAttributes = FontAttributes.Bold;
@@ -223,7 +255,7 @@ namespace PurposeColor
                 userName.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
                 title = new Label();
-                title.Text = model.titleVal;
+                title.Text = item.gem_datetime;
                 title.TextColor = Color.Black;
                 title.WidthRequest = App.screenWidth * 90 / 100;
                 title.FontSize = Device.OnPlatform(12, 12, 12);
@@ -231,10 +263,10 @@ namespace PurposeColor
 
                 description = new Label();
                 description.WidthRequest = App.screenWidth * .80;
-                description.Text = model.desc;
+                description.Text = item.gem_details;
                 description.TextColor = Color.Black;
-				description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-				description.FontSize = Device.OnPlatform( 12, 15, 15 );
+                description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+                description.FontSize = Device.OnPlatform(12, 15, 15);
 
                 CustomImageButton menuButton = new CustomImageButton
                 {
@@ -247,39 +279,42 @@ namespace PurposeColor
                 };
                 menuButton.Clicked += GemMenuButton_Clicked;
 
-               // masterStack.AddChildToLayout(pageTitle, 1, 1);
+                // masterStack.AddChildToLayout(pageTitle, 1, 1);
                 masterStack.AddChildToLayout(menuButton, 79, 1);
-                masterStack.AddChildToLayout( profileImage, 2, 1 );
-                masterStack.AddChildToLayout( userName, 23, 3 );
+                masterStack.AddChildToLayout(profileImage, 2, 1);
+                masterStack.AddChildToLayout(userName, 23, 3);
                 masterStack.AddChildToLayout(title, 23, 7);
 
-				TapGestureRecognizer moreTap = new TapGestureRecognizer();
-				moreTap.Tapped += async (object sender, EventArgs e) => 
-				{
+                TapGestureRecognizer moreTap = new TapGestureRecognizer();
+                moreTap.Tapped += async (object senderr, EventArgs ee) =>
+                {
+                    Image more = senderr as Image;
+                    if (more != null)
+                    {
+                        IProgressBar progress = DependencyService.Get<IProgressBar>();
+                        progress.ShowProgressbar("Loading more medias..");
+                        App.masterPage.IsPresented = false;
+                        CommunityGemsDetails gemInfo = communityGems.resultarray.FirstOrDefault(itm => itm.gem_id == more.ClassId);
+                        if (gemInfo != null)
+                        {
+                            List<PurposeColor.Constants.MediaDetails> mediaPlayerList = new List<PurposeColor.Constants.MediaDetails>();
+                            foreach (var mediaItem in  gemInfo.gem_media )
+                            {
+                                mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type });
+                            }
+                            await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));
+                        }
 
-					IProgressBar progress = DependencyService.Get<IProgressBar>();
-					progress.ShowProgressbar( "Loading community gems" );
-					App.masterPage.IsPresented = false;
-					SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("37");
-					if (goalInfo != null)
-					{
-						List<PurposeColor.Constants.MediaDetails> mediaPlayerList = new List<PurposeColor.Constants.MediaDetails>();
-						foreach (var item in goalInfo.resultarray.goal_media) 
-						{
-							mediaPlayerList.Add( new PurposeColor.Constants.MediaDetails(){ImageName = item.goal_media, ID = item.goal_id, MediaType = item.media_type } );
-						}
-						await Navigation.PushAsync( new CommunityMediaViewer( mediaPlayerList ) );
-						//  App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
-					}
+                        progress.HideProgressbar();
+                    }
 
-					progress.HideProgressbar();
-
-				};
-				Image  moreImg = new Image();
-				moreImg.Source = "more.png";
-				moreImg.HorizontalOptions = LayoutOptions.End;
-				moreImg.VerticalOptions = LayoutOptions.End;
-				moreImg.GestureRecognizers.Add( moreTap );
+                };
+                Image moreImg = new Image();
+                moreImg.Source = "more.png";
+                moreImg.HorizontalOptions = LayoutOptions.End;
+                moreImg.VerticalOptions = LayoutOptions.End;
+                moreImg.GestureRecognizers.Add(moreTap);
+                moreImg.ClassId = item.gem_id;
 
                 #endregion
 
@@ -295,23 +330,17 @@ namespace PurposeColor
 
                 #region MEDIA LIST
 
-                if (model.goal_media != null)
+                if ( item.gem_media != null )
                 {
-                   /* ScrollView imgScrollView = new ScrollView();
-                    imgScrollView.Orientation = ScrollOrientation.Horizontal;
-                    
-                    StackLayout horizmgConatiner = new StackLayout();
-                    horizmgConatiner.Orientation = StackOrientation.Horizontal;*/
-
-               /*   for (int index = 0; index < model.goal_media.Count; index++)
-                    {*/
-					int index = 0;
+                    GemMedia gemMedia = (item.gem_media.Count > 0) ? item.gem_media[0] : null;
+                    if( gemMedia != null )
+                    {
                         TapGestureRecognizer videoTap = new TapGestureRecognizer();
                         videoTap.Tapped += OnActionVideoTapped;
 
                         Image img = new Image();
-                        bool isValidUrl = (model.goal_media[index].goal_media != null && !string.IsNullOrEmpty(model.goal_media[index].goal_media)) ? true : false;
-                        string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                        bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
+                        string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + gemMedia.gem_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                         string fileExtenstion = Path.GetExtension(source);
                         bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                         img.WidthRequest = App.screenWidth * 90 / 100;
@@ -320,17 +349,17 @@ namespace PurposeColor
                         img.ClassId = null;
                         shareButton.ClassId = source;
                         shareLabel.ClassId = source;
-                        if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
+                        if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
                         {
                             img.ClassId = source;
                             source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                         }
-                        else if (model.goal_media[index] != null && model.goal_media[index].media_type == "3gpp")
+                        else if ( gemMedia.gem_media != null && gemMedia.media_type == "3gpp")
                         {
                             img.ClassId = source;
                             source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                         }
-                        else if (model.goal_media[index] != null && model.goal_media[index].media_type == "wav")
+                        else if (gemMedia.gem_media != null && gemMedia.media_type == "wav")
                         {
                             img.ClassId = source;
                             source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -347,10 +376,14 @@ namespace PurposeColor
                         CustomLayout imgContainer = new CustomLayout();
                         imgContainer.WidthRequest = App.screenWidth * 90 / 100;
                         imgContainer.HeightRequest = App.screenWidth * 90 / 100;
+                        img.ClassId = item.gem_id;
                         imgContainer.Children.Add(img);
+                        if( item.gem_media != null && item.gem_media.Count > 1 )
                         imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
 
                         bottomAndLowerControllStack.Children.Add(imgContainer);
+                    }
+
                 }
 
                 #endregion
@@ -358,10 +391,10 @@ namespace PurposeColor
 
                 bottomAndLowerControllStack.Children.Add(toolsLayout);
                 masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
-			  //  masterStack.AddChildToLayout( moreImg, 65, Device.OnPlatform( 30, 20, 20 ) );
+                //  masterStack.AddChildToLayout( moreImg, 65, Device.OnPlatform( 30, 20, 20 ) );
 
                 //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
-               /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
+                /// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
                 masterScroll.HeightRequest = App.screenHeight - 20;
                 masterScroll.WidthRequest = App.screenWidth * 90 / 100;
@@ -369,26 +402,16 @@ namespace PurposeColor
 
                 masterStackLayout.Children.Add(masterStack);
             }
+          
+
 
 
             masterScroll.Content = masterStackLayout;
-
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 5, 18);
-          
-
-            #region CUSTOM LIST MENU
-
-            //new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  }
-
-            #endregion
-            Content = masterLayout;
         }
 
         void OnMyGemsTapped(object sender, EventArgs e)
         {
-            
+
         }
 
 
@@ -424,21 +447,21 @@ namespace PurposeColor
 
         }
 
-        CarouselLayout CreatePagesCarousel( List<SelectedGoalMedia> media )
+        CarouselLayout CreatePagesCarousel(List<SelectedGoalMedia> media)
         {
             List<CarousalViewModel> Pages = new List<CarousalViewModel>();
 
             foreach (var item in media)
             {
                 CarousalViewModel caros = new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = Constants.SERVICE_BASE_URL + item.goal_media };
-                Pages.Add( caros );
+                Pages.Add(caros);
             }
-           /* List<CarousalViewModel> Pages = new List<CarousalViewModel>() {
-				new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = "icon.png" },
-				new CarousalViewModel { Title = "2", Background = Color.Red, ImageSource = "icon.png" },
-				new CarousalViewModel { Title = "3", Background = Color.Blue, ImageSource = "one.jpeg" },
-				new CarousalViewModel { Title = "4", Background = Color.Yellow, ImageSource = "icon.png" },
-			};*/
+            /* List<CarousalViewModel> Pages = new List<CarousalViewModel>() {
+                 new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = "icon.png" },
+                 new CarousalViewModel { Title = "2", Background = Color.Red, ImageSource = "icon.png" },
+                 new CarousalViewModel { Title = "3", Background = Color.Blue, ImageSource = "one.jpeg" },
+                 new CarousalViewModel { Title = "4", Background = Color.Yellow, ImageSource = "icon.png" },
+             };*/
 
             CarouselLayout carousel = new CarouselLayout
             {
@@ -466,7 +489,7 @@ namespace PurposeColor
             menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
             menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
 
-            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems );
+            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
             //GemMenu.WidthRequest = App.screenWidth * .50;
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
@@ -589,13 +612,13 @@ namespace PurposeColor
                 string path = "";
                 Button button = sender as Button;
                 Label label = sender as Label;
-                if( button != null )
+                if (button != null)
                 {
                     if (button.ClassId != null)
                         path = button.ClassId;
                 }
 
-                if( label != null)
+                if (label != null)
                 {
                     if (label.ClassId != null)
                         path = label.ClassId;
@@ -603,14 +626,14 @@ namespace PurposeColor
 
                 IShareVia share = DependencyService.Get<IShareVia>();
                 share.ShareMedia("Hello", path, Constants.MediaType.Image);
-             
+
             }
             catch (Exception)
             {
                 shareButtonTap.Tapped += ShareButtonTapped;
             }
 
-          
+
         }
 
         async void OnLikeButtonTapped(object sender, EventArgs e)
@@ -693,7 +716,7 @@ namespace PurposeColor
 
         }
 
-  
+
 
         public void Dispose()
         {

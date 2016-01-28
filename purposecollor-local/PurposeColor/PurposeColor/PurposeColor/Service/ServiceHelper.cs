@@ -1718,6 +1718,7 @@ namespace PurposeColor.Service
 			}
 		}
 
+
         public static async Task<SelectedGoal> GetSelectedGoalDetails(  string selectedGoalID )
         {
             try
@@ -1748,6 +1749,61 @@ namespace PurposeColor.Service
 
 
                     var rootobject = JsonConvert.DeserializeObject<SelectedGoal>(actionsJson);
+                    if (rootobject != null && rootobject.resultarray != null)
+                    {
+                        client.Dispose();
+                        return rootobject;
+                    }
+                    client.Dispose();
+                    return null;
+
+                }
+                else
+                {
+                    client.Dispose();
+                    return null;
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        public static async Task<CommunityGemsObject>GetCommunityGemsDetails()
+        {
+            try
+            {
+                User user = new User { UserId = 2, UserName = "sam" };
+
+                if (user == null)
+                {
+                    return null;
+                }
+
+                if (!CrossConnectivity.Current.IsConnected)
+                {
+                    return null;
+                }
+
+                var client = new System.Net.Http.HttpClient();
+
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+                string uriString = "api.php?action=getallcommunitygems";
+
+                var response = await client.GetAsync(uriString);
+
+                if (response != null && response.Content != null)
+                {
+                    var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+                    var rootobject = JsonConvert.DeserializeObject<CommunityGemsObject>(actionsJson);
                     if (rootobject != null && rootobject.resultarray != null)
                     {
                         client.Dispose();
@@ -1881,6 +1937,9 @@ namespace PurposeColor.Service
 
             return "404";
         }
+
+
+
 
         public static async Task<ShareStatusAndCommentsCount> GetShareStatusAndCommentsCount(string gemId, GemType gemtype, string userId)
         {

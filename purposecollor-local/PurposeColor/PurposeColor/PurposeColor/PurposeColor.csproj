@@ -76,6 +76,7 @@
     <Compile Include="Model\Addresses.cs" />
     <Compile Include="Model\AppSettings.cs" />
     <Compile Include="Model\CommentsModel.cs" />
+    <Compile Include="Model\Community.cs" />
     <Compile Include="Model\Emotions.cs" />
     <Compile Include="Model\Events.cs" />
     <Compile Include="Model\GEMCategory.cs" />

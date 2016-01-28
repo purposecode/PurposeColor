@@ -12,15 +12,20 @@ using Android.Widget;
 using PurposeColor.Droid.Dependency;
 using PurposeColor.interfaces;
 using Xamarin.Forms;
+using PurposeColor.WinPhone.Dependency;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidShareVia))]
 namespace PurposeColor.Droid.Dependency
 {
     public class AndroidShareVia : IShareVia
     {
+        ProgressBarImpl progress = new ProgressBarImpl();
         public void ShareMedia(string text, string path, PurposeColor.Constants.MediaType type)
         {
+            if (path == null)
+                return;
 
+            progress.ShowProgressbar( "Preparing share view.." );
             string filename = System.IO.Path.GetFileName( path );
 
             Android.Net.Uri uri = Android.Net.Uri.Parse(path);
@@ -42,7 +47,7 @@ namespace PurposeColor.Droid.Dependency
 
                 r.AllowScanningByMediaScanner();
 
-                r.SetNotificationVisibility(Android.App.DownloadVisibility.VisibleNotifyCompleted);
+                r.SetNotificationVisibility(Android.App.DownloadVisibility.VisibleNotifyOnlyCompletion);
 
                 Android.App.DownloadManager dm = (Android.App.DownloadManager)Xamarin.Forms.Forms.Context.GetSystemService(Android.Content.Context.DownloadService);
 
@@ -64,6 +69,7 @@ namespace PurposeColor.Droid.Dependency
 
         void ShowChooser(PurposeColor.Constants.MediaType type, string filename, string text)
         {
+            progress.HideProgressbar();
             Intent shareIntent = new Intent();
             shareIntent.SetAction(Intent.ActionSend);
             shareIntent.PutExtra(Intent.ExtraText, text);

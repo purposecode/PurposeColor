@@ -180,21 +180,22 @@ namespace PurposeColor
                 Image shareButton = new Image();
                 if (user.AllowCommunitySharing)
                 {
-
                     shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
                     shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
                     shareButton.VerticalOptions = LayoutOptions.Center;
+                    shareButton.ClassId = item.gem_id;
                     shareLabel = new Label
                     {
                         Text = "Share",
                         FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                         TextColor = Color.Gray,
                         VerticalOptions = LayoutOptions.Center,
-                        FontSize = Device.OnPlatform(12, 12, 15)
+                        FontSize = Device.OnPlatform(12, 12, 15),
+                        ClassId = item.gem_id
                     };
                     shareButtonTap = new TapGestureRecognizer();
-                    shareButtonTap.Tapped += ShareButtonTapped;
+                    shareButtonTap.Tapped += OnShareButtonTapped;
                     shareButton.GestureRecognizers.Add(shareButtonTap);
                     shareLabel.GestureRecognizers.Add(shareButtonTap);
                     toolsLayout.Children.Add(shareButton);
@@ -351,8 +352,6 @@ namespace PurposeColor
                         img.HeightRequest = App.screenWidth * 80 / 100;
                         img.Aspect = Aspect.Fill;
                         img.ClassId = null;
-                        shareButton.ClassId = source;
-                        shareLabel.ClassId = source;
                         if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
                         {
                             img.ClassId = source;
@@ -607,34 +606,40 @@ namespace PurposeColor
             progressBar.HideProgressbar();
         }
 
-        async void ShareButtonTapped(object sender, EventArgs e)
+        async void OnShareButtonTapped(object sender, EventArgs e)
         {
             string statusCode = "404";
 
             try
             {
-                string path = "";
+                string gemID = "";
                 Button button = sender as Button;
                 Label label = sender as Label;
                 if (button != null)
                 {
                     if (button.ClassId != null)
-                        path = button.ClassId;
+                        gemID = button.ClassId;
                 }
 
                 if (label != null)
                 {
                     if (label.ClassId != null)
-                        path = label.ClassId;
+                        gemID = label.ClassId;
                 }
 
-                IShareVia share = DependencyService.Get<IShareVia>();
-                share.ShareMedia("Hello", path, Constants.MediaType.Image);
+                CommunityGemsDetails gemInfo = communityGems.resultarray.FirstOrDefault(itm => itm.gem_id == gemID );
+
+                if( gemInfo != null )
+                {
+                    IShareVia share = DependencyService.Get<IShareVia>();
+                    string mediaPath = (gemInfo.gem_media != null && gemInfo.gem_media.Count > 0) ?  Constants.SERVICE_BASE_URL +  gemInfo.gem_media[0].gem_media : null;
+                    share.ShareMedia(gemInfo.gem_details, mediaPath, Constants.MediaType.Image);
+                }
 
             }
             catch (Exception)
             {
-                shareButtonTap.Tapped += ShareButtonTapped;
+                shareButtonTap.Tapped += OnShareButtonTapped;
             }
 
 
@@ -734,7 +739,7 @@ namespace PurposeColor
             shareLabel = null;
             if (shareButtonTap != null)
             {
-                shareButtonTap.Tapped -= ShareButtonTapped;
+                shareButtonTap.Tapped -= OnShareButtonTapped;
                 shareButtonTap = null;
             }
             if (commentButtonTap != null)

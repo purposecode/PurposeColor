@@ -20,8 +20,10 @@ namespace PurposeColor
     public class FeelingNowPage : ContentPage, IDisposable
     {
         CustomSlider slider = null;
+        CustomSlider popupSlider;
         CustomLayout masterLayout = null;
         public PurposeColor.interfaces.CustomImageButton emotionalPickerButton = null;
+
         public PurposeColor.interfaces.CustomImageButton eventPickerButton = null;
         CustomListViewItem selectedEmotionItem = null;
         public CustomListViewItem selectedEventItem = null;
@@ -39,6 +41,8 @@ namespace PurposeColor
         Image circleImg2;
         Image circleImg1;
         StackLayout imagesContainer;
+        bool emotionsDisplaying = false;
+        bool eventsDisplaying = false;
 
         public FeelingNowPage()
         {
@@ -68,17 +72,17 @@ namespace PurposeColor
 
             BoxView hLine = new BoxView { BackgroundColor = Constants.TEXT_COLOR_GRAY, WidthRequest = App.screenWidth, HeightRequest = 1 };
 
-            imagesContainer = new StackLayout
-            {
-                Orientation = StackOrientation.Horizontal,
-                BackgroundColor = Color.Transparent, //
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                Padding = new Thickness(30, 0, 0, 0),
-                Spacing = (App.screenWidth / 3),
-                WidthRequest = App.screenWidth,
+            //imagesContainer = new StackLayout
+            //{
+            //    Orientation = StackOrientation.Horizontal,
+            //    BackgroundColor = Color.Transparent, //
+            //    HorizontalOptions = LayoutOptions.Center,
+            //    VerticalOptions = LayoutOptions.Center,
+            //    Padding = new Thickness(30, 0, 0, 0),
+            //    Spacing = (App.screenWidth / 3),
+            //    WidthRequest = App.screenWidth,
 
-            };
+            //};
 
             circleImg1 = new Image
             {
@@ -157,7 +161,10 @@ namespace PurposeColor
             eventPickerButton.TextColor = Color.Gray;
             eventPickerButton.WidthRequest = screenWidth * 90 / 100;
 
-            eventPickerButton.Clicked += OnEventPickerButtonClicked;
+            if (!eventsDisplaying)
+            {
+                eventPickerButton.Clicked += OnEventPickerButtonClicked;
+            }
 
             about = new Label();
             about.IsVisible = false;
@@ -202,7 +209,6 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(inputAckLabelStack, 0, Device.OnPlatform(9, 25, 10));
             //masterLayout.AddChildToLayout(imagesContainer,0, (Device.OnPlatform(9, 25, 10)));//25: center f line.
-            imagesContainer.TranslationY = -5;
 
             sliderValLabel = new Label
             {
@@ -213,6 +219,62 @@ namespace PurposeColor
                 //Text = "werewr qrawe"
             };
 
+            #region SLIDER LABEL TAP
+
+            TapGestureRecognizer sliderLabelTapRecognizer = new TapGestureRecognizer();
+            sliderValLabel.GestureRecognizers.Add(sliderLabelTapRecognizer);
+            sliderLabelTapRecognizer.Tapped += (s, e) =>
+            {
+                /// show a slider as a popup and get its value,
+
+                RemoveSliderPopup();
+
+                popupSlider = new CustomSlider
+                {
+                    Minimum = -2,
+                    Maximum = 2,
+                    WidthRequest = screenWidth * 90 / 100,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                };
+                
+                StackLayout sliderBg = new StackLayout
+                {
+                    BackgroundColor = Color.Black,
+                    Opacity = .95,
+                    HeightRequest = App.screenHeight,
+                    WidthRequest = App.screenWidth,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    Children = {
+                                    new StackLayout{HeightRequest = 250},
+                                    new StackLayout{
+                                        Children = { popupSlider },
+                                        Padding = 10,
+                                        BackgroundColor = Color.FromRgb(244, 244, 244),
+                                        HorizontalOptions = LayoutOptions.Center,
+                                        VerticalOptions = LayoutOptions.Center,
+                                        Opacity = 1
+                                    }
+                                },
+                    ClassId = "sliderBg"
+                };
+
+                TapGestureRecognizer sliderBgTapRecognizer = new TapGestureRecognizer();
+                sliderBg.GestureRecognizers.Add(sliderBgTapRecognizer);
+                sliderBgTapRecognizer.Tapped += (snd, eve) =>
+                {
+                    RemoveSliderPopup();
+                };
+
+                popupSlider.CurrentValue = slider.CurrentValue;
+                popupSlider.StopGesture = GetstopGetsture;
+
+                masterLayout.AddChildToLayout(sliderBg, 0, 0);
+            };
+            
+            #endregion
+
             emotionTextLabel = new Label
             {
                 TextColor = Constants.TEXT_COLOR_GRAY,//BLUE_BG_COLOR,
@@ -221,6 +283,17 @@ namespace PurposeColor
                 WidthRequest = 150//,
                 // Text = "erewrewr werewrww"
             };
+            TapGestureRecognizer emotionTextTap = new TapGestureRecognizer();
+            emotionTextLabel.GestureRecognizers.Add(emotionTextTap);
+            emotionTextTap.Tapped += async (s, e) =>
+            {
+                if (!emotionsDisplaying)
+                {
+                    await Task.Delay(500);
+                    OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+                }
+            };
+
             eventTextLabel = new Label
             {
                 TextColor = Constants.TEXT_COLOR_GRAY,//BLUE_BG_COLOR,
@@ -228,6 +301,17 @@ namespace PurposeColor
                 XAlign = TextAlignment.End,
                 WidthRequest = 200//,
                 // Text ="werewr wer ewr wer w"
+            };
+
+            TapGestureRecognizer eventTextTap = new TapGestureRecognizer();
+            eventTextLabel.GestureRecognizers.Add(eventTextTap);
+            eventTextTap.Tapped += async (s, e) =>
+            {
+                if (!eventsDisplaying)
+                {
+                    await Task.Delay(500);
+                    OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
+                }
             };
 
             masterLayout.AddChildToLayout(sliderValLabel, 1, (Device.OnPlatform(9, 19, 10)));
@@ -249,6 +333,25 @@ namespace PurposeColor
 
         }
 
+        private void RemoveSliderPopup()
+        {
+            try
+            {
+
+                View sliderContainer = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "sliderBg");
+                if (sliderContainer != null)
+                {
+                    masterLayout.Children.Remove(sliderContainer);
+                    sliderContainer = null;
+                    GC.Collect();
+                }
+                
+            }
+            catch (Exception)
+            {
+            }
+        }
+
         public async void GetstopGetsture(bool pressed)
         {
             /* if (slider.Value != 0)
@@ -264,9 +367,20 @@ namespace PurposeColor
                  ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
                  masterLayout.AddChildToLayout(ePicker, 0, 0);
              }*/
+            
 
-            sliderValue = slider.CurrentValue;
-            if (slider.CurrentValue == 0)
+            if (popupSlider != null)
+            {
+                sliderValue = popupSlider.CurrentValue;
+                slider.Value = popupSlider.CurrentValue;
+                popupSlider = null;
+            }
+            else
+            {
+                sliderValue = slider.CurrentValue;
+            }
+
+            if (sliderValue == 0)
             {
                 sliderValLabel.Text = "";
                 circleImg1.Source = "finger_gray";
@@ -293,7 +407,12 @@ namespace PurposeColor
 
                 sliderValLabel.XAlign = TextAlignment.Center;
                 circleImg1.Source = "finger";//"icn_selected";
+            }
 
+            if (!emotionsDisplaying && sliderValue != 0)
+            {
+                await Task.Delay(500);
+                RemoveSliderPopup();
                 OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
             }
         }
@@ -302,8 +421,16 @@ namespace PurposeColor
         {
             try
             {
+                if (popupSlider != null)
+                {
+                    sliderValue = popupSlider.CurrentValue;
+                }
+                else
+                {
+                    sliderValue = slider.CurrentValue;
+                }
 
-                if (slider.Value != 0)
+                if (sliderValue != 0)
                 {
                     View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     if (pickView != null)
@@ -416,7 +543,8 @@ namespace PurposeColor
         {
             try
             {
-
+                this.emotionalPickerButton.Clicked -= OnEmotionalPickerButtonClicked;
+                emotionsDisplaying = true;
                 await emotionalPickerButton.ScaleTo(1.5, 100, Easing.Linear);
                 await emotionalPickerButton.ScaleTo(1, 100, Easing.Linear);
 
@@ -444,12 +572,17 @@ namespace PurposeColor
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
             }
+            this.emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
+            emotionsDisplaying = false;
         }
 
         public async void OnEventPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
+                eventsDisplaying = true;
+                this.eventPickerButton.Clicked -= OnEventPickerButtonClicked;
+                
                 await eventPickerButton.ScaleTo(1.5, 100, Easing.Linear);
                 await eventPickerButton.ScaleTo(1, 100, Easing.Linear);
 
@@ -468,9 +601,11 @@ namespace PurposeColor
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
             }
+            this.eventPickerButton.Clicked += OnEventPickerButtonClicked;
+            eventsDisplaying = false;
         }
 
-        public void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        public async void OnEmotionalPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
@@ -484,9 +619,13 @@ namespace PurposeColor
                 pickView = null;
                 eventPickerButton.IsVisible = true;
                 about.IsVisible = true;
-                OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
+                if (! eventsDisplaying)
+                {
+                    await Task.Delay(500);
+                    OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
 
-                SetFeedBackLablText();
+                    SetFeedBackLablText();
+                }
 
                 string trimmedText = item.Name;
                 if (trimmedText.Length > 15)

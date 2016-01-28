@@ -551,6 +551,8 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icn_like.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icn_like.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_like.png" />
+    <AndroidResource Include="Resources\drawable\finger_gray.png" />
+    <AndroidResource Include="Resources\drawable\finger.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

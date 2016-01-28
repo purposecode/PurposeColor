@@ -13,6 +13,7 @@ using AndroidHUD;
 using Java.IO;
 using Xamarin.Forms;
 using Android.Content.PM;
+using System.IO;
 
 namespace PurposeColor.Droid
 {
@@ -32,16 +33,29 @@ namespace PurposeColor.Droid
 
                 Android.Net.Uri downloadedFileUri = dm.GetUriForDownloadedFile(App.DownloadID);
 
-                MessagingCenter.Send<MyTestReceiver, DateTime>(this, "boom", DateTime.Now);
+
+                if( App.ShareDownloadID != 0 )
+                {
+                    downloadedFileUri = dm.GetUriForDownloadedFile(App.ShareDownloadID);
+                    MessagingCenter.Send<MyTestReceiver, string>(this, "boom", downloadedFileUri.ToString());
+                    App.ShareDownloadID = 0;
+                    string filePath = downloadedFileUri.ToString().Remove(0, 7);
+                    App.DownloadsPath =  Path.GetDirectoryName(filePath);
+                    return;
+                }
+
+          
 
                 if( downloadedFileUri != null )
                 {
-                    File file = new File(new Java.Net.URI(downloadedFileUri.ToString()));
+                    App.DownloadsPath = downloadedFileUri.ToString().Remove(0, 7);
+                    Java.IO.File file = new Java.IO.File(new Java.Net.URI(downloadedFileUri.ToString()));
                     Intent videoPlayerActivity = new Intent(Intent.ActionView);
                     videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");
                     Activity activity = Forms.Context as Activity;
                     activity.StartActivity(videoPlayerActivity);
                 }
+                App.DownloadID = 0;
 
             }
             catch (Exception ex)

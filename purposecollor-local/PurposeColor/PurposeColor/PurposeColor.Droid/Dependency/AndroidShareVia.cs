@@ -21,23 +21,24 @@ namespace PurposeColor.Droid.Dependency
         public void ShareMedia(string text, string path, PurposeColor.Constants.MediaType type)
         {
 
-
             string filename = System.IO.Path.GetFileName( path );
 
             Android.Net.Uri uri = Android.Net.Uri.Parse(path);
 
             string downloadedFolder = "/storage/emulated/0/Download/";
-            if (System.IO.File.Exists(downloadedFolder + "/" + filename))
+            if( App.DownloadsPath != null && !string.IsNullOrEmpty( App.DownloadsPath ) )
             {
-                ShowChooser(type, filename, text);
+                downloadedFolder = App.DownloadsPath + "/";
+            }
+            if (System.IO.File.Exists(downloadedFolder + filename))
+            {
+                ShowChooser(type, downloadedFolder + filename, text);
             }
             else
             {
                 Android.App.DownloadManager.Request r = new Android.App.DownloadManager.Request(uri);
 
-
-
-                r.SetDestinationInExternalPublicDir(Android.OS.Environment.DirectoryDownloads, filename);
+                r.SetDestinationInExternalPublicDir(Android.OS.Environment.ExternalStorageDirectory.ToString(), filename);
 
                 r.AllowScanningByMediaScanner();
 
@@ -45,15 +46,16 @@ namespace PurposeColor.Droid.Dependency
 
                 Android.App.DownloadManager dm = (Android.App.DownloadManager)Xamarin.Forms.Forms.Context.GetSystemService(Android.Content.Context.DownloadService);
 
-                dm.Enqueue(r);
+                App.ShareDownloadID = dm.Enqueue(r);
+
             }
 
 
 
 
-             MessagingCenter.Subscribe<MyTestReceiver, DateTime>(this, "boom", (page, time) =>
+             MessagingCenter.Subscribe<MyTestReceiver, string>(this, "boom", (page, downpath) =>
              {
-                ShowChooser( type, filename, text );
+                 ShowChooser(type, downpath, text);
              });
 
 
@@ -68,7 +70,9 @@ namespace PurposeColor.Droid.Dependency
 
             // shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse("android.resource://sharetowhtsapp.sharetowhtsapp/" + Resource.Drawable.Icon));
 
-            shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse("file:///storage/emulated/0/Download/" + filename));
+            // file:///storage/emulated/0/Download/ + filename
+
+            shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse( "file://" + filename));
             if (type == Constants.MediaType.Video)
             {
                 shareIntent.SetType("video/*");

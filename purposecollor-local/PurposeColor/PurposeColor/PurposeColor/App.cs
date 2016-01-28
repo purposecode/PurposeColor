@@ -19,6 +19,8 @@ namespace PurposeColor
     {
         public static string WindowsDownloadedMedia { get; set; }
         public static long DownloadID{ get; set;}
+        public static long ShareDownloadID { get; set; }
+        public static string DownloadsPath { get; set; }
         public static bool IsLoggedIn { get; set; }
         public static INavigation Navigator { get; set; }
         public static bool IsGoogleLogin { get; set; }

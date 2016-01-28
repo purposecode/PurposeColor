@@ -41,6 +41,7 @@ namespace PurposeColor
         bool IsNavigationFrfomGEMS = false;
         DetailsPageModel modelObject;
         StackLayout masterStackLayout;
+        CommunityGemsObject communityGems;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -60,7 +61,7 @@ namespace PurposeColor
 
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
                 try
@@ -107,6 +108,9 @@ namespace PurposeColor
 
        async  void OnAppearing(object sender, EventArgs e)
         {
+            if (communityGems != null)
+                return;
+
             User user = null;
             IsNavigationFrfomGEMS = modelObject.fromGEMSPage;
             try
@@ -121,7 +125,7 @@ namespace PurposeColor
                 var test = ex.Message;
             }
 
-            CommunityGemsObject communityGems = await ServiceHelper.GetCommunityGemsDetails();
+            communityGems = await ServiceHelper.GetCommunityGemsDetails();
             if (communityGems == null)
             {
                 var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
@@ -344,8 +348,8 @@ namespace PurposeColor
                         string fileExtenstion = Path.GetExtension(source);
                         bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                         img.WidthRequest = App.screenWidth * 90 / 100;
-                        img.HeightRequest = App.screenWidth * 90 / 100;
-                        img.Aspect = Aspect.AspectFill;
+                        img.HeightRequest = App.screenWidth * 80 / 100;
+                        img.Aspect = Aspect.Fill;
                         img.ClassId = null;
                         shareButton.ClassId = source;
                         shareLabel.ClassId = source;
@@ -741,7 +745,10 @@ namespace PurposeColor
                 likeButtonTap = null;
             }
 
-            masterScroll = null;
+            gemMenuContainer = null;
+            modelObject = null;
+            masterStackLayout = null;
+            communityGems = null;
             GC.Collect();
         }
     }

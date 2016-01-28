@@ -10,6 +10,7 @@ using Android.Content;
 using PushNotification.Plugin;
 using PushNotifictionListener;
 using ImageCircle.Forms.Plugin.Droid;
+using Java.IO;
 
 
 namespace PurposeColor.Droid
@@ -27,6 +28,8 @@ namespace PurposeColor.Droid
             curentActivity = this;
             CrossPushNotification.Initialize<CrossPushNotificationListener>("469628380816");
             ImageCircleRenderer.Init();
+            File testFile = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.ExternalStorageDirectory.ToString());
+            App.DownloadsPath = testFile.AbsolutePath + "/";
             LoadApplication(new App());
         }
 

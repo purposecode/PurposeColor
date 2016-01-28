@@ -40,7 +40,6 @@ namespace PurposeColor.Droid
                     MessagingCenter.Send<MyTestReceiver, string>(this, "boom", downloadedFileUri.ToString());
                     App.ShareDownloadID = 0;
                     string filePath = downloadedFileUri.ToString().Remove(0, 7);
-                    App.DownloadsPath =  Path.GetDirectoryName(filePath);
                     return;
                 }
 
@@ -48,7 +47,6 @@ namespace PurposeColor.Droid
 
                 if( downloadedFileUri != null )
                 {
-                    App.DownloadsPath = downloadedFileUri.ToString().Remove(0, 7);
                     Java.IO.File file = new Java.IO.File(new Java.Net.URI(downloadedFileUri.ToString()));
                     Intent videoPlayerActivity = new Intent(Intent.ActionView);
                     videoPlayerActivity.SetDataAndType(Android.Net.Uri.FromFile(file), "video/*");

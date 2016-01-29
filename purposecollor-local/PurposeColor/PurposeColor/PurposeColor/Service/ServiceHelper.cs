@@ -1939,6 +1939,66 @@ namespace PurposeColor.Service
         }
 
 
+		public static async Task<string> LikeGem(string gemId )
+		{
+			try
+			{
+
+				User user = App.Settings.GetUser();
+
+				if( user == null )
+					user = new User(){ UserId = 2 };
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return "404";
+				}
+
+				string result = String.Empty;
+				var client = new HttpClient();
+				client.Timeout = new TimeSpan(0, 15, 0);
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+				var url = "api.php?action=like";//&goal_id=" + gemId + "&user_id=" + user.UserId;
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				if (!string.IsNullOrEmpty(gemId))
+				{
+					content.Add(new StringContent(gemId, Encoding.UTF8), "goal_id");
+				}
+
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
+				HttpResponseMessage response = await client.PostAsync(url, content);
+
+
+				/* var client = new System.Net.Http.HttpClient();
+                client.DefaultRequestHeaders.Add("Post", "application/json");
+                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+                string uriString = "api.php?action=like&goal_id=" + gemId + "&user_id=" + user.UserId;
+
+				var response = await client.PostAsync(uriString);*/
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+					if (rootobject != null && rootobject.code != null)
+					{
+						return rootobject.code;
+					}
+				}
+
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+
+			return "404";
+		}
 
 
         public static async Task<ShareStatusAndCommentsCount> GetShareStatusAndCommentsCount(string gemId, GemType gemtype, string userId)

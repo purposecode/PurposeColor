@@ -146,6 +146,7 @@ namespace PurposeColor
 				foreach (var item in communityGems.resultarray )
 				{
 					masterStack = new CustomLayout();
+					masterStack.ClassId = "masterstack" + item.gem_id;
 					masterStack.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
 
 					#region TOOLS LAYOUT
@@ -332,7 +333,8 @@ namespace PurposeColor
 						HorizontalOptions = LayoutOptions.End,
 						BackgroundColor = Color.Transparent,
 						WidthRequest = 30,
-						HeightRequest = 20
+						HeightRequest = 20,
+						ClassId = item.gem_id
 					};
 					menuButton.Clicked += GemMenuButton_Clicked;
 
@@ -425,7 +427,6 @@ namespace PurposeColor
 							img.GestureRecognizers.Add(videoTap);
 							var indicator = new ActivityIndicator { Color = new Color(.5), };
 							indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-							indicator.BindingContext = img;
 							masterStack.AddChildToLayout(indicator, 40, 30);
 
 							CustomLayout imgContainer = new CustomLayout();
@@ -537,10 +538,17 @@ namespace PurposeColor
 
         void GemMenuButton_Clicked(object sender, EventArgs e)
         {
-            View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
+			CustomImageButton btn = sender as CustomImageButton;
+			CustomLayout sellayout = null;
+			if( btn != null )
+			{
+			     sellayout = (CustomLayout) masterStackLayout.Children.FirstOrDefault (itm => itm.ClassId == "masterstack" + btn.ClassId);
+			}
+
+			View menuView = sellayout.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
             if (menuView != null)
             {
-                HideCommentsPopup();
+				sellayout.Children.Remove ( menuView );
                 return;
             }
 
@@ -554,7 +562,13 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-            masterStack.AddChildToLayout(GemMenu, 52, 4);
+
+			if (sellayout != null)
+			{
+				sellayout.AddChildToLayout(GemMenu, 52, 4);
+			}
+
+			//masterStack.Children.Add (GemMenu, new Point (20, btn.Y));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)

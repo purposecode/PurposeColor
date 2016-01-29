@@ -98,7 +98,7 @@ namespace PurposeColor.screens
             menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion_intellegene_menu_icon.png") });
             menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//comunity_menu_icon.png") });
             menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//setings_menu_icon.png") });
-            // add these items only if globalSettings.IsLoggedIn //
+			// add these items only if globalSettings.IsLoggedIn //
 
 
             listView = new ListView();
@@ -156,11 +156,10 @@ namespace PurposeColor.screens
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new GoalsMainPage());
                 }
-                else if ("EMOTIONAL INTELLIGENCE" == selItem.Name)
+				else if (Constants.EMOTIONAL_INTELLIGENCE == selItem.Name)
                 {
-
                     App.masterPage.IsPresented = false;
-                    App.masterPage.Detail = new NavigationPage(new GraphPage());
+					App.masterPage.Detail = new NavigationPage(new PieGraphPage());
                 }
                 else if ("Community GEMs" == selItem.Name)
                 {
@@ -195,7 +194,7 @@ namespace PurposeColor.screens
                 {
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new ApplicationSettingsPage());
-                }
+				}
 
                 listView.SelectedItem = null; // reset the list selection, other wise the same menu cannot be selected again consecutively.
 

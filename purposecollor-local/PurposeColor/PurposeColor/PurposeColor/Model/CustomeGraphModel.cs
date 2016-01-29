@@ -25,7 +25,7 @@ namespace PurposeColor.Model
         {
             plotModel = new PlotModel
             {
-                Title = "Emotional zone detailed analysis"
+                Title = ""
             };
 
             //plotModel.Axes.Add(new LinearAxis { PositionAtZeroCrossing = true, IsZoomEnabled = false, IsPanEnabled = false, Position = AxisPosition.Bottom, Minimum = -2, Maximum = 2, TickStyle = TickStyle.None, AxislineColor = OxyColors.Transparent });
@@ -79,11 +79,11 @@ namespace PurposeColor.Model
             var pieSeries = new PieSeries();
 
             //in actual implementation PieSlice has to be derived from a dictionary or comining arrays.
-            pieSeries.Slices.Add(new PieSlice("Joy", 1030) { IsExploded = true });
-            pieSeries.Slices.Add(new PieSlice("Sadness", 929) { IsExploded = true });
-            pieSeries.Slices.Add(new PieSlice("Trust", 4157));
-            pieSeries.Slices.Add(new PieSlice("Anticipation", 939) { IsExploded = true });
-            
+            pieSeries.Slices.Add(new PieSlice("Warm", 1030) { IsExploded = true });
+            pieSeries.Slices.Add(new PieSlice("Patient", 529) { IsExploded = true });
+            pieSeries.Slices.Add(new PieSlice("Assertive", 2157));
+            pieSeries.Slices.Add(new PieSlice("Detailed", 939) { IsExploded = true });
+
             pieSeries.InnerDiameter = 0.5;
             pieSeries.ExplodedDistance = 0.0;
             pieSeries.Stroke = OxyColors.White;
@@ -92,7 +92,7 @@ namespace PurposeColor.Model
             pieSeries.AngleSpan = 360;
             pieSeries.StartAngle = 0;
             pieSeries.TickRadialLength = 1;
-            pieSeries.ToolTip = "";
+			pieSeries.ToolTip = "My Emotional Zone";
             pieSeries.TextColor = OxyColor.FromRgb(1, 1, 1);
             pieSeries.InsideLabelColor = OxyColor.FromRgb(5, 5, 5);
 

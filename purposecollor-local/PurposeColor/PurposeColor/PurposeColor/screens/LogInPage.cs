@@ -263,10 +263,13 @@ namespace PurposeColor.screens
                                 isSaveSuccess = await App.Settings.SaveUser(newUser);
 
                                 PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
-                                globalSettings.ShowRegistrationScreen = false;
-                                globalSettings.IsLoggedIn = true;
-                                globalSettings.IsFirstLogin = true;
-                                await App.Settings.SaveAppGlobalSettings(globalSettings);
+								if(globalSettings != null)
+								{
+									globalSettings.ShowRegistrationScreen = false;
+									globalSettings.IsLoggedIn = true;
+									globalSettings.IsFirstLogin = true;
+									await App.Settings.SaveAppGlobalSettings(globalSettings);
+								}
 
                                 progress.HideProgressbar();
                                 App.masterPage.IsPresented = false;

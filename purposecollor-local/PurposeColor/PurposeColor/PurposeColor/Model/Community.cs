@@ -16,6 +16,8 @@ namespace PurposeColor.Model
 	public class CommunityGemsDetails
 	{
 		public string user_id { get; set; }
+		public int like_status { get; set; }
+		public int likecount { get; set; }
 		public string gem_id { get; set; }
 		public string gem_title { get; set; }
 		public string gem_details { get; set; }
@@ -58,6 +60,7 @@ namespace PurposeColor.Model
 	{
 		public string code { get; set; }
 		public string text { get; set; }
+		public int like_status { get; set; }
 		public int likecount { get; set; }
 	}
 

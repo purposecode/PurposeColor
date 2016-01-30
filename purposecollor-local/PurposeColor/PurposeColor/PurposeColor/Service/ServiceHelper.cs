@@ -1778,12 +1778,10 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" };
-
-                if (user == null)
-                {
-                    return null;
-                }
+				User user = App.Settings.GetUser();
+				if( user == null )
+					user = new User { UserId = 2, UserName = "sam" };
+				
 
                 if (!CrossConnectivity.Current.IsConnected)
                 {
@@ -1794,7 +1792,7 @@ namespace PurposeColor.Service
 
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-                string uriString = "api.php?action=getallcommunitygems";
+				string uriString = "api.php?action=getallcommunitygems&user_id=" + user.UserId;
 
                 var response = await client.GetAsync(uriString);
 
@@ -1939,7 +1937,7 @@ namespace PurposeColor.Service
         }
 
 
-		public static async Task<string> LikeGem(string gemId )
+		public static async Task<LikeResponse> LikeGem(string gemId )
 		{
 			try
 			{
@@ -1951,7 +1949,7 @@ namespace PurposeColor.Service
 
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					return "404";
+					return null;
 				}
 
 				string result = String.Empty;
@@ -1976,10 +1974,10 @@ namespace PurposeColor.Service
 				if (response != null && response.StatusCode == HttpStatusCode.OK)
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
-					var rootobject = JsonConvert.DeserializeObject<LikeResponse>(responseJson);
+					LikeResponse rootobject = JsonConvert.DeserializeObject<LikeResponse>(responseJson);
 					if (rootobject != null && rootobject.code != null)
 					{
-						return rootobject.likecount.ToString();
+						return rootobject;
 					}
 				}
 				else

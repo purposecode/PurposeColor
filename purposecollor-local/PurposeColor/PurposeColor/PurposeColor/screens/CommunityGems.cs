@@ -42,6 +42,7 @@ namespace PurposeColor
         DetailsPageModel modelObject;
         StackLayout masterStackLayout;
         CommunityGemsObject communityGems;
+		User currentUser;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -52,7 +53,9 @@ namespace PurposeColor
             masterScroll = new ScrollView();
             masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
-
+			currentUser = App.Settings.GetUser ();
+			if (currentUser == null)
+				currentUser = new User (){ UserId = 2 };
             modelObject = model;
             mediaList = model.mediaArray;
             actionMediaList = model.actionMediaArray;
@@ -198,7 +201,8 @@ namespace PurposeColor
 
 					likeButtonTap = new TapGestureRecognizer();
 					Image likeButton = new Image();
-					likeButton.Source = Device.OnPlatform("icn_like.png", "icn_like.png", "//Assets//icn_like.png");
+					string likeSource = ( item.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
+					likeButton.Source = likeSource;
 					likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.VerticalOptions = LayoutOptions.Center;
@@ -218,6 +222,7 @@ namespace PurposeColor
 
 					Label likeCount = new Label
 					{
+						Text = ( item.likecount > 0 ) ? item.likecount.ToString() : "",
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Blue,
 						VerticalOptions = LayoutOptions.Center,
@@ -263,12 +268,13 @@ namespace PurposeColor
 							progressBar.ShowProgressbar("Requesting...   ");
 							/////////////// for testing /////////////
 
-							var likeRes = await ServiceHelper.LikeGem( gemID );
+							LikeResponse likeRes = await ServiceHelper.LikeGem( gemID );
 							if( likeRes != null )
 							{
-								likeImg.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
+								string source = ( likeRes.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
+								likeImg.Source = source;
 								if( likeCountLabel != null )
-									likeCountLabel.Text = likeRes;
+									likeCountLabel.Text =  ( likeRes.likecount > 0 ) ? likeRes.likecount.ToString() : "";
 							}
 							progressBar.HideProgressbar();
 

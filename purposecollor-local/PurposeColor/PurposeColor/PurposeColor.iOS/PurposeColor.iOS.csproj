@@ -133,9 +133,6 @@
     <None Include="Resources\comnt_box%403x.png" />
     <None Include="Resources\noimage.png" />
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
-    <None Include="Resources\icn_liked.png" />
-    <None Include="Resources\icn_liked%402x.png" />
-    <None Include="Resources\icn_liked%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -256,8 +253,11 @@
     <BundleResource Include="Resources\tic_active.png" />
     <BundleResource Include="Resources\tick_box.png" />
     <BundleResource Include="Resources\icn_like.png" />
-    <BundleResource Include="Resources\icn_ike%402x.png" />
     <BundleResource Include="Resources\icn_like%403x.png" />
+    <BundleResource Include="Resources\icn_like%402x.png" />
+    <BundleResource Include="Resources\icn_liked.png" />
+    <BundleResource Include="Resources\icn_liked%402x.png" />
+    <BundleResource Include="Resources\icn_liked%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

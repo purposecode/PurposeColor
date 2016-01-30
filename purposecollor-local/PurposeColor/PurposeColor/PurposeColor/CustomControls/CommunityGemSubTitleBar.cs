@@ -96,7 +96,7 @@ namespace PurposeColor.CustomControls
 			}
 
 
-			masterLayout.AddChildToLayout(myGemsLabel, Device.OnPlatform(80, 80, 85), Device.OnPlatform(10, 35, 38), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			masterLayout.AddChildToLayout(myGemsLabel, Device.OnPlatform(80, 80, 85), Device.OnPlatform(25, 35, 38), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 		//	masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 75), Device.OnPlatform(10, 2, 15), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
 

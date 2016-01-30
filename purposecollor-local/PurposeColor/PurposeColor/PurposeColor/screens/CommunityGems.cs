@@ -43,6 +43,7 @@ namespace PurposeColor
         StackLayout masterStackLayout;
         CommunityGemsObject communityGems;
 		User currentUser;
+		int myGemsCount = 0;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -70,7 +71,13 @@ namespace PurposeColor
 				IProgressBar progress = DependencyService.Get<IProgressBar>();
 				progress.ShowProgressbar( "Loading Mygems.." );
 
-				Navigation.PushAsync( new MyGemsPage( await ServiceHelper.GetMyGemsDetails() ) );
+				CommunityGemsObject myGems = await ServiceHelper.GetMyGemsDetails();
+				if( myGems != null )
+				{
+					Navigation.PushAsync( new MyGemsPage( myGems ) );
+					myGemsCount = myGems.resultarray.Count;
+				}
+			
 				progress.HideProgressbar();
 
 			/*	masterStack.Children.Clear();
@@ -594,9 +601,7 @@ namespace PurposeColor
             }
 
             List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
-            menuItems.Add(new CustomListViewItem { Name = "Edit", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
-            menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
-            menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
+			menuItems.Add(new CustomListViewItem { Name = "Remove", EmotionID = CurrentGemId.ToString(), EventID = btn.ClassId, SliderValue = 0 });
 
             PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
             //GemMenu.WidthRequest = App.screenWidth * .50;
@@ -663,7 +668,7 @@ namespace PurposeColor
                 {
                     // remove the community sharing of current gem
                 }
-                else if (item.Name == "Edit")
+				else if (item.Name == "Remove")
                 {
 
                 }

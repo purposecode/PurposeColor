@@ -498,9 +498,7 @@ namespace PurposeColor
 			}
 
 			List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
-			menuItems.Add(new CustomListViewItem { Name = "Edit", EmotionID = "44", EventID = string.Empty, SliderValue = 0 });
-			menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = "44", EventID = string.Empty, SliderValue = 0 });
-			menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = "44", EventID = string.Empty, SliderValue = 0 });
+			menuItems.Add(new CustomListViewItem { Name = "Remove", EmotionID = "", EventID = btn.ClassId, SliderValue = 0 });
 
 			PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
 			//GemMenu.WidthRequest = App.screenWidth * .50;
@@ -555,9 +553,22 @@ namespace PurposeColor
 				{
 					// remove the community sharing of current gem
 				}
-				else if (item.Name == "Edit")
+				else if (item.Name == "Remove")
 				{
+					IProgressBar progress = DependencyService.Get<IProgressBar>();
+					progress.ShowProgressbar( "Removing Gem..." );
+					await ServiceHelper.RemoveGemFromCommunity( item.EventID, GemType.Goal );
 
+					communityGems = null;
+					masterStack.Children.Clear();
+					masterStackLayout.Children.Clear();
+					masterScroll.Content = null;
+					GC.Collect();
+
+					communityGems =   await ServiceHelper.GetMyGemsDetails();
+
+					RenderGems( communityGems );
+					progress.HideProgressbar();
 				}
 
 				HideCommentsPopup();

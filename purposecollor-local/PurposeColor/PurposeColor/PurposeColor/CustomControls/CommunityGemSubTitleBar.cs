@@ -89,14 +89,19 @@ namespace PurposeColor.CustomControls
 
 			// masterLayout.AddChildToLayout(bgImage, 0, 0, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			//masterLayout.AddChildToLayout(title, 20, 18, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-			masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(18, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			masterLayout.AddChildToLayout(title, Device.OnPlatform(20, 20, 28), Device.OnPlatform(22, 18, 32), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			if (Device.OS != TargetPlatform.iOS)
 			{
 				masterLayout.AddChildToLayout(imgDivider, 75, 26, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			}
 
 
-			masterLayout.AddChildToLayout(myGemsLabel, Device.OnPlatform(80, 80, 85), Device.OnPlatform(25, 35, 38), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			if (nextButtonVisible) 
+			{
+				masterLayout.AddChildToLayout(myGemsLabel, Device.OnPlatform(80, 80, 85), Device.OnPlatform(25, 35, 38), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			}
+
+
 		//	masterLayout.AddChildToLayout(touchArea, Device.OnPlatform(87, 80, 75), Device.OnPlatform(10, 2, 15), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
 

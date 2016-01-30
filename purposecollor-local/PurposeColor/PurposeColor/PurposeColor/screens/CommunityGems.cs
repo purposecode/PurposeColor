@@ -65,7 +65,7 @@ namespace PurposeColor
 
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
+			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
 			subTitleBar.myGemsTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
 				IProgressBar progress = DependencyService.Get<IProgressBar>();
@@ -388,7 +388,7 @@ namespace PurposeColor
 					menuButton.Clicked += GemMenuButton_Clicked;
 
 					// masterStack.AddChildToLayout(pageTitle, 1, 1);
-					masterStack.AddChildToLayout(menuButton, 79, 1);
+					//masterStack.AddChildToLayout(menuButton, 79, 1);
 					masterStack.AddChildToLayout(profileImage, 2, 1);
 					masterStack.AddChildToLayout(userName, 23, 3);
 					masterStack.AddChildToLayout(title, 23, 7);

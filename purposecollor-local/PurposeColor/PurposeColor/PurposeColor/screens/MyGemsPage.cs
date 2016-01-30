@@ -32,7 +32,7 @@ namespace PurposeColor
 		List<ActionMedia> actionMediaList { get; set; }
 		GemType CurrentGemType = GemType.Goal;
 		PurposeColorTitleBar mainTitleBar;
-		PurposeColorSubTitleBar subTitleBar;
+		CommunityGemSubTitleBar subTitleBar;
 		TapGestureRecognizer shareButtonTap;
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer likeButtonTap;
@@ -53,7 +53,7 @@ namespace PurposeColor
 			communityGems = gemsObject;
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
+			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "My Gems", false);
 
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
 			{

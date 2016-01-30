@@ -8,18 +8,22 @@ using System.Text;
 using UIKit;
 using System.IO;
 using Foundation;
+using AssetsLibrary;
+using Foundation;
+using CoreFoundation;
+using ImageIO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOSResize))]
 namespace PurposeColor.iOS.Dependency
 {
     public class IOSResize : IResize
     {
-		public byte[] Resize(byte[] imageData, float width, float height)
+		public byte[] Resize(byte[] imageData, float width, float height, string path)
         {
-            return ResizeImageIOS(imageData, width, height);
+			return ResizeImageIOS(imageData, width, height, path);
         }
 
-        public static byte[] ResizeImageIOS(byte[] imageData, float width, float height)
+		public static byte[] ResizeImageIOS(byte[] imageData, float width, float height, string path)
         {
             UIImage originalImage = ImageFromByteArray(imageData);
 
@@ -37,8 +41,24 @@ namespace PurposeColor.iOS.Dependency
 
                 UIKit.UIImage resizedImage = UIKit.UIImage.FromImage(context.ToImage());
 
-				//UIImage rotated = this.RotateImage( resizedImage , true);
-				resizedImage = UIImage.FromImage(resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
+
+				var url = new NSUrl( path , false); 
+				CGImageSource myImageSource;
+				myImageSource = CGImageSource.FromUrl (url, null);
+				var ns = new NSDictionary();
+				NSDictionary imageProperties = myImageSource.CopyProperties(ns, 0);
+
+				Console.WriteLine(imageProperties.DescriptionInStringsFileFormat);
+				NSObject[] keys =  imageProperties.Keys;
+				NSObject[] values =  imageProperties.Values;
+
+				string orientation =  values [7].ToString ();
+				if( "6" == orientation )
+					resizedImage = UIImage.FromImage(resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
+
+
+				
+				
                 // save the image as a jpeg
 				return resizedImage.AsJPEG().ToArray();
             }

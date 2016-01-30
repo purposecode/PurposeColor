@@ -9,7 +9,7 @@ namespace PurposeColor.interfaces
 {
     public interface IResize
     {
-        byte[] Resize(byte[] imageData, float width, float height);
+		byte[] Resize(byte[] imageData, float width, float height, string path);
 
         MemoryStream CompessImage(int ratio, MemoryStream ms);
     }

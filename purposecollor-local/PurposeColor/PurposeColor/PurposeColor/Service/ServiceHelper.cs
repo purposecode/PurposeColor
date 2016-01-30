@@ -1973,22 +1973,18 @@ namespace PurposeColor.Service
 				HttpResponseMessage response = await client.PostAsync(url, content);
 
 
-				/* var client = new System.Net.Http.HttpClient();
-                client.DefaultRequestHeaders.Add("Post", "application/json");
-                client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-
-                string uriString = "api.php?action=like&goal_id=" + gemId + "&user_id=" + user.UserId;
-
-				var response = await client.PostAsync(uriString);*/
-
 				if (response != null && response.StatusCode == HttpStatusCode.OK)
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
-					var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+					var rootobject = JsonConvert.DeserializeObject<LikeResponse>(responseJson);
 					if (rootobject != null && rootobject.code != null)
 					{
-						return rootobject.code;
+						return rootobject.likecount.ToString();
 					}
+				}
+				else
+				{
+					return null;
 				}
 
 			}
@@ -1997,8 +1993,67 @@ namespace PurposeColor.Service
 				var test = ex.Message;
 			}
 
-			return "404";
+			return null;
 		}
+
+
+		public static async Task<CommunityGemsObject>GetMyGemsDetails( )
+		{
+			try
+			{
+				User user = App.Settings.GetUser();
+
+				if( user == null )
+					user = new User(){ UserId = 2 };
+
+				if (user == null)
+				{
+					return null;
+				}
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=mygems&user_id=" + user.UserId;
+
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.Content != null)
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+					var rootobject = JsonConvert.DeserializeObject<CommunityGemsObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject;
+					}
+					client.Dispose();
+					return null;
+
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
 
 
         public static async Task<ShareStatusAndCommentsCount> GetShareStatusAndCommentsCount(string gemId, GemType gemtype, string userId)

@@ -32,7 +32,7 @@ namespace PurposeColor
         string CurrentGemId = string.Empty;
         GemType CurrentGemType = GemType.Goal;
         PurposeColorTitleBar mainTitleBar;
-        PurposeColorSubTitleBar subTitleBar;
+		CommunityGemSubTitleBar subTitleBar;
         TapGestureRecognizer shareButtonTap;
         TapGestureRecognizer commentButtonTap;
         TapGestureRecognizer likeButtonTap;
@@ -61,7 +61,23 @@ namespace PurposeColor
 
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
+			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
+			subTitleBar.myGemsTapRecognizer.Tapped += async (object sender, EventArgs e) => 
+			{
+				IProgressBar progress = DependencyService.Get<IProgressBar>();
+				progress.ShowProgressbar( "Loading Mygems.." );
+
+				Navigation.PushAsync( new MyGemsPage( await ServiceHelper.GetMyGemsDetails() ) );
+				progress.HideProgressbar();
+
+			/*	masterStack.Children.Clear();
+				masterStackLayout.Children.Clear();
+				masterScroll.Content = null;
+
+				RenderGems( communityGems );*/
+
+
+			};
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
                 try
@@ -110,6 +126,10 @@ namespace PurposeColor
         {
 			try
 			{
+
+				/*communityGems.resultarray = new List<CommunityGemsDetails>();
+				communityGems.resultarray.Add( new CommunityGemsDetails{ firstname = "test", gem_datetime = "2014 feb 14", gem_id = "68", user_id = "2"  } );*/
+
 				if (communityGems != null)
 					return;
 
@@ -126,6 +146,8 @@ namespace PurposeColor
 				{
 					var test = ex.Message;
 				}
+					
+
 
 				communityGems = await ServiceHelper.GetCommunityGemsDetails();
 				if (communityGems == null)
@@ -143,7 +165,23 @@ namespace PurposeColor
 				}
 
 
-				foreach (var item in communityGems.resultarray )
+				RenderGems( communityGems );
+
+
+
+			} 
+			catch (Exception ex) 
+			{
+				string err = ex.Message;
+			}
+        }
+
+
+		void RenderGems( CommunityGemsObject gemsObject )
+		{
+			try
+			{
+				foreach (var item in gemsObject.resultarray )
 				{
 					masterStack = new CustomLayout();
 					masterStack.ClassId = "masterstack" + item.gem_id;
@@ -164,6 +202,7 @@ namespace PurposeColor
 					likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.VerticalOptions = LayoutOptions.Center;
+					likeButton.ClassId = item.gem_id;
 					likeButton.GestureRecognizers.Add(likeButtonTap);
 
 					Label likeLabel = new Label
@@ -172,10 +211,20 @@ namespace PurposeColor
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
 						VerticalOptions = LayoutOptions.Center,
-						FontSize = Device.OnPlatform(12, 12, 15)
+						FontSize = Device.OnPlatform(12, 12, 15),
+						ClassId = item.gem_id
 					};
 					likeLabel.GestureRecognizers.Add(likeButtonTap);
 
+					Label likeCount = new Label
+					{
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						TextColor = Color.Blue,
+						VerticalOptions = LayoutOptions.Center,
+						FontSize = Device.OnPlatform(12, 12, 15)
+					};
+
+					toolsLayout.Children.Add(likeCount);
 					toolsLayout.Children.Add(likeButton);
 					toolsLayout.Children.Add(likeLabel);
 
@@ -184,40 +233,44 @@ namespace PurposeColor
 						try
 						{
 							string gemID = "";
-							Image button = tapSender as Image;
-							Label label = tapSender as Label;
-							if (button != null)
+							Image likeImg = tapSender as Image;
+							Label like = tapSender as Label;
+							Label likeCountLabel = new Label();
+							if (likeImg != null)
 							{
-								button.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
-								if (button.ClassId != null)
-									gemID = button.ClassId;
+								int likeImgIndex = toolsLayout.Children.IndexOf( likeImg );
+								if( likeImgIndex > 0 )
+								{
+									likeCountLabel =(Label) toolsLayout.Children[ likeImgIndex - 1 ];
+								}
+								if (likeImg.ClassId != null)
+									gemID = likeImg.ClassId;
 							}
 
-							if (label != null)
+							if (like != null)
 							{
-								int labelIndex = toolsLayout.Children.IndexOf( label );
+								int labelIndex = toolsLayout.Children.IndexOf( like );
 								if( labelIndex > 0 )
 								{
-									Image likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
-									likeImg.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
+								    likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
+									likeCountLabel =(Label) toolsLayout.Children[ labelIndex - 2 ];
 								}
-								if (label.ClassId != null)
-									gemID = label.ClassId;
+								if (like.ClassId != null)
+									gemID = like.ClassId;
 							}
 
 							//likeButtonTap.Tapped -= OnLikeButtonTapped;
 							progressBar.ShowProgressbar("Requesting...   ");
 							/////////////// for testing /////////////
 
-							if (user == null)
+							var likeRes = await ServiceHelper.LikeGem( gemID );
+							if( likeRes != null )
 							{
-								await DisplayAlert(Constants.ALERT_TITLE, "Could not process the request now.", Constants.ALERT_OK);
+								likeImg.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
+								if( likeCountLabel != null )
+									likeCountLabel.Text = likeRes;
 							}
-							else
-							{
-
-								await ServiceHelper.LikeGem( gemID );
-							}
+							progressBar.HideProgressbar();
 
 						}
 						catch (Exception ex)
@@ -231,29 +284,26 @@ namespace PurposeColor
 
 
 					Image shareButton = new Image();
-					if (user.AllowCommunitySharing)
+					shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+					shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+					shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+					shareButton.VerticalOptions = LayoutOptions.Center;
+					shareButton.ClassId = item.gem_id;
+					shareLabel = new Label
 					{
-						shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
-						shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
-						shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
-						shareButton.VerticalOptions = LayoutOptions.Center;
-						shareButton.ClassId = item.gem_id;
-						shareLabel = new Label
-						{
-							Text = "Share",
-							FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-							TextColor = Color.Gray,
-							VerticalOptions = LayoutOptions.Center,
-							FontSize = Device.OnPlatform(12, 12, 15),
-							ClassId = item.gem_id
-						};
-						shareButtonTap = new TapGestureRecognizer();
-						shareButtonTap.Tapped += OnShareButtonTapped;
-						shareButton.GestureRecognizers.Add(shareButtonTap);
-						shareLabel.GestureRecognizers.Add(shareButtonTap);
-						toolsLayout.Children.Add(shareButton);
-						toolsLayout.Children.Add(shareLabel);
-					}
+						Text = "Share",
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						TextColor = Color.Gray,
+						VerticalOptions = LayoutOptions.Center,
+						FontSize = Device.OnPlatform(12, 12, 15),
+						ClassId = item.gem_id
+					};
+					shareButtonTap = new TapGestureRecognizer();
+					shareButtonTap.Tapped += OnShareButtonTapped;
+					shareButton.GestureRecognizers.Add(shareButtonTap);
+					shareLabel.GestureRecognizers.Add(shareButtonTap);
+					toolsLayout.Children.Add(shareButton);
+					toolsLayout.Children.Add(shareLabel);
 
 
 
@@ -280,20 +330,6 @@ namespace PurposeColor
 					toolsLayout.Children.Add(commentsLabel);
 
 
-
-					Label myGemsLabel = new Label
-					{
-						Text = "My Gems",
-						VerticalOptions = LayoutOptions.Center,
-						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						TextColor = Color.Gray,
-						FontSize = Device.OnPlatform(10, 12, 15)
-					};
-
-					TapGestureRecognizer myGemsTap = new TapGestureRecognizer();
-					myGemsTap.Tapped += OnMyGemsTapped;
-					myGemsLabel.GestureRecognizers.Add(myGemsTap);
-					toolsLayout.Children.Add(myGemsLabel);
 					#endregion
 
 
@@ -459,16 +495,15 @@ namespace PurposeColor
 					masterStackLayout.Children.Add(masterStack);
 				}
 
-
-
-
 				masterScroll.Content = masterStackLayout;
-			} 
+			}
 			catch (Exception ex) 
 			{
-				string err = ex.Message;
+
 			}
-        }
+		}
+
+
 
         void OnMyGemsTapped(object sender, EventArgs e)
         {
@@ -476,25 +511,25 @@ namespace PurposeColor
         }
 
 
-        protected override bool OnBackButtonPressed()
-        {
-            //var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
+		protected override bool OnBackButtonPressed()
+		{
+			//var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
 
-            Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
-            action.ContinueWith(task =>
-            {
-                bool val = task.Result;
-                if (task.Result)
-                {
-                    CloseAllPages();
+			Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
+			action.ContinueWith(task =>
+				{
+					bool val = task.Result;
+					if (task.Result)
+					{
+						CloseAllPages();
 
-                }
+					}
 
-            });
+				});
 
-            return true;
+			return true;
 
-        }
+		}
 
         private void CloseAllPages()
         {
@@ -548,7 +583,7 @@ namespace PurposeColor
 			View menuView = sellayout.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
             if (menuView != null)
             {
-				sellayout.Children.Remove ( menuView );
+				HideMenuPopUp ( sellayout,menuView );
                 return;
             }
 
@@ -634,6 +669,11 @@ namespace PurposeColor
             {
             }
         }
+
+		void HideMenuPopUp(  CustomLayout sellayout, View toRemove )
+		{
+			sellayout.Children.Remove ( toRemove );
+		}
 
         void HideCommentsPopup()
         {

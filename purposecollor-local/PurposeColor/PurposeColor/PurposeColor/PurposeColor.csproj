@@ -133,6 +133,8 @@
     <Compile Include="interfaces\ILocation.cs" />
     <Compile Include="screens\GemsDetailsPage.cs" />
     <Compile Include="interfaces\IVideoDownloader.cs" />
+    <Compile Include="screens\MyGemsPage.cs" />
+    <Compile Include="CustomControls\CommunityGemSubTitleBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

@@ -54,10 +54,7 @@ namespace PurposeColor
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, false);
-			subTitleBar.myGemsTapRecognizer.Tapped += async (object sender, EventArgs e) => 
-			{
-				
-			};
+
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
 			{
 				try

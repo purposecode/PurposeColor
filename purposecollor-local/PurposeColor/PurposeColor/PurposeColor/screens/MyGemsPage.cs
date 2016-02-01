@@ -130,10 +130,12 @@ namespace PurposeColor
 
 					likeButtonTap = new TapGestureRecognizer();
 					Image likeButton = new Image();
-					likeButton.Source = Device.OnPlatform("icn_like.png", "icn_like.png", "//Assets//icn_like.png");
+					string likeSource = ( item.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
+					likeButton.Source = likeSource;
 					likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.VerticalOptions = LayoutOptions.Center;
+					likeButton.ClassId = item.gem_id;
 					likeButton.GestureRecognizers.Add(likeButtonTap);
 
 					Label likeLabel = new Label
@@ -142,10 +144,21 @@ namespace PurposeColor
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
 						VerticalOptions = LayoutOptions.Center,
-						FontSize = Device.OnPlatform(12, 12, 15)
+						FontSize = Device.OnPlatform(12, 12, 15),
+						ClassId = item.gem_id
 					};
 					likeLabel.GestureRecognizers.Add(likeButtonTap);
 
+					Label likeCount = new Label
+					{
+						Text = ( item.likecount > 0 ) ? item.likecount.ToString() : "",
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						TextColor = Color.Blue,
+						VerticalOptions = LayoutOptions.Center,
+						FontSize = Device.OnPlatform(12, 12, 15)
+					};
+
+					toolsLayout.Children.Add(likeCount);
 					toolsLayout.Children.Add(likeButton);
 					toolsLayout.Children.Add(likeLabel);
 
@@ -154,32 +167,52 @@ namespace PurposeColor
 						try
 						{
 							string gemID = "";
-							Image button = tapSender as Image;
-							Label label = tapSender as Label;
-							if (button != null)
+							Image likeImg = tapSender as Image;
+							Label like = tapSender as Label;
+							Label likeCountLabel = new Label();
+							if (likeImg != null)
 							{
-								button.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
-								if (button.ClassId != null)
-									gemID = button.ClassId;
+								int likeImgIndex = toolsLayout.Children.IndexOf( likeImg );
+								if( likeImgIndex > 0 )
+								{
+									likeCountLabel =(Label) toolsLayout.Children[ likeImgIndex - 1 ];
+								}
+								if (likeImg.ClassId != null)
+									gemID = likeImg.ClassId;
 							}
 
-							if (label != null)
+							if (like != null)
 							{
-								int labelIndex = toolsLayout.Children.IndexOf( label );
+								int labelIndex = toolsLayout.Children.IndexOf( like );
 								if( labelIndex > 0 )
 								{
-									Image likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
-									likeImg.Source = Device.OnPlatform("icn_liked.png", "icn_liked.png", "//Assets//icn_liked.png");
+									likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
+									likeCountLabel =(Label) toolsLayout.Children[ labelIndex - 2 ];
 								}
-								if (label.ClassId != null)
-									gemID = label.ClassId;
+								if (like.ClassId != null)
+									gemID = like.ClassId;
 							}
 
 							//likeButtonTap.Tapped -= OnLikeButtonTapped;
 							progressBar.ShowProgressbar("Requesting...   ");
 							/////////////// for testing /////////////
 
-							await ServiceHelper.LikeGem( gemID );
+							if( !string.IsNullOrEmpty( gemID ) )
+							{
+								LikeResponse likeRes = await ServiceHelper.LikeGem( gemID );
+								if( likeRes != null )
+								{
+									string source = ( likeRes.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
+									likeImg.Source = source;
+									if( likeCountLabel != null )
+										likeCountLabel.Text =  ( likeRes.likecount > 0 ) ? likeRes.likecount.ToString() : "";
+								}
+							}
+							else
+							{
+								progressBar.ShowToast( "Invalid Gem ID." );
+							}
+	
 							progressBar.HideProgressbar();
 
 						}

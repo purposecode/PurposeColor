@@ -19,7 +19,7 @@ namespace PurposeColor.Droid.Dependency
 {
     public class AndroidResize : IResize
     {
-        public byte[] Resize(byte[] imageData, float width, float height)
+		public byte[] Resize(byte[] imageData, float width, float height,  string path)
         {
             return ResizeImageAndroid(imageData, width, height);
         }

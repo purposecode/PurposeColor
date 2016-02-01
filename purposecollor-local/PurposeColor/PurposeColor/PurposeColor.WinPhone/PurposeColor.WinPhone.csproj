@@ -181,6 +181,10 @@
     <Content Include="Assets\goals_badge_red.png" />
     <Content Include="Assets\icon_cmnt.png" />
     <Content Include="Assets\icon_send.png" />
+    <Content Include="Assets\ic_blu.png" />
+    <Content Include="Assets\ic_green.png" />
+    <Content Include="Assets\ic_orge.png" />
+    <Content Include="Assets\ic_red.png" />
     <Content Include="Assets\like.png" />
     <Content Include="Assets\sec_bg.png" />
     <Content Include="Assets\share.png" />

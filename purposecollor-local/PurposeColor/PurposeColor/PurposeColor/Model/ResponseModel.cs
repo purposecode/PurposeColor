@@ -32,4 +32,17 @@ namespace PurposeColor.Model
         public string code { get; set; }
         public ShareStatusAndCommentsCount resultarray { get; set; }
     }
+    public class EmotionValues
+    {
+        public string emotion_value { get; set; }
+        public int count { get; set; }
+        public string emotion_title { get; set; }
+        public int emotion_id { get; set; }
+    }
+    public class AllEmotions
+    {
+        public string code { get; set; }
+        public string text { get; set; }
+        public List<EmotionValues> resultarray { get; set; }
+    }
 }

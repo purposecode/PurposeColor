@@ -200,8 +200,7 @@
     <BundleResource Include="Resources\menu_icn%402x6.png" />
     <BundleResource Include="Resources\menu_icn%403x.png" />
     <BundleResource Include="Resources\mic%401x.png" />
-    <BundleResource Include="Resources\mic%402.png" />
-    <BundleResource Include="Resources\mic%402x6.png" />
+    <BundleResource Include="Resources\mic%402x.png" />
     <BundleResource Include="Resources\mic%403x.png" />
     <BundleResource Include="Resources\drag_btn_no.png" />
     <BundleResource Include="Resources\drag_btn_no%402x.png" />
@@ -428,6 +427,16 @@
     <BundleResource Include="Resources\arrow_box%403x.png" />
     <BundleResource Include="Resources\arrow_box1x.png" />
     <BundleResource Include="Resources\more.png" />
+    <BundleResource Include="Resources\finger_gray.png" />
+    <BundleResource Include="Resources\finger.png" />
+    <BundleResource Include="Resources\ic_blu%401x.png" />
+    <BundleResource Include="Resources\ic_blu%402x.png" />
+    <BundleResource Include="Resources\ic_green%401x.png" />
+    <BundleResource Include="Resources\ic_green%402x.png" />
+    <BundleResource Include="Resources\ic_orge%401x.png" />
+    <BundleResource Include="Resources\ic_orge%402x.png" />
+    <BundleResource Include="Resources\ic_red%401x.png" />
+    <BundleResource Include="Resources\ic_red%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.1.5.1.6471\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

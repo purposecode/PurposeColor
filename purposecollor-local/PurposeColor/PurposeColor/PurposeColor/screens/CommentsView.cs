@@ -335,16 +335,23 @@ namespace PurposeColor.screens
 
                 PurposeColor.Model.User user = App.Settings.GetUser();
 
+				if( user == null )
+				{
+					progressBar.HideProgressbar();
+					progressBar.ShowToast( "user name is not valid." );
+					return;
+				}
+
                 ////////////// for testing  //test //////////////
 
                 isCommunityShared = false; /// for testing only 
-                user = new PurposeColor.Model.User
+        /*        user = new PurposeColor.Model.User
                 {
                     UserId = 2,
                     AllowCommunitySharing = true,
                     UserName = "Test user"
                 };
-                await App.Settings.SaveUser(user);
+                await App.Settings.SaveUser(user);*/
 
 
                 ////////////// for testing  //test //////////////

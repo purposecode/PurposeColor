@@ -255,13 +255,15 @@ namespace PurposeColor
 					commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.VerticalOptions = LayoutOptions.Center;
+					commentButton.ClassId = item.gem_id;
 					Label commentsLabel = new Label
 					{
 						Text = "Comment",
 						VerticalOptions = LayoutOptions.Center,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
-						FontSize = Device.OnPlatform(12, 12, 15)
+						FontSize = Device.OnPlatform(12, 12, 15),
+						ClassId = item.gem_id
 					};
 
 					commentButtonTap = new TapGestureRecognizer();
@@ -639,9 +641,24 @@ namespace PurposeColor
 			//show comments popup
 			try
 			{
+				string gemID = "";
+				Image shareImg = sender as Image;
+				Label shareText = sender as Label;
+				if (shareImg != null)
+				{
+					if (shareImg.ClassId != null)
+						gemID = shareImg.ClassId;
+				}
+
+				if (shareText != null)
+				{
+					if (shareText.ClassId != null)
+						gemID = shareText.ClassId;
+				}
+
 				progressBar.ShowProgressbar("Loading comments");
 
-				List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments("44", CurrentGemType, false);
+				List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments( gemID, GemType.Goal, false);
 				progressBar.HideProgressbar();
 
 				PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, "44", CurrentGemType, false);

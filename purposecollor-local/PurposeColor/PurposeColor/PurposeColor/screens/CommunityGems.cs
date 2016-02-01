@@ -325,17 +325,19 @@ namespace PurposeColor
 					commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.VerticalOptions = LayoutOptions.Center;
+					commentButton.ClassId = item.gem_id;
 					Label commentsLabel = new Label
 					{
 						Text = "Comment",
 						VerticalOptions = LayoutOptions.Center,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
-						FontSize = Device.OnPlatform(12, 12, 15)
+						FontSize = Device.OnPlatform(12, 12, 15),
+						ClassId = item.gem_id
 					};
 
 					commentButtonTap = new TapGestureRecognizer();
-					commentButtonTap.Tapped += CommentButtonTapped;
+					commentButtonTap.Tapped += OnCommentButtonTapped;
 					commentButton.GestureRecognizers.Add(commentButtonTap);
 					commentsLabel.GestureRecognizers.Add(commentButtonTap);
 
@@ -702,22 +704,42 @@ namespace PurposeColor
             }
         }
 
-        async void CommentButtonTapped(object sender, EventArgs e)
+        async void OnCommentButtonTapped(object sender, EventArgs e)
         {
 
             //show comments popup
             try
             {
-                progressBar.ShowProgressbar("Loading comments");
+				string gemID = "";
+				Image commentImg = sender as Image;
+				Label commentLabel = sender as Label;
+				if (commentImg != null)
+				{
 
-                List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(CurrentGemId, CurrentGemType, false);
-                progressBar.HideProgressbar();
+					if (commentImg.ClassId != null)
+						gemID = commentImg.ClassId;
+				}
 
-                PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, CurrentGemId, CurrentGemType, false);
-                commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
-                commentsView.HeightRequest = App.screenHeight;
-                commentsView.WidthRequest = App.screenWidth;
-                masterLayout.AddChildToLayout(commentsView, 0, 0);
+				if (commentLabel != null)
+				{
+
+					if (commentLabel.ClassId != null)
+						gemID = commentLabel.ClassId;
+				}
+
+				if( !string.IsNullOrEmpty( gemID ) )
+				{
+					progressBar.ShowProgressbar("Loading comments");
+					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(gemID, GemType.Goal, false);
+					progressBar.HideProgressbar();
+
+
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, gemID, CurrentGemType, false);
+	                commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
+	                commentsView.HeightRequest = App.screenHeight;
+	                commentsView.WidthRequest = App.screenWidth;
+	                masterLayout.AddChildToLayout(commentsView, 0, 0);
+				}
 
             }
             catch (Exception ex)
@@ -820,7 +842,7 @@ namespace PurposeColor
             }
             if (commentButtonTap != null)
             {
-                commentButtonTap.Tapped -= CommentButtonTapped;
+                commentButtonTap.Tapped -= OnCommentButtonTapped;
                 commentButtonTap = null;
                 likeButtonTap = null;
             }

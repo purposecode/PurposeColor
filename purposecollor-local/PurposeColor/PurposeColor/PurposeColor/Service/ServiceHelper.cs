@@ -1565,11 +1565,11 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" };
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
-					return null;
+					user = new User { UserId = 2, UserName = "sam" };
 				}
 
 				if (!CrossConnectivity.Current.IsConnected)

@@ -274,21 +274,6 @@ namespace PurposeColor
 					toolsLayout.Children.Add(commentButton);
 					toolsLayout.Children.Add(commentsLabel);
 
-
-
-					Label myGemsLabel = new Label
-					{
-						Text = "My Gems",
-						VerticalOptions = LayoutOptions.Center,
-						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						TextColor = Color.Gray,
-						FontSize = Device.OnPlatform(10, 12, 15)
-					};
-
-					TapGestureRecognizer myGemsTap = new TapGestureRecognizer();
-					myGemsTap.Tapped += OnMyGemsTapped;
-					myGemsLabel.GestureRecognizers.Add(myGemsTap);
-					toolsLayout.Children.Add(myGemsLabel);
 					#endregion
 
 

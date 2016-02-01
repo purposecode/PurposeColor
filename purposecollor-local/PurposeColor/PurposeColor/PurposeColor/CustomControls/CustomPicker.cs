@@ -11,6 +11,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
+using PurposeColor.Model;
 
 namespace PurposeColor.CustomControls
 {
@@ -289,6 +290,10 @@ namespace PurposeColor.CustomControls
                         progressBar.ShowProgressbar("sending new emotion");
 
 
+						User user = App.Settings.GetUser();
+						if( user == null )
+							user = new User(){ UserId = 2 };
+						
                         listTitle.IsVisible = true;
                         addButton.IsVisible = true;
                         addEmotionButton.IsVisible = false;
@@ -308,7 +313,7 @@ namespace PurposeColor.CustomControls
                             progressBar.HideProgressbar();
                             return;
                         }
-                        var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text, "2");
+						var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text,  user.UserId.ToString() );
 
                         await FeelingsPage.DownloadAllEmotions();
 

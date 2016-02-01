@@ -1312,6 +1312,12 @@ namespace PurposeColor.screens
 
                         try
                         {
+							GoalDetails newGoal = new GoalDetails();
+
+							User user = App.Settings.GetUser();
+							if( user == null )
+								user = new User(){ UserId = 2 };
+							
                             ActionModel details = new ActionModel();
                             if (!isUpdatePage)
                             {
@@ -1324,7 +1330,7 @@ namespace PurposeColor.screens
                             }
                             details.action_title = eventTitle.Text;
                             details.action_details = eventDescription.Text;
-                            details.user_id = "2";// for tezsting only // test
+							details.user_id = user.UserId.ToString();
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
 							if(!string.IsNullOrEmpty(currentAddress))
@@ -1454,10 +1460,15 @@ namespace PurposeColor.screens
                         try
                         {
                             GoalDetails newGoal = new GoalDetails();
+
+							User user = App.Settings.GetUser();
+							if( user == null )
+								user = new User(){ UserId = 2 };
+							
                             //EventDetails newGoal = new EventDetails();
                             newGoal.goal_title = eventTitle.Text;
                             newGoal.goal_details = eventDescription.Text;
-                            newGoal.user_id = "2"; // for testing only // test
+							newGoal.user_id = user.UserId.ToString();
                             newGoal.location_latitude = lattitude;
                             newGoal.location_longitude = longitude;
                             newGoal.category_id = "1";
@@ -1491,7 +1502,7 @@ namespace PurposeColor.screens
                             {
                                 try
                                 {
-                                    var goals = await ServiceHelper.GetAllGoals(2); //for testing only
+									var goals = await ServiceHelper.GetAllGoals( user.UserId ); //for testing only
                                     if (goals != null)
                                     {
                                         App.goalsListSource = null;

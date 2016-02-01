@@ -13,6 +13,7 @@ using PurposeColor.screens;
 using PurposeColor.Service;
 using System.Diagnostics;
 using PurposeColor.interfaces;
+using PurposeColor.Model;
 
 namespace PurposeColor
 {
@@ -507,8 +508,13 @@ namespace PurposeColor
         {
             try
             {
+
+				User user = App.Settings.GetUser();
+				if( user == null )
+					user = new User(){ UserId = 2 };
+				
                 progressBar.ShowProgressbar("Saving details..");
-                bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID, "2");
+				bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID,  user.UserId.ToString());
                 progressBar.HideProgressbar();
                 if (!isDataSaved)
                 {

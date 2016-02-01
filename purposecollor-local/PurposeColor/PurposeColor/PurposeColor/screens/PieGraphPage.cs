@@ -54,7 +54,7 @@ namespace PurposeColor.screens
                 Text = "My Emotional Zone",
                 FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
                 TextColor = Color.FromRgb(40, 47, 50),
-                FontSize = Device.OnPlatform(20, 20, 30)
+                FontSize = Device.OnPlatform(12, 20, 20)
 
             };
             masterLayout.AddChildToLayout(headingLabel, 10, 20);
@@ -68,8 +68,8 @@ namespace PurposeColor.screens
 
             graphModel = new CustomeGraphModel();
             plotView.Model = graphModel.plotModel;
-            plotView.VerticalOptions = LayoutOptions.StartAndExpand;
-            plotView.HorizontalOptions = LayoutOptions.StartAndExpand;
+			plotView.VerticalOptions = LayoutOptions.Center;
+			plotView.HorizontalOptions = LayoutOptions.Center;
             #endregion
 
             masterLayout.AddChildToLayout(plotView, 20, 27);
@@ -113,7 +113,10 @@ namespace PurposeColor.screens
             Label region1Label = new Label
             {
                 Text = "Warm",
-                WidthRequest = 60
+				WidthRequest = 60, 
+				FontSize = Device.OnPlatform(12, 14, 14 ),
+				VerticalOptions = LayoutOptions.End,
+				TextColor = Color.FromRgb(40, 47, 50),
             };
             region1DownArrow = new Image
             {
@@ -123,14 +126,16 @@ namespace PurposeColor.screens
             };
             Image region1Icon = new Image
             {
-                Source = "ic_red"
+				Source = "ic_red",
+				HeightRequest = 15,
+				WidthRequest = 15
             };
 
             StackLayout region1Button = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                Spacing = 10,
-                Padding = 10,
+				Spacing = Device.OnPlatform(5, 10, 10),
+				Padding = new Thickness(10,10,10,1),
                 Children = { region1Icon, region1Label, region1DownArrow }
             };
             TapGestureRecognizer emotion1TapRecognizer = new TapGestureRecognizer();
@@ -141,6 +146,7 @@ namespace PurposeColor.screens
             {
                 // add all warm button elements to this container.
                 // head icon, label and arrow icon. rotate the arrow icon 180 degree on each click.
+
                 Orientation = StackOrientation.Vertical,
                 Children = { region1Button }
             };
@@ -153,7 +159,10 @@ namespace PurposeColor.screens
             Label region2Label = new Label
             {
                 Text = "Assertive",
-                WidthRequest = 60
+                WidthRequest = 60,
+				FontSize = Device.OnPlatform(12, 14, 14 ),
+				VerticalOptions = LayoutOptions.End,
+				TextColor = Color.FromRgb(40, 47, 50),
             };
             region2DownArrow = new Image
             {
@@ -163,13 +172,15 @@ namespace PurposeColor.screens
             };
             Image region2Icon = new Image
             {
-                Source = "ic_orge"
+				Source = "ic_orge",
+				HeightRequest = 15,
+				WidthRequest = 15
             };
             StackLayout region2Button = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                Spacing = 10,
-                Padding = 10,
+				Spacing = Device.OnPlatform(5, 10, 10),
+				Padding = new Thickness(10,10,10,1),
                 Children = { region2Icon, region2Label, region2DownArrow }
             };
             region2ButtonStack = new StackLayout
@@ -193,18 +204,23 @@ namespace PurposeColor.screens
             Label region3Label = new Label
             {
                 Text = "Patient",
-                WidthRequest = 60
+				WidthRequest = 60, 
+				FontSize = Device.OnPlatform(12, 14, 14 ),
+				VerticalOptions = LayoutOptions.End,
+				TextColor = Color.FromRgb(40, 47, 50),
             };
             Image region3Icon = new Image
             {
-                Source = "ic_green"
+				Source = "ic_green",
+				HeightRequest = 15,
+				WidthRequest = 15
             };
 
             StackLayout region3Button = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                Spacing = 10,
-                Padding = 10,
+				Spacing = Device.OnPlatform(5, 10, 10),
+				Padding = new Thickness(10,10,10,1),
                 Children = { region3Icon, region3Label, region3DownArrow }
             };
             TapGestureRecognizer emotion3TapRecognizer = new TapGestureRecognizer();
@@ -233,19 +249,24 @@ namespace PurposeColor.screens
             Label region4Label = new Label
             {
                 Text = "Detailed",
-                WidthRequest = 60
+				WidthRequest = 60, 
+				FontSize = Device.OnPlatform(12, 14, 14 ),
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Color.FromRgb(40, 47, 50),
             };
             Image region4Icon = new Image
             {
-                Source = "ic_blu"
+				Source = "ic_blu",
+				HeightRequest = 15,
+				WidthRequest = 15
             };
 
 
             StackLayout region4Button = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                Spacing = 10,
-                Padding = 10,
+				Spacing = Device.OnPlatform(5, 10, 10),
+				Padding = new Thickness(10,10,10,1),
                 Children = { region4Icon, region4Label, region4DownArrow }
             };
             TapGestureRecognizer emotion4TapRecognizer = new TapGestureRecognizer();
@@ -262,13 +283,13 @@ namespace PurposeColor.screens
             StackLayout BottomStackContainer = new StackLayout
             {
                 // add all buttons to this container.
-                BackgroundColor = Color.White,
+				BackgroundColor = Color.White,
                 //Padding = 10,
                 WidthRequest = App.screenWidth * .80,
                 Orientation = StackOrientation.Vertical,
                 Spacing = 5, // should be same as that of inner stack spacing //
-                Children = { new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(10,0,0,0), Spacing = 10, Children = { region1ButtonStack, region4ButtonStack } }, // 1. red, 2. blue
-                             new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(10,0,0,0),Spacing = 10, Children = { region2ButtonStack, region3ButtonStack } }} // 3. organe, 4. green
+				Children = { new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(Device.OnPlatform(5, 10, 10),0,0,0), Spacing = 10, Children = { region1ButtonStack, region4ButtonStack } }, // 1. red, 2. blue
+					new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(Device.OnPlatform(5, 10, 10),0,0,0),Spacing = 10, Children = { region2ButtonStack, region3ButtonStack } }} // 3. organe, 4. green
             };
 
             #endregion
@@ -375,13 +396,13 @@ namespace PurposeColor.screens
                 }
 
 
-                StackLayout subEmotionsContainer = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 5, Padding = new Thickness(15,0,0,2), ClassId = "emotionSubContainer" + regionCode };
+				StackLayout subEmotionsContainer = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 5, Padding = new Thickness(Device.OnPlatform(30, 20, 20),0,0,2), ClassId = "emotionSubContainer" + regionCode };
 
                 foreach (EmotionValues emmotionVal in currentRegionEmotions)
                 {
                     if (!string.IsNullOrEmpty(emmotionVal.emotion_title))
                     {
-                        Label emotionLabel = new Label { Text = emmotionVal.emotion_title };
+						Label emotionLabel = new Label { Text = emmotionVal.emotion_title, FontSize = Device.OnPlatform(10, 16, 16), TextColor = Color.FromRgb(40, 47, 50), };
                         subEmotionsContainer.Children.Add(emotionLabel);
                     }
                 }

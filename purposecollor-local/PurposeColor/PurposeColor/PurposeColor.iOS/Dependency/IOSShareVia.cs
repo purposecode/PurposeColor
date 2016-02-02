@@ -12,6 +12,7 @@ namespace PurposeColor.iOS
 {
 	public class IOSShareVia : IShareVia
 	{
+		ProgressBarImpl progress = new ProgressBarImpl();
 		public IOSShareVia()
 		{
 		}
@@ -20,7 +21,8 @@ namespace PurposeColor.iOS
 		{
 			try 
 			{
-				//MonoTouch.ObjCRuntime.Class.ThrowOnInitFailure
+				
+				//progress.ShowProgressbar( "Preparing sharing options...." );
 
 				NSMutableArray sharingItems = new NSMutableArray ();
 
@@ -36,18 +38,30 @@ namespace PurposeColor.iOS
 					UIImage image = UIImage.LoadFromData( NSData.FromUrl( new NSUrl(path) ) );
 					shareArray [1] = image;
 				}
+				else if( type == Constants.MediaType.Video && !string.IsNullOrEmpty( path ) )
+				{
+					NSString videoUrl = new NSString( path );
+					shareArray[1] = videoUrl;
+				}
 
 				var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First().ChildViewControllers.Last().ChildViewControllers.First();
 
 				UIActivityViewController controller = new UIActivityViewController ( shareArray, null  );
 
-				firstController.PresentViewController ( controller, true, null );
+				firstController.PresentViewController ( controller, true, Controlerloaded);
+		
 			}
 			catch (Exception ex) 
 			{
 				Debug.WriteLine ( ex.Message );					
 			}
 
+		}
+
+
+		private void Controlerloaded()
+		{
+			progress.HideProgressbar ();
 		}
 	}
 }

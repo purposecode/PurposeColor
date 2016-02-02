@@ -446,7 +446,7 @@ namespace PurposeColor
 						if( gemMedia != null )
 						{
 							TapGestureRecognizer videoTap = new TapGestureRecognizer();
-							videoTap.Tapped += OnActionVideoTapped;
+							videoTap.Tapped += OnGemTapped;
 
 							Image img = new Image();
 							bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
@@ -752,6 +752,7 @@ namespace PurposeColor
 
         async void OnShareButtonTapped(object sender, EventArgs e)
         {
+
             string statusCode = "404";
 
             try
@@ -775,9 +776,39 @@ namespace PurposeColor
 
                 if( gemInfo != null )
                 {
-                    IShareVia share = DependencyService.Get<IShareVia>();
-                    string mediaPath = (gemInfo.gem_media != null && gemInfo.gem_media.Count > 0) ?  Constants.SERVICE_BASE_URL +  gemInfo.gem_media[0].gem_media : null;
-                    share.ShareMedia(gemInfo.gem_details, mediaPath, Constants.MediaType.Image);
+					IProgressBar progress = DependencyService.Get< IProgressBar >();
+
+					progress.ShowProgressbar( "Share view loading....." );
+
+					try
+					{
+
+						IShareVia share = DependencyService.Get<IShareVia>();
+						string mediaPath = (gemInfo.gem_media != null && gemInfo.gem_media.Count > 0) ?  Constants.SERVICE_BASE_URL +  gemInfo.gem_media[0].gem_media : null;
+						string mediaType = (gemInfo.gem_media != null && gemInfo.gem_media.Count > 0) ?  gemInfo.gem_media[0].media_type : null;
+						Constants.MediaType medaTypeToShare = Constants.MediaType.Image;
+						if( mediaType == "mp4" )
+						{
+							medaTypeToShare = Constants.MediaType.Video;
+						}
+						else if( mediaType == "3gpp" || mediaType == "wav" )
+						{
+							medaTypeToShare = Constants.MediaType.Audio;
+						}
+						else if( mediaType == ".png" || mediaType == ".jpg" || mediaType == ".jpeg" )
+						{
+							medaTypeToShare = Constants.MediaType.Image;
+						}
+
+						share.ShareMedia(gemInfo.gem_details, mediaPath, medaTypeToShare);
+
+
+					}
+					catch (Exception ex)
+					{
+
+					}
+
                 }
 
             }
@@ -791,7 +822,7 @@ namespace PurposeColor
 
 	
 
-        void OnActionVideoTapped(object sender, EventArgs e)
+        void OnGemTapped(object sender, EventArgs e)
         {
             Image img = sender as Image;
             if (img != null)
@@ -799,8 +830,15 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
+					string fileExtenstion = Path.GetExtension(img.ClassId);
+					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+
+					if (!isImage) 
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+						videoDownload.Download(img.ClassId, fileName);
+					}
+                    
 
                 }
 

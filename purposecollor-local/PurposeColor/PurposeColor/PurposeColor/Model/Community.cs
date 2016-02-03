@@ -6,6 +6,21 @@ using System.Threading.Tasks;
 
 namespace PurposeColor.Model
 {
+	public class CommunityGemsDetailsDB
+	{
+		public string user_id { get; set; }
+		public int like_status { get; set; }
+		public int likecount { get; set; }
+		public string gem_id { get; set; }
+		public string gem_title { get; set; }
+		public string gem_details { get; set; }
+		public string gem_datetime { get; set; }
+		public string share_status { get; set; }
+		public string firstname { get; set; }
+		public string profileimg { get; set; }
+	}
+
+
 	public class GemMedia
 	{
 		public string gem_id { get; set; }

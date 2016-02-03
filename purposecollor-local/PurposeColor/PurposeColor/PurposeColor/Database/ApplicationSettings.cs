@@ -129,6 +129,18 @@ namespace PurposeColor.Database
                 {
                     Connection.CreateTable<CompletedActionTitle>();
                 }
+
+				var communityGemsDetailsDB = Connection.GetTableInfo("CommunityGemsDetailsDB");
+				if (communityGemsDetailsDB == null || communityGemsDetailsDB.Count < 1)
+				{
+					Connection.CreateTable<CommunityGemsDetailsDB>();
+				}
+
+				var gemMedia = Connection.GetTableInfo("GemMedia");
+				if (gemMedia == null || gemMedia.Count < 1)
+				{
+					Connection.CreateTable<GemMedia>();
+				}
             }
             catch (Exception ex)
             {
@@ -1048,6 +1060,133 @@ namespace PurposeColor.Database
 		#endregion
 
 
+
+		public void DeleteCommunityGems()
+		{
+			try
+			{
+				Connection.DeleteAll<GemMedia>();
+				Connection.DeleteAll<CommunityGemsDetailsDB>();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("DeleteAllEvents :: " + ex.Message);
+			}
+		}
+
+
+		public CommunityGemsObject GetCommunityGemsObject()
+		{
+			try
+			{
+				CommunityGemsObject masterObject = new CommunityGemsObject();
+
+				List<CommunityGemsDetailsDB> listCommunityDetails = new List<CommunityGemsDetailsDB>();
+				List<GemMedia> listGemMedia = new List<GemMedia>();
+
+				listCommunityDetails = (from t in Connection.Table<CommunityGemsDetailsDB>() select t).ToList();
+				listGemMedia = (from t in Connection.Table<GemMedia>() select t).ToList();
+
+				masterObject.resultarray = new List<CommunityGemsDetails>();
+
+				foreach (var item in listCommunityDetails)
+				{
+					CommunityGemsDetails resultArray = new CommunityGemsDetails();
+					resultArray.gem_media = new List<GemMedia>();
+
+					resultArray.user_id = item.user_id;
+					resultArray.like_status = item.like_status;
+					resultArray.likecount = item.likecount;
+					resultArray.gem_id = item.gem_id;
+					resultArray.gem_title = item.gem_title;
+					resultArray.gem_details = item.gem_details;
+					resultArray.gem_datetime = item.gem_datetime;
+					resultArray.share_status = item.share_status;
+					resultArray.firstname = item.firstname;
+					resultArray.profileimg = item.profileimg;
+
+
+					// Title
+					foreach (var mediaObject in listGemMedia)
+					{
+						if (mediaObject.gem_id == item.gem_id)
+							resultArray.gem_media.Add(mediaObject);
+					}
+
+					masterObject.resultarray.Add(resultArray);
+				}
+
+				return masterObject;
+			}
+			catch (Exception)
+			{
+
+				return null;
+			}
+
+		}
+
+
+		public bool SaveCommunityGemsDetails( CommunityGemsObject gemsObject )
+		{
+			try
+			{
+				if (gemsObject == null || gemsObject.resultarray == null)
+				{
+					return false;
+				}
+
+				List<CommunityGemsDetailsDB> listCommunityGemsDetails = new List<CommunityGemsDetailsDB>();
+				List<GemMedia> listGemMedia = new List<GemMedia>();
+
+				foreach (var item in gemsObject.resultarray)
+				{
+
+
+					if( item != null )
+					{
+						CommunityGemsDetailsDB detail = new CommunityGemsDetailsDB();
+						detail.firstname = item.firstname;
+						detail.gem_datetime = item.gem_datetime;
+						detail.gem_details = item.gem_details;
+						detail.gem_id =  item.gem_id;
+						detail.gem_title = item.gem_title;
+						detail.likecount = item.likecount;
+						detail.like_status = item.like_status;
+						detail.profileimg = item.profileimg;
+						detail.share_status = item.share_status;
+						detail.user_id = item.user_id;
+
+						listCommunityGemsDetails.Add( detail );
+					}
+
+
+					foreach (var gemMedia in item.gem_media)
+					{
+						GemMedia media = new GemMedia();
+						media = gemMedia;
+						listGemMedia.Add(media);
+					}
+
+				}
+
+				Connection.InsertAll(listCommunityGemsDetails);
+				Connection.InsertAll(listGemMedia);
+
+				listGemMedia.Clear();
+				listCommunityGemsDetails.Clear();
+
+				listGemMedia = null;
+				listCommunityGemsDetails = null;
+
+				return true;
+			}
+			catch (Exception ex)
+			{
+
+				return false;
+			}
+		}
 
 
 

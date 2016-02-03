@@ -160,18 +160,26 @@ namespace PurposeColor
 
 
 				communityGems = await ServiceHelper.GetCommunityGemsDetails();
-				if (communityGems == null)
+
+				if( communityGems == null || communityGems.resultarray == null )
 				{
 					var success = await DisplayAlert(Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
-					if (!success)
+					if (!success) 
 					{
-						OnAppearing(sender, EventArgs.Empty);
+						OnAppearing (sender, EventArgs.Empty);
 						return;
-					}
+					} 
 					else
 					{
-						return;
+						if (Device.OS != TargetPlatform.WinPhone)
+							communityGems = App.Settings.GetCommunityGemsObject();
+
 					}
+				}
+				else
+				{
+					App.Settings.DeleteCommunityGems();
+					App.Settings.SaveCommunityGemsDetails( communityGems );
 				}
 
 

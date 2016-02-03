@@ -163,32 +163,13 @@ namespace PurposeColor.screens
                 }
                 else if ("Community GEMs" == selItem.Name)
                 {
-					/*App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
-					App.masterPage.IsPresented = false;
-					return;*/
-                   IProgressBar progress = DependencyService.Get<IProgressBar>();
-                   progress.ShowProgressbar( "Loading community gems" );
-                   App.masterPage.IsPresented = false;
-                   SelectedGoal goalInfo = await ServiceHelper.GetSelectedGoalDetails("37");
-                   if (goalInfo != null)
-                   {
-                       DetailsPageModel model = new DetailsPageModel();
-                       model.actionMediaArray = null;
-                       model.mediaArray = null;
-                       model.goal_media = goalInfo.resultarray.goal_media;
-                       model.Media = null;
-                       model.NoMedia = null;
-                       model.pageTitleVal = "Goal Details";
-                       model.titleVal = goalInfo.resultarray.goal_title;
-                       model.desc = goalInfo.resultarray.goal_details;
-                       model.gemType = GemType.Goal;
-                       model.gemId = "37";
-                       progress.HideProgressbar();
-						App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
-                     //  App.masterPage.Detail = new NavigationPage(new CommunityGemsPage());
-                   }
 
-                   progress.HideProgressbar();
+					IProgressBar progress = DependencyService.Get<IProgressBar>();
+					progress.ShowProgressbar( "Loading community gems" );
+					App.masterPage.IsPresented = false;
+					DetailsPageModel model = new DetailsPageModel();
+					App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
+					progress.HideProgressbar();
                 }
                 else if (Constants.APPLICATION_SETTTINGS == selItem.Name)
                 {

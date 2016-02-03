@@ -6,107 +6,62 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PurposeColor.Model
 {
-    public class CustomeGraphModel
-    {
+	public class CustomeGraphModel
+	{
+		public PlotModel plotModel { get; set; }
 
-        /// <summary>
-        /// Gets or sets the plot model that is shown in the demo apps.
-        /// </summary>
-        /// <value>My model.</value>
-        public PlotModel plotModel { get; set; }
+		public CustomeGraphModel(List<EmotionValues> emotions)
+		{
+			plotModel = new PlotModel
+			{
+				Title = ""
+			};
+			int warmCount = emotions.Where (e => e.emotion_value == "-2").ToList ().Count;
+			int assertiveCount = emotions.Where (e => e.emotion_value == "-1").ToList ().Count;
+			int patientCount = emotions.Where (e => e.emotion_value == "1").ToList ().Count;
+			int detailedCount = emotions.Where (e => e.emotion_value == "2").ToList ().Count;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="OxyPlotSample.MyClass"/> class.
-        /// </summary>
-        public CustomeGraphModel()
-        {
-            plotModel = new PlotModel
-            {
-                Title = ""
-            };
+			//plotModel.Axes.Add(new LinearAxis { PositionAtZeroCrossing = true, IsZoomEnabled = false, IsPanEnabled = false, Position = AxisPosition.Bottom, Minimum = -2, Maximum = 2, TickStyle = TickStyle.None, AxislineColor = OxyColors.Transparent });
+			//plotModel.Axes.Add(new LinearAxis { PositionAtZeroCrossing = true, IsZoomEnabled = false, IsPanEnabled = false, Position = AxisPosition.Left, Minimum = -2, Maximum = 2, TickStyle = TickStyle.None, AxislineColor = OxyColors.Transparent });
 
-            //plotModel.Axes.Add(new LinearAxis { PositionAtZeroCrossing = true, IsZoomEnabled = false, IsPanEnabled = false, Position = AxisPosition.Bottom, Minimum = -2, Maximum = 2, TickStyle = TickStyle.None, AxislineColor = OxyColors.Transparent });
-            //plotModel.Axes.Add(new LinearAxis { PositionAtZeroCrossing = true, IsZoomEnabled = false, IsPanEnabled = false, Position = AxisPosition.Left, Minimum = -2, Maximum = 2, TickStyle = TickStyle.None, AxislineColor = OxyColors.Transparent });
+			#region PIE SERIES DUNMMY PLOT MODEL
 
-            #region LINE SERIES
-            /*
-            var xaxis = new LinearAxis
-            {
-                Position = AxisPosition.Bottom
-            };
+			var pieSeries = new PieSeries();
 
-            var yaxis = new LinearAxis
-            {
-                Position = AxisPosition.Left,
-                Minimum = 0,
-                Maximum = 10
-            };
+			//in actual implementation PieSlice has to be derived from a dictionary or comining arrays.
+			pieSeries.Slices.Add(new PieSlice("Warm", warmCount) { IsExploded = true , Fill = OxyColor.FromRgb(249,68,0)});
+			pieSeries.Slices.Add(new PieSlice("Patient", patientCount) { IsExploded = true , Fill = OxyColor.FromRgb(30,163,1)}); //31, 145, 2
+			pieSeries.Slices.Add(new PieSlice("Assertive", assertiveCount){ IsExploded = true, Fill = OxyColor.FromRgb(255,201,60)});
+			pieSeries.Slices.Add(new PieSlice("Detailed", detailedCount) { IsExploded = true, Fill = OxyColor.FromRgb(2,76,234)});
 
-
-
-            plotModel.Axes.Add(xaxis);
-            plotModel.Axes.Add(yaxis);
-
-            var series1 = new LineSeries
-            {
-                StrokeThickness = 3,
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 4,
-                MarkerStroke = OxyColors.White,
-                MarkerStrokeThickness = 1
-            };
-
-            series1.Points.Add(new DataPoint(0.0, 6.0));
-            series1.Points.Add(new DataPoint(1.4, 2.1));
-            series1.Points.Add(new DataPoint(2.0, 4.2));
-            series1.Points.Add(new DataPoint(3.3, 2.3));
-            series1.Points.Add(new DataPoint(4.7, 7.4));
-            series1.Points.Add(new DataPoint(6.0, 6.2));
-            series1.Points.Add(new DataPoint(8.0, 8.9));
-
-            plotModel.Series.Add(series1);
-            */
-            #endregion
-
-            #region PIE SERIES DUNMMY PLOT MODEL
-            
-            // http://www.nationsonline.org/oneworld/world_population.htm
-            // http://en.wikipedia.org/wiki/Continent
-
-            var pieSeries = new PieSeries();
-
-            //in actual implementation PieSlice has to be derived from a dictionary or comining arrays.
-            pieSeries.Slices.Add(new PieSlice("Warm", 1030) { IsExploded = true });
-            pieSeries.Slices.Add(new PieSlice("Patient", 529) { IsExploded = true });
-            pieSeries.Slices.Add(new PieSlice("Assertive", 2157));
-            pieSeries.Slices.Add(new PieSlice("Detailed", 939) { IsExploded = true });
-
-            pieSeries.InnerDiameter = 0.5;
-            pieSeries.ExplodedDistance = 0.0;
-            pieSeries.Stroke = OxyColors.White;
-            pieSeries.StrokeThickness = 2.0;
-            pieSeries.InsideLabelPosition = 0.8;
-            pieSeries.AngleSpan = 360;
-            pieSeries.StartAngle = 0;
-            pieSeries.TickRadialLength = 1;
+			pieSeries.InnerDiameter = 0; //0.3;
+			pieSeries.ExplodedDistance = 0.0;
+			pieSeries.Stroke = OxyColors.Transparent;
+			pieSeries.StrokeThickness = 0;
+			pieSeries.InsideLabelPosition = 0.6; // 0.8; -for stright label
+			pieSeries.FontSize = 22;
+			pieSeries.AngleSpan = 360;
+			pieSeries.StartAngle = 0;
+			pieSeries.TickRadialLength = 2;
 			pieSeries.ToolTip = "My Emotional Zone";
-            pieSeries.TextColor = OxyColor.FromRgb(1, 1, 1);
-            pieSeries.InsideLabelColor = OxyColor.FromRgb(5, 5, 5);
+			pieSeries.TextColor = OxyColor.FromRgb(1,1,1);
+			pieSeries.InsideLabelColor = OxyColor.FromRgb(1,1,1);
+			pieSeries.OutsideLabelFormat = null;  /// the percentage display of each slice.
+			pieSeries.AreInsideLabelsAngled = true;
 
 
-            //pieSeries.OutsideLabelFormat = null;  /// the percentage display of each slice.
+			plotModel.Background = OxyColors.Transparent;
+			plotModel.PlotAreaBorderColor = OxyColors.Transparent;
 
-            plotModel.Background = OxyColors.Transparent;
-            plotModel.PlotAreaBorderColor = OxyColors.Transparent;
+			plotModel.Series.Add(pieSeries);
 
-            plotModel.Series.Add(pieSeries);
-            
-            #endregion
+			#endregion
 
-            
-        }
-    }
+
+		}
+	}
 }

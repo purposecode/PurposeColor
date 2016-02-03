@@ -39,10 +39,27 @@ namespace PurposeColor.Model
         public string emotion_title { get; set; }
         public int emotion_id { get; set; }
     }
-    public class AllEmotions
-    {
-        public string code { get; set; }
-        public string text { get; set; }
-        public List<EmotionValues> resultarray { get; set; }
-    }
+
+	public class AllEmotions
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public string warm_percent {
+			get;
+			set;
+		}
+		public int patient_percent {
+			get;
+			set;
+		}
+		public int detailed_percent {
+			get;
+			set;
+		}
+		public int assertive_percent {
+			get;
+			set;
+		}
+		public List<EmotionValues> resultarray { get; set; }
+	}
 }

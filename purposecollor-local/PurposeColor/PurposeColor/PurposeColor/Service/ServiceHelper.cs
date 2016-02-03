@@ -2104,8 +2104,6 @@ namespace PurposeColor.Service
 			}
 		}
 
-
-
         public static async Task<ShareStatusAndCommentsCount> GetShareStatusAndCommentsCount(string gemId, GemType gemtype, string userId)
         {
             try
@@ -2160,5 +2158,83 @@ namespace PurposeColor.Service
 
             return null;
         }
+
+		public static async Task<AllEmotions> GetEmotionsDetailsForGraph(string userId)
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+				client.Timeout = new TimeSpan(0, 20, 0);
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=piechartview&user_id=" +userId;
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<AllEmotions>(responseJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						return rootobject;
+					}
+				}
+				else
+				{
+					return null;
+				}
+
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+
+			return null;
+		}
+
+		public static async Task<string> Addtosupportemotion(string emotionId)
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return "504";
+				}
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=addtosupportemotion&useremotion_id=" +emotionId;
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+					if (rootobject != null && rootobject != null)
+					{
+						return rootobject.code;
+					}
+				}
+				else
+				{
+					return "504";
+				}
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+			return "504";
+		}
+
     }
 }

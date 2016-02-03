@@ -59,7 +59,8 @@ namespace PurposeColor.screens
 
 			graphAndEmotionListContainer = new StackLayout
 			{
-				Spacing = 0,
+				HorizontalOptions = LayoutOptions.Center,
+				Spacing = 5,
 				Orientation = StackOrientation.Vertical
 			};
 
@@ -266,7 +267,7 @@ namespace PurposeColor.screens
 			{
 				// add all buttons to this container.
 				BackgroundColor = Color.Transparent,
-				//Padding = 10,
+				HorizontalOptions = LayoutOptions.Center,
 				WidthRequest = App.screenWidth * .80,
 				Orientation = StackOrientation.Vertical,
 				Padding = new Thickness(0,0,0,10),
@@ -278,7 +279,8 @@ namespace PurposeColor.screens
 				WidthRequest = App.screenWidth,
 				Content = graphAndEmotionListContainer,
 				IsClippedToBounds = true,
-				Orientation = ScrollOrientation.Vertical
+				Orientation = ScrollOrientation.Vertical,
+				HorizontalOptions = LayoutOptions.Center
 			};
 
 			masterLayout.AddChildToLayout (contentScrool, 0, 18);
@@ -446,7 +448,7 @@ namespace PurposeColor.screens
 		async void EmotionlabelRecognizer_Tapped (object sender, EventArgs e)
 		{
 			try {
-				
+
 				Label selectedLabel = sender as Label;
 				if (selectedLabel != null) {
 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace PurposeColor.Model
 {
@@ -43,7 +44,7 @@ namespace PurposeColor.Model
 			pieSeries.Stroke = OxyColors.Transparent;
 			pieSeries.StrokeThickness = 0;
 			pieSeries.InsideLabelPosition = 0.6; // 0.8; -for stright label
-			pieSeries.FontSize = 22;
+			pieSeries.FontSize = Device.OnPlatform(10,22,22);
 			pieSeries.AngleSpan = 360;
 			pieSeries.StartAngle = 0;
 			pieSeries.TickRadialLength = 2;
@@ -52,7 +53,6 @@ namespace PurposeColor.Model
 			pieSeries.InsideLabelColor = OxyColor.FromRgb(1,1,1);
 			pieSeries.OutsideLabelFormat = null;  /// the percentage display of each slice.
 			pieSeries.AreInsideLabelsAngled = true;
-
 
 			plotModel.Background = OxyColors.Transparent;
 			plotModel.PlotAreaBorderColor = OxyColors.Transparent;

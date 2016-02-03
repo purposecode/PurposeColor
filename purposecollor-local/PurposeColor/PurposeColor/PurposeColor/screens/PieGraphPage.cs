@@ -11,14 +11,12 @@ using System;
 
 namespace PurposeColor.screens
 {
-	public class PieGraphPage : ContentPage
+	public class PieGraphPage : ContentPage, IDisposable
 	{
 		private OxyPlotView plotView;
 		CustomLayout masterLayout = null;
 
 		public CustomeGraphModel graphModel { get; set; }
-		double screenHeight;
-		double screenWidth;
 		IProgressBar progressBar = null;
 		PurposeColorSubTitleBar subTitleBar = null;
 		PurposeColorTitleBar mainTitleBar = null;
@@ -39,6 +37,8 @@ namespace PurposeColor.screens
 
 		List<EmotionValues> emotionList = null;
 		int currentSubMenuDisplaying = 0;
+		StackLayout graphAndEmotionListContainer = null;
+		StackLayout BottomStackContainer = null;
 
 
 		public PieGraphPage()
@@ -46,8 +46,6 @@ namespace PurposeColor.screens
 			NavigationPage.SetHasNavigationBar(this, false);
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-			screenHeight = App.screenHeight;
-			screenWidth = App.screenWidth;
 			progressBar = DependencyService.Get<IProgressBar>();
 
 			this.Appearing += OnGraphPageAppearing;
@@ -59,6 +57,12 @@ namespace PurposeColor.screens
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
 
+			graphAndEmotionListContainer = new StackLayout
+			{
+				Spacing = 0,
+				Orientation = StackOrientation.Vertical
+			};
+
 			Label headingLabel = new Label
 			{
 				Text = "My Emotional Zone",
@@ -67,12 +71,12 @@ namespace PurposeColor.screens
 				FontSize = Device.OnPlatform(12, 16, 20)
 
 			};
-			masterLayout.AddChildToLayout(headingLabel, 30, 18);
 
 			Image filter = new Image {
 				Source = "filter.png",
 				HeightRequest = 25,
-				WidthRequest = 25
+				WidthRequest = 25,
+				Aspect = Aspect.Fill
 			};
 			TapGestureRecognizer filterTapRecognizer = new TapGestureRecognizer();
 			filter.GestureRecognizers.Add(filterTapRecognizer);
@@ -80,42 +84,7 @@ namespace PurposeColor.screens
 				await DisplayAlert(Constants.ALERT_TITLE,"Filter option to be implemented",Constants.ALERT_OK);
 			};
 
-
-
-			masterLayout.AddChildToLayout(filter, 85, 18);
-
-
-			#region List views
-
-
-			/////////////////////// for testing only ////////////////
-			emotionList = new List<EmotionValues>
-			{
-				new EmotionValues{count = 2, emotion_id = 1, emotion_title="Happy",emotion_value="1"},
-				new EmotionValues{count = 3, emotion_id = 1, emotion_title="Excited",emotion_value="1"},
-				new EmotionValues{count = 5, emotion_id = 1, emotion_title="Satisfaction",emotion_value="1"},
-				new EmotionValues{count = 2, emotion_id = 1, emotion_title="Amusement",emotion_value="1"},
-
-
-				new EmotionValues{count = 4, emotion_id = 2, emotion_title="Creativity",emotion_value="2"},
-				new EmotionValues{count = 4, emotion_id = 2, emotion_title="Great",emotion_value="2"},
-				new EmotionValues{count = 4, emotion_id = 2, emotion_title="Trust",emotion_value="2"},
-				new EmotionValues{count = 4, emotion_id = 2, emotion_title="Motivated",emotion_value="2"},
-
-				new EmotionValues{count = 1, emotion_id = 3, emotion_title="Fedup",emotion_value="-1"},
-				new EmotionValues{count = 1, emotion_id = 3, emotion_title="Worried",emotion_value="-1"},
-				new EmotionValues{count = 1, emotion_id = 3, emotion_title="Disturbed",emotion_value="-1"},
-				new EmotionValues{count = 1, emotion_id = 3, emotion_title="Irritated",emotion_value="-1"},
-
-
-				new EmotionValues{count = 2, emotion_id = 4, emotion_title="Very bad",emotion_value="-2"},
-				new EmotionValues{count = 2, emotion_id = 4, emotion_title="Arrogant",emotion_value="-2"},
-				new EmotionValues{count = 2, emotion_id = 4, emotion_title="frustrated",emotion_value="-2"}
-			};
-
-			// already sorted // Emotions.GroupBy(emo => emo.emotion_value).ToList();
-
-			/////////////////////// for testing only ////////////////
+			graphAndEmotionListContainer.Children.Add(new StackLayout{ Spacing = 50, Padding  = new Thickness(80,0,10,0), Orientation = StackOrientation.Horizontal , Children = {headingLabel,filter}});
 
 
 			#region REGION 1 BUTTON STACK
@@ -292,13 +261,7 @@ namespace PurposeColor.screens
 
 			#endregion
 
-			StackLayout emptySpacingAtBottom = new StackLayout
-			{
-				HeightRequest = 10,
-				BackgroundColor = Color.Transparent
-			};
-
-			StackLayout BottomStackContainer = new StackLayout
+			BottomStackContainer = new StackLayout
 			{
 				// add all buttons to this container.
 				BackgroundColor = Color.Transparent,
@@ -306,22 +269,24 @@ namespace PurposeColor.screens
 				WidthRequest = App.screenWidth * .80,
 				Orientation = StackOrientation.Vertical,
 				Padding = new Thickness(0,0,0,10),
-				//              Spacing = 5, // should be same as that of inner stack spacing //
-				//				Children = { new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(Device.OnPlatform(5, 5, 10),0,0,0), Spacing = 5, Children = { region1ButtonStack, region4ButtonStack } }, // 1. red, 2. blue
-				//							 new StackLayout { Orientation = StackOrientation.Horizontal, Padding = new Thickness(Device.OnPlatform(5, 5, 10),0,0,10),Spacing = 5, Children = { region2ButtonStack, region3ButtonStack } }} // 3. organe, 4. green
-				Children = { new StackLayout { Orientation = StackOrientation.Vertical, Padding = new Thickness(Device.OnPlatform(5, 10, 10),0,0,10), Spacing = 5, Children = {region4ButtonStack, region3ButtonStack, region2ButtonStack, region1ButtonStack} },
-					emptySpacingAtBottom} // 1. red, 2. blue
+				Children = { new StackLayout {Orientation = StackOrientation.Vertical, Padding = new Thickness(Device.OnPlatform(5, 10, 10),0,0,10), Spacing = 5, Children = {region4ButtonStack, region3ButtonStack, region2ButtonStack, region1ButtonStack} }} // 1. red, 2. blue
 			};
 
-			#endregion
-
-			masterLayout.AddChildToLayout(BottomStackContainer, 10, 70);
 			ScrollView contentScrool = new ScrollView {
-				Content = masterLayout,
+				HeightRequest = App.screenHeight - (App.screenHeight * .20),
+				WidthRequest = App.screenWidth,
+				Content = graphAndEmotionListContainer,
 				IsClippedToBounds = true,
 				Orientation = ScrollOrientation.Vertical
 			};
-			Content = contentScrool;
+
+			masterLayout.AddChildToLayout (contentScrool, 0, 18);
+
+			Content = new StackLayout {
+				HeightRequest = App.screenHeight,
+				WidthRequest = App.screenWidth,
+				Children = { masterLayout }
+			};
 		}
 
 		void Emotion4TapRecognizerTapped(object sender, System.EventArgs e)
@@ -426,28 +391,24 @@ namespace PurposeColor.screens
 					return;
 				}
 
-				StackLayout subEmotionsContainer = new StackLayout { Orientation = StackOrientation.Vertical, Spacing = 5, Padding = new Thickness(Device.OnPlatform(30, 47, 30),0,0,2), ClassId = "emotionSubContainer" + regionCode };
+				StackLayout subEmotionsContainer = new StackLayout {Orientation = StackOrientation.Vertical, Spacing = 5, Padding = new Thickness(Device.OnPlatform(55, 47, 30),0,0,2), ClassId = "emotionSubContainer" + regionCode };
 				switch (regionCode)
 				{
 				case 1: // red
 					region1ButtonStack.Children.Add(subEmotionsContainer);
-					//region1ButtonStack.Children.Add(new BoxView{BackgroundColor = Color.Black, WidthRequest = App.screenWidth, HeightRequest = 1});
 					region1DownArrow.Rotation = 180;
 					break;
 				case 2: // orange
 					region2ButtonStack.Children.Add(subEmotionsContainer);
 					region2DownArrow.Rotation = 180;
-					//region2ButtonStack.Children.Add(new BoxView{BackgroundColor = Color.Black, WidthRequest = App.screenWidth, HeightRequest = 1});
 					break;
 				case 3: // green
 					region3ButtonStack.Children.Add(subEmotionsContainer);
 					region3DownArrow.Rotation = 180;
-					//region3ButtonStack.Children.Add(new BoxView{BackgroundColor = Color.Black, WidthRequest = App.screenWidth, HeightRequest = 1});
 					break;
 				case 4: // blue
 					region4ButtonStack.Children.Add(subEmotionsContainer);
 					region4DownArrow.Rotation = 180;
-					//region4ButtonStack.Children.Add(new BoxView{BackgroundColor = Color.Black, WidthRequest = App.screenWidth, HeightRequest = 1});
 					break;
 				default:
 					break;
@@ -484,12 +445,13 @@ namespace PurposeColor.screens
 		async void EmotionlabelRecognizer_Tapped (object sender, EventArgs e)
 		{
 			try {
-				progressBar.ShowProgressbar("Adding to supporting emotions");
+				
 				Label selectedLabel = sender as Label;
 				if (selectedLabel != null) {
 
 					bool doAdd = await DisplayAlert (Constants.ALERT_TITLE, "Would you like to add this to Supporting emotions?", "Add", "Cancel");
 					if (doAdd) {
+						progressBar.ShowProgressbar("Adding to supporting emotions");
 						string emotionId = selectedLabel.ClassId;
 						// call api - addtosupportemotion
 						string serviceResult = await PurposeColor.Service.ServiceHelper.Addtosupportemotion(selectedLabel.ClassId);
@@ -543,46 +505,17 @@ namespace PurposeColor.screens
 					plotView.VerticalOptions = LayoutOptions.Center;
 					plotView.HorizontalOptions = LayoutOptions.Center;
 
-					masterLayout.AddChildToLayout(plotView, 10, 23);
+					graphAndEmotionListContainer.Children.Add(plotView);
+					graphAndEmotionListContainer.Children.Add(BottomStackContainer);
+
+					StackLayout emptySpacingAtBottom = new StackLayout
+					{
+						HeightRequest = 50,
+						BackgroundColor = Color.Transparent
+					};
+					graphAndEmotionListContainer.Children.Add(emptySpacingAtBottom);
+
 					#endregion
-
-					//					string warmPercent = "0";
-					//					if(!string.IsNullOrEmpty(getEmotionsResult.warm_percent))
-					//					{
-					//						warmPercent = getEmotionsResult.warm_percent;
-					//						if (warmPercent.Length > 3) {
-					//							warmPercent= warmPercent.Split('.')[0];
-					//						}
-					//					}
-					//
-					//					string assertivPercent = "0";
-					//					if(!string.IsNullOrEmpty(getEmotionsResult.assertive_percent))
-					//					{
-					//						assertivPercent = getEmotionsResult.assertive_percent;
-					//						if (assertivPercent.Length > 3) {
-					//							assertivPercent= assertivPercent.Split('.')[0];
-					//						}
-					//					}
-					//
-					//					string patientPercent = "0";
-					//					if(!string.IsNullOrEmpty(getEmotionsResult.patient_percent))
-					//					{
-					//						patientPercent = getEmotionsResult.patient_percent;
-					//						if (patientPercent.Length > 3) {
-					//							patientPercent= patientPercent.Split('.')[0];
-					//						}
-					//					}
-					//
-					//					string detailedPercent = "0";
-					//					if(!string.IsNullOrEmpty(getEmotionsResult.detailed_percent))
-					//					{
-					//						detailedPercent = getEmotionsResult.detailed_percent;
-					//
-					//						if (detailedPercent.Length > 3) {
-					//							detailedPercent= detailedPercent.Split('.')[0];
-					//						}
-					//					}
-
 
 					region1WarmLabel.Text = "Warm (" + getEmotionsResult.warm_percent+ "%)";
 					region2AssertiveLabel.Text = "Assertive (" + getEmotionsResult.assertive_percent + "%)";
@@ -606,6 +539,11 @@ namespace PurposeColor.screens
 			{
 				await DisplayAlert (Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
 			}
+		}
+
+		public void Dispose()
+		{
+			GC.Collect ();
 		}
 	}
 }

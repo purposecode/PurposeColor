@@ -134,7 +134,6 @@
     <None Include="Resources\noimage.png" />
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
-    <None Include="Resources\filter%401x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -259,6 +258,7 @@
     <BundleResource Include="Resources\icn_liked.png" />
     <BundleResource Include="Resources\icn_liked%402x.png" />
     <BundleResource Include="Resources\icn_liked%403x.png" />
+    <BundleResource Include="Resources\filter%401x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

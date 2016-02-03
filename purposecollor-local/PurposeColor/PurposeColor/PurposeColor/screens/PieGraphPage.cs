@@ -68,15 +68,16 @@ namespace PurposeColor.screens
 				Text = "My Emotional Zone",
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 				TextColor = Constants.BLUE_BG_COLOR, //Color.FromRgb(40, 47, 50),
-				FontSize = Device.OnPlatform(12, 16, 20)
-
+				FontSize = Device.OnPlatform(14, 16, 20),
+				VerticalOptions = LayoutOptions.Center
 			};
 
 			Image filter = new Image {
 				Source = "filter.png",
 				HeightRequest = 25,
 				WidthRequest = 25,
-				Aspect = Aspect.Fill
+				Aspect = Aspect.Fill,
+				HorizontalOptions = LayoutOptions.End
 			};
 			TapGestureRecognizer filterTapRecognizer = new TapGestureRecognizer();
 			filter.GestureRecognizers.Add(filterTapRecognizer);
@@ -84,7 +85,7 @@ namespace PurposeColor.screens
 				await DisplayAlert(Constants.ALERT_TITLE,"Filter option to be implemented",Constants.ALERT_OK);
 			};
 
-			graphAndEmotionListContainer.Children.Add(new StackLayout{ Spacing = 50, Padding  = new Thickness(80,0,10,0), Orientation = StackOrientation.Horizontal , Children = {headingLabel,filter}});
+			graphAndEmotionListContainer.Children.Add(new StackLayout{ Spacing = 70, Padding  = new Thickness(80,0,10,0), Orientation = StackOrientation.Horizontal , Children = {headingLabel,filter}});
 
 
 			#region REGION 1 BUTTON STACK

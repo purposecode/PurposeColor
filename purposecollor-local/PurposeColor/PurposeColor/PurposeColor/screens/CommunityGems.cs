@@ -44,6 +44,7 @@ namespace PurposeColor
         CommunityGemsObject communityGems;
 		User currentUser;
 		int myGemsCount = 0;
+		int MAX_ROWS_AT_A_TIME = 5;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -180,6 +181,12 @@ namespace PurposeColor
 				{
 					App.Settings.DeleteCommunityGems();
 					App.Settings.SaveCommunityGemsDetails( communityGems );
+				}
+
+
+				if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
+				{
+					communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
 				}
 
 
@@ -518,6 +525,22 @@ namespace PurposeColor
 					masterStackLayout.Children.Add(masterStack);
 				}
 
+				Button loadMoreGems = new Button();
+				loadMoreGems.BackgroundColor = Color.Transparent;
+				loadMoreGems.TextColor = Constants.BLUE_BG_COLOR;
+				loadMoreGems.Text = "Load more gems";
+				loadMoreGems.FontSize = 12;
+				loadMoreGems.BorderWidth = 0;
+				loadMoreGems.BorderColor = Color.Transparent;
+				loadMoreGems.Clicked += OnLoadMoreGemsClicked;
+
+				BoxView transBox = new BoxView();
+				transBox.HeightRequest = 200;
+				transBox.WidthRequest = App.screenWidth * 80 / 100;
+				transBox.BackgroundColor = Color.Transparent;
+				masterStackLayout.Children.Add(loadMoreGems);
+				masterStackLayout.Children.Add(transBox);
+
 				masterScroll.Content = masterStackLayout;
 			}
 			catch (Exception ex) 
@@ -533,6 +556,48 @@ namespace PurposeColor
 
         }
 
+
+		async void OnLoadMoreGemsClicked (object sender, EventArgs e)
+		{
+			try 
+			{
+
+				IProgressBar progress = DependencyService.Get< IProgressBar > ();
+				progress.ShowProgressbar ( "loading...." );
+				CommunityGemsDetails lastItem =   communityGems.resultarray.Last ();
+
+				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
+				int lastRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == lastItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
+				if (lastRendererItemIndex > -1 && ( lastRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
+				{
+					int itemCountToCopy = gemsObj.resultarray.Count - lastRendererItemIndex;
+					itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
+					communityGems = null;
+					communityGems = new CommunityGemsObject ();
+					communityGems.resultarray = new List<CommunityGemsDetails> ();
+					communityGems.resultarray = gemsObj.resultarray.Skip (lastRendererItemIndex + 1).Take (itemCountToCopy).ToList();
+
+					gemsObj = null;
+
+
+					masterStackLayout.Children.Clear();
+
+					masterScroll.Content = null;
+					GC.Collect();
+
+					RenderGems ( communityGems );
+					masterScroll.ScrollToAsync (0, 0, false); 
+				}
+
+				progress.HideProgressbar ();
+				progress = null;
+			} 
+			catch (Exception ex)
+			{
+				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+			}
+
+		}
 
 		protected override bool OnBackButtonPressed()
 		{

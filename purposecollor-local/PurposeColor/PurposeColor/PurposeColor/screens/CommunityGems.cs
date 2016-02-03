@@ -23,7 +23,6 @@ namespace PurposeColor
     {
         CustomLayout masterLayout = null;
         IProgressBar progressBar;
-        CustomLayout masterStack;
         ScrollView masterScroll;
         Label title;
         Label description;
@@ -218,7 +217,7 @@ namespace PurposeColor
 
 				foreach (var item in gemsObject.resultarray )
 				{
-					masterStack = new CustomLayout();
+					CustomLayout masterStack = new CustomLayout();
 					masterStack.ClassId = "masterstack" + item.gem_id;
 					masterStack.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
 
@@ -586,6 +585,7 @@ namespace PurposeColor
 
 					communityGems.resultarray = gemsObj.resultarray;
 
+					gemsObj = null;
 
 					masterStackLayout.Children.Clear();
 
@@ -818,7 +818,7 @@ namespace PurposeColor
 
         void HideCommentsPopup()
         {
-            try
+          /*  try
             {
                 View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
                 if (menuView != null)
@@ -829,7 +829,7 @@ namespace PurposeColor
             }
             catch (Exception)
             {
-            }
+            }*/
         }
 
         async void OnCommentButtonTapped(object sender, EventArgs e)
@@ -995,7 +995,7 @@ namespace PurposeColor
         {
             masterLayout = null;
             progressBar = null;
-            masterStack = null;
+            //masterStack = null;
             title = null;
             description = null;
             mediaList = null;

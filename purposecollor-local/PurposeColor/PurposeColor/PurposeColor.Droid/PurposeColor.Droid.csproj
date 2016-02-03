@@ -293,6 +293,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\icn_liked.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icn_liked.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_liked.png" />
+    <AndroidResource Include="Resources\drawable\filter.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

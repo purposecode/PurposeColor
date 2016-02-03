@@ -134,6 +134,7 @@
     <None Include="Resources\noimage.png" />
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
+    <None Include="Resources\filter%401x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

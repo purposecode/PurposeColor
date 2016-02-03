@@ -169,6 +169,7 @@
     <None Include="Assets\share.png" />
     <None Include="Assets\comnt_box.png" />
     <None Include="Assets\noimage.png" />
+    <None Include="Assets\filter.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\add_btn.png" />
@@ -289,6 +290,11 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+<ItemGroup>
+    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
+      <Name>SQLite for Windows Phone</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExifLib, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -426,11 +432,6 @@
       <Project>{1de1172d-5f4c-46f0-b334-1a87299a6ae1}</Project>
       <Name>PurposeColor</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
-      <Name>SQLite for Windows Phone</Name>
-    </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

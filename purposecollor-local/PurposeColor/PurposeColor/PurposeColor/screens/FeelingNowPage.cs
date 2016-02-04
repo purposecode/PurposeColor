@@ -38,12 +38,11 @@ namespace PurposeColor
         Label sliderValLabel;
         Label emotionTextLabel;
         Label eventTextLabel;
-        Image circleImg3;
-        Image circleImg2;
-        Image circleImg1;
+        
         StackLayout imagesContainer;
         bool emotionsDisplaying = false;
         bool eventsDisplaying = false;
+		StackLayout feedbackLabelStack = null;
 
         public FeelingNowPage()
         {
@@ -85,50 +84,10 @@ namespace PurposeColor
 
             //};
 
-            circleImg1 = new Image
-            {
-                Source = "finger_gray",//"icn_list",
-                HeightRequest = 20,
-                WidthRequest = 20
-            };
-            circleImg2 = new Image
-            {
-                Source = "finger_gray",//"icn_list",
-                HeightRequest = 20,
-                WidthRequest = 20,
-                Rotation = 180
-            };
-            circleImg3 = new Image
-            {
-                Source = "finger_gray",//"icn_list",
-                HeightRequest = 20,
-                WidthRequest = 20
-            };
-
             //imagesContainer.Children.Add(circleImg1);
             //imagesContainer.Children.Add(circleImg2);
             //imagesContainer.Children.Add(circleImg3);
-
-            masterLayout.AddChildToLayout(circleImg1, 8, (Device.OnPlatform(9, 23, 10)));
-            masterLayout.AddChildToLayout(circleImg2, 47, (Device.OnPlatform(9, 26, 10)));
-            masterLayout.AddChildToLayout(circleImg3, 85, (Device.OnPlatform(9, 23, 10)));
-            circleImg1.TranslationY = -1;
-            circleImg2.TranslationY = -1;
-            circleImg3.TranslationY = -1;
-
-
-            StackLayout inputAckLabelStack = new StackLayout
-            {
-                Orientation = StackOrientation.Horizontal,
-                BackgroundColor = Color.Transparent,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                Padding = 5,
-                HeightRequest = 1,
-                WidthRequest = App.screenWidth,
-                Children = { hLine }
-            };
-
+       
             #endregion
 
             Label howYouAreFeeling = new Label();
@@ -208,16 +167,16 @@ namespace PurposeColor
             sliderValue = slider.CurrentValue;
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(inputAckLabelStack, 0, Device.OnPlatform(9, 25, 10));
+            
             //masterLayout.AddChildToLayout(imagesContainer,0, (Device.OnPlatform(9, 25, 10)));//25: center f line.
 
             sliderValLabel = new Label
             {
-                TextColor = Constants.TEXT_COLOR_GRAY,//Constants.BLUE_BG_COLOR,
-                BackgroundColor = Color.Transparent,
-                XAlign = TextAlignment.Center,
-                WidthRequest = 80//,
-                //Text = "werewr qrawe"
+                //TextColor = Constants.TEXT_COLOR_GRAY,//Constants.BLUE_BG_COLOR,
+				TextColor = Constants.BLUE_BG_COLOR,
+				BackgroundColor = Color.Transparent,
+                //WidthRequest = 80,
+				XAlign = TextAlignment.Start
             };
 
             #region SLIDER LABEL TAP
@@ -278,11 +237,9 @@ namespace PurposeColor
 
             emotionTextLabel = new Label
             {
-                TextColor = Constants.TEXT_COLOR_GRAY,//BLUE_BG_COLOR,
-                BackgroundColor = Color.Transparent,
-                XAlign = TextAlignment.Center,
-                WidthRequest = 150//,
-                // Text = "erewrewr werewrww"
+				TextColor = Constants.BLUE_BG_COLOR,
+				BackgroundColor = Color.Transparent,
+				XAlign = TextAlignment.Start
             };
             TapGestureRecognizer emotionTextTap = new TapGestureRecognizer();
             emotionTextLabel.GestureRecognizers.Add(emotionTextTap);
@@ -297,11 +254,9 @@ namespace PurposeColor
 
             eventTextLabel = new Label
             {
-                TextColor = Constants.TEXT_COLOR_GRAY,//BLUE_BG_COLOR,
+				TextColor = Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
-                XAlign = TextAlignment.End,
-                WidthRequest = 200//,
-                // Text ="werewr wer ewr wer w"
+				XAlign = TextAlignment.Start
             };
 
             TapGestureRecognizer eventTextTap = new TapGestureRecognizer();
@@ -315,19 +270,28 @@ namespace PurposeColor
                 }
             };
 
-            masterLayout.AddChildToLayout(sliderValLabel, 1, (Device.OnPlatform(9, 19, 10)));
-            masterLayout.AddChildToLayout(emotionTextLabel, 30, (Device.OnPlatform(9, 29, 10)));//27
-            masterLayout.AddChildToLayout(eventTextLabel, 38, (Device.OnPlatform(9, 19, 10)));
+			feedbackLabelStack = new StackLayout
+			{
+				Orientation = StackOrientation.Vertical,
+				BackgroundColor = Color.Transparent,
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Center,
+				Spacing = 2,
+				HeightRequest = 1,
+				WidthRequest = App.screenWidth,
+				Children = {new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10,0), Children={new Label{Text = "Happiness : ",TextColor = Color.Black}, sliderValLabel}},
+					new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10, 0),  Children={new Label{Text = "Emotion : " ,TextColor = Color.Black}, emotionTextLabel}},
+					new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10, 5), Children={new Label{Text = "Event : " ,TextColor = Color.Black}, eventTextLabel}},
+					hLine}
+			};
 
+			masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(9, 18, 10));
+            masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform(22, 33, 30));
+            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(27, 38, 27));
+            masterLayout.AddChildToLayout(slider, 5, 43);
 
-
-            masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform(22, 33, 30));//30
-            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(27, 38, 27));//35
-            //  masterLayout.AddChildToLayout(sliderBG, 7, 40);
-            masterLayout.AddChildToLayout(slider, 5, 43);//40
-
-            masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform(50, 57, 47));//55
-            masterLayout.AddChildToLayout(about, 0, Device.OnPlatform(62, 66, 59));//65
+            masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform(50, 57, 47));
+            masterLayout.AddChildToLayout(about, 0, Device.OnPlatform(62, 66, 59));
             masterLayout.AddChildToLayout(eventPickerButton, 5, Device.OnPlatform(70, 73, 67));
             SetFeedBackLablText();
             Content = masterLayout;
@@ -355,21 +319,6 @@ namespace PurposeColor
 
         public async void GetstopGetsture(bool pressed)
         {
-            /* if (slider.Value != 0)
-             {
-                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-                 if (pickView != null)
-                     return;
-
-                 CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                 ePicker.WidthRequest = screenWidth;
-                 ePicker.HeightRequest = screenHeight;
-                 ePicker.ClassId = "ePicker";
-                 ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-                 masterLayout.AddChildToLayout(ePicker, 0, 0);
-             }*/
-            
-
             if (popupSlider != null)
             {
                 sliderValue = popupSlider.CurrentValue;
@@ -378,37 +327,17 @@ namespace PurposeColor
             }
             else
             {
-                sliderValue = slider.CurrentValue;
+				sliderValue = slider.CurrentValue;
             }
 
-            if (sliderValue == 0)
-            {
-                sliderValLabel.Text = "";
-                circleImg1.Source = "finger_gray";
-                progressBar.ShowToast("slider is in neutral");
-            }
-            else
-            {
-                if (sliderValue == 2)
-                {
-                    sliderValLabel.Text = "like the most";
-                }
-                else if (sliderValue == 1)
-                {
-                    sliderValLabel.Text = "do like";
-                }
-                else if (sliderValue == -1)
-                {
-                    sliderValLabel.Text = "don't like";
-                }
-                else if (sliderValue == -2)
-                {
-                    sliderValLabel.Text = "worst";
-                }
-
-                sliderValLabel.XAlign = TextAlignment.Center;
-                circleImg1.Source = "finger";//"icn_selected";
-            }
+			if (sliderValue == 0) {
+				//inputAckLabelStack.IsVisible = false;
+				progressBar.ShowToast ("slider is in neutral");
+			} else {
+				//inputAckLabelStack.IsVisible = true;
+			}	
+            
+			sliderValLabel.Text = sliderValue.ToString ();
 
             if (!emotionsDisplaying && sliderValue != 0)
             {
@@ -461,6 +390,7 @@ namespace PurposeColor
             {
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
+				GC.Collect();
                 return true;
             }
 
@@ -568,11 +498,6 @@ namespace PurposeColor
                     var test = "test";
                 };
 
-                //ePicker.FadeTo(1, 1000, Easing.CubicOut);
-                //double yPos = 60 * screenHeight / 100;
-                //ePicker.TranslateTo(0, 65, 3000, Easing.Linear);
-                // ePicker.FadeTo(1, 750, Easing.Linear); 
-
             }
             catch (System.Exception ex)
             {
@@ -598,10 +523,7 @@ namespace PurposeColor
                 ePicker.ClassId = "ePicker";
                 ePicker.listView.ItemSelected += OnEventPickerItemSelected;
                 masterLayout.AddLayout(ePicker, 0, 0);
-                //double yPos = 60 * screenHeight / 100;
-                //ePicker.TranslateTo(0, yPos, 250, Easing.BounceIn);
-                // ePicker.FadeTo(1, 750, Easing.Linear); 
-
+                
             }
             catch (System.Exception ex)
             {
@@ -616,6 +538,12 @@ namespace PurposeColor
             try
             {
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+				if (item == null) {
+					return;
+				}
+				if (string.IsNullOrEmpty(item.Name)) {
+					return;
+				}
                 emotionalPickerButton.Text = item.Name;
                 selectedEmotionItem = item;
                 emotionalPickerButton.TextColor = Color.Black;
@@ -623,6 +551,7 @@ namespace PurposeColor
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
+				GC.Collect();
                 eventPickerButton.IsVisible = true;
                 about.IsVisible = true;
                 if (! eventsDisplaying)
@@ -639,10 +568,8 @@ namespace PurposeColor
                     trimmedText = trimmedText.Substring(0, 15);
                     trimmedText += "..";
                 }
-                emotionTextLabel.Text = trimmedText;
-                emotionTextLabel.XAlign = TextAlignment.Center;
-
-                circleImg2.Source = "finger";// "icn_selected";
+				emotionTextLabel.Text = item.Name;
+                
             }
             catch (System.Exception ex)
             {
@@ -700,13 +627,20 @@ namespace PurposeColor
             try
             {
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+				if (item == null) {
+					return;
+				}
+				if (string.IsNullOrEmpty(item.Name)) {
+					return;
+				}
+
                 eventPickerButton.Text = item.Name;
                 eventPickerButton.TextColor = Color.Black;
                 selectedEventItem = item;
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
-
+				GC.Collect();
                 SetFeedBackLablText();
                 string trimmedText = item.Name;
                 if (trimmedText.Length > 15)
@@ -714,8 +648,8 @@ namespace PurposeColor
                     trimmedText = trimmedText.Substring(0, 15);
                     trimmedText += "..";
                 }
-                eventTextLabel.Text = trimmedText;
-                circleImg3.Source = "finger";// "icn_selected";
+				eventTextLabel.Text = item.Name;
+
             }
             catch (System.Exception ex)
             {
@@ -856,6 +790,11 @@ namespace PurposeColor
             this.subTitleBar = null;
             this.Appearing -= OnFeelingNowPageAppearing;
             this.mainTitleBar = null;
+			sliderValLabel = null;
+			emotionTextLabel = null;
+			eventTextLabel = null;
+			imagesContainer = null;
+			feedbackLabelStack = null;
 
             GC.Collect();
         }

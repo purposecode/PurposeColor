@@ -18,7 +18,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
-    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -294,6 +294,11 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\icn_liked.png" />
     <AndroidResource Include="Resources\drawable-xxxhdpi\icn_liked.png" />
     <AndroidResource Include="Resources\drawable\filter.png" />
+    <AndroidResource Include="Resources\drawable\Sliderfeedback0.png" />
+    <AndroidResource Include="Resources\drawable\Sliderfeedback1.png" />
+    <AndroidResource Include="Resources\drawable\Sliderfeedback2.png" />
+    <AndroidResource Include="Resources\drawable\SliderfeedbackMinues1.png" />
+    <AndroidResource Include="Resources\drawable\SliderfeedbackMinues2.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

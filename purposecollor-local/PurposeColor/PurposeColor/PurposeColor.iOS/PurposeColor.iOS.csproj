@@ -134,6 +134,11 @@
     <None Include="Resources\noimage.png" />
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
+    <None Include="Resources\Sliderfeedback0.png" />
+    <None Include="Resources\Sliderfeedback1.png" />
+    <None Include="Resources\Sliderfeedback2.png" />
+    <None Include="Resources\SliderfeedbackMinues2.png" />
+    <None Include="Resources\SliderfeedbackMinues1.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

@@ -170,6 +170,11 @@
     <None Include="Assets\comnt_box.png" />
     <None Include="Assets\noimage.png" />
     <None Include="Assets\filter.png" />
+    <None Include="Assets\Sliderfeedback0.png" />
+    <None Include="Assets\Sliderfeedback1.png" />
+    <None Include="Assets\Sliderfeedback2.png" />
+    <None Include="Assets\SliderfeedbackMinues2.png" />
+    <None Include="Assets\SliderfeedbackMinues1.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\add_btn.png" />
@@ -290,11 +295,6 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-<ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.11.1">
-      <Name>SQLite for Windows Phone</Name>
-    </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ExifLib, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">

@@ -24,7 +24,6 @@ namespace PurposeColor
         CustomSlider popupSlider;
         CustomLayout masterLayout = null;
         public PurposeColor.interfaces.CustomImageButton emotionalPickerButton = null;
-
         public PurposeColor.interfaces.CustomImageButton eventPickerButton = null;
         CustomListViewItem selectedEmotionItem = null;
         public CustomListViewItem selectedEventItem = null;
@@ -38,7 +37,6 @@ namespace PurposeColor
         Label sliderValLabel;
 		Label emotionTextLabel = null;
 		Label eventTextLabel = null;
-        
         StackLayout imagesContainer = null;
         bool emotionsDisplaying = false;
         bool eventsDisplaying = false;
@@ -49,6 +47,8 @@ namespace PurposeColor
 		BoxView hLine = null;
 		TapGestureRecognizer emotionTextTap = null;
 		TapGestureRecognizer eventTextTap = null;
+
+		Image sliderValueImage = null;
 
         public FeelingNowPage()
         {
@@ -181,6 +181,11 @@ namespace PurposeColor
 				XAlign = TextAlignment.Start
             };
 
+			sliderValueImage = new Image {
+				Source = "Sliderfeedback0.png",
+				HeightRequest = 30,
+				Aspect = Aspect.Fill
+			};
             #region SLIDER LABEL TAP
 
             TapGestureRecognizer sliderLabelTapRecognizer = new TapGestureRecognizer();
@@ -264,14 +269,19 @@ namespace PurposeColor
 
 			sliderFeedbackStack = new StackLayout {
 				IsVisible = false,
+				BackgroundColor = Color.Transparent,
+				VerticalOptions = LayoutOptions.Center,
 				Orientation = StackOrientation.Horizontal, 
 				Spacing = 0, Padding = new Thickness (App.screenWidth * .10, 0, 10, 0), 
 				Children = {
 					new Label {
 						Text = "Happiness : ",
-						TextColor = Color.Black
+						TextColor = Color.Black,
+						//HeightRequest = 50,
+						VerticalOptions = LayoutOptions.End,
 					},
-					sliderValLabel
+					//sliderValLabel
+					sliderValueImage
 				}
 			};
 			sliderFeedbackStack.GestureRecognizers.Add(sliderLabelTapRecognizer);
@@ -342,7 +352,9 @@ namespace PurposeColor
         {
             try
             {
-
+				if (popupSlider!= null) {
+					popupSlider = null;
+				}
                 View sliderContainer = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "sliderBg");
                 if (sliderContainer != null)
                 {
@@ -363,7 +375,10 @@ namespace PurposeColor
             {
                 sliderValue = popupSlider.CurrentValue;
                 slider.Value = popupSlider.CurrentValue;
-                popupSlider = null;
+				if (sliderValue != 0) {
+					popupSlider = null;
+					RemoveSliderPopup();
+				}
             }
             else
             {
@@ -371,20 +386,37 @@ namespace PurposeColor
             }
 
 			if (sliderValue == 0) {
-				//inputAckLabelStack.IsVisible = false;
 				progressBar.ShowToast ("slider is in neutral");
-			} else {
-				//inputAckLabelStack.IsVisible = true;
-			}	
-            
-			sliderValLabel.Text = sliderValue.ToString ();
+			} 
+
+			switch (sliderValue) 
+			{
+			case 2:
+				sliderValueImage.Source = "Sliderfeedback2.png";
+				break;
+			case 1:
+				sliderValueImage.Source = "Sliderfeedback1.png";
+				break;
+			case -1:
+				sliderValueImage.Source = "SliderfeedbackMinues1.png";
+				break;
+			case -2:
+				sliderValueImage.Source = "SliderfeedbackMinues2.png";
+				break;
+			case 0:
+				sliderValueImage.Source = "Sliderfeedback0.png";
+				break;
+			default:
+				break;
+			};
+
 			sliderFeedbackStack.IsVisible = true;
-			hLine.IsVisible = true;
+			hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
 
             if (!emotionsDisplaying && sliderValue != 0)
             {
                 await Task.Delay(500);
-                RemoveSliderPopup();
+                
                 OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
             }
         }
@@ -611,7 +643,7 @@ namespace PurposeColor
                     trimmedText += "..";
                 }
 				feelingFeedbackStack.IsVisible = true;
-				hLine.IsVisible = true;
+				hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
 				emotionTextLabel.Text = item.Name;
                 
             }
@@ -693,7 +725,7 @@ namespace PurposeColor
                     trimmedText += "..";
                 }
 				eventFeedbackStack.IsVisible = true;
-				hLine.IsVisible = true;
+				hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
 				eventTextLabel.Text = item.Name;
 
             }

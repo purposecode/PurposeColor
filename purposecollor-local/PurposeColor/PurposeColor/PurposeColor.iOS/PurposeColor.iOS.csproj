@@ -134,11 +134,6 @@
     <None Include="Resources\noimage.png" />
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
-    <None Include="Resources\Sliderfeedback0.png" />
-    <None Include="Resources\Sliderfeedback1.png" />
-    <None Include="Resources\Sliderfeedback2.png" />
-    <None Include="Resources\SliderfeedbackMinues2.png" />
-    <None Include="Resources\SliderfeedbackMinues1.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -264,6 +259,11 @@
     <BundleResource Include="Resources\icn_liked%402x.png" />
     <BundleResource Include="Resources\icn_liked%403x.png" />
     <BundleResource Include="Resources\filter%401x.png" />
+    <BundleResource Include="Resources\Sliderfeedback0.png" />
+    <BundleResource Include="Resources\Sliderfeedback1.png" />
+    <BundleResource Include="Resources\Sliderfeedback2.png" />
+    <BundleResource Include="Resources\SliderfeedbackMinues1.png" />
+    <BundleResource Include="Resources\SliderfeedbackMinues2.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

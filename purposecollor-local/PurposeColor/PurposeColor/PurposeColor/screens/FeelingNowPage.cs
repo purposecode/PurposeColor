@@ -28,7 +28,7 @@ namespace PurposeColor
         CustomListViewItem selectedEmotionItem = null;
         public CustomListViewItem selectedEventItem = null;
         Label about = null;
-        public static int sliderValue;
+		public static int sliderValue = 0;
         double screenHeight;
         double screenWidth;
         IProgressBar progressBar = null;
@@ -73,7 +73,6 @@ namespace PurposeColor
             };
             slider.StopGesture = GetstopGetsture;
 
-            //slider.ValueChanged += slider_ValueChanged;
             #region Top stack - dynamic label
 
 			hLine = new BoxView {IsVisible = false, BackgroundColor = Constants.TEXT_COLOR_GRAY, WidthRequest = App.screenWidth, HeightRequest = 1 };
@@ -200,6 +199,7 @@ namespace PurposeColor
                     WidthRequest = screenWidth * 90 / 100,
                     HorizontalOptions = LayoutOptions.Center,
                     VerticalOptions = LayoutOptions.Center,
+					CurrentValue = sliderValue
                 };
                 
                 StackLayout sliderBg = new StackLayout
@@ -244,7 +244,8 @@ namespace PurposeColor
 				TextColor = Constants.BLUE_BG_COLOR,
 				BackgroundColor = Color.Transparent,
 				XAlign = TextAlignment.Start,
-				Text = "test"
+				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+				FontSize = Device.OnPlatform(12, 18, 26)
             };
             emotionTextTap = new TapGestureRecognizer();
 			emotionTextTap.Tapped += EmotionTextTap_Tapped;
@@ -253,7 +254,9 @@ namespace PurposeColor
             {
 				TextColor = Constants.BLUE_BG_COLOR,
                 BackgroundColor = Color.Transparent,
-				XAlign = TextAlignment.Start
+				XAlign = TextAlignment.Start,
+				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+				FontSize = Device.OnPlatform(12, 18, 26)
             };
 
             eventTextTap = new TapGestureRecognizer();
@@ -275,6 +278,8 @@ namespace PurposeColor
 				Spacing = 0, Padding = new Thickness (App.screenWidth * .10, 0, 10, 0), 
 				Children = {
 					new Label {
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						FontSize = Device.OnPlatform(12, 18, 26),
 						Text = "Happiness : ",
 						TextColor = Color.Black,
 						//HeightRequest = 50,
@@ -294,8 +299,10 @@ namespace PurposeColor
 				Padding = new Thickness (App.screenWidth * .10, 0, 10, 0),
 				Children = {
 					new Label {
-						Text = "Emotion : " ,
-						TextColor = Color.Black
+						Text = "Feeling : " ,
+						TextColor = Color.Black,
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						FontSize = Device.OnPlatform(12, 18, 26)
 					},
 					emotionTextLabel
 				}
@@ -310,7 +317,9 @@ namespace PurposeColor
 				Children = {
 					new Label {
 						Text = "Event : " ,
-						TextColor = Color.Black
+						TextColor = Color.Black,
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						FontSize = Device.OnPlatform(12, 18, 26)
 					},
 					eventTextLabel
 				}
@@ -329,9 +338,9 @@ namespace PurposeColor
 				Children = {sliderFeedbackStack, feelingFeedbackStack, eventFeedbackStack, hLine}
 			};
 
-			masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(9, 18, 10));
-            masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform(22, 33, 30));
-            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(27, 38, 27));
+			masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(16, 18, 10));
+            masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform(33, 33, 30));
+            masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(38, 38, 27));
             masterLayout.AddChildToLayout(slider, 5, 43);
 
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform(50, 57, 47));
@@ -353,6 +362,7 @@ namespace PurposeColor
             try
             {
 				if (popupSlider!= null) {
+					sliderValue = popupSlider.CurrentValue;
 					popupSlider = null;
 				}
                 View sliderContainer = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "sliderBg");
@@ -371,23 +381,21 @@ namespace PurposeColor
 
         public async void GetstopGetsture(bool pressed)
         {
-            if (popupSlider != null)
+			if (popupSlider != null )
             {
                 sliderValue = popupSlider.CurrentValue;
-                slider.Value = popupSlider.CurrentValue;
+				slider.Value = sliderValue;
+				slider.CurrentValue = sliderValue;
+
 				if (sliderValue != 0) {
 					popupSlider = null;
 					RemoveSliderPopup();
 				}
             }
-            else
+			else
             {
 				sliderValue = slider.CurrentValue;
             }
-
-			if (sliderValue == 0) {
-				progressBar.ShowToast ("slider is in neutral");
-			} 
 
 			switch (sliderValue) 
 			{
@@ -413,48 +421,14 @@ namespace PurposeColor
 			sliderFeedbackStack.IsVisible = true;
 			hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
 
-            if (!emotionsDisplaying && sliderValue != 0)
+			if (sliderValue == 0) {
+				progressBar.ShowToast ("slider is in neutral");
+			}
+			else if (!emotionsDisplaying && sliderValue != 0)
             {
-                await Task.Delay(500);
-                
+                //await Task.Delay(500);
                 OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
             }
-        }
-
-        void slider_ValueChanged(object sender, ValueChangedEventArgs e)
-        {
-            try
-            {
-                if (popupSlider != null)
-                {
-                    sliderValue = popupSlider.CurrentValue;
-                }
-                else
-                {
-                    sliderValue = slider.CurrentValue;
-                }
-
-                if (sliderValue != 0)
-                {
-                    View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-                    if (pickView != null)
-                        return;
-
-                    CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEmotionsList(), 65, "Select Emotions", true, false);
-                    ePicker.WidthRequest = screenWidth;
-                    ePicker.HeightRequest = screenHeight;
-                    ePicker.ClassId = "ePicker";
-                    ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
-                    masterLayout.AddChildToLayout(ePicker, 0, 0);
-                }
-
-            }
-            catch (System.Exception ex)
-            {
-                var test = ex.Message;
-            }
-
-
         }
 
         protected override bool OnBackButtonPressed()
@@ -551,6 +525,13 @@ namespace PurposeColor
 
         async void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
+			if (slider.CurrentValue == 0) {
+				//emotionalPickerButton.Text = "Select Emotion";
+				progressBar.ShowToast("Slider is in neutral.");
+
+				return;
+			}
+
             try
             {
                 this.emotionalPickerButton.Clicked -= OnEmotionalPickerButtonClicked;
@@ -571,7 +552,6 @@ namespace PurposeColor
                 {
                     var test = "test";
                 };
-
             }
             catch (System.Exception ex)
             {

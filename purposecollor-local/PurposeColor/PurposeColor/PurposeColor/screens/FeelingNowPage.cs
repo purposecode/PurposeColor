@@ -36,13 +36,19 @@ namespace PurposeColor
         PurposeColorSubTitleBar subTitleBar = null;
         PurposeColorTitleBar mainTitleBar = null;
         Label sliderValLabel;
-        Label emotionTextLabel;
-        Label eventTextLabel;
+		Label emotionTextLabel = null;
+		Label eventTextLabel = null;
         
-        StackLayout imagesContainer;
+        StackLayout imagesContainer = null;
         bool emotionsDisplaying = false;
         bool eventsDisplaying = false;
 		StackLayout feedbackLabelStack = null;
+		StackLayout sliderFeedbackStack = null;
+		StackLayout feelingFeedbackStack = null;
+		StackLayout eventFeedbackStack = null;
+		BoxView hLine = null;
+		TapGestureRecognizer emotionTextTap = null;
+		TapGestureRecognizer eventTextTap = null;
 
         public FeelingNowPage()
         {
@@ -70,7 +76,7 @@ namespace PurposeColor
             //slider.ValueChanged += slider_ValueChanged;
             #region Top stack - dynamic label
 
-            BoxView hLine = new BoxView { BackgroundColor = Constants.TEXT_COLOR_GRAY, WidthRequest = App.screenWidth, HeightRequest = 1 };
+			hLine = new BoxView {IsVisible = false, BackgroundColor = Constants.TEXT_COLOR_GRAY, WidthRequest = App.screenWidth, HeightRequest = 1 };
 
             //imagesContainer = new StackLayout
             //{
@@ -168,28 +174,21 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             
-            //masterLayout.AddChildToLayout(imagesContainer,0, (Device.OnPlatform(9, 25, 10)));//25: center f line.
-
             sliderValLabel = new Label
             {
-                //TextColor = Constants.TEXT_COLOR_GRAY,//Constants.BLUE_BG_COLOR,
 				TextColor = Constants.BLUE_BG_COLOR,
 				BackgroundColor = Color.Transparent,
-                //WidthRequest = 80,
 				XAlign = TextAlignment.Start
             };
 
             #region SLIDER LABEL TAP
 
             TapGestureRecognizer sliderLabelTapRecognizer = new TapGestureRecognizer();
-            sliderValLabel.GestureRecognizers.Add(sliderLabelTapRecognizer);
             sliderLabelTapRecognizer.Tapped += (s, e) =>
             {
                 /// show a slider as a popup and get its value,
-
-                RemoveSliderPopup();
-
-                popupSlider = new CustomSlider
+				RemoveSliderPopup();
+				popupSlider = new CustomSlider
                 {
                     Minimum = -2,
                     Maximum = 2,
@@ -239,18 +238,11 @@ namespace PurposeColor
             {
 				TextColor = Constants.BLUE_BG_COLOR,
 				BackgroundColor = Color.Transparent,
-				XAlign = TextAlignment.Start
+				XAlign = TextAlignment.Start,
+				Text = "test"
             };
-            TapGestureRecognizer emotionTextTap = new TapGestureRecognizer();
-            emotionTextLabel.GestureRecognizers.Add(emotionTextTap);
-            emotionTextTap.Tapped += async (s, e) =>
-            {
-                if (!emotionsDisplaying)
-                {
-                    await Task.Delay(500);
-                    OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
-                }
-            };
+            emotionTextTap = new TapGestureRecognizer();
+			emotionTextTap.Tapped += EmotionTextTap_Tapped;
 
             eventTextLabel = new Label
             {
@@ -259,8 +251,7 @@ namespace PurposeColor
 				XAlign = TextAlignment.Start
             };
 
-            TapGestureRecognizer eventTextTap = new TapGestureRecognizer();
-            eventTextLabel.GestureRecognizers.Add(eventTextTap);
+            eventTextTap = new TapGestureRecognizer();
             eventTextTap.Tapped += async (s, e) =>
             {
                 if (!eventsDisplaying)
@@ -269,6 +260,52 @@ namespace PurposeColor
                     OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
                 }
             };
+			//eventTextLabel.GestureRecognizers.Add(eventTextTap);
+
+			sliderFeedbackStack = new StackLayout {
+				IsVisible = false,
+				Orientation = StackOrientation.Horizontal, 
+				Spacing = 0, Padding = new Thickness (App.screenWidth * .10, 0, 10, 0), 
+				Children = {
+					new Label {
+						Text = "Happiness : ",
+						TextColor = Color.Black
+					},
+					sliderValLabel
+				}
+			};
+			sliderFeedbackStack.GestureRecognizers.Add(sliderLabelTapRecognizer);
+
+
+			feelingFeedbackStack = new StackLayout {
+				IsVisible = false,
+				Orientation = StackOrientation.Horizontal,
+				Spacing = 0,
+				Padding = new Thickness (App.screenWidth * .10, 0, 10, 0),
+				Children = {
+					new Label {
+						Text = "Emotion : " ,
+						TextColor = Color.Black
+					},
+					emotionTextLabel
+				}
+			};
+			feelingFeedbackStack.GestureRecognizers.Add(emotionTextTap);
+
+			eventFeedbackStack = new StackLayout {
+				IsVisible = false,
+				Orientation = StackOrientation.Horizontal,
+				Spacing = 0,
+				Padding = new Thickness (App.screenWidth * .10, 0, 10, 5),
+				Children = {
+					new Label {
+						Text = "Event : " ,
+						TextColor = Color.Black
+					},
+					eventTextLabel
+				}
+			};
+			eventFeedbackStack.GestureRecognizers.Add(eventTextTap);
 
 			feedbackLabelStack = new StackLayout
 			{
@@ -277,12 +314,9 @@ namespace PurposeColor
 				HorizontalOptions = LayoutOptions.Center,
 				VerticalOptions = LayoutOptions.Center,
 				Spacing = 2,
-				HeightRequest = 1,
+				//HeightRequest = 1,
 				WidthRequest = App.screenWidth,
-				Children = {new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10,0), Children={new Label{Text = "Happiness : ",TextColor = Color.Black}, sliderValLabel}},
-					new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10, 0),  Children={new Label{Text = "Emotion : " ,TextColor = Color.Black}, emotionTextLabel}},
-					new StackLayout{Orientation = StackOrientation.Horizontal, Spacing = 0, Padding = new Thickness(App.screenWidth * .10,0,10, 5), Children={new Label{Text = "Event : " ,TextColor = Color.Black}, eventTextLabel}},
-					hLine}
+				Children = {sliderFeedbackStack, feelingFeedbackStack, eventFeedbackStack, hLine}
 			};
 
 			masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(9, 18, 10));
@@ -296,6 +330,12 @@ namespace PurposeColor
             SetFeedBackLablText();
             Content = masterLayout;
 
+        }
+
+		async void EmotionTextTap_Tapped (object sender, EventArgs e)
+        {
+			await Task.Delay(500);
+			OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
         }
 
         private void RemoveSliderPopup()
@@ -338,6 +378,8 @@ namespace PurposeColor
 			}	
             
 			sliderValLabel.Text = sliderValue.ToString ();
+			sliderFeedbackStack.IsVisible = true;
+			hLine.IsVisible = true;
 
             if (!emotionsDisplaying && sliderValue != 0)
             {
@@ -568,6 +610,8 @@ namespace PurposeColor
                     trimmedText = trimmedText.Substring(0, 15);
                     trimmedText += "..";
                 }
+				feelingFeedbackStack.IsVisible = true;
+				hLine.IsVisible = true;
 				emotionTextLabel.Text = item.Name;
                 
             }
@@ -648,6 +692,8 @@ namespace PurposeColor
                     trimmedText = trimmedText.Substring(0, 15);
                     trimmedText += "..";
                 }
+				eventFeedbackStack.IsVisible = true;
+				hLine.IsVisible = true;
 				eventTextLabel.Text = item.Name;
 
             }
@@ -795,6 +841,11 @@ namespace PurposeColor
 			eventTextLabel = null;
 			imagesContainer = null;
 			feedbackLabelStack = null;
+			sliderFeedbackStack = null;
+			feelingFeedbackStack = null;
+			eventFeedbackStack = null;
+			hLine = null;
+			emotionTextTap = null;
 
             GC.Collect();
         }

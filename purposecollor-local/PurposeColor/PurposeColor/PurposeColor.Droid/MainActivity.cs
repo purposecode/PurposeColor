@@ -28,8 +28,12 @@ namespace PurposeColor.Droid
             curentActivity = this;
             CrossPushNotification.Initialize<CrossPushNotificationListener>("469628380816");
             ImageCircleRenderer.Init();
+
             File testFile = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.ExternalStorageDirectory.ToString());
             App.DownloadsPath = testFile.AbsolutePath + "/";
+			var dir =  new Java.IO.File( App.DownloadsPath  );
+			if (!dir.Exists ())
+				dir.Mkdirs ();
             LoadApplication(new App());
         }
 

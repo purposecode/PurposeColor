@@ -27,7 +27,6 @@ namespace PurposeColor
         Label title;
         Label description;
 		List<string> mediaList = new List<string> ();
-        List<ActionMedia> actionMediaList { get; set; }
         string CurrentGemId = string.Empty;
         GemType CurrentGemType = GemType.Goal;
         PurposeColorTitleBar mainTitleBar;
@@ -58,8 +57,6 @@ namespace PurposeColor
 			if (currentUser == null)
 				currentUser = new User (){ UserId = 2 };
             modelObject = model;
-       //     mediaList = model.mediaArray;
-            actionMediaList = model.actionMediaArray;
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
 
@@ -1037,7 +1034,6 @@ namespace PurposeColor
             title = null;
             description = null;
             mediaList = null;
-            actionMediaList = null;
             shareLabel = null;
             if (shareButtonTap != null)
             {

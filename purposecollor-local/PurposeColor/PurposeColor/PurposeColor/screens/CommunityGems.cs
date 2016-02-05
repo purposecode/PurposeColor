@@ -607,7 +607,7 @@ namespace PurposeColor
 
 				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
 				int firstRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == firstItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
-				if (firstRendererItemIndex > -1 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
+				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
 					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
 					//	itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;

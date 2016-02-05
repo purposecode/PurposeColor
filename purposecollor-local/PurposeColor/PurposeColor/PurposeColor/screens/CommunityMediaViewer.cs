@@ -141,7 +141,8 @@ namespace PurposeColor
 			Image img = sender as Image;
 			if (img != null) {
 				string fileName = Path.GetFileName (img.ClassId);
-				if (fileName != null) {
+				if (fileName != null)
+				{
 					IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
 					videoDownload.Download (img.ClassId, fileName);
 

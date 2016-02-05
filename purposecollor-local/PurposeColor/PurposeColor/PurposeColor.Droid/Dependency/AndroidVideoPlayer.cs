@@ -33,6 +33,11 @@ namespace PurposeColor.Droid.Dependency
                 downloadedFolder = App.DownloadsPath + "/";
             }
 
+			string fileExtenstion = Path.GetExtension(filename);
+
+			if (fileExtenstion == ".jpg" || fileExtenstion == ".jpeg" || fileExtenstion == ".png")
+				return false;
+
             if (System.IO.File.Exists(downloadedFolder + filename))
             {
                 string downloadedUri = "file://" + downloadedFolder + filename;

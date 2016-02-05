@@ -137,11 +137,13 @@ namespace PurposeColor
 				/*communityGems.resultarray = new List<CommunityGemsDetails>();
 				communityGems.resultarray.Add( new CommunityGemsDetails{ firstname = "test", gem_datetime = "2014 feb 14", gem_id = "68", user_id = "2"  } );*/
 
-				IProgressBar progess = DependencyService.Get< IProgressBar >();
-				progess.ShowProgressbar( "Downloading gems...." );
 
 				if (communityGems != null)
 					return;
+
+
+				IProgressBar progess = DependencyService.Get< IProgressBar >();
+				progess.ShowProgressbar( "Downloading gems...." );
 
 				User user = null;
 				IsNavigationFrfomGEMS = modelObject.fromGEMSPage;

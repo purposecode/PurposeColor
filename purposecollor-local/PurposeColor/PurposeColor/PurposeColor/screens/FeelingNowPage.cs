@@ -245,7 +245,7 @@ namespace PurposeColor
 				BackgroundColor = Color.Transparent,
 				XAlign = TextAlignment.Start,
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-				FontSize = Device.OnPlatform(12, 18, 26)
+				FontSize = Device.OnPlatform(12, 16, 26)
             };
             emotionTextTap = new TapGestureRecognizer();
 			emotionTextTap.Tapped += EmotionTextTap_Tapped;
@@ -256,7 +256,7 @@ namespace PurposeColor
                 BackgroundColor = Color.Transparent,
 				XAlign = TextAlignment.Start,
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-				FontSize = Device.OnPlatform(12, 18, 26)
+				FontSize = Device.OnPlatform(12, 16, 26)
             };
 
             eventTextTap = new TapGestureRecognizer();
@@ -279,7 +279,7 @@ namespace PurposeColor
 				Children = {
 					new Label {
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 18, 26),
+						FontSize = Device.OnPlatform(12, 16, 26),
 						Text = "Happiness : ",
 						TextColor = Color.Black,
 						//HeightRequest = 50,
@@ -302,7 +302,7 @@ namespace PurposeColor
 						Text = "Feeling : " ,
 						TextColor = Color.Black,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 18, 26)
+						FontSize = Device.OnPlatform(12, 16, 26),
 					},
 					emotionTextLabel
 				}
@@ -319,7 +319,7 @@ namespace PurposeColor
 						Text = "Event : " ,
 						TextColor = Color.Black,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 18, 26)
+						FontSize = Device.OnPlatform(12, 16, 26),
 					},
 					eventTextLabel
 				}
@@ -329,7 +329,7 @@ namespace PurposeColor
 			feedbackLabelStack = new StackLayout
 			{
 				Orientation = StackOrientation.Vertical,
-				BackgroundColor = Color.Transparent,
+				BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY,
 				HorizontalOptions = LayoutOptions.Center,
 				VerticalOptions = LayoutOptions.Center,
 				Spacing = 2,

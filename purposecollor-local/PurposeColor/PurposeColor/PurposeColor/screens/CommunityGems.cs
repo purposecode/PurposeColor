@@ -26,7 +26,7 @@ namespace PurposeColor
         ScrollView masterScroll;
         Label title;
         Label description;
-        List<EventMedia> mediaList { get; set; }
+		List<string> mediaList = new List<string> ();
         List<ActionMedia> actionMediaList { get; set; }
         string CurrentGemId = string.Empty;
         GemType CurrentGemType = GemType.Goal;
@@ -58,7 +58,7 @@ namespace PurposeColor
 			if (currentUser == null)
 				currentUser = new User (){ UserId = 2 };
             modelObject = model;
-            mediaList = model.mediaArray;
+       //     mediaList = model.mediaArray;
             actionMediaList = model.actionMediaArray;
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
@@ -182,6 +182,7 @@ namespace PurposeColor
 					App.Settings.SaveCommunityGemsDetails( communityGems );
 				}
 
+				await DownloadMedias();
 
 				if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
 				{
@@ -200,6 +201,41 @@ namespace PurposeColor
 			}
         }
 
+
+
+		async Task<bool>  DownloadMedias()
+		{
+			IDownload downloader =  DependencyService.Get<IDownload> ();
+			List<string> mediaListToDownload = new List<string> ();
+
+			foreach (var item in communityGems.resultarray)
+			{
+				string media = item.gem_media [0].gem_media;
+
+				string fileExtenstion = Path.GetExtension(media);
+				if (fileExtenstion == ".mp4") {
+					media = "video.png";
+				} else if (fileExtenstion == "3gpp" || fileExtenstion == "wav") {
+					media = "audio.png";
+				} 
+				else
+				{
+					string fileName = Path.GetFileName ( media );
+					media = fileName;
+				}
+
+				mediaList.Add ( media );
+				foreach (var mediaItem in item.gem_media) 
+				{
+
+					if( mediaItem.media_type == "png" || mediaItem.media_type == "jpg" || mediaItem.media_type == "jpeg"  )
+						mediaListToDownload.Add( Constants.SERVICE_BASE_URL + mediaItem.gem_media );
+				}
+			}
+
+			var val = await downloader.DownloadFiles ( mediaListToDownload );
+			return val;
+		}
 
 		void RenderGems( CommunityGemsObject gemsObject )
 		{
@@ -472,9 +508,11 @@ namespace PurposeColor
 							TapGestureRecognizer videoTap = new TapGestureRecognizer();
 							videoTap.Tapped += OnGemTapped;
 
+							string fileName = Path.GetFileName( Constants.SERVICE_BASE_URL + gemMedia.gem_media ); 
+
 							Image img = new Image();
 							bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
-							string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + gemMedia.gem_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+							string source = (isValidUrl) ?  App.DownloadsPath + fileName : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 							string fileExtenstion = Path.GetExtension(source);
 							bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 							img.WidthRequest = App.screenWidth * 90 / 100;
@@ -575,13 +613,13 @@ namespace PurposeColor
 				if (firstRendererItemIndex > -1 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
 					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
-				//	itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
+					//	itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
 					communityGems = null;
 					communityGems = new CommunityGemsObject ();
 					communityGems.resultarray = new List<CommunityGemsDetails> ();
 					gemsObj.resultarray.RemoveRange( firstRendererItemIndex, gemsObj.resultarray.Count - firstRendererItemIndex );
-					if( firstRendererItemIndex > 5 )
-						gemsObj.resultarray.RemoveRange( 0, firstRendererItemIndex - 5 );
+					if( firstRendererItemIndex > MAX_ROWS_AT_A_TIME )
+						gemsObj.resultarray.RemoveRange( 0, firstRendererItemIndex - MAX_ROWS_AT_A_TIME );
 
 					communityGems.resultarray = gemsObj.resultarray;
 

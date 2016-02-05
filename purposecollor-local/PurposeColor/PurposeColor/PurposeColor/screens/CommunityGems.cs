@@ -207,12 +207,15 @@ namespace PurposeColor
 
 			foreach (var item in communityGems.resultarray)
 			{
-				string media = item.gem_media [0].gem_media;
+			/*	string media = item.gem_media [0].gem_media;
 
 				string fileExtenstion = Path.GetExtension(media);
-				if (fileExtenstion == ".mp4") {
+				if (fileExtenstion == ".mp4") 
+				{
 					media = "video.png";
-				} else if (fileExtenstion == "3gpp" || fileExtenstion == "wav") {
+				} 
+				else if (fileExtenstion == "3gpp" || fileExtenstion == "wav") 
+				{
 					media = "audio.png";
 				} 
 				else
@@ -221,7 +224,7 @@ namespace PurposeColor
 					media = fileName;
 				}
 
-				mediaList.Add ( media );
+				mediaList.Add ( media );*/
 				foreach (var mediaItem in item.gem_media) 
 				{
 

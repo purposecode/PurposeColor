@@ -8,6 +8,7 @@ namespace PurposeColor
 	public interface IDownload
 	{
 		Task<bool> DownloadFiles ( List<string> downloadUrlList );
+		string GetLocalFileName (string path);
 	}
 }
 

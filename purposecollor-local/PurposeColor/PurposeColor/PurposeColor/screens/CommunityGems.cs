@@ -184,11 +184,13 @@ namespace PurposeColor
 					App.Settings.SaveCommunityGemsDetails( communityGems );
 				}
 
-				if(!await DownloadMedias())
+			/*if(!await DownloadMedias())
 				{
 					DisplayAlert( Constants.ALERT_TITLE, "Media download failed..", Constants.ALERT_OK );
 					return;
-				}
+				}*/
+
+				await DownloadMedias();
 
 				if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
 				{
@@ -516,11 +518,15 @@ namespace PurposeColor
 							TapGestureRecognizer videoTap = new TapGestureRecognizer();
 							videoTap.Tapped += OnGemTapped;
 
+							IDownload downloader = DependencyService.Get<IDownload>();
+
 							string fileName = Path.GetFileName( Constants.SERVICE_BASE_URL + gemMedia.gem_media ); 
+							string localFilePath = Device.OnPlatform( downloader.GetLocalFileName( fileName ), App.DownloadsPath + fileName, "" );
+
 
 							Image img = new Image();
 							bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
-							string source = (isValidUrl) ?  App.DownloadsPath + fileName : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+							string source = (isValidUrl) ?  localFilePath : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 							string fileExtenstion = Path.GetExtension(source);
 							bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 							img.WidthRequest = App.screenWidth * 90 / 100;

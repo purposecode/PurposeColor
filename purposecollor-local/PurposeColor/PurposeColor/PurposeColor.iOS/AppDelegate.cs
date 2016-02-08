@@ -27,6 +27,8 @@ namespace PurposeColor.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             ImageCircleRenderer.Init();
+			App.DownloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/" ;
+
             LoadApplication(new App());
 
             CrossPushNotification.Initialize<CrossPushNotificationListener>();

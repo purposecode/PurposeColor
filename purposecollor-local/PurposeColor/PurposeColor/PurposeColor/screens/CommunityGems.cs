@@ -535,12 +535,12 @@ namespace PurposeColor
 							img.ClassId = null;
 							if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
 							{
-								img.ClassId = source;
+								img.ClassId = Constants.SERVICE_BASE_URL + gemMedia.gem_media ;
 								source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
 							}
 							else if ( gemMedia.gem_media != null && gemMedia.media_type == "3gpp")
 							{
-								img.ClassId = source;
+								img.ClassId = Constants.SERVICE_BASE_URL + gemMedia.gem_media;
 								source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
 							}
 							else if (gemMedia.gem_media != null && gemMedia.media_type == "wav")
@@ -559,7 +559,6 @@ namespace PurposeColor
 							CustomLayout imgContainer = new CustomLayout();
 							imgContainer.WidthRequest = App.screenWidth * 90 / 100;
 							imgContainer.HeightRequest = App.screenWidth * 90 / 100;
-							img.ClassId = item.gem_id;
 							imgContainer.Children.Add(img);
 							if( item.gem_media != null && item.gem_media.Count > 1 )
 								imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);

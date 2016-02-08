@@ -31,7 +31,6 @@ namespace PurposeColor
 		TapGestureRecognizer commentButtonTap;
 		TapGestureRecognizer favoriteButtonTap;
 		Label shareLabel;
-		bool IsNavigationFrfomGEMS = false;
         DetailsPageModel detailsPageModel;
         int commentsCount = 0;
         bool isSharedToCommunity = false;
@@ -56,7 +55,6 @@ namespace PurposeColor
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
             User user = null;
-			IsNavigationFrfomGEMS = model.fromGEMSPage;
             try
             {
                 user = App.Settings.GetUser();
@@ -480,17 +478,7 @@ namespace PurposeColor
 							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
 							try
 							{
-								if (IsNavigationFrfomGEMS) 
-                                {
-									//nav to gems main page
-									App.masterPage.IsPresented = false;
-									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
-								}else
-								{
-									// nav to goals n dreams
-									App.masterPage.IsPresented = false;
-									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
-								}
+								await Navigation.PopAsync();
 							}
 							catch (Exception)
 							{

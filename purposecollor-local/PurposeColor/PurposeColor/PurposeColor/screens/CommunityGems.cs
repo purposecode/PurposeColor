@@ -184,7 +184,11 @@ namespace PurposeColor
 					App.Settings.SaveCommunityGemsDetails( communityGems );
 				}
 
-				await DownloadMedias();
+				if(!await DownloadMedias())
+				{
+					DisplayAlert( Constants.ALERT_TITLE, "Media download failed..", Constants.ALERT_OK );
+					return;
+				}
 
 				if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
 				{
@@ -193,10 +197,7 @@ namespace PurposeColor
 
 				progess.HideProgressbar();
 
-
 				RenderGems( communityGems );
-
-
 
 			} 
 			catch (Exception ex) 
@@ -620,7 +621,6 @@ namespace PurposeColor
 				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
 					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
-					//	itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
 					communityGems = null;
 					communityGems = new CommunityGemsObject ();
 					communityGems.resultarray = new List<CommunityGemsDetails> ();

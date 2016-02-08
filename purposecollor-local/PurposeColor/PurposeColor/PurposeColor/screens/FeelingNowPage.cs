@@ -34,9 +34,11 @@ namespace PurposeColor
         IProgressBar progressBar = null;
         PurposeColorSubTitleBar subTitleBar = null;
         PurposeColorTitleBar mainTitleBar = null;
+
         Label sliderValLabel;
 		Label emotionTextLabel = null;
 		Label eventTextLabel = null;
+
         StackLayout imagesContainer = null;
         bool emotionsDisplaying = false;
         bool eventsDisplaying = false;
@@ -47,8 +49,13 @@ namespace PurposeColor
 		BoxView hLine = null;
 		TapGestureRecognizer emotionTextTap = null;
 		TapGestureRecognizer eventTextTap = null;
-
 		Image sliderValueImage = null;
+
+
+		Image topCloseBtn = null;
+		StackLayout topBgandCloseBtn = null;
+		StackLayout topLabelBg = null;
+		CustomLayout topLabelsContainer = null;
 
         public FeelingNowPage()
         {
@@ -73,28 +80,6 @@ namespace PurposeColor
             };
             slider.StopGesture = GetstopGetsture;
 
-            #region Top stack - dynamic label
-
-			hLine = new BoxView {IsVisible = false, BackgroundColor = Constants.TEXT_COLOR_GRAY, WidthRequest = App.screenWidth, HeightRequest = 1 };
-
-            //imagesContainer = new StackLayout
-            //{
-            //    Orientation = StackOrientation.Horizontal,
-            //    BackgroundColor = Color.Transparent, //
-            //    HorizontalOptions = LayoutOptions.Center,
-            //    VerticalOptions = LayoutOptions.Center,
-            //    Padding = new Thickness(30, 0, 0, 0),
-            //    Spacing = (App.screenWidth / 3),
-            //    WidthRequest = App.screenWidth,
-
-            //};
-
-            //imagesContainer.Children.Add(circleImg1);
-            //imagesContainer.Children.Add(circleImg2);
-            //imagesContainer.Children.Add(circleImg3);
-       
-            #endregion
-
             Label howYouAreFeeling = new Label();
             howYouAreFeeling.Text = Constants.HOW_YOU_ARE_FEELING;
             howYouAreFeeling.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -107,65 +92,67 @@ namespace PurposeColor
             howYouAreFeeling2.TextColor = Color.FromRgb(40, 47, 50);
             howYouAreFeeling2.HorizontalOptions = LayoutOptions.Center;
 
-            emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            emotionalPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", @"/Assets/select_box_whitebg.png");
-            emotionalPickerButton.Text = "Select Emotion";
+			#region  Emotion pic button
+			emotionalPickerButton = new PurposeColor.interfaces.CustomImageButton ();
+			emotionalPickerButton.ImageName = Device.OnPlatform ("select_box_whitebg.png", "select_box_whitebg.png", @"/Assets/select_box_whitebg.png");
+			emotionalPickerButton.Text = "Select Emotion";
 
-            emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            emotionalPickerButton.TextColor = Color.Gray;
-            emotionalPickerButton.WidthRequest = screenWidth * 90 / 100;
-            emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
+			emotionalPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			emotionalPickerButton.TextOrientation = interfaces.TextOrientation.Left;
+			emotionalPickerButton.TextColor = Color.Gray;
+			emotionalPickerButton.WidthRequest = screenWidth * 90 / 100;
+			emotionalPickerButton.Clicked += OnEmotionalPickerButtonClicked;
 
-            eventPickerButton = new PurposeColor.interfaces.CustomImageButton();
-            eventPickerButton.IsVisible = false;
-            eventPickerButton.ImageName = Device.OnPlatform("select_box_whitebg.png", "select_box_whitebg.png", "/Assets/select_box_whitebg.png");
-            eventPickerButton.Text = "Events, Situation & Thoughts";
-            eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
-            eventPickerButton.TextColor = Color.Gray;
-            eventPickerButton.WidthRequest = screenWidth * 90 / 100;
+			eventPickerButton = new PurposeColor.interfaces.CustomImageButton ();
+			eventPickerButton.IsVisible = false;
+			eventPickerButton.ImageName = Device.OnPlatform ("select_box_whitebg.png", "select_box_whitebg.png", "/Assets/select_box_whitebg.png");
+			eventPickerButton.Text = "Events, Situation & Thoughts";
+			eventPickerButton.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			eventPickerButton.TextOrientation = interfaces.TextOrientation.Left;
+			eventPickerButton.TextColor = Color.Gray;
+			eventPickerButton.WidthRequest = screenWidth * 90 / 100;
+
 
             if (!eventsDisplaying)
             {
                 eventPickerButton.Clicked += OnEventPickerButtonClicked;
             }
+			#endregion
 
-            about = new Label();
-            about.IsVisible = false;
-            about.Text = "About";
-            about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            about.WidthRequest = screenWidth;
-            about.HorizontalOptions = LayoutOptions.Center;
-            about.XAlign = TextAlignment.Center;
+			#region About text
+			about = new Label ();
+			about.IsVisible = false;
+			about.Text = "About";
+			about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			about.WidthRequest = screenWidth;
+			about.HorizontalOptions = LayoutOptions.Center;
+			about.XAlign = TextAlignment.Center;
 
-            about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            about.TextColor = Color.FromRgb(40, 47, 50);
+			about.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			about.TextColor = Color.FromRgb (40, 47, 50);
 
-            int fontSize = 15;
-            if (App.screenDensity > 1.5)
-            {
-                howYouAreFeeling.FontSize = Device.OnPlatform(20, 22, 30);
-                howYouAreFeeling2.FontSize = Device.OnPlatform(20, 22, 30);
-                about.FontSize = Device.OnPlatform(15, 18, 30);
+			int fontSize = 15;
+			if (App.screenDensity > 1.5) {
+				howYouAreFeeling.FontSize = Device.OnPlatform (20, 22, 30);
+				howYouAreFeeling2.FontSize = Device.OnPlatform (20, 22, 30);
+				about.FontSize = Device.OnPlatform (15, 18, 30);
 
-                emotionalPickerButton.HeightRequest = screenHeight * 6 / 100;
-                fontSize = 17;
-                eventPickerButton.HeightRequest = screenHeight * 6 / 100;
-            }
-            else
-            {
-                howYouAreFeeling.FontSize = Device.OnPlatform(16, 18, 26);
-                howYouAreFeeling2.FontSize = Device.OnPlatform(16, 18, 26);
-                about.FontSize = Device.OnPlatform(16, 18, 26);
+				emotionalPickerButton.HeightRequest = screenHeight * 6 / 100;
+				fontSize = 17;
+				eventPickerButton.HeightRequest = screenHeight * 6 / 100;
+			} else {
+				howYouAreFeeling.FontSize = Device.OnPlatform (16, 18, 26);
+				howYouAreFeeling2.FontSize = Device.OnPlatform (16, 18, 26);
+				about.FontSize = Device.OnPlatform (16, 18, 26);
 
-                emotionalPickerButton.HeightRequest = screenHeight * 9 / 100;
-                fontSize = 15;
-                eventPickerButton.HeightRequest = screenHeight * 9 / 100;
-            }
+				emotionalPickerButton.HeightRequest = screenHeight * 9 / 100;
+				fontSize = 15;
+				eventPickerButton.HeightRequest = screenHeight * 9 / 100;
+			}
 
-            emotionalPickerButton.FontSize = Device.OnPlatform(fontSize, fontSize, 22);
-            eventPickerButton.FontSize = Device.OnPlatform(fontSize, fontSize, 22);
+			emotionalPickerButton.FontSize = Device.OnPlatform (fontSize, fontSize, 22);
+			eventPickerButton.FontSize = Device.OnPlatform (fontSize, fontSize, 22);
+			#endregion
 
             this.Appearing += OnFeelingNowPageAppearing;
 
@@ -185,6 +172,7 @@ namespace PurposeColor
 				HeightRequest = 30,
 				Aspect = Aspect.Fill
 			};
+
             #region SLIDER LABEL TAP
 
             TapGestureRecognizer sliderLabelTapRecognizer = new TapGestureRecognizer();
@@ -245,7 +233,7 @@ namespace PurposeColor
 				BackgroundColor = Color.Transparent,
 				XAlign = TextAlignment.Start,
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-				FontSize = Device.OnPlatform(12, 16, 26)
+				FontSize = Device.OnPlatform(12, 14, 26)
             };
             emotionTextTap = new TapGestureRecognizer();
 			emotionTextTap.Tapped += EmotionTextTap_Tapped;
@@ -256,7 +244,7 @@ namespace PurposeColor
                 BackgroundColor = Color.Transparent,
 				XAlign = TextAlignment.Start,
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-				FontSize = Device.OnPlatform(12, 16, 26)
+				FontSize = Device.OnPlatform(12, 14, 26)
             };
 
             eventTextTap = new TapGestureRecognizer();
@@ -264,7 +252,7 @@ namespace PurposeColor
             {
                 if (!eventsDisplaying)
                 {
-                    await Task.Delay(500);
+                    await Task.Delay(100);
                     OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
                 }
             };
@@ -279,13 +267,11 @@ namespace PurposeColor
 				Children = {
 					new Label {
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 16, 26),
+						FontSize = Device.OnPlatform(12, 14, 26),
 						Text = "Happiness : ",
 						TextColor = Color.Black,
-						//HeightRequest = 50,
 						VerticalOptions = LayoutOptions.End,
 					},
-					//sliderValLabel
 					sliderValueImage
 				}
 			};
@@ -302,7 +288,7 @@ namespace PurposeColor
 						Text = "Feeling : " ,
 						TextColor = Color.Black,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 16, 26),
+						FontSize = Device.OnPlatform(12, 14, 26),
 					},
 					emotionTextLabel
 				}
@@ -311,34 +297,74 @@ namespace PurposeColor
 
 			eventFeedbackStack = new StackLayout {
 				IsVisible = false,
+				//BackgroundColor = Color.Red,
 				Orientation = StackOrientation.Horizontal,
 				Spacing = 0,
-				Padding = new Thickness (App.screenWidth * .10, 0, 10, 5),
+				Padding = new Thickness (App.screenWidth * .10, 0, 10, 0),
 				Children = {
 					new Label {
 						Text = "Event : " ,
 						TextColor = Color.Black,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-						FontSize = Device.OnPlatform(12, 16, 26),
+						FontSize = Device.OnPlatform(12, 14, 26),
 					},
 					eventTextLabel
 				}
 			};
 			eventFeedbackStack.GestureRecognizers.Add(eventTextTap);
 
+			// add this to a customLayout n a stack with bg transparent.
+			topLabelsContainer = new CustomLayout {
+				WidthRequest = screenWidth,
+			};
+
+			topLabelBg = new StackLayout {
+				WidthRequest = screenWidth,
+				BackgroundColor = Color.Gray,
+				Opacity = .2
+			};
+
+			topBgandCloseBtn = new StackLayout {
+				//BackgroundColor  = Color.Yellow, // for testing only
+				Orientation = StackOrientation.Vertical,
+				Spacing = 0,
+				Children = {topLabelBg}
+			};
+
+			topCloseBtn = new Image {
+				Source = "downarrow.png",
+				IsVisible = false,
+				HeightRequest = 25,
+				WidthRequest = 35,
+				HorizontalOptions = LayoutOptions.End
+			};
+			topBgandCloseBtn.Children.Add (topCloseBtn);
+
+			TapGestureRecognizer topCloseBtnTapRecognizer = new TapGestureRecognizer();
+			topCloseBtnTapRecognizer.Tapped += (s, e) =>
+			{
+				AnimateToplabels(0);
+			};
+
+			topCloseBtn.GestureRecognizers.Add (topCloseBtnTapRecognizer);
+
 			feedbackLabelStack = new StackLayout
 			{
 				Orientation = StackOrientation.Vertical,
-				BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY,
+				//BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY,
 				HorizontalOptions = LayoutOptions.Center,
 				VerticalOptions = LayoutOptions.Center,
 				Spacing = 2,
-				//HeightRequest = 1,
 				WidthRequest = App.screenWidth,
-				Children = {sliderFeedbackStack, feelingFeedbackStack, eventFeedbackStack, hLine}
+				Children = {sliderFeedbackStack, feelingFeedbackStack, eventFeedbackStack}
 			};
+			topLabelsContainer.AddChildToLayout (topBgandCloseBtn, 0, 0);
+			topLabelsContainer.AddChildToLayout (feedbackLabelStack, 0, 0);
 
-			masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(16, 18, 10));
+
+			//masterLayout.AddChildToLayout(feedbackLabelStack, 0, Device.OnPlatform(16, 18, 10));
+			masterLayout.AddChildToLayout(topLabelsContainer, 0, Device.OnPlatform(16, 18, 10));
+
             masterLayout.AddChildToLayout(howYouAreFeeling, 16, Device.OnPlatform(33, 33, 30));
             masterLayout.AddChildToLayout(howYouAreFeeling2, 29, Device.OnPlatform(38, 38, 27));
             masterLayout.AddChildToLayout(slider, 5, 43);
@@ -346,14 +372,14 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(emotionalPickerButton, 5, Device.OnPlatform(50, 57, 47));
             masterLayout.AddChildToLayout(about, 0, Device.OnPlatform(62, 66, 59));
             masterLayout.AddChildToLayout(eventPickerButton, 5, Device.OnPlatform(70, 73, 67));
-            SetFeedBackLablText();
+            //SetFeedBackLablText();
             Content = masterLayout;
 
         }
 
 		async void EmotionTextTap_Tapped (object sender, EventArgs e)
         {
-			await Task.Delay(500);
+			await Task.Delay(100);
 			OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
         }
 
@@ -419,15 +445,18 @@ namespace PurposeColor
 			};
 
 			sliderFeedbackStack.IsVisible = true;
-			hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
+			sliderFeedbackStack.HeightRequest = 0;
 
 			if (sliderValue == 0) {
 				progressBar.ShowToast ("slider is in neutral");
 			}
 			else if (!emotionsDisplaying && sliderValue != 0)
             {
-                //await Task.Delay(500);
+				AnimateToplabels(1);
+
+                await Task.Delay(100);
                 OnEmotionalPickerButtonClicked(emotionalPickerButton, EventArgs.Empty);
+
             }
         }
 
@@ -526,7 +555,6 @@ namespace PurposeColor
         async void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
         {
 			if (slider.CurrentValue == 0) {
-				//emotionalPickerButton.Text = "Select Emotion";
 				progressBar.ShowToast("Slider is in neutral.");
 
 				return;
@@ -610,10 +638,9 @@ namespace PurposeColor
                 about.IsVisible = true;
                 if (! eventsDisplaying)
                 {
-                    await Task.Delay(500);
+                    await Task.Delay(100);
                     OnEventPickerButtonClicked(eventPickerButton, EventArgs.Empty);
-
-                    SetFeedBackLablText();
+                    //SetFeedBackLablText();
                 }
 
                 string trimmedText = item.Name;
@@ -622,10 +649,12 @@ namespace PurposeColor
                     trimmedText = trimmedText.Substring(0, 15);
                     trimmedText += "..";
                 }
-				feelingFeedbackStack.IsVisible = true;
-				hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
+
 				emotionTextLabel.Text = item.Name;
-                
+				feelingFeedbackStack.IsVisible = true;
+				feelingFeedbackStack.HeightRequest = 0;
+				AnimateToplabels(2);
+
             }
             catch (System.Exception ex)
             {
@@ -635,47 +664,47 @@ namespace PurposeColor
 
         private void SetFeedBackLablText()
         {
-
-            var spanString = new FormattedString();
-            string trimmedText;
-            spanString.Spans.Add(new Span { Text = "Feeling ", ForegroundColor = Color.Black, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
-            if (selectedEmotionItem != null)
-            {
-                if (selectedEmotionItem.Name != null && selectedEmotionItem.Name.Length > 10)
-                {
-                    trimmedText = selectedEmotionItem.Name.Substring(0, 10);
-                    trimmedText += "..";
-                }
-                else
-                {
-                    trimmedText = selectedEmotionItem.Name;
-                }
-                spanString.Spans.Add(new Span { Text = trimmedText, ForegroundColor = Constants.BLUE_BG_COLOR, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 20 });
-            }
-            else
-            {
-                spanString.Spans.Add(new Span { Text = "............", ForegroundColor = Color.Black, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
-            }
-            spanString.Spans.Add(new Span { Text = " about ", ForegroundColor = Color.Black, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
-
-            if (selectedEventItem != null)
-            {
-                if (selectedEventItem.Name != null && selectedEventItem.Name.Length > 10)
-                {
-                    trimmedText = selectedEventItem.Name.Substring(0, 10);
-                    trimmedText += "..";
-                }
-                else
-                {
-                    trimmedText = selectedEventItem.Name;
-                }
-
-                spanString.Spans.Add(new Span { Text = trimmedText + ".", ForegroundColor = Constants.BLUE_BG_COLOR, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 20 });
-            }
-            else
-            {
-                spanString.Spans.Add(new Span { Text = "............", ForegroundColor = Color.Black, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
-            }
+//
+//            var spanString = new FormattedString();
+//            string trimmedText;
+//            spanString.Spans.Add(new Span { Text = "Feeling ", ForegroundColor = Color.Black, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
+//            if (selectedEmotionItem != null)
+//            {
+//                if (selectedEmotionItem.Name != null && selectedEmotionItem.Name.Length > 10)
+//                {
+//                    trimmedText = selectedEmotionItem.Name.Substring(0, 10);
+//                    trimmedText += "..";
+//                }
+//                else
+//                {
+//                    trimmedText = selectedEmotionItem.Name;
+//                }
+//                spanString.Spans.Add(new Span { Text = trimmedText, ForegroundColor = Constants.BLUE_BG_COLOR, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 20 });
+//            }
+//            else
+//            {
+//                spanString.Spans.Add(new Span { Text = "............", ForegroundColor = Color.Black, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
+//            }
+//            spanString.Spans.Add(new Span { Text = " about ", ForegroundColor = Color.Black, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
+//
+//            if (selectedEventItem != null)
+//            {
+//                if (selectedEventItem.Name != null && selectedEventItem.Name.Length > 10)
+//                {
+//                    trimmedText = selectedEventItem.Name.Substring(0, 10);
+//                    trimmedText += "..";
+//                }
+//                else
+//                {
+//                    trimmedText = selectedEventItem.Name;
+//                }
+//
+//                spanString.Spans.Add(new Span { Text = trimmedText + ".", ForegroundColor = Constants.BLUE_BG_COLOR, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 20 });
+//            }
+//            else
+//            {
+//                spanString.Spans.Add(new Span { Text = "............", ForegroundColor = Color.Black, FontAttributes = FontAttributes.Italic, FontFamily = Constants.HELVERTICA_NEUE_LT_STD, FontSize = 16 });
+//            }
         }
 
         void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -705,15 +734,90 @@ namespace PurposeColor
                     trimmedText += "..";
                 }
 				eventFeedbackStack.IsVisible = true;
-				hLine.IsVisible = eventFeedbackStack.IsVisible || feelingFeedbackStack.IsVisible || sliderFeedbackStack.IsVisible;
+				eventFeedbackStack.HeightRequest = 0;
 				eventTextLabel.Text = item.Name;
 
+				AnimateToplabels(3);
             }
             catch (System.Exception ex)
             {
                 DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
             }
         }
+
+		void AnimateToplabels (int LabelIndex)
+		{
+			if (LabelIndex == 0) {
+				if (topCloseBtn.Rotation != 0) 
+				{
+					sliderFeedbackStack.IsVisible = false;
+					feelingFeedbackStack.IsVisible = false;
+					eventFeedbackStack.IsVisible = false;
+
+					var animate = new Animation (d => topLabelBg.HeightRequest = d, topLabelBg.Height, 0, Easing.SpringIn);
+					animate.Commit (topLabelBg, "BarGraph", 16, 200);
+					animate = null;
+
+					topCloseBtn.Rotation = 0;
+
+					return;
+				} else {
+				
+					AnimateToplabels (1);
+					AnimateToplabels (2);
+					AnimateToplabels (3);
+				return;
+				}
+			}
+
+			int heightReq = 0;
+			heightReq += string.IsNullOrEmpty (emotionTextLabel.Text) ? 0 : (int)emotionTextLabel.Height;
+			heightReq += string.IsNullOrEmpty (eventTextLabel.Text) ? 0 : 25;
+			heightReq += slider.CurrentValue == 0 ? 0 : (int)sliderValueImage.Height;
+
+			topLabelsContainer.HeightRequest = heightReq + topCloseBtn.Height;
+
+			if (heightReq > 20) {
+				topCloseBtn.Rotation = 180;
+				topCloseBtn.IsVisible = true;
+			} else {
+				topCloseBtn.Rotation = 0;
+				topCloseBtn.IsVisible = false;
+			}
+			//topLabelBg.HeightRequest = heightReq;
+
+			{
+				var animate = new Animation(d => topLabelBg.HeightRequest = d,topLabelBg.Height, heightReq + 3, Easing.SpringIn);
+				animate.Commit(topLabelBg, "BarGraph", 16, 500);
+				animate = null;
+			}
+
+			var sliderFeedbackStackH = sliderFeedbackStack.Height;
+
+
+			if (slider.CurrentValue != 0 && LabelIndex == 1) {
+				sliderFeedbackStack.IsVisible = true;
+				var animate = new Animation(d => sliderFeedbackStack.HeightRequest = d, 0, sliderValueImage.Height, Easing.SpringIn);
+				animate.Commit(sliderFeedbackStack, "BarGraph", 16, 500);
+				animate = null;
+			}
+
+			if (!string.IsNullOrEmpty (emotionTextLabel.Text)  && LabelIndex == 2) {
+				feelingFeedbackStack.IsVisible = true;
+				var animate = new Animation(d => feelingFeedbackStack .HeightRequest = d, 0, emotionTextLabel.Height  , Easing.SpringIn);
+				animate.Commit(feelingFeedbackStack , "BarGraph", 16, 500);
+				animate = null;
+			}
+
+			if (!string.IsNullOrEmpty (eventTextLabel.Text)  && LabelIndex == 3) {
+				eventFeedbackStack.IsVisible = true;
+				var animate = new Animation(d => eventFeedbackStack.HeightRequest = d, 0,23, Easing.SpringIn);
+				animate.Commit(eventFeedbackStack, "BarGraph", 16, 500);
+				animate = null;
+			}
+
+			GC.Collect ();
+		}
 
         void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)
         {

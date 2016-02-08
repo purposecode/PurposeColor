@@ -271,6 +271,7 @@ namespace PurposeColor
             try
             {
                 var goalsList = await DownloadAllGoals();
+				await Task.Delay(100);
                 OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
 
             }
@@ -501,7 +502,7 @@ namespace PurposeColor
             }
         }
 
-        void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        async void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
@@ -522,6 +523,7 @@ namespace PurposeColor
                 {
                     actionPreviewListSource.Clear();
                 }
+				await Task.Delay(100);
                 OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
 
             }

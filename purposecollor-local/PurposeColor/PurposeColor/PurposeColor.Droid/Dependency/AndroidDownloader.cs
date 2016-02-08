@@ -16,6 +16,10 @@ namespace PurposeColor.Droid
 		{
 		}
 
+		public string GetLocalFileName (string path)
+		{
+			return "";
+		}
 
 		public async  Task<bool> DownloadFiles ( List<string> downloadUrlList )
 		{

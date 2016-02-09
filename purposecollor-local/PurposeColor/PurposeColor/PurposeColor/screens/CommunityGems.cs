@@ -296,7 +296,7 @@ namespace PurposeColor
 		{
 			try
 			{
-				Button loadPreviousGems = new Button();
+				/*Button loadPreviousGems = new Button();
 				loadPreviousGems.BackgroundColor = Color.Transparent;
 				loadPreviousGems.TextColor = Constants.BLUE_BG_COLOR;
 				loadPreviousGems.Text = "Load previous gems";
@@ -304,7 +304,7 @@ namespace PurposeColor
 				loadPreviousGems.BorderWidth = 0;
 				loadPreviousGems.BorderColor = Color.Transparent;
 				loadPreviousGems.Clicked += OnLoadPreviousGemsClicked;
-				masterStackLayout.Children.Add( loadPreviousGems );
+				masterStackLayout.Children.Add( loadPreviousGems );*/
 
 				foreach (var item in gemsObject.resultarray )
 				{
@@ -571,7 +571,7 @@ namespace PurposeColor
 
 							Image img = new Image();
 							bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
-							string source = (isValidUrl) ?  localFilePath : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+							string source = (isValidUrl) ?  localFilePath : null;
 							string fileExtenstion = Path.GetExtension(source);
 							bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 							img.WidthRequest = App.screenWidth * 90 / 100;
@@ -594,21 +594,24 @@ namespace PurposeColor
 								source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
 							}
 
+							if( source != null )
+							{
+								img.Source = source;
+								img.GestureRecognizers.Add(videoTap);
+								var indicator = new ActivityIndicator { Color = new Color(.5), };
+								indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+								masterStack.AddChildToLayout(indicator, 40, 30);
 
-							img.Source = source;
-							img.GestureRecognizers.Add(videoTap);
-							var indicator = new ActivityIndicator { Color = new Color(.5), };
-							indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-							masterStack.AddChildToLayout(indicator, 40, 30);
+								CustomLayout imgContainer = new CustomLayout();
+								imgContainer.WidthRequest = App.screenWidth * 90 / 100;
+								imgContainer.HeightRequest = App.screenWidth * 90 / 100;
+								imgContainer.Children.Add(img);
+								if( item.gem_media != null && item.gem_media.Count > 1 )
+									imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
 
-							CustomLayout imgContainer = new CustomLayout();
-							imgContainer.WidthRequest = App.screenWidth * 90 / 100;
-							imgContainer.HeightRequest = App.screenWidth * 90 / 100;
-							imgContainer.Children.Add(img);
-							if( item.gem_media != null && item.gem_media.Count > 1 )
-								imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
+								bottomAndLowerControllStack.Children.Add(imgContainer);
+							}
 
-							bottomAndLowerControllStack.Children.Add(imgContainer);
 						}
 
 					}
@@ -632,20 +635,20 @@ namespace PurposeColor
 
 
 
-				Button loadMoreGems = new Button();
+			/*	Button loadMoreGems = new Button();
 				loadMoreGems.BackgroundColor = Color.Transparent;
 				loadMoreGems.TextColor = Constants.BLUE_BG_COLOR;
 				loadMoreGems.Text = "Load more gems";
 				loadMoreGems.FontSize = 12;
 				loadMoreGems.BorderWidth = 0;
 				loadMoreGems.BorderColor = Color.Transparent;
-				loadMoreGems.Clicked += OnLoadMoreGemsClicked;
+				loadMoreGems.Clicked += OnLoadMoreGemsClicked;*/
 
 				BoxView transBox = new BoxView();
 				transBox.HeightRequest = 125;
 				transBox.WidthRequest = App.screenWidth * 80 / 100;
 				transBox.BackgroundColor = Color.Transparent;
-				masterStackLayout.Children.Add(loadMoreGems);
+				//masterStackLayout.Children.Add(loadMoreGems);
 				masterStackLayout.Children.Add(transBox);
 
 				masterScroll.Content = masterStackLayout;

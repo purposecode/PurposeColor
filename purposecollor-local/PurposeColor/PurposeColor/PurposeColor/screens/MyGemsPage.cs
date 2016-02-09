@@ -40,6 +40,9 @@ namespace PurposeColor
 		StackLayout gemMenuContainer;
 		StackLayout masterStackLayout;
 		CommunityGemsObject communityGems;
+		int MAX_ROWS_AT_A_TIME = 10;
+		bool reachedEnd;
+		bool reachedFront;
 
 		//public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
 		public MyGemsPage( CommunityGemsObject gemsObject )
@@ -82,11 +85,151 @@ namespace PurposeColor
 			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
 			masterLayout.AddChildToLayout(masterScroll, 5, 18);
 
+			if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
+			{
+				communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
+			}
+
 			RenderGems( gemsObject );
 
+
+			masterScroll.Scrolled += OnMasterScrollScrolled;
 			Content = masterLayout;
 		}
 
+		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)
+		{
+			if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
+			{
+				masterScroll.Scrolled -= OnMasterScrollScrolled;
+				progressBar.ShowProgressbar( "loading gems..." );
+
+				OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
+
+				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+				await masterScroll.ScrollToAsync( 0, 10, false );
+
+				progressBar.HideProgressbar();
+
+
+				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+				masterScroll.Scrolled += OnMasterScrollScrolled;
+
+
+			}
+			else if( masterScroll.ScrollY < Device.OnPlatform( -50, 1, 0 ) && !reachedFront  )
+			{
+				masterScroll.Scrolled -= OnMasterScrollScrolled;
+				progressBar.ShowProgressbar( "loading gems..." );
+
+
+				OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
+
+				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+				await masterScroll.ScrollToAsync( 0,  masterStackLayout.Height - 750, false );
+
+
+				progressBar.HideProgressbar();
+
+				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+				masterScroll.Scrolled += OnMasterScrollScrolled;
+
+			}
+		}
+
+
+		void OnLoadPreviousGemsClicked (object sender, EventArgs e)
+		{
+			try
+			{
+				CommunityGemsDetails firstItem =   communityGems.resultarray.First ();
+
+				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
+				int firstRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == firstItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
+				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
+				{
+					reachedEnd = false;
+					reachedFront = false;
+					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
+					communityGems = null;
+					communityGems = new CommunityGemsObject ();
+					communityGems.resultarray = new List<CommunityGemsDetails> ();
+					gemsObj.resultarray.RemoveRange( firstRendererItemIndex, gemsObj.resultarray.Count - firstRendererItemIndex );
+					if( firstRendererItemIndex > MAX_ROWS_AT_A_TIME )
+						gemsObj.resultarray.RemoveRange( 0, firstRendererItemIndex - MAX_ROWS_AT_A_TIME );
+
+					communityGems.resultarray = gemsObj.resultarray;
+
+					gemsObj = null;
+
+					masterStackLayout.Children.Clear();
+
+					masterScroll.Content = null;
+					GC.Collect();
+
+					RenderGems ( communityGems );
+				}
+				else
+				{
+					reachedFront = true;
+				}
+
+			} 
+			catch (Exception ex) 
+			{
+				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+			}
+		}
+
+
+		void OnMyGemsTapped(object sender, EventArgs e)
+		{
+
+		}
+
+
+		async void OnLoadMoreGemsClicked (object sender, EventArgs e)
+		{
+			try 
+			{
+
+				CommunityGemsDetails lastItem =   communityGems.resultarray.Last ();
+
+				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
+				int lastRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == lastItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
+				if (lastRendererItemIndex > 0 && ( lastRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
+				{
+					reachedEnd = false;
+					reachedFront = false;
+					int itemCountToCopy = gemsObj.resultarray.Count - lastRendererItemIndex;
+					itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
+					communityGems = null;
+					communityGems = new CommunityGemsObject ();
+					communityGems.resultarray = new List<CommunityGemsDetails> ();
+					communityGems.resultarray = gemsObj.resultarray.Skip (lastRendererItemIndex + 1).Take (itemCountToCopy).ToList();
+
+					gemsObj = null;
+
+
+					masterStackLayout.Children.Clear();
+
+					masterScroll.Content = null;
+					GC.Collect();
+
+					RenderGems ( communityGems );
+				}
+				else
+				{
+					reachedEnd = true;
+				}
+
+			} 
+			catch (Exception ex)
+			{
+				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+			}
+
+		}
 
 
 		async  void OnAppearing(object sender, EventArgs e)
@@ -380,7 +523,7 @@ namespace PurposeColor
 
 							Image img = new Image();
 							bool isValidUrl = (gemMedia.gem_media != null && !string.IsNullOrEmpty(gemMedia.gem_media)) ? true : false;
-							string source = (isValidUrl) ?  App.DownloadsPath + fileName : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+							string source = (isValidUrl) ?  App.DownloadsPath + fileName : null;
 							string fileExtenstion = Path.GetExtension(source);
 
 							bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
@@ -404,22 +547,25 @@ namespace PurposeColor
 								source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
 							}
 
+							if( source != null )
+							{
+								img.Source = source;
+								img.GestureRecognizers.Add(videoTap);
+								var indicator = new ActivityIndicator { Color = new Color(.5), };
+								indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+								masterStack.AddChildToLayout(indicator, 40, 30);
 
-							img.Source = source;
-							img.GestureRecognizers.Add(videoTap);
-							var indicator = new ActivityIndicator { Color = new Color(.5), };
-							indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-							masterStack.AddChildToLayout(indicator, 40, 30);
+								CustomLayout imgContainer = new CustomLayout();
+								imgContainer.WidthRequest = App.screenWidth * 90 / 100;
+								imgContainer.HeightRequest = App.screenWidth * 90 / 100;
+								img.ClassId = item.gem_id;
+								imgContainer.Children.Add(img);
+								if( item.gem_media != null && item.gem_media.Count > 1 )
+									imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
 
-							CustomLayout imgContainer = new CustomLayout();
-							imgContainer.WidthRequest = App.screenWidth * 90 / 100;
-							imgContainer.HeightRequest = App.screenWidth * 90 / 100;
-							img.ClassId = item.gem_id;
-							imgContainer.Children.Add(img);
-							if( item.gem_media != null && item.gem_media.Count > 1 )
-								imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
-
-							bottomAndLowerControllStack.Children.Add(imgContainer);
+								bottomAndLowerControllStack.Children.Add(imgContainer);
+							}
+						
 						}
 
 					}
@@ -451,10 +597,6 @@ namespace PurposeColor
 
 
 
-		void OnMyGemsTapped(object sender, EventArgs e)
-		{
-
-		}
 
 		protected override bool OnBackButtonPressed()
 		{

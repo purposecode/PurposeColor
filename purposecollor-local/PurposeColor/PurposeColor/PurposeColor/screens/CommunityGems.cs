@@ -42,6 +42,7 @@ namespace PurposeColor
         CommunityGemsObject communityGems;
 		User currentUser;
 		bool reachedEnd;
+		bool reachedFront;
 		int myGemsCount = 0;
 		int MAX_ROWS_AT_A_TIME = 10;
 
@@ -124,48 +125,52 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 5, 18);
 
-			masterScroll.Scrolled += async (object sender, ScrolledEventArgs e) => 
-			{
-			/*	Debug.WriteLine( "Scroll y  : " + masterScroll.ScrollY );
-				Debug.WriteLine( "master stack layout height - " + masterStackLayout.Height.ToString() +   "Height Diff - 700   :: " +  (masterStackLayout.Height - 700).ToString() );
-				return; */
-
-
-
-				if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
-				{
-					//progressBar.ShowProgressbar( "loading gems..." );
-
-					OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
-
-					await Task.Delay( TimeSpan.FromSeconds( 1 ) );
-					await masterScroll.ScrollToAsync( 0, 0, false );
-
-					//progressBar.HideProgressbar();
-
-
-				}
-				else if( masterScroll.ScrollY < Device.OnPlatform( -50, -40, 0 )  )
-				{
-					//progressBar.ShowProgressbar( "loading gems..." );
-
-					Debug.WriteLine( "----------------------- scrol prev-----------------" );
-
-					OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
-
-					await Task.Delay( TimeSpan.FromSeconds( 1 ) );
-					await masterScroll.ScrollToAsync( 0, 100, false );
-
-					//progressBar.HideProgressbar();
-
-					//await DisplayAlert(Constants.ALERT_TITLE, "Previous set loaded", Constants.ALERT_OK);
-
-				}
-
-			};
+			masterScroll.Scrolled += OnMasterScrollScrolled;
 
             Content = masterLayout;
         }
+
+
+		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)
+		{
+			if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
+			{
+				masterScroll.Scrolled -= OnMasterScrollScrolled;
+				progressBar.ShowProgressbar( "loading gems..." );
+
+				OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
+
+				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+				await masterScroll.ScrollToAsync( 0, 10, false );
+
+				progressBar.HideProgressbar();
+
+
+				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+				masterScroll.Scrolled += OnMasterScrollScrolled;
+
+
+			}
+			else if( masterScroll.ScrollY < Device.OnPlatform( -50, 1, 0 ) && !reachedFront  )
+			{
+				masterScroll.Scrolled -= OnMasterScrollScrolled;
+				progressBar.ShowProgressbar( "loading gems..." );
+
+
+				OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
+
+				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+				await masterScroll.ScrollToAsync( 0,  masterStackLayout.Height - 750, false );
+
+
+				progressBar.HideProgressbar();
+
+				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+				masterScroll.Scrolled += OnMasterScrollScrolled;
+
+			}
+		}
+
 
 
 
@@ -664,6 +669,7 @@ namespace PurposeColor
 				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
 					reachedEnd = false;
+					reachedFront = false;
 					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
 					communityGems = null;
 					communityGems = new CommunityGemsObject ();
@@ -682,6 +688,10 @@ namespace PurposeColor
 					GC.Collect();
 
 					RenderGems ( communityGems );
+				}
+				else
+				{
+					reachedFront = true;
 				}
 
 			} 
@@ -710,6 +720,7 @@ namespace PurposeColor
 				if (lastRendererItemIndex > 0 && ( lastRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
 					reachedEnd = false;
+					reachedFront = false;
 					int itemCountToCopy = gemsObj.resultarray.Count - lastRendererItemIndex;
 					itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
 					communityGems = null;

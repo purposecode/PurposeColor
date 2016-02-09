@@ -173,6 +173,11 @@ namespace PurposeColor
 
 
 
+		public void OnCancelProgress()
+		{
+			string cancelst = "cancel pressed";
+		}
+
 
        async  void OnAppearing(object sender, EventArgs e)
         {
@@ -188,7 +193,7 @@ namespace PurposeColor
 
 
 				IProgressBar progess = DependencyService.Get< IProgressBar >();
-				progess.ShowProgressbar( "Downloading gems...." );
+				progess.ShowProgressbarWithCancel( "Downloading gems....", OnCancelProgress );
 
 				User user = null;
 				IsNavigationFrfomGEMS = modelObject.fromGEMSPage;
@@ -242,7 +247,7 @@ namespace PurposeColor
 					communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
 				}
 
-				progess.HideProgressbar();
+				progess.HideProgressbarWithCancel();
 
 				RenderGems( communityGems );
 

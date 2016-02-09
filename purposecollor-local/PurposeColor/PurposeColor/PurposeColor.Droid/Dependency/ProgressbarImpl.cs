@@ -23,6 +23,17 @@ namespace PurposeColor.WinPhone.Dependency
             
         }
 
+		public void ShowProgressbarWithCancel( string text, Action cancelAction  )
+		{
+			AndHUD.Shared.Show(MainActivity.GetMainActivity(), text, -1, MaskType.Clear, null, cancelAction, true, cancelAction);
+		}
+
+		public void HideProgressbarWithCancel ()
+		{
+			AndHUD.Shared.Dismiss ();
+		}
+
+
 
         public void HideProgressbar()
         {

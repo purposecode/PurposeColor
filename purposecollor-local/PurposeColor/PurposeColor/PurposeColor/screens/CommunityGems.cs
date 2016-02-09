@@ -41,8 +41,9 @@ namespace PurposeColor
         StackLayout masterStackLayout;
         CommunityGemsObject communityGems;
 		User currentUser;
+		bool reachedEnd;
 		int myGemsCount = 0;
-		int MAX_ROWS_AT_A_TIME = 5;
+		int MAX_ROWS_AT_A_TIME = 10;
 
         //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public CommunityGems(DetailsPageModel model)
@@ -123,6 +124,45 @@ namespace PurposeColor
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 5, 18);
 
+			masterScroll.Scrolled += async (object sender, ScrolledEventArgs e) => 
+			{
+			/*	Debug.WriteLine( "Scroll y  : " + masterScroll.ScrollY );
+				Debug.WriteLine( "master stack layout height - " + masterStackLayout.Height.ToString() +   "Height Diff - 700   :: " +  (masterStackLayout.Height - 700).ToString() );
+				return; */
+
+
+
+				if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
+				{
+					//progressBar.ShowProgressbar( "loading gems..." );
+
+					OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
+
+					await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+					await masterScroll.ScrollToAsync( 0, 0, false );
+
+					//progressBar.HideProgressbar();
+
+
+				}
+				else if( masterScroll.ScrollY < Device.OnPlatform( -50, -40, 0 )  )
+				{
+					//progressBar.ShowProgressbar( "loading gems..." );
+
+					Debug.WriteLine( "----------------------- scrol prev-----------------" );
+
+					OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
+
+					await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+					await masterScroll.ScrollToAsync( 0, 100, false );
+
+					//progressBar.HideProgressbar();
+
+					//await DisplayAlert(Constants.ALERT_TITLE, "Previous set loaded", Constants.ALERT_OK);
+
+				}
+
+			};
 
             Content = masterLayout;
         }
@@ -617,14 +657,13 @@ namespace PurposeColor
 		{
 			try
 			{
-				IProgressBar progress = DependencyService.Get< IProgressBar > ();
-				progress.ShowProgressbar ( "loading...." );
 				CommunityGemsDetails firstItem =   communityGems.resultarray.First ();
 
 				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
 				int firstRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == firstItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
 				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
+					reachedEnd = false;
 					int itemCountToCopy = MAX_ROWS_AT_A_TIME;
 					communityGems = null;
 					communityGems = new CommunityGemsObject ();
@@ -643,11 +682,8 @@ namespace PurposeColor
 					GC.Collect();
 
 					RenderGems ( communityGems );
-					masterScroll.ScrollToAsync (0, 0, false); 
 				}
 
-				progress.HideProgressbar ();
-				progress = null;
 			} 
 			catch (Exception ex) 
 			{
@@ -667,14 +703,13 @@ namespace PurposeColor
 			try 
 			{
 
-				IProgressBar progress = DependencyService.Get< IProgressBar > ();
-				progress.ShowProgressbar ( "loading...." );
 				CommunityGemsDetails lastItem =   communityGems.resultarray.Last ();
 
 				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
 				int lastRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == lastItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
-				if (lastRendererItemIndex > -1 && ( lastRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
+				if (lastRendererItemIndex > 0 && ( lastRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{
+					reachedEnd = false;
 					int itemCountToCopy = gemsObj.resultarray.Count - lastRendererItemIndex;
 					itemCountToCopy = (itemCountToCopy > MAX_ROWS_AT_A_TIME) ? MAX_ROWS_AT_A_TIME : itemCountToCopy;
 					communityGems = null;
@@ -691,11 +726,12 @@ namespace PurposeColor
 					GC.Collect();
 
 					RenderGems ( communityGems );
-					masterScroll.ScrollToAsync (0, 0, false); 
+				}
+				else
+				{
+					reachedEnd = true;
 				}
 
-				progress.HideProgressbar ();
-				progress = null;
 			} 
 			catch (Exception ex)
 			{

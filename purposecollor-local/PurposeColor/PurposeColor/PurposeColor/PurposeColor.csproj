@@ -137,6 +137,7 @@
     <Compile Include="CustomControls\CommunityGemSubTitleBar.cs" />
     <Compile Include="interfaces\IDownload.cs" />
     <Compile Include="screens\ChatPage.cs" />
+    <Compile Include="screens\ChatDetailsPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

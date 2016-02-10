@@ -8,6 +8,7 @@ using ImageCircle.Forms.Plugin.Abstractions;
 using PurposeColor.Service;
 using PurposeColor.Model;
 using PurposeColor.interfaces;
+using System.Collections.ObjectModel;
 
 namespace PurposeColor
 {
@@ -44,9 +45,24 @@ namespace PurposeColor
 			chatContactsListView.SeparatorVisibility = SeparatorVisibility.Default;
 			chatContactsListView.BackgroundColor = Color.White;
 			chatContactsListView.HeightRequest = App.screenHeight * 90 / 100;
-			chatContactsListView.HasUnevenRows = false;
-			chatContactsListView.RowHeight = (int) App.screenHeight * 10 / 100;
+			chatContactsListView.HasUnevenRows = true;
+			//chatContactsListView.RowHeight = (int) App.screenHeight * 10 / 100;
 			chatContactsListView.SeparatorColor = Color.FromRgb (8, 135, 224);
+			chatContactsListView.ItemSelected +=  (object sender, SelectedItemChangedEventArgs e) => 
+			{
+				ObservableCollection<string> chathistory = new ObservableCollection<string>();
+				chathistory.Add( "Hi" );
+				chathistory.Add( "Hello" );
+				chathistory.Add( "how are you" );
+				chathistory.Add( "from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ? from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ? from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ?" );
+				chathistory.Add( "wht abt u" );chathistory.Add( "you are" );
+				chathistory.Add( "from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ?" );
+				chathistory.Add( "am from delhi, india" );chathistory.Add( "so how s " );
+				chathistory.Add( "life there ?" );
+				chathistory.Add( "not going good" );
+				chathistory.Add( "ok..." );
+				 Navigation.PushAsync( new ChatDetailsPage( chathistory ) );
+			};
 
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
@@ -91,9 +107,9 @@ namespace PurposeColor
 			StackLayout mainLayout = new StackLayout ();
 			mainLayout.Orientation = StackOrientation.Horizontal;
 			mainLayout.WidthRequest = App.screenWidth;
-			mainLayout.HeightRequest = App.screenHeight * 50 / 100;
+			mainLayout.HeightRequest = App.screenHeight * 8 / 100;
 			mainLayout.BackgroundColor = Color.White;
-			mainLayout.Padding = new Thickness (10, 10, 10, 10);
+			mainLayout.Padding = new Thickness (0, 10, 10, 10);
 			mainLayout.Spacing = 10;
 
 			Label userName = new Label ();
@@ -108,8 +124,8 @@ namespace PurposeColor
 			CircleImage userImage = new CircleImage 
 			{
 				Aspect = Aspect.AspectFit,
-				WidthRequest = 100,
-				HeightRequest = 100,
+				WidthRequest = 75,
+				HeightRequest = 75,
 				HorizontalOptions = LayoutOptions.Start
 			};
 			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );
@@ -129,9 +145,16 @@ namespace PurposeColor
 			statusImg.VerticalOptions = LayoutOptions.Center;
 			statusImg.HorizontalOptions = LayoutOptions.EndAndExpand;
 
+			BoxView availabelStatus = new BoxView ();
+			availabelStatus.BackgroundColor = Color.Green;
+			availabelStatus.WidthRequest = 10;
+			availabelStatus.HeightRequest = 5;
+			availabelStatus.VerticalOptions = LayoutOptions.Center;
+			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
+
 			mainLayout.Children.Add ( userImage );
 			mainLayout.Children.Add ( userName );
-			mainLayout.Children.Add ( statusImg );
+			mainLayout.Children.Add ( availabelStatus );
 
 			View = mainLayout;
 

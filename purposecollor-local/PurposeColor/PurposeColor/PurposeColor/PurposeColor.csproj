@@ -136,6 +136,7 @@
     <Compile Include="screens\MyGemsPage.cs" />
     <Compile Include="CustomControls\CommunityGemSubTitleBar.cs" />
     <Compile Include="interfaces\IDownload.cs" />
+    <Compile Include="screens\ChatPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

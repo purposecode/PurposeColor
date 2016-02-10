@@ -6,6 +6,28 @@ using System.Threading.Tasks;
 
 namespace PurposeColor.Model
 {
+	public class ChatUsersDetails
+	{
+		public string user_id { get; set; }
+		public string firstname { get; set; }
+		public string profileimg { get; set; }
+		public string logged_status { get; set; }
+		public string profileImgUrl
+		{
+			get
+			{
+				return Constants.SERVICE_BASE_URL + profileimg;
+			}
+		}
+	}
+
+	public class ChatUsersObject
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<ChatUsersDetails> resultarray { get; set; }
+	}
+
 	public class CommunityGemsDetailsDB
 	{
 		public string user_id { get; set; }

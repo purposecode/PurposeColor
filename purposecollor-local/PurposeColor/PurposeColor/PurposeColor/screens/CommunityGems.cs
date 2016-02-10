@@ -120,8 +120,20 @@ namespace PurposeColor
             masterStackLayout = new StackLayout();
             masterStackLayout.Orientation = StackOrientation.Vertical;
 
+			TapGestureRecognizer chatTap = new TapGestureRecognizer ();
+			Image chat = new Image ();
+			chat.Source = "chat.png";
+			chat.Aspect = Aspect.Fill;
+			chat.WidthRequest = App.screenWidth * 16 / 100;
+			chat.HeightRequest = App.screenWidth * 12 / 100;
+			chat.GestureRecognizers.Add ( chatTap );
+			chatTap.Tapped += async (object sender, EventArgs e) => 
+			{
+				await Navigation.PushAsync( new ChatPage() );
+			};
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+			masterLayout.AddChildToLayout(chat, 80, 1);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
             masterLayout.AddChildToLayout(masterScroll, 5, 18);
 

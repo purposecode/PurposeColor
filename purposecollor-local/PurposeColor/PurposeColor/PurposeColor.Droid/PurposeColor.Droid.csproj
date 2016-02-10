@@ -300,6 +300,9 @@
     <AndroidResource Include="Resources\drawable\Sliderfeedback2.png" />
     <AndroidResource Include="Resources\drawable\SliderfeedbackMinues1.png" />
     <AndroidResource Include="Resources\drawable\SliderfeedbackMinues2.png" />
+    <AndroidResource Include="Resources\drawable\offline.png" />
+    <AndroidResource Include="Resources\drawable\online.png" />
+    <AndroidResource Include="Resources\drawable\chat.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

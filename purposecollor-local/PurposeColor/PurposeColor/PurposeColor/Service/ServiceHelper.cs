@@ -2199,6 +2199,55 @@ namespace PurposeColor.Service
 			return null;
 		}
 
+		public static async Task<ChatUsersObject> GetAllChatUsers()
+		{
+			try
+			{
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=userlist";
+
+				var response = await client.GetAsync(uriString);
+
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+					var rootobject = JsonConvert.DeserializeObject<ChatUsersObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject; 
+					}
+					client.Dispose();
+					return null;
+
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+
 		public static async Task<string> Addtosupportemotion(string emotionId)
 		{
 			try

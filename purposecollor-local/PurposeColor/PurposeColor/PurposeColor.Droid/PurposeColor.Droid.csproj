@@ -303,6 +303,8 @@
     <AndroidResource Include="Resources\drawable\offline.png" />
     <AndroidResource Include="Resources\drawable\online.png" />
     <AndroidResource Include="Resources\drawable\chat.png" />
+    <AndroidResource Include="Resources\drawable\blue_tip.png" />
+    <AndroidResource Include="Resources\drawable\yellow_tip.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

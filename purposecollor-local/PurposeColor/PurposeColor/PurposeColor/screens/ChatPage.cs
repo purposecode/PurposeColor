@@ -50,17 +50,26 @@ namespace PurposeColor
 			chatContactsListView.SeparatorColor = Color.FromRgb (8, 135, 224);
 			chatContactsListView.ItemSelected +=  (object sender, SelectedItemChangedEventArgs e) => 
 			{
-				ObservableCollection<string> chathistory = new ObservableCollection<string>();
-				chathistory.Add( "Hi" );
-				chathistory.Add( "Hello" );
-				chathistory.Add( "how are you" );
-				chathistory.Add( "from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ? from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ? from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ?" );
-				chathistory.Add( "wht abt u" );chathistory.Add( "you are" );
-				chathistory.Add( "from where. am from delhi, india . am from delhi, india djg  am from delhi, india am from delhi, india ?" );
-				chathistory.Add( "am from delhi, india" );chathistory.Add( "so how s " );
-				chathistory.Add( "life there ?" );
-				chathistory.Add( "not going good" );
-				chathistory.Add( "ok..." );
+				ObservableCollection<ChatDetails> chathistory = new ObservableCollection<ChatDetails>();
+
+				for( int index = 0; index < 20; index++ )
+				{
+					ChatDetails chat1 = new ChatDetails();
+					chat1.AuthorName = "prvn";
+					chat1.Message = "new chat messge ";
+					chathistory.Add( chat1 );
+				}
+
+
+				for( int index = 0; index < 20; index++ )
+				{
+					ChatDetails chat1 = new ChatDetails();
+					chat1.AuthorName = "test";
+					chat1.Message = "test chat messge";
+					chathistory.Add( chat1 );
+				}
+
+			
 				 Navigation.PushAsync( new ChatDetailsPage( chathistory ) );
 			};
 
@@ -99,6 +108,8 @@ namespace PurposeColor
 			this.Content = null;
 		}
 	}
+
+
 
 	public class ChatContactListCell : ViewCell
 	{

@@ -12,6 +12,10 @@ using System.Collections.ObjectModel;
 
 namespace PurposeColor
 {
+	public class MessageViewCell : ViewCell
+	{
+	}
+
 	public class ChatDetailsPage : ContentPage, IDisposable
 	{
 		PurposeColorTitleBar mainTitleBar;
@@ -19,9 +23,9 @@ namespace PurposeColor
 		CustomLayout masterLayout;
 		IProgressBar progressBar;
 		ListView chatHistoryListView;
-		ObservableCollection<string> chatList = null;
+		ObservableCollection<ChatDetails> chatList = null;
 
-		public ChatDetailsPage ( ObservableCollection<string> chats )
+		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats )
 		{
 
 			chatList = chats;
@@ -95,7 +99,43 @@ namespace PurposeColor
 			
 		}
 
+		private Cell CreateMessageCell()
+		{
+			var timestampLabel = new Label();
+			timestampLabel.SetBinding(Label.TextProperty, new Binding("Timestamp", stringFormat: "[{0:HH:mm}]"));
+			timestampLabel.TextColor = Color.Silver;
+			timestampLabel.Font = Font.SystemFontOfSize(14);
 
+			var authorLabel = new Label();
+			authorLabel.SetBinding(Label.TextProperty, new Binding("AuthorName", stringFormat: "{0}: "));
+			authorLabel.TextColor = Device.OnPlatform(Color.Blue, Color.Yellow, Color.Yellow);
+			authorLabel.Font = Font.SystemFontOfSize(14);
+
+			var messageLabel = new Label();
+			messageLabel.SetBinding(Label.TextProperty, new Binding("Message"));
+			messageLabel.Font = Font.SystemFontOfSize(14);
+
+			var stack = new StackLayout
+			{
+				Orientation = StackOrientation.Horizontal,
+				Children = {authorLabel, messageLabel}
+			};
+					
+
+			var view = new MessageViewCell
+			{
+				View = stack
+			};
+			return view;
+		}
+
+
+	}
+
+
+	public class CustomImageLabel : Label
+	{
+		public string BackGroundImage{ get; set;}
 	}
 
 
@@ -104,78 +144,59 @@ namespace PurposeColor
 		public ChatHistoryListCell()
 		{
 			StackLayout mainLayout = new StackLayout ();
-			mainLayout.Orientation = StackOrientation.Horizontal;
+			//mainLayout.Orientation = StackOrientation.Horizontal;
 			mainLayout.WidthRequest = App.screenWidth;
-			//mainLayout.HeightRequest = App.screenHeight * 50 / 100;
-			mainLayout.BackgroundColor =  Color.FromRgb(54, 79, 120);
+
+			mainLayout.BackgroundColor =  Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
 			mainLayout.Padding = new Thickness (10, 10, 10, 10);
-			mainLayout.Spacing = 50;
+		 	mainLayout.Spacing = 0;
+
+
+			StackLayout tipContainer = new StackLayout ();
+			//tipContainer.BackgroundColor =  Color.tr  Color.FromRgb(54, 79, 120);
+			tipContainer.HorizontalOptions = LayoutOptions.Center;
+			tipContainer.VerticalOptions = LayoutOptions.Center;
+			tipContainer.SetBinding ( StackLayout.HorizontalOptionsProperty, "BubblePos" );
+			//tipContainer.SetBinding ( StackLayout.BackgroundColorProperty, "BubbleColor" );
+
+
 
 			StackLayout labelContainer = new StackLayout ();
-			labelContainer.BackgroundColor = Color.White;
-			//labelContainer.Spacing = 10;
-
+			labelContainer.Orientation = StackOrientation.Horizontal;
 			labelContainer.Padding = new Thickness ( 5, 15, 5, 15 );
+			labelContainer.SetBinding ( StackLayout.HorizontalOptionsProperty, "BubblePos" );
+			labelContainer.SetBinding ( StackLayout.BackgroundColorProperty, "BubbleColor" );
 
-			StackLayout labelMasterContainer = new StackLayout ();
-			labelMasterContainer.BackgroundColor = Color.White;
-			//labelMasterContainer.Padding = new Thickness ( 5, 0, 5, 0 );
-
-
-
-			BoxView trasperentArea = new BoxView ();
-			trasperentArea.BackgroundColor = Color.Transparent;
-			trasperentArea.WidthRequest = App.screenWidth;
-			trasperentArea.HeightRequest = 100;
 
 			Label chat = new Label ();
-			chat.BackgroundColor = Color.White;
 			chat.TextColor = Color.Black;
-			chat.XAlign = TextAlignment.Start;
+			chat.XAlign = TextAlignment.End;
 			chat.YAlign = TextAlignment.Center;
 			chat.VerticalOptions = LayoutOptions.Start;
 			chat.FontSize = 15;
-			chat.HorizontalOptions = LayoutOptions.CenterAndExpand;
-			chat.SetBinding ( Label.TextProperty, "." );
+			chat.HorizontalOptions = LayoutOptions.End;
+			chat.SetBinding ( Label.TextProperty, "Message" );
+
+			Image imgTip = new Image ();
+			imgTip.Aspect = Aspect.Fill;
+			imgTip.WidthRequest = 25;
+			imgTip.HeightRequest = 15;
+			imgTip.HorizontalOptions = LayoutOptions.Start;
+			imgTip.VerticalOptions = LayoutOptions.End;
+			imgTip.SetBinding ( Image.SourceProperty, "ImageTip" );
+
+			tipContainer.Children.Add ( imgTip );
 			labelContainer.Children.Add ( chat );
-		//	labelContainer.Children.Add ( trasperentArea );
 
+	
 
-
-			//labelMasterContainer.Children.Add ( labelContainer );
-
-			/*CircleImage userImage = new CircleImage 
-			{
-				Aspect = Aspect.AspectFit,
-				WidthRequest = 100,
-				HeightRequest = 100,
-				HorizontalOptions = LayoutOptions.Start
-			};
-			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );
-
-			Image statusImg = new Image ();
-			statusImg.WidthRequest = App.screenWidth * 5 / 100;
-			statusImg.HeightRequest = App.screenWidth * 5 / 100;
-			statusImg.Source = "online.png";
-			statusImg.Aspect = Aspect.Fill;
-			statusImg.VerticalOptions = LayoutOptions.Center;
-			statusImg.HorizontalOptions = LayoutOptions.EndAndExpand;
-
-			BoxView availabelStatus = new BoxView ();
-			availabelStatus.BackgroundColor = Color.Green;
-			availabelStatus.WidthRequest = 10;
-			availabelStatus.HeightRequest = 5;
-			availabelStatus.VerticalOptions = LayoutOptions.Center;
-			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
-
-			mainLayout.Children.Add ( userImage );
-			mainLayout.Children.Add ( userName );*/
 			mainLayout.Children.Add ( labelContainer );
-		//	mainLayout.Children.Add ( trasperentArea );
+			mainLayout.Children.Add ( tipContainer );
+
 
 
 			View = mainLayout;
-			this.View.BackgroundColor =  Color.FromRgb(54, 79, 120);
+			//this.View.BackgroundColor =  Color.FromRgb(54, 79, 120);
 		}
 
 

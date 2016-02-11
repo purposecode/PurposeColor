@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PurposeColor.Model
 {
@@ -20,6 +21,60 @@ namespace PurposeColor.Model
 			}
 		}
 	}
+
+	public class ChatDetails
+	{
+		public string user_id { get; set; }
+		public string AuthorName { get; set; }
+		public string Message{ get; set; }
+		public string Timestamp{ get; set; }
+
+		public LayoutOptions BubblePos
+		{
+			get
+			{
+				if (AuthorName == "test")
+					return LayoutOptions.Start;
+				else
+					return LayoutOptions.End;
+			}
+		}
+
+		public bool IsMine
+		{
+			get
+			{
+				if (AuthorName == "test")
+					return true;
+				else
+					return false;
+			}
+		}
+
+		public Color BubbleColor
+		{
+			get
+			{
+				if (AuthorName == "test")
+					return Color.FromRgb( 0, 153, 255 );
+				else
+					return Color.FromRgb( 255, 255, 0 );
+			}
+
+		}
+
+		public string ImageTip
+		{
+			get 
+			{
+				if (AuthorName == "test")
+					return "blue_tip.png";
+				else
+					return "yellow_tip.png";
+			}
+		}
+	}
+
 
 	public class ChatUsersObject
 	{

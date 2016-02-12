@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.IO;
 
 namespace PurposeColor.Model
 {
@@ -13,11 +14,14 @@ namespace PurposeColor.Model
 		public string firstname { get; set; }
 		public string profileimg { get; set; }
 		public string logged_status { get; set; }
-		public string profileImgUrl
-		{
-			get
+		public string profileImgUrl {
+			get 
 			{
-				return Constants.SERVICE_BASE_URL + profileimg;
+				string fileName = Path.GetFileName(profileimg);
+				return App.DownloadsPath + fileName;
+			}
+			set
+			{
 			}
 		}
 	}
@@ -58,7 +62,7 @@ namespace PurposeColor.Model
 				if (AuthorName == "test")
 					return Color.FromRgb( 0, 153, 255 );
 				else
-					return Color.FromRgb( 255, 255, 0 );
+					return Color.FromRgb( 250, 250, 250 );
 			}
 
 		}

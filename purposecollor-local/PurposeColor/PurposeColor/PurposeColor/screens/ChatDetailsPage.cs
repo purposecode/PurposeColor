@@ -44,7 +44,7 @@ namespace PurposeColor
 			chatHistoryListView.SeparatorVisibility = SeparatorVisibility.None;
 			chatHistoryListView.HeightRequest = App.screenHeight * 70 / 100;
 			chatHistoryListView.HasUnevenRows = true;
-			chatHistoryListView.BackgroundColor = Color.White;// Color.FromRgb(54, 79, 120);
+			chatHistoryListView.BackgroundColor =  Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
 
 
@@ -58,17 +58,14 @@ namespace PurposeColor
 
 			};
 
-			Image addCommentButton = new Image();
-			addCommentButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
+			Image postChatButton = new Image();
+			postChatButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
 
-			addCommentButton.VerticalOptions = LayoutOptions.Center;
-			addCommentButton.HorizontalOptions = LayoutOptions.Center;
-			TapGestureRecognizer addCommentButtonTap = new TapGestureRecognizer();
-			addCommentButtonTap.Tapped += async (object sender, EventArgs e) => 
-			{
-				
-			};
-			addCommentButton.GestureRecognizers.Add(addCommentButtonTap);
+			postChatButton.VerticalOptions = LayoutOptions.Center;
+			postChatButton.HorizontalOptions = LayoutOptions.Center;
+			TapGestureRecognizer postChatButtonTap = new TapGestureRecognizer();
+
+			postChatButton.GestureRecognizers.Add(postChatButtonTap);
 
 			StackLayout inputCountainer = new StackLayout
 			{
@@ -76,7 +73,7 @@ namespace PurposeColor
 				Padding = Device.OnPlatform(5, 5, 5),
 				Orientation = StackOrientation.Horizontal,
 				BackgroundColor = Color.FromRgb( 45, 62, 80 ),
-				Children = { chatEntry, addCommentButton },
+				Children = { chatEntry, postChatButton },
 				WidthRequest = App.screenWidth
 			};
 
@@ -89,6 +86,17 @@ namespace PurposeColor
 			ScrollView masterScroll = new ScrollView ();
 			masterScroll.Orientation = ScrollOrientation.Vertical;
 			masterScroll.Content = masterLayout;
+
+
+			postChatButtonTap.Tapped += async (object sender, EventArgs e) => 
+			{
+				ChatDetails detail = new ChatDetails();
+				detail.AuthorName = "prvn";
+				detail.Message = chatEntry.Text;
+				chatList.Add( detail );
+				chatEntry.Text = "";
+				chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+			};
 
 			Content = masterScroll;
 
@@ -147,7 +155,7 @@ namespace PurposeColor
 			//mainLayout.Orientation = StackOrientation.Horizontal;
 			mainLayout.WidthRequest = App.screenWidth;
 
-			mainLayout.BackgroundColor = Color.White;// Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
+			mainLayout.BackgroundColor = Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
 			mainLayout.Padding = new Thickness (10, 10, 10, 10);
 		 	mainLayout.Spacing = 0;
 

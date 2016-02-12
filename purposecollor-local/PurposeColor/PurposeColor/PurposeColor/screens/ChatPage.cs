@@ -9,6 +9,7 @@ using PurposeColor.Service;
 using PurposeColor.Model;
 using PurposeColor.interfaces;
 using System.Collections.ObjectModel;
+using System.IO;
 
 namespace PurposeColor
 {
@@ -88,7 +89,21 @@ namespace PurposeColor
 
 			progressBar.ShowProgressbar ( "Loading users list...." );
 			userObject = await ServiceHelper.GetAllChatUsers ();
-			chatContactsListView.ItemsSource = userObject.resultarray;
+			if (userObject != null)
+			{
+				List<string> profileImageUrlList = new List<string> ();
+
+				foreach ( var item in userObject.resultarray ) 
+				{
+					string profileUrl = Constants.SERVICE_BASE_URL + item.profileimg;
+					profileImageUrlList.Add ( profileUrl );		
+				}
+
+				IDownload downloader = DependencyService.Get<IDownload> ();
+				downloader.DownloadFiles ( profileImageUrlList );
+				chatContactsListView.ItemsSource = userObject.resultarray;
+			}
+
 			progressBar.HideProgressbar ();
 		}
 

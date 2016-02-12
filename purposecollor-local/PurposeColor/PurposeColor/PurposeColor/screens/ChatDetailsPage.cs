@@ -36,7 +36,7 @@ namespace PurposeColor
 
 			masterLayout = new CustomLayout ();
 			masterLayout.WidthRequest = App.screenWidth;
-			masterLayout.HeightRequest = App.screenHeight - 100;
+			masterLayout.HeightRequest = App.screenHeight - 50;
 			masterLayout.BackgroundColor = Color.FromRgb(45, 62, 80);
 
 			chatHistoryListView = new ListView();
@@ -44,7 +44,7 @@ namespace PurposeColor
 			chatHistoryListView.SeparatorVisibility = SeparatorVisibility.None;
 			chatHistoryListView.HeightRequest = App.screenHeight * 70 / 100;
 			chatHistoryListView.HasUnevenRows = true;
-			chatHistoryListView.BackgroundColor = Color.FromRgb(54, 79, 120);
+			chatHistoryListView.BackgroundColor = Color.White;// Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
 
 
@@ -147,7 +147,7 @@ namespace PurposeColor
 			//mainLayout.Orientation = StackOrientation.Horizontal;
 			mainLayout.WidthRequest = App.screenWidth;
 
-			mainLayout.BackgroundColor =  Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
+			mainLayout.BackgroundColor = Color.White;// Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
 			mainLayout.Padding = new Thickness (10, 10, 10, 10);
 		 	mainLayout.Spacing = 0;
 

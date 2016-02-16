@@ -36,7 +36,6 @@ namespace PurposeColor.screens
 		TapGestureRecognizer goalsListingBtnTapgesture = null;
 
 		bool isEmotionsListing = false;
-		string localFilePath = string.Empty;
 		StackLayout listViewContainer;
 		bool isLoading = false;
 		string previousTitle = string.Empty;
@@ -66,7 +65,7 @@ namespace PurposeColor.screens
 
 			masterStack = new StackLayout();
 			masterStack.Orientation = StackOrientation.Vertical;
-			masterStack.BackgroundColor = Color.White; //Color.Transparent;
+			masterStack.BackgroundColor = Color.White;
 
 			emotionLabel = new Label {
 				Text = "EMOTIONS  ", 
@@ -83,7 +82,7 @@ namespace PurposeColor.screens
 				Children = {
 					emotionLabel
 				},
-				BackgroundColor = Color.FromRgb(8, 159, 245),//Constants.BLUE_BG_COLOR,
+				BackgroundColor = Color.FromRgb(8, 159, 245),
 				Orientation = StackOrientation.Horizontal,
 				WidthRequest = App.screenWidth * .5
 			};
@@ -105,7 +104,7 @@ namespace PurposeColor.screens
 				Children = {
 					goalsAndDreamsLabel
 				},
-				BackgroundColor = Constants.INPUT_GRAY_LINE_COLOR, // Color.FromRgb(232, 234, 230),//Constants.LIST_BG_COLOR, //Constants.STACK_BG_COLOR_GRAY,
+				BackgroundColor = Constants.INPUT_GRAY_LINE_COLOR,
 				Orientation = StackOrientation.Horizontal,
 				WidthRequest = App.screenWidth * .5
 			};
@@ -114,7 +113,7 @@ namespace PurposeColor.screens
 			goalsButton.GestureRecognizers.Add (goalsListingBtnTapgesture);
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-			masterLayout.AddChildToLayout(new StackLayout{BackgroundColor = Color.Aqua, HeightRequest = App.screenHeight * .08, Orientation = StackOrientation.Horizontal,Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,10);
+			masterLayout.AddChildToLayout(new StackLayout{HeightRequest =  App.screenHeight * 0.08, Orientation = StackOrientation.Horizontal, Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,Device.OnPlatform(9,10,10));
 		}
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
@@ -128,7 +127,7 @@ namespace PurposeColor.screens
 				if (!isEmotionsListing) {
 					return;
 				}
-				progressBar.ShowProgressbar ("Loading..");
+				progressBar.ShowProgressbar ("Loading gems..");
 
 				if (actionsWithImage == null) 
 				{
@@ -138,7 +137,6 @@ namespace PurposeColor.screens
 					{
 						var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching GEMS", Constants.ALERT_OK, Constants.ALERT_RETRY);
 						if (!success) {
-							//OnAppearing (sender, EventArgs.Empty);
 							GoalsListingBtnTapgesture_Tapped(goalsButton, null);
 							return;
 						}
@@ -189,7 +187,7 @@ namespace PurposeColor.screens
 					return;
 				}
 				// display the emotions list and change color of Goals selection uttion
-				progressBar.ShowProgressbar ("loading..");
+				progressBar.ShowProgressbar ("loading gems..");
 
 				bool isSuccess = await AddEventsToView (0);
 				if (isSuccess) 
@@ -228,7 +226,7 @@ namespace PurposeColor.screens
 			IProgressBar progress = DependencyService.Get<IProgressBar> ();
 
 			try {
-				progress.ShowProgressbar ("Loading gems..");
+				//progress.ShowProgressbar ("Loading gems..");
 				try {
 					if (eventsWithImage == null) 
 					{
@@ -273,11 +271,9 @@ namespace PurposeColor.screens
 				empty.BackgroundColor = Color.Transparent;
 				masterStack.Children.Add (empty);
 
-				//masterLayout.AddChildToLayout(masterStack,0, 18);
-
 				masterScroll.Content = masterStack;
 
-				masterLayout.AddChildToLayout(masterScroll,0, 18);
+				masterLayout.AddChildToLayout(masterScroll,0, Device.OnPlatform(17, 18, 18));
 
 				Content = masterLayout;
 
@@ -578,30 +574,27 @@ namespace PurposeColor.screens
 			{
 				masterScroll.Scrolled -= OnScroll;
 				if (!displayedLastGem) {
-					progressBar.ShowProgressbar ("loading..");
+					progressBar.ShowProgressbar ("loading gems..");
 					await LoadMoreGemsClicked ();
 					progressBar.HideProgressbar ();
 				} else {
 					progressBar.ShowToast ("Reached end of the list..");
 				}
-
 				await Task.Delay (TimeSpan.FromSeconds (3));
 				masterScroll.Scrolled += OnScroll;
 			}
-			else if( masterScroll.ScrollY < Device.OnPlatform( -50, 5, 0 )  )
+			else if( masterScroll.ScrollY < Device.OnPlatform( -15, 5, 0 )  )
 			{
 				masterScroll.Scrolled -= OnScroll;
 				if (!reachedFront) {
-					progressBar.ShowProgressbar ("loading..");
+					progressBar.ShowProgressbar ("loading gems..");
 					await LoadPreviousGems ();
+					progressBar.HideProgressbar ();
 				} else {
 					progressBar.ShowToast ("Reached starting of the list..");
 				}
-
 				await Task.Delay (TimeSpan.FromSeconds (3));
-				progressBar.HideProgressbar ();
 				masterScroll.Scrolled += OnScroll;
-
 			}
 		}
 
@@ -635,7 +628,7 @@ namespace PurposeColor.screens
 				else {
 					bool isSuccess = await AddActionsToView(firstGemIndexOnDisplay - 1, false); // false = load previous gems
 				}
-				await masterScroll.ScrollToAsync( 0, 0, false );
+				await masterScroll.ScrollToAsync( 0, masterStack.Height - Device.OnPlatform( 512, 550, 0 ), false );
 			}
 			catch (Exception ex) {
 				return false;

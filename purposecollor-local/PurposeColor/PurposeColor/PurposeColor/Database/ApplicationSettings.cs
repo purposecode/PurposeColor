@@ -141,6 +141,16 @@ namespace PurposeColor.Database
 				{
 					Connection.CreateTable<GemMedia>();
 				}
+
+				var eventITbl = Connection.GetTableInfo("EventWithImage");
+				if (eventITbl == null) {
+					Connection.CreateTable<EventWithImage>();
+				}
+
+				var actionITable = Connection.GetTableInfo("ActionWithImage");
+				if (actionITable == null) {
+					Connection.CreateTable<ActionWithImage>();
+				}
             }
             catch (Exception ex)
             {
@@ -1188,9 +1198,73 @@ namespace PurposeColor.Database
 			}
 		}
 
+		#region EventsWithImage
+
+		//ActionWithImage
+		public async Task<bool> SaveEventsWithImage(List<EventWithImage> eventsWithImg)
+		{
+			try {
+				if (eventsWithImg == null) {
+					return false;
+				}
+
+				Connection.DeleteAll<EventWithImage>();
+				Connection.InsertAll(eventsWithImg);
+				return true;
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			return false;
+		}
+
+		public async Task<List<EventWithImage>> GetAllEventWithImage()
+		{
+			try {
+				List<EventWithImage> eventsWithI = new List<EventWithImage> ();
+				eventsWithI = (from c in Connection.Table<EventWithImage> ()
+					select c).ToList ();
+				return eventsWithI;
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			return null;
+		}
 
 
+		#endregion
 
+		#region ActionWithImage
+
+		//List<ActionWithImage>
+		public async Task<bool> SaveActionsWithImage(List<ActionWithImage> actionWithImage)
+		{
+			try {
+				if (actionWithImage == null) {
+					return false;
+				} else {
+					Connection.DeleteAll<ActionWithImage>();
+					Connection.InsertAll(actionWithImage);
+					return true;
+				}
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			return false;
+		}
+
+		public async Task<List<ActionWithImage>> GetAllActionWithImage()
+		{
+			try {
+				List<ActionWithImage> actionWithImage = new List<ActionWithImage>();
+				actionWithImage = (from tbl in Connection.Table<ActionWithImage>() select tbl).ToList();
+				return actionWithImage ;
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			return null;
+		}
+
+		#endregion
 
     }
 }

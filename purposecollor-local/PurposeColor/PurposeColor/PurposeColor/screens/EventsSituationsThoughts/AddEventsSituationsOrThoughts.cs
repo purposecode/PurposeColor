@@ -1613,7 +1613,7 @@ namespace PurposeColor.screens
                     {
                         MemoryStream compressedStream = new MemoryStream();
                         IResize resize = DependencyService.Get<IResize>();
-						Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenWidth * App.screenDensity), path);
+						Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenHeight * App.screenDensity), path);
                         MemoryStream resizedStream = new MemoryStream(resizedOutput);
                         compressedStream = resize.CompessImage(25, resizedStream);
 

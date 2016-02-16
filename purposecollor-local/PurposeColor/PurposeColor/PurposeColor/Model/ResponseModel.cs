@@ -62,4 +62,82 @@ namespace PurposeColor.Model
 		}
 		public List<EmotionValues> resultarray { get; set; }
 	}
+
+	public class EventWithImage
+	{
+		public string emotion_title {
+			get;
+			set;
+		}
+
+		public int event_id {
+			get;
+			set;
+		}
+
+		public string event_details {
+			get;
+			set;
+		}
+
+		public string event_media {
+			get;
+			set;
+		}
+
+	}
+
+	public class AllEventsWithImage
+	{
+		public string code {
+			get;
+			set;
+		}
+		public string text {
+			get;
+			set;
+		}
+		public List<EventWithImage> resultarray {
+			get;
+			set;
+		}
+	}
+
+	public class ActionWithImage
+	{
+		public string goal_title {
+			get;
+			set;
+		}
+		public int goalaction_id {
+			get;
+			set;
+		}
+
+		public string action_details {
+			get;
+			set;
+		}
+
+		public string action_media {
+			get;
+			set;
+		}
+	}
+
+	public class AllActionsWithImage
+	{
+		public string code {
+			get;
+			set;
+		}
+		public string text {
+			get;
+			set;
+		}
+		public List<ActionWithImage> resultarray {
+			get;
+			set;
+		}
+	}
 }

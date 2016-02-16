@@ -811,4 +811,29 @@ namespace PurposeColor.screens
             }
         }
     }
+
+	public class GemsPageInfo
+	{
+		public string MainTitle { get; set; }
+		public string SubTitle { get; set; }
+		public string FirstDetailsInfo { get; set; }
+		public string FirstDateInfo { get; set; }
+		public string SecondDetailsInfo { get; set; }
+		public string SecondDateInfo { get; set; }
+		public string FirstImage { get; set; }
+		public string SecondImage { get; set; }
+		public bool IsMainTitleVisible { get; set; }
+		public string TrimmedFirstDetailsInfo
+		{
+			get
+			{
+				if (FirstDetailsInfo != null && FirstDetailsInfo.Length > 50)
+				{
+					string trimmedInfo = FirstDetailsInfo.Substring(0, 50);
+					return trimmedInfo + "....";
+				}
+				return FirstDetailsInfo;
+			}
+		}
+	}
 }

@@ -12,1140 +12,715 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.IO;
 
 namespace PurposeColor.screens
 {
-    public class GemsMainPage : ContentPage, IDisposable
-    {
-        CustomLayout masterLayout;
-        IProgressBar progressBar;
-        StackLayout listContainer;
-        List<GemsPageInfo> gemsList;
-        int listViewVislbleIndex;
-        GemsPageTitleBar mainTitleBar;
-        ScrollView masterScroll;
-        StackLayout masterStack;
-        GemsEmotionsObject gemsEmotionsObject;
-        GemsGoalsObject gemsGoalsObject;
-        ObservableCollection<GemsEmotionsDetails> emotionList;
-		List<GemsGoalsDetails> goalsList;
-        public GemsMainPage()
-        {
-            NavigationPage.SetHasNavigationBar(this, false);
-            masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-            progressBar = DependencyService.Get<IProgressBar>();
+	public class GemsMainPage : ContentPage, IDisposable
+	{
+		CustomLayout masterLayout;
+		IProgressBar progressBar;
+		int listViewVislbleIndex;
+		GemsPageTitleBar mainTitleBar;
+		ScrollView masterScroll;
+		StackLayout masterStack;
+		List<EventWithImage> eventsWithImage;
+		List<ActionWithImage> actionsWithImage;
 
+		StackLayout emotionsButtion = null;
+		StackLayout goalsButton = null;
+		Label goalsAndDreamsLabel = null;
+		Label emotionLabel = null;
 
-            this.Appearing += OnAppearing;
-           // PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-            mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", false);
-           
+		TapGestureRecognizer emotionListingBtnTapgesture = null;
+		TapGestureRecognizer goalsListingBtnTapgesture = null;
 
+		bool isEmotionsListing = false;
+		string localFilePath = string.Empty;
+		StackLayout listViewContainer;
+		bool isLoading = false;
+		string previousTitle = string.Empty;
 
-            masterScroll = new ScrollView();
-            masterScroll.WidthRequest = App.screenWidth;
-            masterScroll.HeightRequest = App.screenHeight * 85 / 100;
+		bool reachedFront = true;
+		bool displayedLastGem = false;
+		int lastGemIndexOnDisplay = 0;
+		int firstGemIndexOnDisplay = 0;
 
-            masterStack = new StackLayout();
-            masterStack.Orientation = StackOrientation.Vertical;
-            masterStack.BackgroundColor = Color.Transparent;
+		public GemsMainPage()
+		{
 
+			NavigationPage.SetHasNavigationBar(this, false);
+			masterLayout = new CustomLayout();
+			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+			progressBar = DependencyService.Get<IProgressBar>();
 
-    
+			this.Appearing += OnAppearing;
+			this.Disappearing += GemsMainPage_Disappearing;
+			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "My Supporting Emotions", Color.White, "", false);
 
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(masterScroll, 0, 10);
+			masterScroll = new ScrollView();
+			masterScroll.WidthRequest = App.screenWidth;
+			masterScroll.HeightRequest = App.screenHeight * 85 / 100;
+			masterScroll.BackgroundColor = Color.White;
+			masterScroll.Scrolled += OnScroll;
 
-            
-        }
+			masterStack = new StackLayout();
+			masterStack.Orientation = StackOrientation.Vertical;
+			masterStack.BackgroundColor = Color.White; //Color.Transparent;
 
-        void OnBackButtonTapRecognizerTapped(object sender, EventArgs e)
-        {
-            App.Navigator.PopAsync();
-        }
+			emotionLabel = new Label {
+				Text = "EMOTIONS  ", 
+				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+				FontSize = Device.OnPlatform (14, 18, 14),
+				HorizontalOptions = LayoutOptions.End,
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Color.White,
+				WidthRequest = App.screenWidth * .5,
+				XAlign = TextAlignment.End
+			};
 
-        async void OnAppearing(object sender, EventArgs e)
-        {
-            IProgressBar progress = DependencyService.Get<IProgressBar>();
+			emotionsButtion = new StackLayout{
+				Children = {
+					emotionLabel
+				},
+				BackgroundColor = Color.FromRgb(8, 159, 245),//Constants.BLUE_BG_COLOR,
+				Orientation = StackOrientation.Horizontal,
+				WidthRequest = App.screenWidth * .5
+			};
 
-            if (gemsEmotionsObject != null || gemsGoalsObject != null)
-                return;
+			emotionListingBtnTapgesture = new TapGestureRecognizer ();
+			emotionListingBtnTapgesture.Tapped += ShowEmotionsTapGesture_Tapped;
+			emotionsButtion.GestureRecognizers.Add (emotionListingBtnTapgesture);
 
-            progress.ShowProgressbar( "Loading gems.." );
+			goalsAndDreamsLabel = new Label {
+				Text = "  GOALS & DREAMS", 
+				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+				FontSize = Device.OnPlatform (14, 18, 14),
+				HorizontalOptions = LayoutOptions.Start,
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Color.Gray
+			};
+
+			goalsButton = new StackLayout{
+				Children = {
+					goalsAndDreamsLabel
+				},
+				BackgroundColor = Constants.INPUT_GRAY_LINE_COLOR, // Color.FromRgb(232, 234, 230),//Constants.LIST_BG_COLOR, //Constants.STACK_BG_COLOR_GRAY,
+				Orientation = StackOrientation.Horizontal,
+				WidthRequest = App.screenWidth * .5
+			};
+			goalsListingBtnTapgesture = new TapGestureRecognizer ();
+			goalsListingBtnTapgesture.Tapped += GoalsListingBtnTapgesture_Tapped;
+			goalsButton.GestureRecognizers.Add (goalsListingBtnTapgesture);
+
+			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+			masterLayout.AddChildToLayout(new StackLayout{BackgroundColor = Color.Aqua, HeightRequest = App.screenHeight * .08, Orientation = StackOrientation.Horizontal,Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,10);
+		}
+
+		void GemsMainPage_Disappearing (object sender, EventArgs e)
+		{
+			Dispose ();
+		}
+
+		async void GoalsListingBtnTapgesture_Tapped (object sender, EventArgs e)
+		{
+			try {
+				if (!isEmotionsListing) {
+					return;
+				}
+				progressBar.ShowProgressbar ("Loading..");
+
+				if (actionsWithImage == null) 
+				{
+					actionsWithImage = await ServiceHelper.GetAllActionsWithImage ();
+
+					if (actionsWithImage == null) 
+					{
+						var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching GEMS", Constants.ALERT_OK, Constants.ALERT_RETRY);
+						if (!success) {
+							//OnAppearing (sender, EventArgs.Empty);
+							GoalsListingBtnTapgesture_Tapped(goalsButton, null);
+							return;
+						}
+						else 
+						{
+							if (Device.OS != TargetPlatform.WinPhone)
+							{
+								actionsWithImage = await App.Settings.GetAllActionWithImage();
+							}
+						}
+					}
+					else
+					{
+						if (Device.OS != TargetPlatform.WinPhone)
+						{
+							App.Settings.SaveActionsWithImage(actionsWithImage);
+						}
+					}
+				}
+
+				// do list the actions.....//
+				bool isSuccess = await AddActionsToView(0, true);
+				if (isSuccess) 
+				{
+					isEmotionsListing = false;
+					masterScroll.ScrollToAsync(0,0, true);
+					#region button color
+					// hide emotions & show goals , change selection buttons color
+					Color goalBtnClr = goalsButton.BackgroundColor;
+					goalsButton.BackgroundColor = emotionsButtion.BackgroundColor;
+					emotionsButtion.BackgroundColor = goalBtnClr;
+					Color golsTxtClr = goalsAndDreamsLabel.TextColor;
+					goalsAndDreamsLabel.TextColor = emotionLabel.TextColor;
+					emotionLabel.TextColor = golsTxtClr;
+					#endregion
+				}
+
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			progressBar.HideProgressbar ();
+		}
+
+		async void ShowEmotionsTapGesture_Tapped (object sender, EventArgs e)
+		{
+			try {
+				if (isEmotionsListing) {
+					return;
+				}
+				// display the emotions list and change color of Goals selection uttion
+				progressBar.ShowProgressbar ("loading..");
+
+				bool isSuccess = await AddEventsToView (0);
+				if (isSuccess) 
+				{
+					masterScroll.ScrollToAsync(0,0, true);
+					isEmotionsListing = true;
+					#region MyRegionButton color
+					Color eBtnClr = emotionsButtion.BackgroundColor;
+					emotionsButtion.BackgroundColor = goalsButton.BackgroundColor;
+					goalsButton.BackgroundColor = eBtnClr;
+					Color ETxtClr = emotionLabel.TextColor;
+					emotionLabel.TextColor = goalsAndDreamsLabel.TextColor;
+					goalsAndDreamsLabel.TextColor = ETxtClr;
+
+					#endregion
+				}
+				progressBar.HideProgressbar();
+			} catch (Exception ex) {
+
+			}
+		}
+
+		void OnBackButtonTapRecognizerTapped(object sender, EventArgs e)
+		{
+			try {
+				App.Navigator.PopAsync();
+			} catch (Exception ex) {
+
+			}
+		}
+
+		#region OnAppearing
+
+		async void OnAppearing (object sender, EventArgs e)
+		{
+			IProgressBar progress = DependencyService.Get<IProgressBar> ();
 
 			try {
-				gemsEmotionsObject = await ServiceHelper.GetAllSupportingEmotions ();
-				gemsGoalsObject = await ServiceHelper.GetAllSupportingGoals ();
+				progress.ShowProgressbar ("Loading gems..");
+				try {
+					if (eventsWithImage == null) 
+					{
+						eventsWithImage = await ServiceHelper.GetAllEventsWithImage ();
+
+						if (eventsWithImage != null) {
+							App.Settings.SaveEventsWithImage(eventsWithImage);
+						}
+						else
+						{
+							var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
+							if (!success) {
+								OnAppearing (sender, EventArgs.Empty);
+								return;
+							}
+							else 
+							{
+								eventsWithImage = await App.Settings.GetAllEventWithImage(); // get from local db.
+								//progress.HideProgressbar ();
+							}
+						}
+					}
+				}
+				catch (Exception ex) 
+				{
+					var test = ex.Message;
+				}
+
+				listViewContainer = new StackLayout
+				{
+					Orientation = StackOrientation.Vertical,
+					Padding = new Thickness(0, 0, 0, 5),
+					//BackgroundColor = Color.White, //
+					WidthRequest = App.screenWidth,
+					Spacing = 0 // App.screenHeight * .02
+				};
+				masterStack.Children.Add (listViewContainer);
+
+				StackLayout empty = new StackLayout ();
+				empty.HeightRequest = Device.OnPlatform (30, 30, 50);
+				empty.WidthRequest = App.screenWidth;
+				empty.BackgroundColor = Color.Transparent;
+				masterStack.Children.Add (empty);
+
+				//masterLayout.AddChildToLayout(masterStack,0, 18);
+
+				masterScroll.Content = masterStack;
+
+				masterLayout.AddChildToLayout(masterScroll,0, 18);
+
+				Content = masterLayout;
+
+				// call - ShowEmotionsTapGesture_Tapped //
+				ShowEmotionsTapGesture_Tapped(emotionsButtion, null);
+
+				progress.HideProgressbar ();
+
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+			progress.HideProgressbar ();
+
+		}
+
+		#endregion
+
+		async Task<bool> AddEventsToView(int index, bool showNextGems = true)
+		{
+			try {
+				isLoading = true;
+				int listCapacity = 10;
+				int max;
+
+				if (showNextGems)
+				{
+					max = (index + listCapacity) <= eventsWithImage.Count ? (index + listCapacity) : eventsWithImage.Count;
+					if (index >= max || eventsWithImage == null || eventsWithImage.Count == 0)
+					{
+						displayedLastGem = true;
+						isLoading = false;
+						return false;
+					}
+				}
+				else
+				{
+					// show previous gems.
+					max = index;
+					index = (index - listCapacity) > 0 ? (index - listCapacity): 0;
+				}
+
+				if (max >= eventsWithImage.Count) {
+					displayedLastGem = true;
+				}else {
+					displayedLastGem = false;
+				}
+
+				if (index == 0) {
+					reachedFront = true;
+				}
+				else {
+					reachedFront = false;
+				}
+
+				firstGemIndexOnDisplay = index;
+				lastGemIndexOnDisplay = max;
+
+				IDownload downloader = DependencyService.Get<IDownload> ();
+				List<string> filesTodownliad = new List<string> ();
+				for (int i = index; i < max; i++) {//eventsWithImage.Count - 1
+					filesTodownliad.Add (Constants.SERVICE_BASE_URL + eventsWithImage [i].event_media);
+				}
+
+				bool doneDownloading = await downloader.DownloadFiles (filesTodownliad);
+
+				downloader = null;
+				filesTodownliad.Clear();
+				filesTodownliad = null;
+
+				try {
+					int cou = listViewContainer.Children.Count; 
+					if (cou > 0) {
+						listViewContainer.Children.Clear ();
+					}
+				} catch (Exception ex) {
+
+				}
+
+				for (int i = index; i < max; i++) {
+					try {
+						await AddToScrollView (new CustomGemItemModel {
+							Description = eventsWithImage [i].event_details,
+							Source = App.DownloadsPath + Path.GetFileName (eventsWithImage [i].event_media),
+							ID = eventsWithImage [i].event_id.ToString(),
+							GroupTitle = eventsWithImage [i].emotion_title,
+							CellIndex = i
+						});
+					} catch (Exception ex) {
+						var test = ex.Message;
+					}
+				}
+
+
+				//await masterScroll.ScrollToAsync( 0, 10, false );
+				return true;
+
 			} catch (Exception ex) {
 				var test = ex.Message;
 			}
 
-			if (gemsEmotionsObject == null) 
+			return false;
+		}
+
+		async Task<bool> AddActionsToView(int index, bool showNextGems = true)
+		{
+			int listCapacity = 10;
+			int max  = 0;
+
+			try 
 			{
-				var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
-				if (!success) 
+				isLoading = true;
+
+				if (showNextGems) 
 				{
-					OnAppearing (sender, EventArgs.Empty);
-					return;
+					//display next gems
+					max = (index + listCapacity) <= actionsWithImage.Count ? (index + listCapacity) : actionsWithImage.Count;
+					if (index >= max || actionsWithImage == null || actionsWithImage.Count == 0)
+					{
+						displayedLastGem = true;
+						isLoading = false;
+						return false;
+					}
 				}
 				else
 				{
-                    if( Device.OS != TargetPlatform.WinPhone )
-					gemsEmotionsObject = App.Settings.GetGemsEmotionsObject ();
-					progress.HideProgressbar ();
+					// show previous gems.
+					max = index;
+					index = (index - listCapacity) > 0 ? (index - listCapacity): 0;
 				}
 
-			}
-			else
-			{
-                if (Device.OS != TargetPlatform.WinPhone)
-                {
-                    App.Settings.DeleteAllGemsEvents();
-                    App.Settings.SaveAllEmotionGems(gemsEmotionsObject);
-                }
-
-			}
-
-			if (gemsGoalsObject == null)
-			{
-				var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
-				if (!success) 
-				{
-					OnAppearing (sender, EventArgs.Empty);
-					return;
-				} 
-				else 
-				{
-                    if (Device.OS != TargetPlatform.WinPhone)
-					gemsGoalsObject = App.Settings.GetGemsGoalsObject ();
-					progress.HideProgressbar ();
+				if (max >= actionsWithImage.Count) {
+					displayedLastGem = true;
+				}else {
+					displayedLastGem = false;
 				}
 
-			} 
-			else
-			{
-                if (Device.OS != TargetPlatform.WinPhone)
-                {
-                    App.Settings.DeleteAllGemsActions();
-                    App.Settings.SaveAllGoalsGems(gemsGoalsObject);
-                }
-
-			}
-
-            emotionList = new ObservableCollection<GemsEmotionsDetails>();
-            if (gemsEmotionsObject.resultarray != null && gemsEmotionsObject.resultarray.Count > 1)
-            {
-                emotionList.Add(gemsEmotionsObject.resultarray[0]);
-                emotionList.Add(gemsEmotionsObject.resultarray[1]);
-            }
-
-            goalsList = new List<GemsGoalsDetails>();
-            if( gemsGoalsObject.resultarray != null && gemsGoalsObject.resultarray.Count > 1 )
-            {
-                goalsList.Add( gemsGoalsObject.resultarray[0] );
-                goalsList.Add( gemsGoalsObject.resultarray[1] );
-            }
-
-
-            RefreshView();
-
-            masterScroll.Scrolled += OnScroll;
-
-			StackLayout empty = new StackLayout ();
-			empty.HeightRequest = Device.OnPlatform( 50, 50, 100 );
-			empty.WidthRequest = App.screenWidth * 90 / 100;
-			empty.BackgroundColor = Color.Transparent;
-			masterStack.Children.Add ( empty );
-
-            masterScroll.Content = masterStack;
-            Content = masterLayout;
-
-
-            progress.HideProgressbar();
-        }
-
-
-
-        void RefreshView()
-        {
-            try
-            {
-                  masterStack.Children.Clear();
-
-            int emotionIndex = 0;
-            foreach (var item in emotionList)
-            {
-
-                if (item.event_title == null)
-                    break;
-
-                StackLayout cellMasterLayout = new StackLayout();
-                cellMasterLayout.Orientation = StackOrientation.Vertical;
-                cellMasterLayout.BackgroundColor = Color.White;
-
-                StackLayout headerLayout = new StackLayout();
-                headerLayout.Orientation = StackOrientation.Vertical;
-                headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-
-                CustomLayout customLayout = new CustomLayout();
-                customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-                double screenWidth = App.screenWidth;
-                double screenHeight = App.screenHeight;
-
-                CustomImageButton mainTitle = new CustomImageButton();
-                //  mainTitle.IsEnabled = false;
-                mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-                mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                mainTitle.Text = "My Supporting Emotions";
-                mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = Device.OnPlatform(12, 18, 18);
-                mainTitle.WidthRequest = App.screenWidth;
-                mainTitle.TextOrientation = TextOrientation.Middle;
-                headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
-                mainTitle.HeightRequest = 80;
-
-                TapGestureRecognizer titleTap = new TapGestureRecognizer();
-                titleTap.ClassId = ( item.event_title != null ) ? item.event_title[0].event_id : "";
-                titleTap.Tapped += OnEmotionTapped;
-                Label subTitle = new Label();
-                subTitle.Text = item.emotion_title;
-                subTitle.TextColor = Color.Gray;
-                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                subTitle.XAlign = TextAlignment.Center;
-                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                subTitle.VerticalOptions = LayoutOptions.Center;
-                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                headerLayout.HorizontalOptions = LayoutOptions.Center;
-                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
-
-                Label firstDetailsInfo = new Label();
-                string trimmedFirstDetails = (item.event_details != null && item.event_details.Count > 0) ? item.event_details[0].event_details : "empty";
-                if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
-                {
-                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
-                    trimmedFirstDetails = trimmedFirstDetails + "....";
-                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
-                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
-                }
-
-                firstDetailsInfo.ClassId = item.event_title[0].event_id + "&&" + item.emotion_title;
-                firstDetailsInfo.Text = trimmedFirstDetails;
-                firstDetailsInfo.TextColor = Color.Gray;
-                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                firstDetailsInfo.HeightRequest = 45;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(12, 16, 13) : 15;
-                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-                firstDetailsInfo.GestureRecognizers.Add(titleTap);
-
-
-                Label firstDateInfo = new Label();
-                firstDateInfo.ClassId = item.event_title[0].event_id + "&&" + item.emotion_title;
-                firstDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 0) ? item.event_datetime[0].event_datetime : "empty";
-                //firstDateInfo.Text = "2015 Januvary 30";
-                firstDateInfo.TextColor = Color.Black;
-                firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(10, 13, 13) : 12;
-                firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
-                firstDateInfo.GestureRecognizers.Add(titleTap);
-
-
-                Image firstEmotionsImage = new Image();
-                firstEmotionsImage.ClassId = item.event_title[0].event_id + "&&" + item.emotion_title; ;
-                firstEmotionsImage.Aspect = Aspect.Fill;
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                //string firstImageSource = (item.event_media != null && item.event_media.Count > 0) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : "no_image_found.jpg";
-                string firstImageSource = (item.event_media != null && item.event_media.Count > 0 && !string.IsNullOrEmpty(item.event_media[0].event_media)) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[0].event_media : Constants.SERVICE_BASE_URL + gemsEmotionsObject.noimageurl;
-                if (item.event_media[0] != null && item.event_media[0].media_type == "mp4")
-                {
-                    firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
-                }
-                else if (item.event_media[0] != null && item.event_media[0].media_type == "3gpp")
-                {
-                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                }
-                else if (item.event_media[0] != null && item.event_media[0].media_type == "wav")
-                {
-                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                }
-                firstEmotionsImage.Source = firstImageSource;
-                firstEmotionsImage.GestureRecognizers.Add(titleTap);
-                //firstEmotionsImage.Source = "manali.jpg";
-                //firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
-
-                StackLayout viewContainer = new StackLayout();
-                viewContainer.WidthRequest = App.screenWidth * 90 / 100;
-                viewContainer.HeightRequest = 175;
-                viewContainer.BackgroundColor = Color.White;
-
-                customLayout.WidthRequest = screenWidth;
-                customLayout.HeightRequest = 200;
-
-                Image divider = new Image();
-                divider.Source = "line_seperate.png";
-                divider.BackgroundColor = Color.Transparent;
-                divider.WidthRequest = App.screenWidth * 80 / 100;
-
-                customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-
-
-                if( item.event_details.Count > 1 )
-                {
-                    Label secondDetailsInfo = new Label();
-                    string trimmedSecondDetails = (item.event_details != null && item.event_details.Count > 1) ? item.event_details[1].event_details : "empty";
-                    if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 50)
-                    {
-                        trimmedSecondDetails = trimmedSecondDetails.Substring(0, 50);
-                        trimmedSecondDetails = trimmedSecondDetails + "....";
-                        trimmedSecondDetails = trimmedSecondDetails.Replace("\\n", string.Empty);
-                        trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
-                    }
-                    secondDetailsInfo.Text = trimmedSecondDetails;
-                    secondDetailsInfo.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title; ;
-                    secondDetailsInfo.GestureRecognizers.Add(titleTap);
-                    // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
-                    secondDetailsInfo.TextColor = Color.Gray;
-                    secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                    secondDetailsInfo.HeightRequest = 45;
-                    secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-
-
-                    Label secondDateInfo = new Label();
-                    secondDateInfo.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title; ;
-                    secondDateInfo.GestureRecognizers.Add(titleTap);
-                    secondDateInfo.Text = (item.event_datetime != null && item.event_datetime.Count > 1) ? item.event_datetime[1].event_datetime : "empty";
-                    secondDateInfo.TextColor = Color.Black;
-                    secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    secondDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
-
-
-                    Image secondEmotionsImage = new Image();
-                    secondEmotionsImage.GestureRecognizers.Add(titleTap);
-                    secondEmotionsImage.ClassId = item.event_details[1].event_id + "&&" + item.emotion_title; ;
-                    secondEmotionsImage.Aspect = Aspect.Fill;
-                    secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
-                    secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                    //string secondImageSource = (item.event_media != null && item.event_media.Count > 1) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : "no_image_found.jpg";
-                    string secondImageSource = (item.event_media != null && item.event_media.Count > 1 && !string.IsNullOrEmpty(item.event_media[1].event_media)) ? Constants.SERVICE_BASE_URL + gemsEmotionsObject.mediathumbpath + item.event_media[1].event_media : Constants.SERVICE_BASE_URL + gemsEmotionsObject.noimageurl;
-                    if (item.event_media[1] != null && item.event_media[1].media_type == "mp4")
-                    {
-                        secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
-                    }
-                    else if (item.event_media[1] != null && item.event_media[1].media_type == "3gpp")
-                    {
-                        secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    else if (item.event_media[1] != null && item.event_media[1].media_type == "wav")
-                    {
-                        secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    secondEmotionsImage.Source = secondImageSource;
-                    //secondEmotionsImage.Source = "manali.jpg"; 
-
-
-                    CustomImageButton moreButton = new CustomImageButton();
-                    moreButton.BackgroundColor = Color.Transparent;
-                    moreButton.BorderColor = Color.Transparent;
-                    moreButton.BorderWidth = 0;
-                    moreButton.Text = "More";
-                    moreButton.FontSize = Device.OnPlatform(12, 15, 15);
-                    moreButton.MinimumHeightRequest = 20;
-                    moreButton.TextColor = Color.Silver;
-                    moreButton.ClassId = item.emotion_id.ToString();
-                    moreButton.Clicked += OnEmotionsMoreButtonClicked;
-
-					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
-
-					customLayout.AddChildToLayout(divider, 5, 14);
-
-                    customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
-                    customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
-                    customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(14, 16, 12));
-                    customLayout.AddChildToLayout(moreButton, Device.OnPlatform(77, 75, 75), Device.OnPlatform(24, 27, 19));
-                }
-                else
-                {
-					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
-					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
-					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
-                }
-
-
-
-               /* if (emotionIndex == 0)
-                    headerLayout.Children.Add(mainTitle);*/
-                headerLayout.Children.Add(subTitle);
-
-                if (emotionIndex == 0)
-                {
-                    StackLayout whiteBorder = new StackLayout();
-                    whiteBorder.BackgroundColor = Color.White;
-                    whiteBorder.HeightRequest = 10;
-                    whiteBorder.WidthRequest = App.screenWidth;
-                  //  whiteBorder.TranslationY = 20;
-                    masterStack.Children.Add( whiteBorder );
-
-                    //customLayout.AddChildToLayout(whiteBorder, Device.OnPlatform(0, 0, 0), Device.OnPlatform(40, 40, 40));
-                }
-                    
-
-                double paddingLeft = App.screenWidth * 5 / 100;
-                customLayout.Padding = new Thickness(paddingLeft, 0, paddingLeft, 0);
-
-                masterStack.Children.Add(headerLayout);
-                masterStack.Children.Add(customLayout);
-
-                if (emotionIndex == 0)
-                {
-                    StackLayout whiteBorder = new StackLayout();
-                    whiteBorder.BackgroundColor = Color.White;
-                    whiteBorder.HeightRequest = 10;
-                    whiteBorder.WidthRequest = App.screenWidth;
-                    masterStack.Children.Add(whiteBorder);
-
-                    //customLayout.AddChildToLayout(whiteBorder, Device.OnPlatform(0, 0, 0), Device.OnPlatform(40, 40, 40));
-                }
-
-                emotionIndex++;
-                // masterStack.Children.Add( cellMasterLayout );
-            }
-            emotionIndex = 0;
-
-            CustomImageButton showMoreEmotions = new CustomImageButton();
-            showMoreEmotions.Text = "Show more emotions";
-            showMoreEmotions.TextColor = Color.Gray;
-            showMoreEmotions.BackgroundColor = Color.Transparent;
-            showMoreEmotions.Clicked += OnShowMoreEmotionsClicked;
-            masterStack.Children.Add(showMoreEmotions);
-
-            int goalsIndex = 0;
-            foreach (var item in goalsList)
-            {
-                StackLayout cellMasterLayout = new StackLayout();
-                cellMasterLayout.Orientation = StackOrientation.Vertical;
-                cellMasterLayout.BackgroundColor = Color.White;
-
-                if (item.action_title == null)
-                    break;
-
-                StackLayout headerLayout = new StackLayout();
-                headerLayout.Orientation = StackOrientation.Vertical;
-                headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-
-                CustomLayout customLayout = new CustomLayout();
-                customLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-                double screenWidth = App.screenWidth;
-                double screenHeight = App.screenHeight;
-
-                CustomImageButton mainTitle = new CustomImageButton();
-                //  mainTitle.IsEnabled = false;
-                mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-                mainTitle.ImageName = Device.OnPlatform("blue_bg.png", "blue_bg.png", @"/Assets/blue_bg.png");
-                mainTitle.Text = "My Goals and Dreams";
-                mainTitle.TextColor = Color.White;
-                mainTitle.FontSize = Device.OnPlatform(12, 18, 18);
-                mainTitle.WidthRequest = App.screenWidth;
-                mainTitle.TextOrientation = TextOrientation.Middle;
-                headerLayout.VerticalOptions = LayoutOptions.CenterAndExpand;
-                mainTitle.HeightRequest = 80;
-
-
-                Label subTitle = new Label();
-                subTitle.Text = item.goal_title;
-                subTitle.TextColor = Color.Gray;
-                subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                subTitle.XAlign = TextAlignment.Center;
-                int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-                subTitle.VerticalOptions = LayoutOptions.Center;
-                subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-                subTitle.WidthRequest = App.screenWidth * 90 / 100;
-                headerLayout.HorizontalOptions = LayoutOptions.Center;
-                subTitle.HeightRequest = Device.OnPlatform(40, 40, 30);
-
-                TapGestureRecognizer goalsTap = new TapGestureRecognizer();
-                goalsTap.Tapped += GoalsTapped;
-                Label firstDetailsInfo = new Label();
-                string trimmedFirstDetails = (item.action_details != null && item.action_details.Count > 0) ? item.action_details[0].action_details : "empty";
-                if (trimmedFirstDetails != null && trimmedFirstDetails.Length > 50)
-                {
-                    trimmedFirstDetails = trimmedFirstDetails.Substring(0, 50);
-                    trimmedFirstDetails = trimmedFirstDetails + "....";
-                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\n", string.Empty);
-                    trimmedFirstDetails = trimmedFirstDetails.Replace("\\r", string.Empty);
-                }
-
-
-                firstDetailsInfo.GestureRecognizers.Add(goalsTap);
-                firstDetailsInfo.ClassId = item.action_title[0].goalaction_id;
-                firstDetailsInfo.Text = trimmedFirstDetails;
-                firstDetailsInfo.TextColor = Color.Gray;
-                firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                firstDetailsInfo.HeightRequest = 40;
-                int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(12, 16, 13) : 15;
-                firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-
-
-                Label firstDateInfo = new Label();
-                firstDateInfo.ClassId = item.action_title[0].goalaction_id;
-                firstDateInfo.GestureRecognizers.Add(goalsTap);
-                firstDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 0) ? item.action_datetime[0].action_datetime : "empty";
-                //firstDateInfo.Text = "2015 Januvary 30";
-                firstDateInfo.TextColor = Color.Black;
-                firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                int dateFontSize = (App.screenDensity > 1.5) ? Device.OnPlatform(10, 13, 13) : 12;
-                firstDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
-
-
-                Image firstEmotionsImage = new Image();
-                firstEmotionsImage.ClassId = item.action_title[0].goalaction_id;
-                firstEmotionsImage.GestureRecognizers.Add(goalsTap);
-                firstEmotionsImage.Aspect = Aspect.Fill;
-                firstEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
-                firstEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                bool firstImageValidity = (item.action_media != null && item.action_media.Count > 0 && !string.IsNullOrEmpty(item.action_media[0].action_media)) ? true : false;
-                //string firstImageSource = (item.action_media != null && item.action_media.Count > 0) ? Constants.SERVICE_BASE_URL +  gemsGoalsObject.mediathumbpath + item.action_media[0] : "no_image_found.jpg";
-               // string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[0].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
-                string firstImageSource = (firstImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[0].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
-                if (item.action_media[0] != null && item.action_media[0].media_type == "mp4")
-                {
-                    firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
-                }
-                else if (item.action_media[0] != null && item.action_media[0].media_type == "3gpp")
-                {
-                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                }
-                else if (item.action_media[0] != null && item.action_media[0].media_type == "wav")
-                {
-                    firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                }
-
-                firstEmotionsImage.Source = firstImageSource;
-
-
-                StackLayout viewContainer = new StackLayout();
-                viewContainer.WidthRequest = App.screenWidth * 90 / 100;
-                viewContainer.HeightRequest = 175;
-                viewContainer.BackgroundColor = Color.White;
-
-                customLayout.WidthRequest = screenWidth;
-                customLayout.HeightRequest = 200;
-
-                Image divider = new Image();
-                divider.Source = "line_seperate.png";
-                divider.BackgroundColor = Color.Transparent;
-                divider.WidthRequest = App.screenWidth * 85 / 100;
-
-                customLayout.AddChildToLayout(viewContainer, 0, Device.OnPlatform(-5, 0, 0));
-      
-                if(  item.action_details.Count > 1 )
-                {
-                    Label secondDetailsInfo = new Label();
-                    secondDetailsInfo.GestureRecognizers.Add(goalsTap);
-                    string trimmedSecondDetails = (item.action_details != null && item.action_details.Count > 1) ? item.action_details[1].action_details : "empty";
-                    if (trimmedSecondDetails != null && trimmedSecondDetails.Length > 50)
-                    {
-                        trimmedSecondDetails = trimmedSecondDetails.Substring(0, 50);
-                        trimmedSecondDetails = trimmedSecondDetails + "....";
-                        trimmedSecondDetails = trimmedSecondDetails.Replace("\\n", string.Empty);
-                        trimmedSecondDetails = trimmedSecondDetails.Replace("\\r", string.Empty);
-                    }
-                    secondDetailsInfo.Text = trimmedSecondDetails;
-                    secondDetailsInfo.ClassId = (item.action_media.Count > 1) ? item.action_media[1].goalaction_id : null;
-                    // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
-                    secondDetailsInfo.TextColor = Color.Gray;
-                    secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-                    secondDetailsInfo.HeightRequest = 40;
-                    secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, firstDetailsInfoFontSize);
-
-
-                    Label secondDateInfo = new Label();
-                    secondDateInfo.ClassId = (item.action_media.Count > 1) ? item.action_media[1].goalaction_id : null;
-                    secondDateInfo.GestureRecognizers.Add(goalsTap);
-                    secondDateInfo.Text = (item.action_datetime != null && item.action_datetime.Count > 1) ? item.action_datetime[1].action_datetime : "empty";
-                    secondDateInfo.TextColor = Color.Black;
-                    secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-                    secondDateInfo.FontSize = Device.OnPlatform(dateFontSize, dateFontSize, dateFontSize);
-
-
-                    Image secondEmotionsImage = new Image();
-                    secondEmotionsImage.ClassId = (item.action_media.Count > 1) ? item.action_media[1].goalaction_id : null;
-                    secondEmotionsImage.GestureRecognizers.Add(goalsTap);
-                    secondEmotionsImage.Aspect = Aspect.Fill;
-                    secondEmotionsImage.WidthRequest = App.screenWidth * Device.OnPlatform(23, 25, 22) / 100;
-                    secondEmotionsImage.HeightRequest = App.screenWidth * Device.OnPlatform(17, 17, 14) / 100;
-                    bool secondImageValidity = (item.action_media != null && item.action_media.Count > 1 && !string.IsNullOrEmpty(item.action_media[1].action_media)) ? true : false;
-                    //string secondImageSource = (secondImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[1].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
-                    string secondImageSource = (secondImageValidity) ? Constants.SERVICE_BASE_URL + gemsGoalsObject.mediathumbpath + item.action_media[1].action_media : Constants.SERVICE_BASE_URL + gemsGoalsObject.noimageurl;
-                    //secondEmotionsImage.Source = "manali.jpg"; 
-                    if (item.action_media[1] != null && item.action_media[1].media_type == "mp4")
-                    {
-                        secondImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
-                    }
-                    else if (item.action_media[1] != null && item.action_media[1].media_type == "3gpp")
-                    {
-                        secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    else if (item.action_media[1] != null && item.action_media[1].media_type == "wav")
-                    {
-                        secondImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    secondEmotionsImage.Source = secondImageSource;
-
-
-                    CustomImageButton moreButton = new CustomImageButton();
-                    moreButton.BackgroundColor = Color.Transparent;
-                    moreButton.BorderColor = Color.Transparent;
-                    moreButton.BorderWidth = 0;
-                    moreButton.Text = "More";
-                    moreButton.FontSize = Device.OnPlatform(12, 15, 15);
-                    moreButton.MinimumHeightRequest = 20;
-                    moreButton.TextColor = Color.Silver;
-                    moreButton.ClassId = item.goal_id.ToString();
-                    moreButton.Clicked += OnGoalsMore;
-
-
-					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(-3, 2, 2));
-					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(4, 9, 7));
-					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(-2, 4, 1));
-
-                    customLayout.AddChildToLayout(divider, 5, 14);
-
-                    customLayout.AddChildToLayout(secondDetailsInfo, 5, Device.OnPlatform(14, 15, 11));
-                    customLayout.AddChildToLayout(secondDateInfo, 5, Device.OnPlatform(20, 22, 16));
-                    customLayout.AddChildToLayout(secondEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(14, 16, 12));
-                    customLayout.AddChildToLayout(moreButton, Device.OnPlatform(77, 75, 75), Device.OnPlatform(24, 27, 19));
-                }
-                else
-                {
-					customLayout.AddChildToLayout(firstDetailsInfo, 5, Device.OnPlatform(4, 8, 8));
-					customLayout.AddChildToLayout(firstDateInfo, 5, Device.OnPlatform(12, 15, 13));
-					customLayout.AddChildToLayout(firstEmotionsImage, Device.OnPlatform(63, 60, 60), Device.OnPlatform(6, 9, 6));
-                }
-
-
-                if (goalsIndex == 0)
-                    headerLayout.Children.Add(mainTitle);
-                headerLayout.Children.Add(subTitle);
-
-
-                double paddingLeft = App.screenWidth * 5 / 100;
-                customLayout.Padding = new Thickness(paddingLeft, 0, paddingLeft, 0);
-
-                masterStack.Children.Add(headerLayout);
-                masterStack.Children.Add(customLayout);
-                goalsIndex++;
-                // masterStack.Children.Add( cellMasterLayout );
-            }
-            goalsIndex = 0;
-
-
-            CustomImageButton showMoreGoals = new CustomImageButton();
-            showMoreGoals.Text = "Show more goals";
-            showMoreGoals.TextColor = Color.Gray;
-            showMoreGoals.BackgroundColor = Color.Transparent;
-            showMoreGoals.Clicked += OnShowMoreGoalslicked;
-            masterStack.Children.Add(showMoreGoals);
-
-
-            if (Device.OS == TargetPlatform.WinPhone)
-            {
-                StackLayout spaceOffsetlayout = new StackLayout();
-                spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-                spaceOffsetlayout.HeightRequest = Device.OnPlatform(0, 0, 100);
-                spaceOffsetlayout.BackgroundColor = Color.Transparent;
-                masterStack.Children.Add(spaceOffsetlayout);
-            }
-            }
-            catch (Exception ex)
-            {
-                
-               DisplayAlert(Constants.ALERT_TITLE, "Error in getting gems", Constants.ALERT_OK);
-            }
-        }
-
-        void OnShowMoreGoalslicked(object sender, EventArgs e)
-        {
-           
-            int index = gemsGoalsObject.resultarray.IndexOf(goalsList[goalsList.Count - 1]);
-            if (index >= gemsGoalsObject.resultarray.Count - 1)
-            {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowToast("No more goals");
-                return;
-            }
-
-            goalsList.Clear();
-            if (gemsGoalsObject.resultarray.Count > index + 1)
-            {
-                goalsList.Add(gemsGoalsObject.resultarray[index + 1]);
-            }
-            if (gemsGoalsObject.resultarray.Count > index + 2)
-            {
-                goalsList.Add(gemsGoalsObject.resultarray[index + 2]);
-            }
-            RefreshView();
-        }
-
-        void OnShowMoreEmotionsClicked(object sender, EventArgs e)
-        {
-            int index = gemsEmotionsObject.resultarray.IndexOf(emotionList[ emotionList.Count - 1 ]);
-
-            if (index >= gemsEmotionsObject.resultarray.Count - 1)
-            {
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                progress.ShowToast( "No more events" );
-                return;
-            }
-
-            emotionList.Clear();
-            if ( gemsEmotionsObject.resultarray.Count > index + 1 )
-            {
-                emotionList.Add(gemsEmotionsObject.resultarray[index + 1]);
-            }
-            if (gemsEmotionsObject.resultarray.Count > index + 2)
-            {
-                emotionList.Add(gemsEmotionsObject.resultarray[index + 2]);
-            }
-            RefreshView();
-        }
-
-
-		async void OnEmotionTapped (object sender, EventArgs e)
-		{
-			
-			View tap = sender as View;
-			if (tap != null && tap.ClassId != null)
-			{
-				string[] delimiters = { "&&" };
-				string[] clasIDArray = tap.ClassId.Split(delimiters, StringSplitOptions.None);
-				string selectedEmotionName = clasIDArray [1];
-				string selectedEventID = clasIDArray [0];
-
-				List<EventMedia> media = new List<EventMedia>();
-				EventTitle eventTitle = new EventTitle ();
-				EventDetail eventDetail = new EventDetail ();
-			
-				for (int index = 0;  index < emotionList.Count; index++)
+				if (index == 0) {
+					reachedFront = true;
+				}
+				else {
+					reachedFront = false;
+				}
+
+				firstGemIndexOnDisplay = index;
+				lastGemIndexOnDisplay = max;
+
+				IDownload downloader = DependencyService.Get<IDownload> ();
+				List<string> filesTodownliad = new List<string> ();
+				for (int i = index; i < max; i++)
 				{
-					media = emotionList[index].event_media.FindAll (med => med.event_id == selectedEventID).ToList();
-					if (media != null && media.Count > 0 )
-					{
-						break;
+					filesTodownliad.Add (Constants.SERVICE_BASE_URL + actionsWithImage[i].action_media);
+				}
+
+				bool doneDownloading = await downloader.DownloadFiles (filesTodownliad);
+
+				downloader = null;
+				filesTodownliad.Clear();
+				filesTodownliad = null;
+
+				try {
+					int cou = listViewContainer.Children.Count; 
+					if (cou > 0) {
+						listViewContainer.Children.Clear ();
+					}
+				} catch (Exception ex) {
+
+				}
+
+				for (int i = index; i < max; i++) {
+					try {
+						await AddToScrollView (new CustomGemItemModel {
+							Description = actionsWithImage [i].action_details,
+							Source = App.DownloadsPath + Path.GetFileName (actionsWithImage [i].action_media),
+							ID = actionsWithImage [i].goalaction_id.ToString(),
+							GroupTitle = actionsWithImage [i].goal_title,
+							CellIndex = i
+						});
+					} catch (Exception ex) {
+						var test = ex.Message;
 					}
 				}
 
-				for (int index = 0;  index < emotionList.Count; index++)
-				{
-					eventTitle = emotionList [index].event_title.FirstOrDefault (itm => itm.event_id == selectedEventID);
-					if (eventTitle != null)
-					{
-						break;
-					}
-				}
 
-				for (int index = 0;  index < emotionList.Count; index++)
-				{
-					eventDetail = emotionList [index].event_details.FirstOrDefault (itm => itm.event_id == selectedEventID);
-					if (eventDetail != null)
-					{
-						break;
-					}
-				}
-					
-		
-			//	title = emotionList.eve
-				if (media != null) 
-				{
-                    try
-                    {
-						DetailsPageModel model = new DetailsPageModel() { mediaArray = media, actionMediaArray = null, pageTitleVal = selectedEmotionName, titleVal = eventTitle.event_title, desc = eventDetail.event_details, Media = gemsEmotionsObject.mediapath, NoMedia = gemsEmotionsObject.noimageurl, gemId = eventDetail.event_id, gemType = GemType.Event, fromGEMSPage = true };
-						//await Navigation.PushAsync (new GemsDetailsPage (media, null, selectedEmotionName, eventTitle.event_title, eventDetail.event_details, gemsEmotionsObject.mediapath, gemsEmotionsObject.noimageurl, eventDetail.event_id, GemType.Event));
-                        await Navigation.PushAsync(new GemsDetailsPage(model));
-                    }
-                    catch (Exception)
-                    {
-                    }
-				}
-			} 
-			else
-			{
-				await DisplayAlert( Constants.ALERT_TITLE, "Not a valid Event", Constants.ALERT_OK );
+				//await masterScroll.ScrollToAsync( 0, 0, false );
+
+				return true;
+			} catch (Exception ex) {
+				var test = ex.Message;
 			}
-		
 
+			return false;
 		}
 
-
-		async void GoalsTapped (object sender, EventArgs e)
+		async Task<bool> AddToScrollView(CustomGemItemModel gemModel)
 		{
-			View goalsTap = sender as View;
+			try {
+				CustomLayout scrollLayout = null;
+				Image image = null;
+				StackLayout cellSpacing = null;
+				StackLayout bgStack = null;
+				Label detailsLabel = null;
+				Label groupTitleLabel = null;
 
-			if (goalsTap != null && goalsTap.ClassId != null)
-			{
-				List<ActionMedia> media = new List<ActionMedia>();
-				ActionTitle eventTitle = new ActionTitle ();
-				ActionDetail eventDetail = new ActionDetail ();
+				scrollLayout = new CustomLayout ();
+				scrollLayout.BackgroundColor = Color.FromRgb(219,221,221);
+				scrollLayout.WidthRequest = App.screenWidth;
+				scrollLayout.Padding = new Thickness(0,0,0,App.screenHeight * .04);
+				detailsLabel = new Label ();
+				detailsLabel.Text = gemModel.Description;
+				detailsLabel.TextColor = Color.White; // Color.FromRgb(8, 135, 224);//Color.FromRgb(8, 159, 245);
+				detailsLabel.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+				detailsLabel.FontSize = 18;
+				detailsLabel.WidthRequest = App.screenWidth - (App.screenWidth *.01);
+				detailsLabel.HorizontalOptions = LayoutOptions.Center;
+				detailsLabel.YAlign = TextAlignment.Center;
+				detailsLabel.XAlign = TextAlignment.Center;
 
-				for (int index = 0;  index < goalsList.Count; index++)
+				bgStack = new StackLayout ();
+				bgStack.WidthRequest = App.screenWidth;
+				bgStack.HeightRequest = 85;
+				bgStack.BackgroundColor = Color.Black;//Color.FromRgb(220, 220, 220);
+				bgStack.Opacity = .2;
+
+				if(!string.IsNullOrEmpty(detailsLabel.Text))
 				{
-					media = goalsList[index].action_media.FindAll (med => med.goalaction_id == goalsTap.ClassId).ToList();
-					if (media != null && media.Count > 0 )
+					int textleng = detailsLabel.Text.Length;
+				}
+
+				image = new Image {
+					Aspect = Aspect.Fill,
+					HorizontalOptions = LayoutOptions.Center,
+					VerticalOptions = LayoutOptions.Center,
+					WidthRequest = App.screenWidth,
+					HeightRequest = (App.screenHeight * .35),
+					Rotation= 0,
+					Source = gemModel.Source
+				};
+
+				Image nextBtn = new Image
+				{
+					Source = "nxtArrow_gem.png",
+					WidthRequest = App.screenWidth * .1,
+					HeightRequest = App.screenWidth * .1
+
+				};
+
+				if (previousTitle == null || !string.IsNullOrEmpty(gemModel.GroupTitle) && gemModel.GroupTitle != previousTitle)
+				{
+					groupTitleLabel = new Label
 					{
-						break;
-					}
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						FontSize = 19,
+						YAlign = TextAlignment.Start,
+						VerticalOptions = LayoutOptions.Center,
+						TextColor = Color.White,
+						Text = "  " + gemModel.GroupTitle.Trim()
+					};
+					StackLayout titleHolder = new StackLayout{
+						Children={groupTitleLabel},
+						BackgroundColor =  Color.FromRgb(111, 199, 251),
+						Padding = 0,
+						Orientation = StackOrientation.Horizontal,
+						WidthRequest= App.screenWidth
+					};
+					scrollLayout.AddChildToLayout (titleHolder, 0, 0);
+					scrollLayout.AddChildToLayout (image, 0, 4);
+					scrollLayout.AddChildToLayout (bgStack, 0, 16);//16 - appear @ center of img. 26 - text appear at bottom corner of img.
+					scrollLayout.AddChildToLayout (detailsLabel, 1, 16);
+					scrollLayout.AddChildToLayout (nextBtn, 50, 23);
+
+				}else
+				{
+					scrollLayout.AddChildToLayout (image, 0, 0);
+					scrollLayout.AddChildToLayout (bgStack, 0, 12);// 12 - aliended center to img. // 22 - align to bottom of img.
+					scrollLayout.AddChildToLayout (detailsLabel, 1, 12);
+					scrollLayout.AddChildToLayout (nextBtn, 50, 19);
 				}
 
-				for (int index = 0;  index < goalsList.Count; index++)
-				{
-					eventTitle = goalsList [index].action_title.FirstOrDefault (itm => itm.goalaction_id == goalsTap.ClassId);
-					if (eventTitle != null)
-					{
-						break;
-					}
+				if (!string.IsNullOrEmpty(gemModel.GroupTitle)) {
+					previousTitle = gemModel.GroupTitle.Trim();
 				}
 
-				for (int index = 0;  index < goalsList.Count; index++)
-				{
-					eventDetail = goalsList [index].action_details.FirstOrDefault (itm => itm.goalaction_id == goalsTap.ClassId);
-					if (eventDetail != null)
-					{
-						break;
-					}
-				}
+				listViewContainer.Children.Add(scrollLayout);
 
-				if (media != null) 
-				{
-                    try
-                    {
-						DetailsPageModel model = new DetailsPageModel() { mediaArray = null, actionMediaArray = media, pageTitleVal = "", titleVal = eventTitle.action_title, desc = eventDetail.action_details, Media = gemsGoalsObject.mediapath, NoMedia = gemsGoalsObject.noimageurl, gemId = eventDetail.goalaction_id, gemType = GemType.Action, fromGEMSPage = true };
-						//await Navigation.PushAsync(new GemsDetailsPage(null, media, "", eventTitle.action_title, eventDetail.action_details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, eventDetail.goalaction_id, GemType.Action));
-                        await Navigation.PushAsync(new GemsDetailsPage(model));
-                    }
-                    catch (Exception)
-                    {
-                    }
-				}
+				gemModel = null; // to clear mem.
+
+				return true;
+			} catch (Exception ex) {
+				var test = ex.Message;
 			}
-			else
+
+			return false;
+		}
+
+		async void OnScroll(object sender, ScrolledEventArgs e)
+		{
+			if(  masterScroll.ScrollY > ( masterStack.Height - Device.OnPlatform( 512, 550, 0 ) )  )
 			{
-				await DisplayAlert( Constants.ALERT_TITLE, "Not a valid goal", Constants.ALERT_OK );
+				masterScroll.Scrolled -= OnScroll;
+				if (!displayedLastGem) {
+					progressBar.ShowProgressbar ("loading..");
+					await LoadMoreGemsClicked ();
+					progressBar.HideProgressbar ();
+				} else {
+					progressBar.ShowToast ("Reached end of the list..");
+				}
+
+				await Task.Delay (TimeSpan.FromSeconds (3));
+				masterScroll.Scrolled += OnScroll;
+			}
+			else if( masterScroll.ScrollY < Device.OnPlatform( -50, 5, 0 )  )
+			{
+				masterScroll.Scrolled -= OnScroll;
+				if (!reachedFront) {
+					progressBar.ShowProgressbar ("loading..");
+					await LoadPreviousGems ();
+				} else {
+					progressBar.ShowToast ("Reached starting of the list..");
+				}
+
+				await Task.Delay (TimeSpan.FromSeconds (3));
+				progressBar.HideProgressbar ();
+				masterScroll.Scrolled += OnScroll;
+
 			}
 		}
 
-        async void OnEmotionsMoreButtonClicked(object sender, EventArgs e)
-        {
-            Button btn = sender as Button;
-            GemsEmotionsDetails emotionDetailsList = gemsEmotionsObject.resultarray.FirstOrDefault(item => item.emotion_id == btn.ClassId);
-            try
-            {
-                await Navigation.PushAsync(new GemsMoreDetailsPage(emotionDetailsList, null, gemsEmotionsObject.mediapath, gemsEmotionsObject.mediathumbpath, gemsEmotionsObject.noimageurl, null, null, null));
-            }
-            catch (Exception)
-            {
-            }
-        }
+		async Task<bool>LoadMoreGemsClicked ()
+		{
+			try 
+			{
+				if (isEmotionsListing) { // the gems displayed will be Events for each emotion.
+					bool isSuccess = await AddEventsToView (lastGemIndexOnDisplay);
+				}
+				else
+				{
+					bool isSuccess = await AddActionsToView(lastGemIndexOnDisplay, true);
+				}
+				await masterScroll.ScrollToAsync( 0, 0, false );
+			}
+			catch (Exception ex)
+			{
+				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+				return false;
+			}
+			return true;
+		}
 
-		async  void OnGoalsMore (object sender, EventArgs e)
-        {
-			Button btn = sender as Button;
-			GemsGoalsDetails goalsDetailsList = gemsGoalsObject.resultarray.FirstOrDefault(item => item.goal_id == btn.ClassId);
+		async Task<bool> LoadPreviousGems()
+		{
+			try {
+				if (isEmotionsListing) { // the gems displayed will be Events for each emotion.
+					bool isSuccess = await AddEventsToView (firstGemIndexOnDisplay - 1, false); // false = load previous gems
+				}
+				else {
+					bool isSuccess = await AddActionsToView(firstGemIndexOnDisplay - 1, false); // false = load previous gems
+				}
+				await masterScroll.ScrollToAsync( 0, 0, false );
+			}
+			catch (Exception ex) {
+				return false;
+			}
+			return true;
+		}
 
-            try
-            {
-                await Navigation.PushAsync(new GemsMoreDetailsPage(null, goalsDetailsList, null, null, null, gemsGoalsObject.mediapath, gemsGoalsObject.mediathumbpath, gemsGoalsObject.noimageurl));
-            }
-            catch (Exception)
-            {
-            }
-        }
+		public void Dispose()
+		{
+			masterLayout = null;
+			progressBar = null;
+			mainTitleBar = null;
+			masterScroll = null;
+			masterStack = null;
+			eventsWithImage = null;
+			actionsWithImage = null;
+			emotionsButtion = null;
+			goalsButton = null;
+			goalsAndDreamsLabel = null;
+			emotionLabel = null;
+			emotionListingBtnTapgesture = null;
+			goalsListingBtnTapgesture = null;
+			listViewContainer = null;
+			bool isLoading = false;
 
-        void OnScroll(object sender, ScrolledEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("Scroll pos : " + masterScroll.ScrollY.ToString());
+			//GC.SuppressFinalize(this);
+		}
 
-            if( masterScroll.ScrollY > 1 && masterScroll.ScrollY < 570 )
-            {
-				if( mainTitleBar.title.Text != "My Supporting Emotions" )
-                mainTitleBar.title.Text = "My Supporting Emotions";
-            }
-            else if (masterScroll.ScrollY > 570 && masterScroll.ScrollY < 900)
-            {
-                if( mainTitleBar.title.Text != "My Goals and Dreams")
-					mainTitleBar.title.Text = "My Goals and Dreams";
-            }
+		public void ScrollVisibleItems( int visbleIndex )
+		{
+		}
 
-        }
+		//		~GemsMainPage()
+		//		{
+		//			Dispose ();
+		//		}
+		//
+		//		protected virtual void Dispose(bool isDisposing)
+		//		{
+		//			if (isDisposing) {
+		//
+		//			}
+		//
+		//		}
+		//
+	}
 
-        void NextButtonTapRecognizer_Tapped(object sender, EventArgs e)
-        {
-           
-        }
+	public class CustomGemItemModel
+	{
+		string description;
 
+		public string Description
+		{
+			get { return description; }
+			set
+			{
+				string trimmedText = string.Empty;
+				if (value.Length > 70)
+				{
+					trimmedText = value.Substring(0, 70); // should adjst the height of bg img as well.
+					trimmedText += "...";
+				}
+				else
+				{
+					trimmedText = value;
+				}
 
-        protected override bool OnBackButtonPressed()
-        {
-            //var success =  DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel").Result;
+				description = trimmedText;
+			}
+		}
 
-            Task<bool> action = DisplayAlert(Constants.ALERT_TITLE, "Do you want to exit from App ?", Constants.ALERT_OK, "Cancel");
-            action.ContinueWith(task =>
-            {
-                bool val = task.Result;
-                if (task.Result)
-                {
-                    CloseAllPages();
+		public string Source { get; set; }
+		public string ID { get; set; }
+		public string GroupTitle{ get; set;}
+		public int CellIndex {
+			get;
+			set;
+		}
 
-                }
-
-            });
-
-            return true;
-
-        }
-
-        private void CloseAllPages()
-        {
-            if (Device.OS != TargetPlatform.iOS)
-            {
-                IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
-                device.ExitApp();
-            }
-
-        }
-
-        public void Dispose()
-        {
-            masterLayout = null;
-            progressBar = null;
-            listContainer = null;
-            gemsList = null;
-            mainTitleBar = null;
-            masterScroll = null; ;
-            masterStack = null;
-            GemsEmotionsObject gemsEmotionsObject;
-        }
-
-        public void ScrollVisibleItems( int visbleIndex )
-        {
-     
-            if (visbleIndex >= 0 && visbleIndex < gemsList.Count && listViewVislbleIndex != visbleIndex)
-            {
-                GemsPageInfo gems = gemsList[visbleIndex];
-
-                /*if( gems.IsMainTitleVisible )
-                {
-                    
-                }*/
-                if( visbleIndex < 2 )
-                {
-                    mainTitleBar.title.Text = "My Supporting Emotions";
-                }
-                else 
-                {
-                    mainTitleBar.title.Text = "My Goals and Dreams";
-                }
-               
-            }
-
-            listViewVislbleIndex = visbleIndex;
-        }
-    }
-
-
-    public class GemsListCellTemplate : ViewCell
-    {
-        public GemsListCellTemplate()
-        {
-
-            StackLayout cellMasterLayout = new StackLayout();
-            cellMasterLayout.Orientation = StackOrientation.Vertical;
-            cellMasterLayout.BackgroundColor = Color.White;
-
-
-            StackLayout headerLayout = new StackLayout();
-            headerLayout.Orientation = StackOrientation.Vertical;
-            headerLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-
-            CustomLayout customLayout = new CustomLayout();
-            customLayout.BackgroundColor =  Color.FromRgb(244, 244, 244);
-            double screenWidth = App.screenWidth;
-            double screenHeight = App.screenHeight;
-
-            CustomImageButton mainTitle = new CustomImageButton();
-          //  mainTitle.IsEnabled = false;
-            mainTitle.BackgroundColor = Color.FromRgb(30, 126, 210);
-            mainTitle.ImageName = "blue_bg.png";
-            mainTitle.SetBinding(CustomImageButton.TextProperty, "MainTitle");
-            mainTitle.TextColor = Color.White;
-            mainTitle.FontSize = 12;
-            mainTitle.WidthRequest = App.screenWidth;
-           // mainTitle.HeightRequest = App.screenHeight * 5 / 100;
-            mainTitle.TextOrientation = TextOrientation.Middle;
-            mainTitle.SetBinding(CustomImageButton.IsVisibleProperty, "IsMainTitleVisible");
-            headerLayout.VerticalOptions = LayoutOptions.Center;
-
-
-            Label subTitle = new Label();
-            subTitle.SetBinding(Label.TextProperty, "SubTitle");
-            subTitle.TextColor = Color.Gray;
-            subTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            subTitle.XAlign = TextAlignment.Center;
-            int subTitleFontSize = (App.screenDensity > 1.5) ? 18 : 16;
-            subTitle.VerticalOptions = LayoutOptions.Center;
-            subTitle.FontSize = Device.OnPlatform(subTitleFontSize, subTitleFontSize, 22);
-            subTitle.WidthRequest = App.screenWidth * 90 / 100;
-            subTitle.HeightRequest = 40;
-
-            Label firstDetailsInfo = new Label();
-            firstDetailsInfo.SetBinding(Label.TextProperty, "TrimmedFirstDetailsInfo");
-            //firstDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
-            firstDetailsInfo.TextColor = Color.Gray;
-            firstDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            firstDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-            firstDetailsInfo.HeightRequest = 45;
-            int firstDetailsInfoFontSize = (App.screenDensity > 1.5) ? 17 : 15;
-            firstDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
-
-
-            Label firstDateInfo = new Label();
-            firstDateInfo.SetBinding(Label.TextProperty, "FirstDateInfo");
-            //firstDateInfo.Text = "2015 Januvary 30";
-            firstDateInfo.TextColor = Color.Black;
-            firstDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            int detailsFontSize = (App.screenDensity > 1.5) ? 15 : 12;
-            firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
-
-
-            Image firstEmotionsImage = new Image();
-            firstEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
-            firstEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
-            //firstEmotionsImage.Source = "manali.jpg";
-            firstEmotionsImage.SetBinding(Image.SourceProperty, "FirstImage");
-
-
-
-            Label secondDetailsInfo = new Label();
-            secondDetailsInfo.SetBinding(Label.TextProperty, "SecondDetailsInfo");
-           // secondDetailsInfo.Text = "Referece site about lorem lpsum. Referece site about lorem lpsum. Referece site about lorem lpsum";
-            secondDetailsInfo.TextColor = Color.Gray;
-            secondDetailsInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            secondDetailsInfo.WidthRequest = App.screenWidth * 60 / 100;
-            secondDetailsInfo.HeightRequest = 45;
-            secondDetailsInfo.FontSize = Device.OnPlatform(firstDetailsInfoFontSize, firstDetailsInfoFontSize, 22);
-
-
-            Label secondDateInfo = new Label();
-            secondDateInfo.SetBinding(Label.TextProperty, "SecondDateInfo");
-            secondDateInfo.TextColor = Color.Black;
-            secondDateInfo.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            firstDateInfo.FontSize = Device.OnPlatform(detailsFontSize, detailsFontSize, 22);
-
-
-            Image secondEmotionsImage = new Image();
-            secondEmotionsImage.WidthRequest = App.screenWidth * 25 / 100;
-            secondEmotionsImage.HeightRequest = App.screenWidth * 25 / 100;
-            secondEmotionsImage.SetBinding(Image.SourceProperty, "SecondImage");
-
-
-            Button moreButton = new Button();
-            moreButton.BackgroundColor = Color.Transparent;
-            moreButton.BorderColor = Color.Transparent;
-            moreButton.BorderWidth = 0;
-            moreButton.Text = "more";
-            moreButton.FontSize = 15;
-            moreButton.MinimumHeightRequest = 20;
-            moreButton.TextColor = Color.Silver;
-
-            customLayout.WidthRequest = screenWidth;
-            customLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 31, 7) / 100;
-
-            
-            StackLayout viewContainer = new StackLayout();
-            viewContainer.WidthRequest = App.screenWidth;
-            viewContainer.HeightRequest = screenHeight * Device.OnPlatform(30, 27, 7) / 100;
-            viewContainer.BackgroundColor = Color.White;
-
-            Image divider = new Image();
-            divider.Source = "line_seperate.png";
-            divider.BackgroundColor = Color.Transparent;
-            divider.WidthRequest = App.screenWidth * 85 / 100;
-
-          /*  StackLayout whiteBorder = new StackLayout();
-            whiteBorder.BackgroundColor = Color.White;
-            whiteBorder.HeightRequest = 5;
-            whiteBorder.WidthRequest = App.screenWidth;*/
-
-            headerLayout.Children.Add( mainTitle );
-            headerLayout.Children.Add( subTitle );
-
-
-            customLayout.AddChildToLayout(viewContainer, 0, 0 );
-            customLayout.AddChildToLayout(firstDetailsInfo, 5, 2);
-            customLayout.AddChildToLayout(firstDateInfo, 5, 9);
-            customLayout.AddChildToLayout(firstEmotionsImage, 65, 0);
-            customLayout.AddChildToLayout(divider, 5, 14);
-
-            customLayout.AddChildToLayout(secondDetailsInfo, 5, 15);
-            customLayout.AddChildToLayout(secondDateInfo, 5, 22 );
-            customLayout.AddChildToLayout(secondEmotionsImage, 65, 13);
-            customLayout.AddChildToLayout(moreButton, 75, 25);
-
-            cellMasterLayout.Children.Add( headerLayout );
-            cellMasterLayout.Children.Add( customLayout );
-           // masterLayout.AddChildToLayout(whiteBorder, 0, 45);
-
-          /*  masterLayout.AddChildToLayout(firstDetailsInfo, (float)8, (float)Device.OnPlatform(5, 15, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(firstDateInfo, (float)8, (float)Device.OnPlatform(5, 30, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(firstEmotionsImage, (float)70, (float)Device.OnPlatform(5, 15, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-
-            masterLayout.AddChildToLayout(divider, (float)5, (float)Device.OnPlatform(5, 50, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-
-
-            masterLayout.AddChildToLayout(secondDateInfo, (float)8, (float)Device.OnPlatform(5, 65, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(secondDateInfo, (float)8, (float)Device.OnPlatform(5, 80, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            masterLayout.AddChildToLayout(secondEmotionsImage, (float)70, (float)Device.OnPlatform(5, 65, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            */
-
-            this.View = cellMasterLayout;
-        }
-
-        public void Dispose()
-        {
-            GC.Collect();
-        }
-    }
-
-
-    public class GemsPageInfo
-    {
-        public string MainTitle { get; set; }
-        public string SubTitle { get; set; }
-        public string FirstDetailsInfo { get; set; }
-        public string FirstDateInfo { get; set; }
-        public string SecondDetailsInfo { get; set; }
-        public string SecondDateInfo { get; set; }
-        public string FirstImage { get; set; }
-        public string SecondImage { get; set; }
-        public bool IsMainTitleVisible { get; set; }
-        public string TrimmedFirstDetailsInfo
-        {
-            get
-            {
-                if (FirstDetailsInfo != null && FirstDetailsInfo.Length > 50)
-                {
-                    string trimmedInfo = FirstDetailsInfo.Substring(0, 50);
-                    return trimmedInfo + "....";
-                }
-                return FirstDetailsInfo;
-            }
-        }
-    }
+		public CustomGemItemModel()
+		{
+		}
+		public void Dispose()
+		{
+			GC.Collect();
+		}
+	}
 }

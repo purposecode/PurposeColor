@@ -75,6 +75,7 @@ namespace PurposeColor.screens
         int Seconds = 0;
         string currentGemId;
         GemType currentGemType;
+
         #endregion
 
         public AddEventsSituationsOrThoughts(string title, DetailsPageModel detailsPageModel = null)
@@ -178,7 +179,14 @@ namespace PurposeColor.screens
 
             if (detailsPageModel != null)
             {
-                isUpdatePage = true;
+				if (detailsPageModel.IsCopyingGem) {
+					isUpdatePage = false;
+				}
+				else
+				{
+					isUpdatePage = true;
+				}
+
                 currentGemId = detailsPageModel.gemId;
                 if (detailsPageModel.gemType != null)
                 {

@@ -290,6 +290,7 @@ namespace PurposeColor.Model
         public GemType gemType { get; set; }
 		public bool fromGEMSPage {get; set; }
 		public List<SelectedGoalMedia> goal_media { get; set; }
+		public bool IsCopyingGem = false;
     }
 
 	public class SelectedEventMedia

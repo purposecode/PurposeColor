@@ -444,6 +444,7 @@ namespace PurposeColor
             
             List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
             menuItems.Add(new CustomListViewItem { Name = "Edit", EmotionID = CurrentGemId.ToString(),EventID = string.Empty, SliderValue = 0 });
+			menuItems.Add(new CustomListViewItem { Name = "Copy", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
             menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
             menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
 
@@ -505,7 +506,14 @@ namespace PurposeColor
                 {
                     await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
                     //await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel)); // is working in Android.
-                }
+				}
+				else if(item.Name == "Copy")
+				{
+					detailsPageModel.gemId = "";
+					detailsPageModel.IsCopyingGem = true;
+					await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+
+				}
 
                 HideCommentsPopup();
 

@@ -54,6 +54,8 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
+			App.isEmotionsListing = false;
+			isLoadingFromDetailsPage = false;
 
 			this.Appearing += OnAppearing;
 			this.Disappearing += GemsMainPage_Disappearing;

@@ -35,7 +35,7 @@ namespace PurposeColor.screens
 		TapGestureRecognizer emotionListingBtnTapgesture = null;
 		TapGestureRecognizer goalsListingBtnTapgesture = null;
 
-		bool isEmotionsListing = false;
+		//bool isEmotionsListing = false;
 		StackLayout listViewContainer;
 		bool isLoading = false;
 		string previousTitle = string.Empty;
@@ -44,6 +44,7 @@ namespace PurposeColor.screens
 		bool displayedLastGem = false;
 		int lastGemIndexOnDisplay = 0;
 		int firstGemIndexOnDisplay = 0;
+		bool isLoadingFromDetailsPage = false;
 
 
 		public GemsMainPage()
@@ -119,14 +120,17 @@ namespace PurposeColor.screens
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
 		{
-			Dispose ();
+			//Dispose (); // if so on navigating back from gem details page will cause null exceptions
 		}
 
 		async void GoalsListingBtnTapgesture_Tapped (object sender, EventArgs e)
 		{
 			try {
-				if (!isEmotionsListing) {
+				if (!App.isEmotionsListing) {
 					return;
+				}
+				if (progressBar == null) {
+					progressBar = DependencyService.Get<IProgressBar>();
 				}
 				progressBar.ShowProgressbar ("Loading gems..");
 
@@ -162,7 +166,7 @@ namespace PurposeColor.screens
 				bool isSuccess = await AddActionsToView(0, true);
 				if (isSuccess) 
 				{
-					isEmotionsListing = false;
+					App.isEmotionsListing = false;
 					masterScroll.ScrollToAsync(0,0, true);
 					#region button color
 					// hide emotions & show goals , change selection buttons color
@@ -184,8 +188,13 @@ namespace PurposeColor.screens
 		async void ShowEmotionsTapGesture_Tapped (object sender, EventArgs e)
 		{
 			try {
-				if (isEmotionsListing) {
+				if (App.isEmotionsListing) {
 					return;
+				}
+
+				if(progressBar == null)
+				{
+					progressBar = DependencyService.Get<IProgressBar>();
 				}
 				// display the emotions list and change color of Goals selection uttion
 				progressBar.ShowProgressbar ("loading gems..");
@@ -194,7 +203,7 @@ namespace PurposeColor.screens
 				if (isSuccess) 
 				{
 					masterScroll.ScrollToAsync(0,0, true);
-					isEmotionsListing = true;
+					App.isEmotionsListing = true;
 					#region MyRegionButton color
 					Color eBtnClr = emotionsButtion.BackgroundColor;
 					emotionsButtion.BackgroundColor = goalsButton.BackgroundColor;
@@ -224,70 +233,67 @@ namespace PurposeColor.screens
 
 		async void OnAppearing (object sender, EventArgs e)
 		{
-			IProgressBar progress = DependencyService.Get<IProgressBar> ();
+			if (!isLoadingFromDetailsPage) 
+			{
+				IProgressBar progress = DependencyService.Get<IProgressBar> ();
 
-			try {
-				//progress.ShowProgressbar ("Loading gems..");
 				try {
-					if (eventsWithImage == null) 
-					{
-						eventsWithImage = await ServiceHelper.GetAllEventsWithImage ();
+					//progress.ShowProgressbar ("Loading gems..");
+					try {
+						if (eventsWithImage == null) {
+							eventsWithImage = await ServiceHelper.GetAllEventsWithImage ();
 
-						if (eventsWithImage != null) {
-							App.Settings.SaveEventsWithImage(eventsWithImage);
-						}
-						else
-						{
-							var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
-							if (!success) {
-								OnAppearing (sender, EventArgs.Empty);
-								return;
-							}
-							else 
-							{
-								eventsWithImage = await App.Settings.GetAllEventWithImage(); // get from local db.
-								//progress.HideProgressbar ();
+							if (eventsWithImage != null) {
+								App.Settings.SaveEventsWithImage (eventsWithImage);
+							} else {
+								var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching gems", Constants.ALERT_OK, Constants.ALERT_RETRY);
+								if (!success) {
+									OnAppearing (sender, EventArgs.Empty);
+									return;
+								} else {
+									eventsWithImage = await App.Settings.GetAllEventWithImage (); // get from local db.
+									//progress.HideProgressbar ();
+								}
 							}
 						}
+					} catch (Exception ex) {
+						var test = ex.Message;
 					}
-				}
-				catch (Exception ex) 
-				{
+
+					listViewContainer = new StackLayout {
+						Orientation = StackOrientation.Vertical,
+						Padding = new Thickness (0, 0, 0, 5),
+						//BackgroundColor = Color.White, //
+						WidthRequest = App.screenWidth,
+						Spacing = 0 // App.screenHeight * .02
+					};
+					masterStack.Children.Add (listViewContainer);
+
+					StackLayout empty = new StackLayout ();
+					empty.HeightRequest = Device.OnPlatform (30, 30, 50);
+					empty.WidthRequest = App.screenWidth;
+					empty.BackgroundColor = Color.Transparent;
+					masterStack.Children.Add (empty);
+
+					masterScroll.Content = masterStack;
+
+					masterLayout.AddChildToLayout (masterScroll, 0, Device.OnPlatform (17, 18, 18));
+
+					Content = masterLayout;
+
+					// call - ShowEmotionsTapGesture_Tapped //
+
+					ShowEmotionsTapGesture_Tapped (emotionsButtion, null);	
+				
+
+
+					progress.HideProgressbar ();
+
+				} catch (Exception ex) {
 					var test = ex.Message;
 				}
-
-				listViewContainer = new StackLayout
-				{
-					Orientation = StackOrientation.Vertical,
-					Padding = new Thickness(0, 0, 0, 5),
-					//BackgroundColor = Color.White, //
-					WidthRequest = App.screenWidth,
-					Spacing = 0 // App.screenHeight * .02
-				};
-				masterStack.Children.Add (listViewContainer);
-
-				StackLayout empty = new StackLayout ();
-				empty.HeightRequest = Device.OnPlatform (30, 30, 50);
-				empty.WidthRequest = App.screenWidth;
-				empty.BackgroundColor = Color.Transparent;
-				masterStack.Children.Add (empty);
-
-				masterScroll.Content = masterStack;
-
-				masterLayout.AddChildToLayout(masterScroll,0, Device.OnPlatform(17, 18, 18));
-
-				Content = masterLayout;
-
-				// call - ShowEmotionsTapGesture_Tapped //
-				ShowEmotionsTapGesture_Tapped(emotionsButtion, null);
-
 				progress.HideProgressbar ();
-
-			} catch (Exception ex) {
-				var test = ex.Message;
 			}
-			progress.HideProgressbar ();
-
 		}
 
 		#endregion
@@ -471,17 +477,17 @@ namespace PurposeColor.screens
 		async Task<bool> AddToScrollView(CustomGemItemModel gemModel)
 		{
 			try {
-				CustomLayout scrollLayout = null;
+				CustomLayout gemLayout = null;
 				Image image = null;
 				StackLayout cellSpacing = null;
 				StackLayout bgStack = null;
 				Label detailsLabel = null;
 				Label groupTitleLabel = null;
 
-				scrollLayout = new CustomLayout ();
-				scrollLayout.BackgroundColor = Color.FromRgb(219,221,221);
-				scrollLayout.WidthRequest = App.screenWidth;
-				scrollLayout.Padding = new Thickness(0,0,0,App.screenHeight * .04);
+				gemLayout = new CustomLayout ();
+				gemLayout.BackgroundColor = Color.FromRgb(219,221,221);
+				gemLayout.WidthRequest = App.screenWidth;
+				gemLayout.Padding = new Thickness(0,0,0,App.screenHeight * .04);
 				detailsLabel = new Label ();
 				detailsLabel.Text = gemModel.Description;
 				detailsLabel.TextColor = Color.White; // Color.FromRgb(8, 135, 224);//Color.FromRgb(8, 159, 245);
@@ -497,6 +503,7 @@ namespace PurposeColor.screens
 				bgStack.HeightRequest = 85;
 				bgStack.BackgroundColor = Color.Black;//Color.FromRgb(220, 220, 220);
 				bgStack.Opacity = .2;
+				bgStack.ClassId = gemModel.ID;
 
 				if(!string.IsNullOrEmpty(detailsLabel.Text))
 				{
@@ -544,25 +551,29 @@ namespace PurposeColor.screens
 						Orientation = StackOrientation.Horizontal,
 						WidthRequest= App.screenWidth
 					};
-					scrollLayout.AddChildToLayout (titleHolder, 0, 0);
-					scrollLayout.AddChildToLayout (image, 0, 4);
-					scrollLayout.AddChildToLayout (bgStack, 0, 16);//16 - appear @ center of img. 26 - text appear at bottom corner of img.
-					scrollLayout.AddChildToLayout (detailsLabel, 1, 16);
-					scrollLayout.AddChildToLayout (nextBtn, 50, 23);
+					gemLayout.AddChildToLayout (titleHolder, 0, 0);
+					gemLayout.AddChildToLayout (image, 0, 4);
+					gemLayout.AddChildToLayout (bgStack, 0, 16);//16 - appear @ center of img. 26 - text appear at bottom corner of img.
+					gemLayout.AddChildToLayout (detailsLabel, 1, 16);
+					gemLayout.AddChildToLayout (nextBtn, 49, 23); // btn width = 1% of width.
 
 				}else
 				{
-					scrollLayout.AddChildToLayout (image, 0, 0);
-					scrollLayout.AddChildToLayout (bgStack, 0, 12);// 12 - aliended center to img. // 22 - align to bottom of img.
-					scrollLayout.AddChildToLayout (detailsLabel, 1, 12);
-					scrollLayout.AddChildToLayout (nextBtn, 50, 19);
+					gemLayout.AddChildToLayout (image, 0, 0);
+					gemLayout.AddChildToLayout (bgStack, 0, 12);// 12 - aliended center to img. // 22 - align to bottom of img.
+					gemLayout.AddChildToLayout (detailsLabel, 1, 12);
+					gemLayout.AddChildToLayout (nextBtn, 49, 19);
 				}
+
+				gemLayout.ClassId = gemModel.ID;
+				gemLayout.GestureRecognizers.Add(DetailsTapgesture);
+				bgStack.GestureRecognizers.Add(DetailsTapgesture);
 
 				if (!string.IsNullOrEmpty(gemModel.GroupTitle)) {
 					previousTitle = gemModel.GroupTitle.Trim();
 				}
 
-				listViewContainer.Children.Add(scrollLayout);
+				listViewContainer.Children.Add(gemLayout);
 
 				gemModel = null; // to clear mem.
 
@@ -580,39 +591,107 @@ namespace PurposeColor.screens
 				progressBar = DependencyService.Get<IProgressBar>();
 				progressBar.ShowProgressbar("Retriving details");
 
-				string btnId = (sender as Image).ClassId;
-				if (isEmotionsListing) {
-					SelectedEventDetails eventDetails = await ServiceHelper.GetSelectedEventDetails(btnId);
-					if (eventDetails != null)
-					{
-						DetailsPageModel model = new DetailsPageModel();
-						model.actionMediaArray = null;
-						model.eventMediaArray = eventDetails.event_media;
-						model.goal_media = null;
-						model.Media = null;
-						model.NoMedia = null;
-						model.pageTitleVal = "Event Details";
-						model.titleVal = eventDetails.event_title;
-						model.description = eventDetails.event_details;
-						model.gemType = GemType.Event;
-						model.gemId = btnId;
-						if (progressBar != null) {
-							progressBar.HideProgressbar();
-						}
+				string btnId = "0";
 
-						await Navigation.PushAsync(new GemsDetailsPage(model));
+				try {
+					var senderType = sender.GetType();
+					if (senderType == typeof(CustomLayout))
+					{
+						btnId = (sender as CustomLayout).ClassId;
+					}
+					else if(senderType == typeof(Image))
+					{
+						btnId = (sender as Image).ClassId;
+					}
+					else if(senderType == typeof(StackLayout))
+					{
+						btnId = (sender as StackLayout).ClassId;
+					}
+				} catch (Exception ex) {
+					
+				}
+
+				if(btnId == "0")
+				{
+					return;
+				}
+
+				if (App.isEmotionsListing) {
+					try {
+						SelectedEventDetails eventDetails = await ServiceHelper.GetSelectedEventDetails(btnId);
+						if (eventDetails != null)
+						{
+							DetailsPageModel model = new DetailsPageModel();
+							model.actionMediaArray = null;
+							model.eventMediaArray = eventDetails.event_media;
+							model.goal_media = null;
+							model.Media = null;
+							model.NoMedia = null;
+							model.pageTitleVal = "Event Details";
+							model.titleVal = eventDetails.event_title;
+							model.description = eventDetails.event_details;
+							model.gemType = GemType.Event;
+							model.gemId = btnId;
+							if (progressBar != null) {
+								progressBar.HideProgressbar();
+							}
+							isLoadingFromDetailsPage = true;
+							await Navigation.PushAsync(new GemsDetailsPage(model));
+							eventDetails = null;
+						}
+					} catch (Exception ex) {
+						
 					}
 				}
-			} catch (Exception ex) {
-				var test = ex.Message;
-				
+				else
+				{
+					//-- call service for Action details
+					try {
+
+						SelectedActionDetails actionDetails = await ServiceHelper.GetSelectedActionDetails(btnId);
+						if (actionDetails != null) {
+							DetailsPageModel model = new DetailsPageModel();
+							model.actionMediaArray = actionDetails.action_media;
+							model.eventMediaArray = null;
+							model.goal_media = null;
+							model.Media = null;
+							model.NoMedia = null;
+							model.pageTitleVal = "Action Details";
+							model.titleVal = actionDetails.action_title;
+							model.description = actionDetails.action_details;
+							model.gemType = GemType.Action;
+							model.gemId = btnId;
+							if (progressBar != null) {
+								progressBar.HideProgressbar();
+							}
+							isLoadingFromDetailsPage = true;
+							await Navigation.PushAsync(new GemsDetailsPage(model));
+							actionDetails = null;
+						}
+					} catch (Exception ex) {
+						
+					}
+
+				}
 			}
+			catch (Exception ex)
+			{
+				if (progressBar != null) {
+					progressBar.HideProgressbar();
+				}
+				var test = ex.Message;
+			}
+
+
 		}
 
 		async void OnScroll(object sender, ScrolledEventArgs e)
 		{
 			try {
-				progressBar = DependencyService.Get<IProgressBar>();
+				if(progressBar == null)
+				{
+					progressBar = DependencyService.Get<IProgressBar>();
+				}
 				if (masterScroll.ScrollY > (masterStack.Height - Device.OnPlatform (512, 550, 0))) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
@@ -645,7 +724,7 @@ namespace PurposeColor.screens
 		{
 			try 
 			{
-				if (isEmotionsListing) { // the gems displayed will be Events for each emotion.
+				if (App.isEmotionsListing) { // the gems displayed will be Events for each emotion.
 					bool isSuccess = await AddEventsToView (lastGemIndexOnDisplay);
 				}
 				else
@@ -665,7 +744,7 @@ namespace PurposeColor.screens
 		async Task<bool> LoadPreviousGems()
 		{
 			try {
-				if (isEmotionsListing) { // the gems displayed will be Events for each emotion.
+				if (App.isEmotionsListing) { // the gems displayed will be Events for each emotion.
 					bool isSuccess = await AddEventsToView (firstGemIndexOnDisplay - 1, false); // false = load previous gems
 				}
 				else {

@@ -316,11 +316,7 @@ namespace PurposeColor.Model
 		public string event_datetime { get; set; }
 		public int user_id { get; set; }
 		public int share_status { get; set; }
-		public int comment_count {
-			get;
-			set;
-		}
-		//public List<SelectedEventMedia> event_media { get; set; }//
+		public int comment_count  { get; set; }
 		public List<EventMedia> event_media { get; set; }
 	}
 
@@ -329,6 +325,23 @@ namespace PurposeColor.Model
 		public string code { get; set; }
 		public string text { get; set; }
 		public SelectedEventDetails resultarray { get; set; }
+	}
+
+	public class SelectedActionDetails
+	{
+		public string action_title { get; set; }
+		public string action_details { get; set; }
+		public string action_datetime { get; set; }
+		public int user_id { get; set; }
+		public int share_status { get; set; }
+		public int comment_count { get; set; }
+		public List<ActionMedia> action_media { get; set; }
+	}
+	public class SelectedAction
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public SelectedActionDetails resultarray { get; set; }
 	}
 
 }

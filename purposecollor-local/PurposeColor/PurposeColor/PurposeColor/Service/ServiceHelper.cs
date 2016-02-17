@@ -2420,5 +2420,53 @@ namespace PurposeColor.Service
 			}
 		}
 
+		public static async Task<SelectedActionDetails> GetSelectedActionDetails(  string selectedActionID )
+		{
+			try
+			{
+				User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+
+				if (user == null)
+				{
+					return null;
+				}
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString = "api.php?action=getaction&goalaction_id=" + selectedActionID;
+
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.Content != null)
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+					var rootobject = JsonConvert.DeserializeObject<SelectedAction>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject.resultarray;
+					}
+					client.Dispose();
+					return null;
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
     }
 }

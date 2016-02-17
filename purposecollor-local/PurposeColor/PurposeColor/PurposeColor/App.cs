@@ -45,6 +45,7 @@ namespace PurposeColor
         public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
         public static string newEmotionId;
         public static bool IsTesting = false;
+		public static bool isEmotionsListing = false;
         public static ApplicationSettings Settings
         {
             get

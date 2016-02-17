@@ -50,7 +50,7 @@ namespace PurposeColor
             masterStack = new CustomLayout();
             //masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
-            mediaList = model.mediaArray;
+            mediaList = model.eventMediaArray;
             actionMediaList = model.actionMediaArray;
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
@@ -190,7 +190,7 @@ namespace PurposeColor
 
 			description = new Label ();
 			description.WidthRequest = App.screenWidth * .80;
-			description.Text = model.desc;
+			description.Text = model.description;
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             
@@ -218,7 +218,7 @@ namespace PurposeColor
                 WidthRequest = App.screenWidth * .90,
                 ClassId= "BottomNlowerStack"
             };
-            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(5, 0, 5, 0), Children = { description } });
+            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(0, 0, 5, 0), Children = { description } });
             
             #region MEDIA LIST
 
@@ -415,11 +415,11 @@ namespace PurposeColor
                     if (shareStatusResult.comment_count != null)
                     {
                         commentsCount = shareStatusResult.comment_count;
-                        if (commentsCount > 0)
+						if (commentsCount > 0 && commentsLabel != null)
                         {
                             commentsLabel.Text = "Comments (" + commentsCount + ")";
                         }
-                        else
+						else if(commentsLabel != null)
                         {
                             commentsLabel.Text = "Comments";
                         }

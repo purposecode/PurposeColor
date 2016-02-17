@@ -367,7 +367,7 @@ namespace PurposeColor.screens
 					ActionDetail actionDetail = selectedGoal.action_details.FirstOrDefault ( item => item.goalaction_id == selectedActionID );
 					string details = (actionDetail != null && actionDetail.action_details != null) ? actionDetail.action_details : "";
 
-                    DetailsPageModel model = new DetailsPageModel() { mediaArray = null, actionMediaArray = actionMediaList, pageTitleVal = "Action Details", titleVal = title, desc = details, Media = gemsGoalsObject.mediapath, NoMedia = gemsGoalsObject.noimageurl, gemId = actionTitle.goalaction_id, gemType = GemType.Action };
+                    DetailsPageModel model = new DetailsPageModel() { eventMediaArray = null, actionMediaArray = actionMediaList, pageTitleVal = "Action Details", titleVal = title, description = details, Media = gemsGoalsObject.mediapath, NoMedia = gemsGoalsObject.noimageurl, gemId = actionTitle.goalaction_id, gemType = GemType.Action };
 					//await Navigation.PushAsync (new GemsDetailsPage (null, actionMediaList, "Action Details", title, details, gemsGoalsObject.mediapath, gemsGoalsObject.noimageurl, actionTitle.goalaction_id ,GemType.Action));
                     await Navigation.PushAsync(new GemsDetailsPage(model));
 				}
@@ -591,13 +591,13 @@ namespace PurposeColor.screens
                 {
                     DetailsPageModel model = new DetailsPageModel();
                     model.actionMediaArray = null;
-                    model.mediaArray = null;
+                    model.eventMediaArray = null;
                     model.goal_media = goalInfo.resultarray.goal_media;
                     model.Media = null;
                     model.NoMedia = null;
                     model.pageTitleVal = "Goal Details";
                     model.titleVal = goalInfo.resultarray.goal_title;
-                    model.desc = goalInfo.resultarray.goal_details;
+                    model.description = goalInfo.resultarray.goal_details;
                     model.gemType = GemType.Goal;
                     model.gemId = goalID;
                     progress.HideProgressbar();

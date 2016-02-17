@@ -279,11 +279,11 @@ namespace PurposeColor.Model
         {
 
         }
-        public List<EventMedia> mediaArray { get; set; }
+        public List<EventMedia> eventMediaArray { get; set; }
         public List<ActionMedia> actionMediaArray { get; set; }
         public string pageTitleVal { get; set; }
         public string titleVal { get; set; }
-        public string desc { get; set; }
+        public string description { get; set; }
         public string Media { get; set; }
         public string NoMedia { get; set; }
         public string gemId { get; set; }
@@ -291,4 +291,44 @@ namespace PurposeColor.Model
 		public bool fromGEMSPage {get; set; }
 		public List<SelectedGoalMedia> goal_media { get; set; }
     }
+
+	public class SelectedEventMedia
+	{
+		public int event_id {
+			get;
+			set;
+		}
+
+		public string media_type {
+			get;
+			set;
+		}
+		public string event_media {
+			get;
+			set;
+		}
+	}
+
+	public class SelectedEventDetails
+	{
+		public string event_title { get; set; }
+		public string event_details { get; set; }
+		public string event_datetime { get; set; }
+		public int user_id { get; set; }
+		public int share_status { get; set; }
+		public int comment_count {
+			get;
+			set;
+		}
+		//public List<SelectedEventMedia> event_media { get; set; }//
+		public List<EventMedia> event_media { get; set; }
+	}
+
+	public class SelectedEvent
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public SelectedEventDetails resultarray { get; set; }
+	}
+
 }

@@ -45,6 +45,7 @@ namespace PurposeColor.screens
 		int lastGemIndexOnDisplay = 0;
 		int firstGemIndexOnDisplay = 0;
 
+
 		public GemsMainPage()
 		{
 
@@ -514,11 +515,16 @@ namespace PurposeColor.screens
 
 				Image nextBtn = new Image
 				{
-					Source = "nxtArrow_gem.png",
+					Source = "roundNextBtn.png",
 					WidthRequest = App.screenWidth * .1,
-					HeightRequest = App.screenWidth * .1
-
+					HeightRequest = App.screenWidth * .1,
+					ClassId = gemModel.ID.ToString()
 				};
+
+				TapGestureRecognizer DetailsTapgesture = null;
+				DetailsTapgesture = new TapGestureRecognizer();
+				DetailsTapgesture.Tapped += DetailsTapgesture_Tapped;
+				nextBtn.GestureRecognizers.Add(DetailsTapgesture);
 
 				if (previousTitle == null || !string.IsNullOrEmpty(gemModel.GroupTitle) && gemModel.GroupTitle != previousTitle)
 				{
@@ -568,33 +574,70 @@ namespace PurposeColor.screens
 			return false;
 		}
 
+		async void DetailsTapgesture_Tapped (object sender, EventArgs e)
+		{
+			try {
+				progressBar = DependencyService.Get<IProgressBar>();
+				progressBar.ShowProgressbar("Retriving details");
+
+				string btnId = (sender as Image).ClassId;
+				if (isEmotionsListing) {
+					SelectedEventDetails eventDetails = await ServiceHelper.GetSelectedEventDetails(btnId);
+					if (eventDetails != null)
+					{
+						DetailsPageModel model = new DetailsPageModel();
+						model.actionMediaArray = null;
+						model.eventMediaArray = eventDetails.event_media;
+						model.goal_media = null;
+						model.Media = null;
+						model.NoMedia = null;
+						model.pageTitleVal = "Event Details";
+						model.titleVal = eventDetails.event_title;
+						model.description = eventDetails.event_details;
+						model.gemType = GemType.Event;
+						model.gemId = btnId;
+						if (progressBar != null) {
+							progressBar.HideProgressbar();
+						}
+
+						await Navigation.PushAsync(new GemsDetailsPage(model));
+					}
+				}
+			} catch (Exception ex) {
+				var test = ex.Message;
+				
+			}
+		}
+
 		async void OnScroll(object sender, ScrolledEventArgs e)
 		{
-			if(  masterScroll.ScrollY > ( masterStack.Height - Device.OnPlatform( 512, 550, 0 ) )  )
-			{
-				masterScroll.Scrolled -= OnScroll;
-				if (!displayedLastGem) {
-					progressBar.ShowProgressbar ("loading gems..");
-					await LoadMoreGemsClicked ();
-					progressBar.HideProgressbar ();
-				} else {
-					progressBar.ShowToast ("Reached end of the list..");
+			try {
+				progressBar = DependencyService.Get<IProgressBar>();
+				if (masterScroll.ScrollY > (masterStack.Height - Device.OnPlatform (512, 550, 0))) {
+					masterScroll.Scrolled -= OnScroll;
+					if (!displayedLastGem) {
+						progressBar.ShowProgressbar ("loading gems..");
+						await LoadMoreGemsClicked ();
+						progressBar.HideProgressbar ();
+					} else {
+						progressBar.ShowToast ("Reached end of the list..");
+					}
+					await Task.Delay (TimeSpan.FromSeconds (3));
+					masterScroll.Scrolled += OnScroll;
+				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 5, 0)) {
+					masterScroll.Scrolled -= OnScroll;
+					if (!reachedFront) {
+						progressBar.ShowProgressbar ("loading gems..");
+						await LoadPreviousGems ();
+						progressBar.HideProgressbar ();
+					} else {
+						progressBar.ShowToast ("Reached starting of the list..");
+					}
+					await Task.Delay (TimeSpan.FromSeconds (3));
+					masterScroll.Scrolled += OnScroll;
 				}
-				await Task.Delay (TimeSpan.FromSeconds (3));
-				masterScroll.Scrolled += OnScroll;
-			}
-			else if( masterScroll.ScrollY < Device.OnPlatform( -15, 5, 0 )  )
-			{
-				masterScroll.Scrolled -= OnScroll;
-				if (!reachedFront) {
-					progressBar.ShowProgressbar ("loading gems..");
-					await LoadPreviousGems ();
-					progressBar.HideProgressbar ();
-				} else {
-					progressBar.ShowToast ("Reached starting of the list..");
-				}
-				await Task.Delay (TimeSpan.FromSeconds (3));
-				masterScroll.Scrolled += OnScroll;
+			} catch (Exception ex) {
+				
 			}
 		}
 

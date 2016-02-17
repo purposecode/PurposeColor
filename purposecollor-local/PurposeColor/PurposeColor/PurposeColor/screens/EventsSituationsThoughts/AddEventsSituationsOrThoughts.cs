@@ -203,9 +203,9 @@ namespace PurposeColor.screens
                 {
                     eventTitle.Text = detailsPageModel.titleVal;
                 }
-                if ( detailsPageModel.desc != null)
+                if ( detailsPageModel.description != null)
 	            {
-		             eventDescription.Text = detailsPageModel.desc;
+		             eventDescription.Text = detailsPageModel.description;
 	            }
             }
 
@@ -366,9 +366,9 @@ namespace PurposeColor.screens
 
             if(detailsPageModel != null)
             {
-                if (detailsPageModel.mediaArray!= null && detailsPageModel.mediaArray.Count > 0)
+                if (detailsPageModel.eventMediaArray!= null && detailsPageModel.eventMediaArray.Count > 0)
                 {
-                    foreach (EventMedia eventObj in detailsPageModel.mediaArray)
+                    foreach (EventMedia eventObj in detailsPageModel.eventMediaArray)
                     {
                         AddFilenameToMediaList(eventObj.event_media);
                     }

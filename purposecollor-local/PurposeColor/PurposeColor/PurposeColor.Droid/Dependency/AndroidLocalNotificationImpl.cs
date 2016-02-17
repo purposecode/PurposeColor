@@ -15,29 +15,48 @@ using PurposeColor.Droid.Dependency;
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidLocalNotificationImpl))]
 namespace PurposeColor.Droid.Dependency
 {
-    class AndroidLocalNotificationImpl : ILocalNotification
-    {
-        public void ShowNotification(string title, string messege)
-        {
-            // Instantiate the builder and set notification elements:
-            Notification.Builder builder = new Notification.Builder(MainActivity.GetMainActivity())
-                                        .SetContentTitle(title)
-                                        .SetContentText(messege)
-                                        .SetDefaults(NotificationDefaults.Sound)
-                                        .SetSmallIcon(Resource.Drawable.app_icon);
+	class AndroidLocalNotificationImpl : ILocalNotification
+	{
+		public void ShowNotification(string title, string messege)
+		{
+			try
+			{
+				// Set up an intent so that tapping the notifications returns to this app:
+				Intent intent = new Intent ( Application.Context , typeof(  NotificationClick ));
+				//intent.RemoveExtra ("MyData");
+				intent.PutExtra ("MyData", messege);
 
-            builder.SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate);
+				// Create a PendingIntent; we're only using one PendingIntent (ID = 0):
+				const int pendingIntentId = 0;
+				PendingIntent pendingIntent = 
+					PendingIntent.GetActivity ( MainActivity.GetMainActivity() , pendingIntentId, intent, PendingIntentFlags.OneShot);
 
-            // Build the notification:
-            Notification notification = builder.Build();
+				// Instantiate the builder and set notification elements:
+				Notification.Builder builder = new Notification.Builder(MainActivity.GetMainActivity())
+					.SetContentIntent( pendingIntent )
+					.SetContentTitle(title)
+					.SetContentText(messege)
+					.SetDefaults(NotificationDefaults.Sound)
+					.SetSmallIcon(Resource.Drawable.app_icon);
 
-            // Get the notification manager:
-            NotificationManager notificationManager = (NotificationManager)MainActivity.GetMainActivity().GetSystemService(Context.NotificationService);
+				builder.SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate);
 
-            // Publish the notification:
-            const int notificationId = 0;
-            notificationManager.Notify(notificationId, notification);
-        }
-       
-    }
+				// Build the notification:
+				Notification notification = builder.Build();
+
+				// Get the notification manager:
+				NotificationManager notificationManager = (NotificationManager)MainActivity.GetMainActivity().GetSystemService(Context.NotificationService);
+
+				// Publish the notification:
+				const int notificationId = 0;
+				notificationManager.Notify(notificationId, notification);
+			} 
+			catch (Exception ex)
+			{
+				string err = ex.Message;
+			}
+
+		}
+
+	}
 }

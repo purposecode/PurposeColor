@@ -234,6 +234,7 @@
     <Compile Include="SplashScreen.cs" />
     <Compile Include="Dependency\AndroidLocationImpl.cs" />
     <Compile Include="Dependency\AndroidDownloader.cs" />
+    <Compile Include="NotificationClick.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -305,6 +306,9 @@
     <AndroidResource Include="Resources\drawable\chat.png" />
     <AndroidResource Include="Resources\drawable\blue_tip.png" />
     <AndroidResource Include="Resources\drawable\yellow_tip.png" />
+    <AndroidResource Include="Resources\layout\samplenotificationclick.axml" />
+    <AndroidResource Include="Resources\drawable\follow.png" />
+    <AndroidResource Include="Resources\drawable\follow_disable.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />
@@ -622,4 +626,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Resources\layout\" />
+  </ItemGroup>
 </Project>

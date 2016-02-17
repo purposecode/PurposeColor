@@ -8,6 +8,61 @@ using System.IO;
 
 namespace PurposeColor.Model
 {
+
+	public class NotificationRespResult
+	{
+		public string message_id { get; set; }
+	}
+
+	public class NotitictionRequestRespObject
+	{
+		public long multicast_id { get; set; }
+		public int success { get; set; }
+		public int failure { get; set; }
+		public int canonical_ids { get; set; }
+		public List<NotificationRespResult> results { get; set; }
+	}
+
+	public class RegTokenResponse
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+	}
+
+	public class FolowersDetails
+	{
+		public string follow_id { get; set; }
+		public string follow_status { get; set; }
+		public string follow_datetime { get; set; }
+		public string firstname { get; set; }
+		public string profileimage { get; set; }
+		public string profileImgUrl
+		{
+			get 
+			{
+				string fileName = Path.GetFileName(profileimage);
+				return App.DownloadsPath + fileName;
+			}
+			set
+			{
+			}
+		}
+	}
+
+	public class FollowersObject
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<FolowersDetails> resultarray { get; set; }
+	}
+
+
+	public class FollowResponse
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+	}
+
 	public class ChatUsersDetails
 	{
 		public string user_id { get; set; }
@@ -119,6 +174,7 @@ namespace PurposeColor.Model
 		public string gem_details { get; set; }
 		public string gem_datetime { get; set; }
 		public string share_status { get; set; }
+		public int follow_status { get; set; }
 		public string firstname { get; set; }
 		public string profileimg { get; set; }
 		public List<GemMedia> gem_media { get; set; }

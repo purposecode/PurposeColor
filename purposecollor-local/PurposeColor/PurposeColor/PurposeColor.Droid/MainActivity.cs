@@ -26,7 +26,7 @@ namespace PurposeColor.Droid
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.Forms.Forms.SetTitleBarVisibility(AndroidTitleBarVisibility.Never);
             curentActivity = this;
-            CrossPushNotification.Initialize<CrossPushNotificationListener>("469628380816");
+			CrossPushNotification.Initialize<CrossPushNotificationListener>("572461137328");
             ImageCircleRenderer.Init();
 
             File testFile = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.ExternalStorageDirectory.ToString());

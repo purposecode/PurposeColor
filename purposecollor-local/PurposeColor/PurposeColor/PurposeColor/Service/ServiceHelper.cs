@@ -9,6 +9,7 @@ using PurposeColor.Model;
 using PurposeColor.CustomControls;
 using System.Net.Http;
 using Plugin.Connectivity;
+using Xamarin.Forms;
 
 namespace PurposeColor.Service
 {
@@ -2467,6 +2468,217 @@ namespace PurposeColor.Service
 			{
 				return null;
 			}
+		}
+
+
+
+		public static async Task<FollowersObject> GetFollowers()
+		{
+			try
+			{
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return null;
+
+
+				var client = new System.Net.Http.HttpClient();
+
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString =  "api.php?action=followrequestlist&user_id=" + user.UserId.ToString();
+
+				var response = await client.GetAsync(uriString);
+
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+
+
+					var rootobject = JsonConvert.DeserializeObject<FollowersObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject; 
+					}
+					client.Dispose();
+					return null;
+
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+
+
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+
+
+
+		public static async Task<bool> SendNotificationToken( string regToken )
+		{
+			try
+			{
+
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
+
+				User user = App.Settings.GetUser(  );
+				if( user == null )
+					return false;
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString =   "api.php?action=setusertoken&user_id=" + user.UserId.ToString() + "&registration_id=" +  regToken + "&device=" + Device.OnPlatform( "ios", "android", "windows" );
+
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<RegTokenResponse>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+			return false;
+		}
+
+
+
+		public static async Task<bool> UpdateNotificationRequest( string status, string folowReqID )
+		{
+			try
+			{
+
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
+
+				User user = App.Settings.GetUser(  );
+				if( user == null )
+					return false;
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				var url = "api.php?action=updatefollowstatus";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				//string uriString =   "api.php?action=updatefollowstatus&followrequest_id="+ folowReqID + "&follow_status=" + status;
+
+				content.Add(new StringContent(folowReqID, Encoding.UTF8), "followrequest_id");//  to be confirmed - status id of new goal // for testing only // test
+				content.Add(new StringContent(status, Encoding.UTF8), "follow_status"); // category_id = 1 for testing only // test
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+
+				var response = await client.PostAsync(url, content);
+				//var response = await client.GetAsync(uriString);
+
+				if (response != null )
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<NotitictionRequestRespObject>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+			return false;
+		}
+
+
+
+		public static async Task<bool> SendFollowRequest(  string currentUserID, string followID )
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
+
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return false;
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				string uriString =  "api.php?action=follow&user_id="+ currentUserID.ToString() + "&followid=" +followID.ToString();
+				var response = await client.GetAsync(uriString);
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<FollowResponse>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+			return false;
 		}
     }
 }

@@ -16,54 +16,55 @@ using CustomLayouts;
 using PurposeColor.Service;
 using Cross;
 using System.Threading.Tasks;
+using PushNotifictionListener;
 
 namespace PurposeColor
 {
-    public class CommunityGems : ContentPage, IDisposable
-    {
-        CustomLayout masterLayout = null;
-        IProgressBar progressBar;
-        ScrollView masterScroll;
-        Label title;
-        Label description;
+	public class CommunityGems : ContentPage, IDisposable
+	{
+		CustomLayout masterLayout = null;
+		IProgressBar progressBar;
+		ScrollView masterScroll;
+		Label title;
+		Label description;
 		List<string> mediaList = new List<string> ();
-        string CurrentGemId = string.Empty;
-        GemType CurrentGemType = GemType.Goal;
-        PurposeColorTitleBar mainTitleBar;
+		string CurrentGemId = string.Empty;
+		GemType CurrentGemType = GemType.Goal;
+		PurposeColorTitleBar mainTitleBar;
 		CommunityGemSubTitleBar subTitleBar;
-        TapGestureRecognizer shareButtonTap;
-        TapGestureRecognizer commentButtonTap;
-        TapGestureRecognizer likeButtonTap;
-        Label shareLabel;
-        StackLayout gemMenuContainer;
-        bool IsNavigationFrfomGEMS = false;
-        DetailsPageModel modelObject;
-        StackLayout masterStackLayout;
-        CommunityGemsObject communityGems;
+		TapGestureRecognizer shareButtonTap;
+		TapGestureRecognizer commentButtonTap;
+		TapGestureRecognizer likeButtonTap;
+		Label shareLabel;
+		StackLayout gemMenuContainer;
+		bool IsNavigationFrfomGEMS = false;
+		DetailsPageModel modelObject;
+		StackLayout masterStackLayout;
+		CommunityGemsObject communityGems;
 		User currentUser;
 		bool reachedEnd;
 		bool reachedFront;
 		int myGemsCount = 0;
-		int MAX_ROWS_AT_A_TIME = 10;
+		int MAX_ROWS_AT_A_TIME = 3;
 
-        //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
-        public CommunityGems(DetailsPageModel model)
-        {
-            NavigationPage.SetHasNavigationBar(this, false);
-            masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-            masterScroll = new ScrollView();
-            masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
-            progressBar = DependencyService.Get<IProgressBar>();
+		//public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
+		public CommunityGems(DetailsPageModel model)
+		{
+			NavigationPage.SetHasNavigationBar(this, false);
+			masterLayout = new CustomLayout();
+			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+			masterScroll = new ScrollView();
+			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
+			progressBar = DependencyService.Get<IProgressBar>();
 			currentUser = App.Settings.GetUser ();
 			if (currentUser == null)
 				currentUser = new User (){ UserId = 2 };
-            modelObject = model;
-            CurrentGemId = model.gemId;
-            CurrentGemType = model.gemType;
+			modelObject = model;
+			CurrentGemId = model.gemId;
+			CurrentGemType = model.gemType;
 
 
-            mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
 			subTitleBar.myGemsTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
@@ -76,10 +77,10 @@ namespace PurposeColor
 					Navigation.PushAsync( new MyGemsPage( myGems ) );
 					myGemsCount = myGems.resultarray.Count;
 				}
-			
+
 				progress.HideProgressbar();
 
-			/*	masterStack.Children.Clear();
+				/*	masterStack.Children.Clear();
 				masterStackLayout.Children.Clear();
 				masterScroll.Content = null;
 
@@ -87,38 +88,41 @@ namespace PurposeColor
 
 
 			};
-            subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
-            {
-                try
-                {
-                    await Navigation.PopAsync();
-                }
-                catch (Exception)
-                {
-                }
-            };
+			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
+			{
+				try
+				{
+					await Navigation.PopAsync();
+				}
+				catch (Exception)
+				{
+				}
+			};
 
 
-            this.Appearing += OnAppearing;
+			this.Appearing += OnAppearing;
 
-            Label pageTitle = new Label();
-            pageTitle.Text = model.pageTitleVal;
-            pageTitle.TextColor = Color.Black;
-            pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            pageTitle.FontAttributes = FontAttributes.Bold;
-            pageTitle.WidthRequest = App.screenWidth * 80 / 100;
-            pageTitle.HeightRequest = 50;
-            pageTitle.XAlign = TextAlignment.Start;
-            pageTitle.YAlign = TextAlignment.Start;
-            pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
 
-            BoxView emptyLayout = new BoxView();
-            emptyLayout.BackgroundColor = Color.Transparent;
-            emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
-            emptyLayout.HeightRequest = 30;
 
-            masterStackLayout = new StackLayout();
-            masterStackLayout.Orientation = StackOrientation.Vertical;
+
+			Label pageTitle = new Label();
+			pageTitle.Text = model.pageTitleVal;
+			pageTitle.TextColor = Color.Black;
+			pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			pageTitle.FontAttributes = FontAttributes.Bold;
+			pageTitle.WidthRequest = App.screenWidth * 80 / 100;
+			pageTitle.HeightRequest = 50;
+			pageTitle.XAlign = TextAlignment.Start;
+			pageTitle.YAlign = TextAlignment.Start;
+			pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
+
+			BoxView emptyLayout = new BoxView();
+			emptyLayout.BackgroundColor = Color.Transparent;
+			emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
+			emptyLayout.HeightRequest = 30;
+
+			masterStackLayout = new StackLayout();
+			masterStackLayout.Orientation = StackOrientation.Vertical;
 
 			TapGestureRecognizer chatTap = new TapGestureRecognizer ();
 			Image chat = new Image ();
@@ -132,15 +136,15 @@ namespace PurposeColor
 				await Navigation.PushAsync( new ChatPage() );
 			};
 
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(chat, 80, 1);
-            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 5, 18);
+			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+			masterLayout.AddChildToLayout(masterScroll, 5, 18);
 
 			masterScroll.Scrolled += OnMasterScrollScrolled;
 
-            Content = masterLayout;
-        }
+			Content = masterLayout;
+		}
 
 
 		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)
@@ -191,8 +195,8 @@ namespace PurposeColor
 		}
 
 
-       async  void OnAppearing(object sender, EventArgs e)
-        {
+		async  void OnAppearing(object sender, EventArgs e)
+		{
 			try
 			{
 
@@ -220,7 +224,7 @@ namespace PurposeColor
 				{
 					var test = ex.Message;
 				}
-					
+
 
 
 				communityGems = await ServiceHelper.GetCommunityGemsDetails();
@@ -246,7 +250,7 @@ namespace PurposeColor
 					App.Settings.SaveCommunityGemsDetails( communityGems );
 				}
 
-			/*if(!await DownloadMedias())
+				/*if(!await DownloadMedias())
 				{
 					DisplayAlert( Constants.ALERT_TITLE, "Media download failed..", Constants.ALERT_OK );
 					return;
@@ -263,12 +267,19 @@ namespace PurposeColor
 
 				RenderGems( communityGems );
 
+				/*MessagingCenter.Subscribe<CrossPushNotificationListener, string>  (this, "boom", "", (page, reqID, updatesStatus) =>
+				{
+
+					ServiceHelper.UpdateNotificationRequest( reqID, updatesStatus );
+
+				});*/
+
 			} 
 			catch (Exception ex) 
 			{
 				string err = ex.Message;
 			}
-        }
+		}
 
 
 
@@ -279,7 +290,7 @@ namespace PurposeColor
 
 			foreach (var item in communityGems.resultarray)
 			{
-			/*	string media = item.gem_media [0].gem_media;
+				/*	string media = item.gem_media [0].gem_media;
 
 				string fileExtenstion = Path.GetExtension(media);
 				if (fileExtenstion == ".mp4") 
@@ -396,7 +407,7 @@ namespace PurposeColor
 								int labelIndex = toolsLayout.Children.IndexOf( like );
 								if( labelIndex > 0 )
 								{
-								    likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
+									likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
 									likeCountLabel =(Label) toolsLayout.Children[ labelIndex - 2 ];
 								}
 								if (like.ClassId != null)
@@ -521,11 +532,44 @@ namespace PurposeColor
 					};
 					menuButton.Clicked += GemMenuButton_Clicked;
 
+					CustomImageButton followButton = new CustomImageButton();
+					//followButton.Text = "Follow";
+					followButton.ImageName = "follow.png";
+					followButton.TextColor = Color.White;
+					followButton.HeightRequest = 20;
+					followButton.BackgroundColor =  Color.FromRgb(8, 135, 224);
+					followButton.WidthRequest = 60;
+					followButton.ClassId = item.user_id;
+					followButton.IsEnabled = true;
+					if( item.follow_status == 1 )
+					{
+						//followButton.ImageName = "follow_disable.png";	
+						//followButton.IsEnabled = false;
+					}
+					followButton.Clicked += async (object fsender, EventArgs fe) => 
+					{
+						CustomImageButton btn = fsender as CustomImageButton;
+						btn.ImageName = "follow_disable.png";	
+						btn.IsEnabled = false;
+						if( btn != null && btn.ClassId != null )
+						{
+							User currentUser = App.Settings.GetUser();
+							if( currentUser != null )
+							{
+								progressBar.ShowProgressbar( "Loading...." );
+								await ServiceHelper.SendFollowRequest( currentUser.UserId.ToString(), btn.ClassId.ToString() );
+								progressBar.HideProgressbar();
+							}
+
+						}
+					};
+
 					// masterStack.AddChildToLayout(pageTitle, 1, 1);
 					//masterStack.AddChildToLayout(menuButton, 79, 1);
 					masterStack.AddChildToLayout(profileImage, 2, 1);
 					masterStack.AddChildToLayout(userName, 23, 3);
 					masterStack.AddChildToLayout(title, 23, 7);
+					masterStack.AddChildToLayout(followButton, 70, 3 );
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();
 					moreTap.Tapped += async (object senderr, EventArgs ee) =>
@@ -652,7 +696,7 @@ namespace PurposeColor
 
 
 
-			/*	Button loadMoreGems = new Button();
+				/*	Button loadMoreGems = new Button();
 				loadMoreGems.BackgroundColor = Color.Transparent;
 				loadMoreGems.TextColor = Constants.BLUE_BG_COLOR;
 				loadMoreGems.Text = "Load more gems";
@@ -722,10 +766,10 @@ namespace PurposeColor
 		}
 
 
-        void OnMyGemsTapped(object sender, EventArgs e)
-        {
+		void OnMyGemsTapped(object sender, EventArgs e)
+		{
 
-        }
+		}
 
 
 		async void OnLoadMoreGemsClicked (object sender, EventArgs e)
@@ -791,70 +835,70 @@ namespace PurposeColor
 
 		}
 
-        private void CloseAllPages()
-        {
-            if (Device.OS != TargetPlatform.iOS)
-            {
-                Dispose();
-                GC.Collect();
-                IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
-                device.ExitApp();
-            }
+		private void CloseAllPages()
+		{
+			if (Device.OS != TargetPlatform.iOS)
+			{
+				Dispose();
+				GC.Collect();
+				IDeviceSpec device = DependencyService.Get<IDeviceSpec>();
+				device.ExitApp();
+			}
 
-        }
+		}
 
-        CarouselLayout CreatePagesCarousel(List<SelectedGoalMedia> media)
-        {
-            List<CarousalViewModel> Pages = new List<CarousalViewModel>();
+		CarouselLayout CreatePagesCarousel(List<SelectedGoalMedia> media)
+		{
+			List<CarousalViewModel> Pages = new List<CarousalViewModel>();
 
-            foreach (var item in media)
-            {
-                CarousalViewModel caros = new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = Constants.SERVICE_BASE_URL + item.goal_media };
-                Pages.Add(caros);
-            }
-            /* List<CarousalViewModel> Pages = new List<CarousalViewModel>() {
+			foreach (var item in media)
+			{
+				CarousalViewModel caros = new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = Constants.SERVICE_BASE_URL + item.goal_media };
+				Pages.Add(caros);
+			}
+			/* List<CarousalViewModel> Pages = new List<CarousalViewModel>() {
                  new CarousalViewModel { Title = "1", Background = Color.White, ImageSource = "icon.png" },
                  new CarousalViewModel { Title = "2", Background = Color.Red, ImageSource = "icon.png" },
                  new CarousalViewModel { Title = "3", Background = Color.Blue, ImageSource = "one.jpeg" },
                  new CarousalViewModel { Title = "4", Background = Color.Yellow, ImageSource = "icon.png" },
              };*/
 
-            CarouselLayout carousel = new CarouselLayout
-            {
-                IndicatorStyle = CustomLayouts.Controls.CarouselLayout.IndicatorStyleEnum.Dots,
-                ItemTemplate = new DataTemplate(typeof(CarousalTemplate))
-            };
-            carousel.ItemsSource = Pages;
-            //carousel.SetBinding(CarouselLayout.ItemsSourceProperty, "Pages");
-            //carousel.SetBinding(CarouselLayout.SelectedItemProperty, "CurrentPage", BindingMode.TwoWay);
+			CarouselLayout carousel = new CarouselLayout
+			{
+				IndicatorStyle = CustomLayouts.Controls.CarouselLayout.IndicatorStyleEnum.Dots,
+				ItemTemplate = new DataTemplate(typeof(CarousalTemplate))
+			};
+			carousel.ItemsSource = Pages;
+			//carousel.SetBinding(CarouselLayout.ItemsSourceProperty, "Pages");
+			//carousel.SetBinding(CarouselLayout.SelectedItemProperty, "CurrentPage", BindingMode.TwoWay);
 
-            return carousel;
-        }
+			return carousel;
+		}
 
-        void GemMenuButton_Clicked(object sender, EventArgs e)
-        {
+		void GemMenuButton_Clicked(object sender, EventArgs e)
+		{
 			CustomImageButton btn = sender as CustomImageButton;
 			CustomLayout sellayout = null;
 			if( btn != null )
 			{
-			     sellayout = (CustomLayout) masterStackLayout.Children.FirstOrDefault (itm => itm.ClassId == "masterstack" + btn.ClassId);
+				sellayout = (CustomLayout) masterStackLayout.Children.FirstOrDefault (itm => itm.ClassId == "masterstack" + btn.ClassId);
 			}
 
 			View menuView = sellayout.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
-            if (menuView != null)
-            {
+			if (menuView != null)
+			{
 				HideMenuPopUp ( sellayout,menuView );
-                return;
-            }
+				return;
+			}
 
-            List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
+			List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
 			menuItems.Add(new CustomListViewItem { Name = "Remove", EmotionID = CurrentGemId.ToString(), EventID = btn.ClassId, SliderValue = 0 });
 
-            PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
-            //GemMenu.WidthRequest = App.screenWidth * .50;
-            //GemMenu.HeightRequest = App.screenHeight * .40;
-            GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
-            GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
+			PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
+			//GemMenu.WidthRequest = App.screenWidth * .50;
+			//GemMenu.HeightRequest = App.screenHeight * .40;
+			GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
+			GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
 
 			if (sellayout != null)
 			{
@@ -862,80 +906,80 @@ namespace PurposeColor
 			}
 
 			//masterStack.Children.Add (GemMenu, new Point (20, btn.Y));
-        }
+		}
 
-        async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
-            try
-            {
+		async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+		{
+			try
+			{
 
-                CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-                if (item.Name == "Delete")
-                {
-                    // do call the delete gem api
-                    // pass gem type and gem id to service helper .
-                    var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", Constants.ALERT_OK, "Cancel");
-                    if (alert)
-                    {
-                        string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
-                        if (responceCode == "200")
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
-                            try
-                            {
-                                if (IsNavigationFrfomGEMS)
-                                {
-                                    //nav to gems main page
-                                    //await Navigation.PopAsync();
-                                    App.masterPage.IsPresented = false;
-                                    App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
-                                }
-                                else
-                                {
-                                    // nav to goals n dreams
-                                    App.masterPage.IsPresented = false;
-                                    App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        else if (responceCode == "404")
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
-                        }
-                        else
-                        {
-                            await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
-                        }
-                    }
-                }
-                else if (item.Name == "Hide")
-                {
-                    // remove the community sharing of current gem
-                }
+				CustomListViewItem item = e.SelectedItem as CustomListViewItem;
+				if (item.Name == "Delete")
+				{
+					// do call the delete gem api
+					// pass gem type and gem id to service helper .
+					var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", Constants.ALERT_OK, "Cancel");
+					if (alert)
+					{
+						string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
+						if (responceCode == "200")
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
+							try
+							{
+								if (IsNavigationFrfomGEMS)
+								{
+									//nav to gems main page
+									//await Navigation.PopAsync();
+									App.masterPage.IsPresented = false;
+									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
+								}
+								else
+								{
+									// nav to goals n dreams
+									App.masterPage.IsPresented = false;
+									App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
+								}
+							}
+							catch (Exception)
+							{
+							}
+						}
+						else if (responceCode == "404")
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
+						}
+						else
+						{
+							await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+						}
+					}
+				}
+				else if (item.Name == "Hide")
+				{
+					// remove the community sharing of current gem
+				}
 				else if (item.Name == "Remove")
-                {
+				{
 
-                }
+				}
 
-                HideCommentsPopup();
+				HideCommentsPopup();
 
-            }
-            catch (Exception)
-            {
-            }
-        }
+			}
+			catch (Exception)
+			{
+			}
+		}
 
 		void HideMenuPopUp(  CustomLayout sellayout, View toRemove )
 		{
 			sellayout.Children.Remove ( toRemove );
 		}
 
-        void HideCommentsPopup()
-        {
-          /*  try
+		void HideCommentsPopup()
+		{
+			/*  try
             {
                 View menuView = masterStack.Children.FirstOrDefault(pick => pick.ClassId == Constants.CUSTOMLISTMENU_VIEW_CLASS_ID);
                 if (menuView != null)
@@ -947,14 +991,14 @@ namespace PurposeColor
             catch (Exception)
             {
             }*/
-        }
+		}
 
-        async void OnCommentButtonTapped(object sender, EventArgs e)
-        {
+		async void OnCommentButtonTapped(object sender, EventArgs e)
+		{
 
-            //show comments popup
-            try
-            {
+			//show comments popup
+			try
+			{
 				string gemID = "";
 				Image commentImg = sender as Image;
 				Label commentLabel = sender as Label;
@@ -980,47 +1024,47 @@ namespace PurposeColor
 
 
 					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, gemID, CurrentGemType, false);
-	                commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
-	                commentsView.HeightRequest = App.screenHeight;
-	                commentsView.WidthRequest = App.screenWidth;
-	                masterLayout.AddChildToLayout(commentsView, 0, 0);
+					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
+					commentsView.HeightRequest = App.screenHeight;
+					commentsView.WidthRequest = App.screenWidth;
+					masterLayout.AddChildToLayout(commentsView, 0, 0);
 				}
 
-            }
-            catch (Exception ex)
-            {
-                progressBar.HideProgressbar();
-                DisplayAlert(Constants.ALERT_TITLE, "Could not fetch comments, Please try again later.", Constants.ALERT_OK);
-            }
-            progressBar.HideProgressbar();
-        }
+			}
+			catch (Exception ex)
+			{
+				progressBar.HideProgressbar();
+				DisplayAlert(Constants.ALERT_TITLE, "Could not fetch comments, Please try again later.", Constants.ALERT_OK);
+			}
+			progressBar.HideProgressbar();
+		}
 
-        async void OnShareButtonTapped(object sender, EventArgs e)
-        {
+		async void OnShareButtonTapped(object sender, EventArgs e)
+		{
 
-            string statusCode = "404";
+			string statusCode = "404";
 
-            try
-            {
-                string gemID = "";
-                Button button = sender as Button;
-                Label label = sender as Label;
-                if (button != null)
-                {
-                    if (button.ClassId != null)
-                        gemID = button.ClassId;
-                }
+			try
+			{
+				string gemID = "";
+				Button button = sender as Button;
+				Label label = sender as Label;
+				if (button != null)
+				{
+					if (button.ClassId != null)
+						gemID = button.ClassId;
+				}
 
-                if (label != null)
-                {
-                    if (label.ClassId != null)
-                        gemID = label.ClassId;
-                }
+				if (label != null)
+				{
+					if (label.ClassId != null)
+						gemID = label.ClassId;
+				}
 
-                CommunityGemsDetails gemInfo = communityGems.resultarray.FirstOrDefault(itm => itm.gem_id == gemID );
+				CommunityGemsDetails gemInfo = communityGems.resultarray.FirstOrDefault(itm => itm.gem_id == gemID );
 
-                if( gemInfo != null )
-                {
+				if( gemInfo != null )
+				{
 					IProgressBar progress = DependencyService.Get< IProgressBar >();
 
 					progress.ShowProgressbar( "Share view loading....." );
@@ -1054,27 +1098,27 @@ namespace PurposeColor
 
 					}
 
-                }
+				}
 
-            }
-            catch (Exception)
-            {
-                shareButtonTap.Tapped += OnShareButtonTapped;
-            }
+			}
+			catch (Exception)
+			{
+				shareButtonTap.Tapped += OnShareButtonTapped;
+			}
 
 
-        }
+		}
 
-	
 
-        void OnGemTapped(object sender, EventArgs e)
-        {
-            Image img = sender as Image;
-            if (img != null)
-            {
-                string fileName = Path.GetFileName(img.ClassId);
-                if (fileName != null)
-                {
+
+		void OnGemTapped(object sender, EventArgs e)
+		{
+			Image img = sender as Image;
+			if (img != null)
+			{
+				string fileName = Path.GetFileName(img.ClassId);
+				if (fileName != null)
+				{
 					string fileExtenstion = Path.GetExtension(img.ClassId);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 
@@ -1083,59 +1127,59 @@ namespace PurposeColor
 						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
 						videoDownload.Download(img.ClassId, fileName);
 					}
-                    
-
-                }
-
-            }
-        }
-
-        void OnEventVideoTapped(object sender, EventArgs e)
-        {
-            Image img = sender as Image;
-            if (img != null)
-            {
-                string fileName = Path.GetFileName(img.ClassId);
-                if (fileName != null)
-                {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
-                }
-
-            }
-
-        }
 
 
+				}
 
-        public void Dispose()
-        {
-            masterLayout = null;
-            progressBar = null;
-            //masterStack = null;
-            title = null;
-            description = null;
-            mediaList = null;
-            shareLabel = null;
-            if (shareButtonTap != null)
-            {
-                shareButtonTap.Tapped -= OnShareButtonTapped;
-                shareButtonTap = null;
-            }
-            if (commentButtonTap != null)
-            {
-                commentButtonTap.Tapped -= OnCommentButtonTapped;
-                commentButtonTap = null;
-                likeButtonTap = null;
-            }
+			}
+		}
 
-            gemMenuContainer = null;
-            modelObject = null;
-            masterStackLayout = null;
-            communityGems = null;
-            GC.Collect();
-        }
-    }
+		void OnEventVideoTapped(object sender, EventArgs e)
+		{
+			Image img = sender as Image;
+			if (img != null)
+			{
+				string fileName = Path.GetFileName(img.ClassId);
+				if (fileName != null)
+				{
+					IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
+					videoDownload.Download(img.ClassId, fileName);
+				}
+
+			}
+
+		}
+
+
+
+		public void Dispose()
+		{
+			masterLayout = null;
+			progressBar = null;
+			//masterStack = null;
+			title = null;
+			description = null;
+			mediaList = null;
+			shareLabel = null;
+			if (shareButtonTap != null)
+			{
+				shareButtonTap.Tapped -= OnShareButtonTapped;
+				shareButtonTap = null;
+			}
+			if (commentButtonTap != null)
+			{
+				commentButtonTap.Tapped -= OnCommentButtonTapped;
+				commentButtonTap = null;
+				likeButtonTap = null;
+			}
+
+			gemMenuContainer = null;
+			modelObject = null;
+			masterStackLayout = null;
+			communityGems = null;
+			GC.Collect();
+		}
+	}
 
 }
 

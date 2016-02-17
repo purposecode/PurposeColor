@@ -828,6 +828,9 @@ namespace PurposeColor
             try
             {
                 base.OnAppearing();
+
+				await ServiceHelper.SendNotificationToken (App.NotificationToken);
+
                 if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {
                     progressBar.ShowProgressbar("Loading emotions...");

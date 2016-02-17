@@ -12,11 +12,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xamarin.Forms;
+using System.Threading.Tasks;
+using PurposeColor.Service;
 
 namespace PurposeColor
 {
     public class App : Application
     {
+		public static string NotificationToken { get; set; }
+		public static string NotificationReqID { get; set; }
         public static string WindowsDownloadedMedia { get; set; }
         public static long DownloadID{ get; set;}
         public static long ShareDownloadID { get; set; }
@@ -123,6 +127,11 @@ namespace PurposeColor
             token = tkn;
         }
 
+		public static async Task<bool> UpdateNotificationStatus( string reqID, string status )
+		{
+			return await ServiceHelper.UpdateNotificationRequest ( status, reqID );
+			await Navigator.PopAsync ();
+		}
 
         public static List<CustomListViewItem> GetEmotionsList()
         {

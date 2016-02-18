@@ -334,7 +334,7 @@ namespace PurposeColor.screens
                 isPosting = true;
 
                 PurposeColor.Model.User user = App.Settings.GetUser();
-
+				user = new User{UserName = "Sam", UserId = 2, AllowCommunitySharing = true, DisplayName="Sam"};
 				if( user == null )
 				{
 					progressBar.HideProgressbar();
@@ -344,7 +344,7 @@ namespace PurposeColor.screens
 
                 ////////////// for testing  //test //////////////
 
-                isCommunityShared = false; /// for testing only 
+                //isCommunityShared = false; /// for testing only 
         /*        user = new PurposeColor.Model.User
                 {
                     UserId = 2,
@@ -513,18 +513,15 @@ namespace PurposeColor.screens
                     };
 
                     ///////////////////////// firstname /////////////////////////
-                    if (!string.IsNullOrEmpty(comment.firstname))
-                    {
-                        Label nameText = new Label
-                        {
-                            Text = comment.firstname,
-                            TextColor = Color.Black,
-                            FontSize = Device.OnPlatform(16, 16, 21),
-                            HorizontalOptions = LayoutOptions.Start
-                        };
-                        TextHolderStack.Children.Add(nameText);
-                        TextHolderStack.Children.Add(commentTextLabel);
-                    }
+					Label nameText = new Label
+					{
+						Text = !string.IsNullOrEmpty(comment.firstname) ? comment.firstname :" ",
+						TextColor = Color.Black,
+						FontSize = Device.OnPlatform(16, 16, 21),
+						HorizontalOptions = LayoutOptions.Start
+					};
+					TextHolderStack.Children.Add(nameText);
+					TextHolderStack.Children.Add(commentTextLabel);
 
 
                     /////////////////////////  comment_datetime  /////////////////////////

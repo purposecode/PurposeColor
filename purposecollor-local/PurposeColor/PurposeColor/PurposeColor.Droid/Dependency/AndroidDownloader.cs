@@ -25,7 +25,7 @@ namespace PurposeColor.Droid
 		public async  Task<bool> DownloadFiles ( List<string> downloadUrlList )
 		{
 			int imgWidth = (int)(App.screenWidth * App.screenDensity);
-			int imgHeight = (int)(App.screenHeight * .35 * App.screenDensity);
+			int imgHeight = (int)(App.screenHeight * App.screenDensity);
 			try 
 			{
 				foreach (var item in downloadUrlList)

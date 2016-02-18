@@ -35,9 +35,10 @@ namespace PurposeColor
         int commentsCount = 0;
         bool isSharedToCommunity = false;
         bool isFavouriteGem = false;
-        Label commentsLabel;
+		Label commentsLabel = null;
+		Image favoriteButton = null;
+		Image shareButton = null;
 
-        //public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
         public GemsDetailsPage( DetailsPageModel model )
         {
             NavigationPage.SetHasNavigationBar(this, false);
@@ -108,7 +109,7 @@ namespace PurposeColor
             toolsLayout.Padding = new Thickness(10, 10, 10, 10);
             toolsLayout.ClassId = "ToolsLayout";
 
-			Image favoriteButton = new Image();
+			favoriteButton = new Image();
 			favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
             favoriteButton.WidthRequest = Device.OnPlatform(15, 20, 15);
             favoriteButton.HeightRequest = Device.OnPlatform(15, 20, 15);
@@ -132,7 +133,7 @@ namespace PurposeColor
 
             if (user.AllowCommunitySharing)
             {
-                Image shareButton = new Image();
+                shareButton = new Image();
                 shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
                 shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
                 shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
@@ -200,12 +201,12 @@ namespace PurposeColor
                 Text = string.Empty,
                 HorizontalOptions = LayoutOptions.End,
 				BackgroundColor = Color.White,
-                WidthRequest = Device.OnPlatform(40, 32, 60),
-                HeightRequest = Device.OnPlatform(30, 25, 40)
+                WidthRequest = Device.OnPlatform(20, 20, 60),
+                HeightRequest = Device.OnPlatform(20, 20, 40)
             };
             menuButton.Clicked += GemMenuButton_Clicked;
             masterStack.AddChildToLayout(pageTitle, 1, 1);
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 77, 79), 1);
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 80, 79), 1);
             masterStack.AddChildToLayout(title,1,7);
 			#endregion
 
@@ -405,12 +406,22 @@ namespace PurposeColor
                     if (shareStatusResult.share_status != null)
                     {
                         isSharedToCommunity = shareStatusResult.share_status == 0 ? false : true;
+						if(isSharedToCommunity)
+						{
+							shareButton.Source = Device.OnPlatform("shareActive.png", "shareActive.png", "//Assets//shareActive.png");
+						}else
+						{
+							shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+						}
                     }
 
-                    if (shareStatusResult.favourite_count != null)
+                    if (shareStatusResult.favourite_count > 0)
                     {
-                        isSharedToCommunity = shareStatusResult.favourite_count == 0 ? false : true;
-                    }
+						favoriteButton.Source = Device.OnPlatform("favoriteIconActive.png", "favoriteIconActive.png", "//Assets//favoriteIconActive.png");
+					}else
+					{
+						favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
+					}
 
                     if (shareStatusResult.comment_count != null)
                     {
@@ -445,8 +456,17 @@ namespace PurposeColor
             List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
             menuItems.Add(new CustomListViewItem { Name = "Edit", EmotionID = CurrentGemId.ToString(),EventID = string.Empty, SliderValue = 0 });
 			menuItems.Add(new CustomListViewItem { Name = "Copy", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
-            menuItems.Add(new CustomListViewItem { Name = "Hide", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
-            menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
+			if (isSharedToCommunity) 
+			{// chk current status of community sharing - add hide option accordingly.
+				menuItems.Add (new CustomListViewItem {
+					Name = "Hide",
+					EmotionID = CurrentGemId.ToString (),
+					EventID = string.Empty,
+					SliderValue = 0
+				});
+			}
+
+			menuItems.Add(new CustomListViewItem { Name = "Delete", EmotionID = CurrentGemId.ToString(), EventID = string.Empty, SliderValue = 0 });
 
             PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
             //GemMenu.WidthRequest = App.screenWidth * .50;
@@ -460,7 +480,6 @@ namespace PurposeColor
         {
             try
             {
-
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
                 if (item.Name == "Delete")
                 {
@@ -471,48 +490,75 @@ namespace PurposeColor
 					var alert = await DisplayAlert(Constants.ALERT_TITLE, "Are you sure you want to delete this GEM?", "Delete", "Cancel");
 					if (alert)
 					{
-                        progressBar.ShowProgressbar("Deleting GEM");
-						string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
-						if (responceCode == "200")
-						{
-                            progressBar.HideProgressbar();
-							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
-							try
-							{
-								await Navigation.PopAsync();
-							}
-							catch (Exception)
-							{
-							}
-						}
-						else if (responceCode == "404")
-						{
-							await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
-						}
-						else
-						{
-							await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
-						}
-                        progressBar.HideProgressbar();
+                        try {
+                        	progressBar.ShowProgressbar("Deleting GEM");
+                        	string responceCode = await PurposeColor.Service.ServiceHelper.DeleteGem(item.EmotionID, CurrentGemType);
+                        	if (responceCode == "200")
+                        	{
+                        	    progressBar.HideProgressbar();
+                        		await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
+	                        	try
+	                        	{
+	                        		await Navigation.PopAsync();
+	                        	}
+	                        	catch (Exception)
+	                        	{
+	                        	}
+                        	}
+                        	else if (responceCode == "404")
+                        	{
+                        		await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
+                        	}
+                        	else
+                        	{
+                        		await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+                        	}
+                        	progressBar.HideProgressbar();
+                        } catch (Exception ex) {
+                        }
 					}
- 
-	#endregion
+						#endregion
                 }
                 else if (item.Name == "Hide")
                 {
-                    // remove the community sharing of current gem
+					try {
+						// remove the community sharing of current gem
+						progressBar.ShowProgressbar("Removing from community");
+						string responceCode = await PurposeColor.Service.ServiceHelper.RemoveGemFromCommunity(CurrentGemId, CurrentGemType);
+						progressBar.HideProgressbar();
+						if (responceCode == "200") {
+							isSharedToCommunity = false;
+							shareButtonTap.Tapped += ShareButtonTapped;
+							shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+							progressBar.ShowToast("Removed from connunity GEMs");
+							//item.Dispose();
+
+						}else
+						{
+							DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);	
+						}
+					} catch (Exception ex) {
+						var test = ex.Message;
+						DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);	
+					}
                 }
                 else if (item.Name == "Edit")
                 {
-                    await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
-                    //await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel)); // is working in Android.
+					try {
+						await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+					} catch (Exception ex) {
+						DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+					}
 				}
 				else if(item.Name == "Copy")
 				{
-					detailsPageModel.gemId = "";
-					detailsPageModel.IsCopyingGem = true;
-					await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
-
+					try {
+						detailsPageModel.gemId = "";
+						detailsPageModel.IsCopyingGem = true;
+						await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+					} catch (Exception ex) {
+						DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
+					}
 				}
 
                 HideCommentsPopup();
@@ -609,6 +655,7 @@ namespace PurposeColor
 			if (statusCode == "200") {
 				progressBar.ShowToast ("GEM shard to community.");
                 isSharedToCommunity = true;
+				shareButton.Source = Device.OnPlatform("shareActive.png", "shareActive.png", "//Assets//shareActive.png");
 			} else if (statusCode == "401") {
 				progressBar.ShowToast ("Could not process your request");
                 shareButtonTap.Tapped += ShareButtonTapped;
@@ -649,6 +696,7 @@ namespace PurposeColor
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "GEM added to favourites.", Constants.ALERT_OK);
                         isFavouriteGem = true;
+						favoriteButton.Source = Device.OnPlatform("favoriteIconActive.png", "favoriteIconActive.png", "//Assets//favoriteIconActive.png");
                     }
                     else if (responceCode == "401")
                     {

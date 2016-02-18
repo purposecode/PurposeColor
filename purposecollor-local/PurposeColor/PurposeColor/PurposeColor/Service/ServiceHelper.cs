@@ -1880,35 +1880,38 @@ namespace PurposeColor.Service
 
 		public static async Task<string> RemoveGemFromCommunity(string gemId, GemType gemtype)
 		{
-			try
-			{
-
-				User user = App.Settings.GetUser();
-
-				if( user == null )
-					user = new User(){ UserId = 2 };
-
+			try {
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					return null;
+					return "404";
 				}
 
-				string result = String.Empty;
-				var client = new HttpClient();
-				client.Timeout = new TimeSpan(0, 15, 0);
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
 				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
-				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+				string gemIdString = string.Empty;
 
-				var url = "api.php?action=removegem";//&goal_id=" + gemId + "&user_id=" + user.UserId;
-
-				MultipartFormDataContent content = new MultipartFormDataContent();
-
-				if (!string.IsNullOrEmpty(gemId))
+				switch (gemtype)
 				{
-					content.Add(new StringContent(gemId, Encoding.UTF8), "goal_id");
+				case GemType.Goal:
+					gemIdString = "goal_id=";
+					break;
+				case GemType.Event:
+					gemIdString = "event_id=";
+					break;
+				case GemType.Action:
+					gemIdString = "goalaction_id=";
+					break;
+				case GemType.Emotion:
+					gemIdString = "emotion_id=";
+					break;
+				default:
+					break;
 				}
-					
-				HttpResponseMessage response = await client.PostAsync(url, content);
+
+				string uriString = "api.php?action=removegem&"+ gemIdString + gemId;
+
+				var response = await client.GetAsync(uriString);
 
 				if (response != null && response.StatusCode == HttpStatusCode.OK)
 				{
@@ -1919,13 +1922,9 @@ namespace PurposeColor.Service
 						return rootobject.code;
 					}
 				}
+			} catch (Exception ex) {
 
 			}
-			catch (Exception ex)
-			{
-				var test = ex.Message;
-			}
-
 			return "404";
 		}
 

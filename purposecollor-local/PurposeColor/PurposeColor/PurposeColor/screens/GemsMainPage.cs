@@ -513,7 +513,7 @@ namespace PurposeColor.screens
 				}
 
 				image = new Image {
-					Aspect = Aspect.Fill,
+					Aspect = Aspect.AspectFill, //Aspect.Fill,
 					HorizontalOptions = LayoutOptions.Center,
 					VerticalOptions = LayoutOptions.Center,
 					WidthRequest = App.screenWidth,
@@ -557,14 +557,14 @@ namespace PurposeColor.screens
 					gemLayout.AddChildToLayout (image, 0, 4);
 					gemLayout.AddChildToLayout (bgStack, 0, 16);//16 - appear @ center of img. 26 - text appear at bottom corner of img.
 					gemLayout.AddChildToLayout (detailsLabel, 1, 16);
-					gemLayout.AddChildToLayout (nextBtn, 49, 23); // btn width = 1% of width.
+					gemLayout.AddChildToLayout (nextBtn, 47, 23); // btn width = 1% of width.
 
 				}else
 				{
 					gemLayout.AddChildToLayout (image, 0, 0);
 					gemLayout.AddChildToLayout (bgStack, 0, 12);// 12 - aliended center to img. // 22 - align to bottom of img.
 					gemLayout.AddChildToLayout (detailsLabel, 1, 12);
-					gemLayout.AddChildToLayout (nextBtn, 49, 19);
+					gemLayout.AddChildToLayout (nextBtn, 47, 19);
 				}
 
 				gemLayout.ClassId = gemModel.ID;
@@ -683,8 +683,6 @@ namespace PurposeColor.screens
 				}
 				var test = ex.Message;
 			}
-
-
 		}
 
 		async void OnScroll(object sender, ScrolledEventArgs e)

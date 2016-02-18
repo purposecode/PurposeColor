@@ -57,8 +57,7 @@ namespace PurposeColor
 			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
 			currentUser = App.Settings.GetUser ();
-			if (currentUser == null)
-				currentUser = new User (){ UserId = 2 };
+
 			modelObject = model;
 			CurrentGemId = model.gemId;
 			CurrentGemType = model.gemType;
@@ -559,7 +558,6 @@ namespace PurposeColor
 						btn.IsEnabled = false;
 						if( btn != null && btn.ClassId != null )
 						{
-							User currentUser = App.Settings.GetUser();
 							if( currentUser != null )
 							{
 								progressBar.ShowProgressbar( "Loading...." );
@@ -579,6 +577,8 @@ namespace PurposeColor
 					masterStack.AddChildToLayout(profileImage, 2, 1);
 					masterStack.AddChildToLayout(userName, 23, 3);
 					masterStack.AddChildToLayout(title, 23, 7);
+
+					if( item.user_id != currentUser.UserId.ToString() )
 					masterStack.AddChildToLayout(followButton, 70, 3 );
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();

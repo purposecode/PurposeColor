@@ -2643,7 +2643,7 @@ namespace PurposeColor.Service
 
 
 
-		public static async Task<bool> SendFollowRequest(  string currentUserID, string followID )
+		public static async Task<FollowResponse> SendFollowRequest(  string currentUserID, string followID )
 		{
 			try
 			{
@@ -2669,23 +2669,23 @@ namespace PurposeColor.Service
 					var rootobject = JsonConvert.DeserializeObject<FollowResponse>(responseJson);
 					if (rootobject != null )
 					{
-						return true;
+						return rootobject;
 					}
 					else
 					{
-						return false;
+						return null;
 					}
 				}
 				else
 				{
-					return false;
+					return null;
 				}
 			}
 			catch (Exception ex)
 			{
 				var test = ex.Message;
 			}
-			return false;
+			return null;
 		}
     }
 }

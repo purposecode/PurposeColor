@@ -547,7 +547,7 @@ namespace PurposeColor
 					followButton.WidthRequest = 60;
 					followButton.ClassId = item.user_id;
 					followButton.IsEnabled = true;
-					if( item.follow_status == 1 )
+					if( item.follow_status > 0 )
 					{
 						followButton.ImageName = "follow_disable.png";	
 						followButton.IsEnabled = false;
@@ -563,7 +563,11 @@ namespace PurposeColor
 							if( currentUser != null )
 							{
 								progressBar.ShowProgressbar( "Loading...." );
-								await ServiceHelper.SendFollowRequest( currentUser.UserId.ToString(), btn.ClassId.ToString() );
+								FollowResponse resp = await ServiceHelper.SendFollowRequest( currentUser.UserId.ToString(), btn.ClassId.ToString() );
+								if( resp != null && resp.code == "400" )
+								{
+									progressBar.ShowToast( "Already sent reqeust." );
+								}
 								progressBar.HideProgressbar();
 							}
 

@@ -49,7 +49,7 @@ namespace PushNotifictionListener
 			}
 
 			ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-			notify.ShowNotification ( "Purpose Color", messge );
+			notify.ShowNotification ( "Purpose Color", messge, true );
 		}
 
 		public async void OnRegistered(string Token, DeviceType deviceType)

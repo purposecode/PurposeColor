@@ -8,6 +8,6 @@ namespace PurposeColor.interfaces
 {
     public interface ILocalNotification
     {
-         void ShowNotification(string title, string messege);
+		void ShowNotification(string title, string messege, bool handleClickNeeded );
     }
 }

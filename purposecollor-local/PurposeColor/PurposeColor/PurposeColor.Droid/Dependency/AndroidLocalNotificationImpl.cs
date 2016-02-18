@@ -17,7 +17,7 @@ namespace PurposeColor.Droid.Dependency
 {
 	class AndroidLocalNotificationImpl : ILocalNotification
 	{
-		public void ShowNotification(string title, string messege)
+		public void ShowNotification(string title, string messege, bool handleClickNeeded )
 		{
 			try
 			{
@@ -33,7 +33,6 @@ namespace PurposeColor.Droid.Dependency
 
 				// Instantiate the builder and set notification elements:
 				Notification.Builder builder = new Notification.Builder(MainActivity.GetMainActivity())
-					.SetContentIntent( pendingIntent )
 					.SetContentTitle(title)
 					.SetContentText(messege)
 					.SetDefaults(NotificationDefaults.Sound)
@@ -42,7 +41,10 @@ namespace PurposeColor.Droid.Dependency
 
 				builder.SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate);
 
-				// Build the notification:
+				if( handleClickNeeded )
+				builder.SetContentIntent( pendingIntent );
+				
+				// Build the notification: 
 				Notification notification = builder.Build();
 
 				// Get the notification manager:

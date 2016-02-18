@@ -245,7 +245,7 @@ namespace PurposeColor
                     try
                     {
                         ILocalNotification notfiy = DependencyService.Get<ILocalNotification> ();
-					    notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created");
+						notfiy.ShowNotification (Constants.ALERT_TITLE, "Emotional awareness created", false);
                     }
                     catch (System.Exception)
                     {

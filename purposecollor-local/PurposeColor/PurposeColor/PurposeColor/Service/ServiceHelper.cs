@@ -2649,12 +2649,12 @@ namespace PurposeColor.Service
 			{
 				if (!CrossConnectivity.Current.IsConnected)
 				{
-					return false;
+					return null;
 				}
 
 				User user = App.Settings.GetUser();
 				if( user == null )
-					return false;
+					return null;
 
 				var client = new System.Net.Http.HttpClient();
 				client.DefaultRequestHeaders.Add("Post", "application/json");

@@ -26,22 +26,22 @@ namespace PurposeColor
 		CommunityGemSubTitleBar subTitleBar;
 		CustomLayout masterLayout;
 		ListView chatContactsListView;
-		ChatUsersObject userObject;
+		ChatObject userObject;
 		IProgressBar progressBar;
 
 		public ChatPage ()
 		{
 			progressBar = DependencyService.Get< IProgressBar > ();
-		    mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-		    subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
 
 			this.Appearing += OnChatPageAppearing;
-		    masterLayout = new CustomLayout ();
+			masterLayout = new CustomLayout ();
 			masterLayout.WidthRequest = App.screenWidth;
 			masterLayout.HeightRequest = App.screenHeight;
 
 
-		    chatContactsListView = new ListView();
+			chatContactsListView = new ListView();
 			chatContactsListView.ItemTemplate = new DataTemplate(typeof(ChatContactListCell));
 			chatContactsListView.SeparatorVisibility = SeparatorVisibility.Default;
 			chatContactsListView.BackgroundColor = Color.White;
@@ -70,8 +70,8 @@ namespace PurposeColor
 					chathistory.Add( chat1 );
 				}
 
-			
-				 Navigation.PushAsync( new ChatDetailsPage( chathistory ) );
+
+				Navigation.PushAsync( new ChatDetailsPage( chathistory ) );
 			};
 
 
@@ -95,7 +95,7 @@ namespace PurposeColor
 
 				foreach ( var item in userObject.resultarray ) 
 				{
-					string profileUrl = Constants.SERVICE_BASE_URL + item.profileimg;
+					string profileUrl = Constants.SERVICE_BASE_URL + item.profileimage;
 					profileImageUrlList.Add ( profileUrl );		
 				}
 

@@ -135,6 +135,32 @@ namespace PurposeColor.Model
 	}
 
 
+	public class ChatUsersInfo
+	{
+		public string user_id { get; set; }
+		public string firstname { get; set; }
+		public string profileimage { get; set; }
+		public string profileImgUrl {
+			get 
+			{
+				string fileName = Path.GetFileName(profileimage);
+				return App.DownloadsPath + fileName;
+			}
+			set
+			{
+			}
+		}
+	}
+
+	public class ChatObject
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<ChatUsersInfo> resultarray { get; set; }
+	}
+
+
+
 	public class ChatUsersObject
 	{
 		public string code { get; set; }
@@ -148,6 +174,7 @@ namespace PurposeColor.Model
 		public int like_status { get; set; }
 		public int likecount { get; set; }
 		public string gem_id { get; set; }
+		public string gem_type { get; set; }
 		public string gem_title { get; set; }
 		public string gem_details { get; set; }
 		public string gem_datetime { get; set; }
@@ -160,6 +187,7 @@ namespace PurposeColor.Model
 	public class GemMedia
 	{
 		public string gem_id { get; set; }
+		public string gem_type { get; set; }
 		public string media_type { get; set; }
 		public string gem_media { get; set; }
 	}
@@ -170,6 +198,7 @@ namespace PurposeColor.Model
 		public int like_status { get; set; }
 		public int likecount { get; set; }
 		public string gem_id { get; set; }
+		public string gem_type { get; set; }
 		public string gem_title { get; set; }
 		public string gem_details { get; set; }
 		public string gem_datetime { get; set; }

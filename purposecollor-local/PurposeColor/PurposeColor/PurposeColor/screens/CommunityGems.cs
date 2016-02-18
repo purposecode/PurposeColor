@@ -45,7 +45,7 @@ namespace PurposeColor
 		bool reachedEnd;
 		bool reachedFront;
 		int myGemsCount = 0;
-		int MAX_ROWS_AT_A_TIME = 3;
+		int MAX_ROWS_AT_A_TIME = 10;
 
 		//public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
 		public CommunityGems(DetailsPageModel model)
@@ -192,6 +192,7 @@ namespace PurposeColor
 		public void OnCancelProgress()
 		{
 			string cancelst = "cancel pressed";
+			progressBar.HideProgressbar ();
 		}
 
 
@@ -208,8 +209,8 @@ namespace PurposeColor
 					return;
 
 
-				IProgressBar progess = DependencyService.Get< IProgressBar >();
-				progess.ShowProgressbarWithCancel( "Downloading gems....", OnCancelProgress );
+				progressBar.ShowProgressbarWithCancel( "Downloading gems....", OnCancelProgress );
+				//progess.ShowProgressbar( "lloading gems..." );
 
 				User user = null;
 				IsNavigationFrfomGEMS = modelObject.fromGEMSPage;
@@ -263,7 +264,7 @@ namespace PurposeColor
 					communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
 				}
 
-				progess.HideProgressbarWithCancel();
+				progressBar.HideProgressbarWithCancel();
 
 				RenderGems( communityGems );
 
@@ -356,7 +357,7 @@ namespace PurposeColor
 					likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.VerticalOptions = LayoutOptions.Center;
-					likeButton.ClassId = item.gem_id;
+					likeButton.ClassId = item.gem_id + "&&"  + item.gem_type;
 					likeButton.GestureRecognizers.Add(likeButtonTap);
 
 					Label likeLabel = new Label
@@ -366,7 +367,7 @@ namespace PurposeColor
 						TextColor = Color.Gray,
 						VerticalOptions = LayoutOptions.Center,
 						FontSize = Device.OnPlatform(12, 12, 15),
-						ClassId = item.gem_id
+						ClassId = item.gem_id + "&&" + item.gem_type
 					};
 					likeLabel.GestureRecognizers.Add(likeButtonTap);
 
@@ -418,7 +419,12 @@ namespace PurposeColor
 							progressBar.ShowProgressbar("Requesting...   ");
 							/////////////// for testing /////////////
 
-							LikeResponse likeRes = await ServiceHelper.LikeGem( gemID );
+							string[] delimiters = { "&&" };
+							string[] clasIDArray = gemID.Split(delimiters, StringSplitOptions.None);
+							string selectedGemID = clasIDArray [0];
+							string selectedGemType = clasIDArray [1];
+
+							LikeResponse likeRes = await ServiceHelper.LikeGem( selectedGemID, selectedGemType );
 							if( likeRes != null )
 							{
 								string source = ( likeRes.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
@@ -468,7 +474,7 @@ namespace PurposeColor
 					commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.VerticalOptions = LayoutOptions.Center;
-					commentButton.ClassId = item.gem_id;
+					commentButton.ClassId = item.gem_id + "&&"  + item.gem_type;
 					Label commentsLabel = new Label
 					{
 						Text = "Comment",
@@ -476,7 +482,7 @@ namespace PurposeColor
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
 						FontSize = Device.OnPlatform(12, 12, 15),
-						ClassId = item.gem_id
+						ClassId = item.gem_id + "&&"  + item.gem_type
 					};
 
 					commentButtonTap = new TapGestureRecognizer();
@@ -543,8 +549,8 @@ namespace PurposeColor
 					followButton.IsEnabled = true;
 					if( item.follow_status == 1 )
 					{
-						//followButton.ImageName = "follow_disable.png";	
-						//followButton.IsEnabled = false;
+						followButton.ImageName = "follow_disable.png";	
+						followButton.IsEnabled = false;
 					}
 					followButton.Clicked += async (object fsender, EventArgs fe) => 
 					{
@@ -1018,8 +1024,15 @@ namespace PurposeColor
 
 				if( !string.IsNullOrEmpty( gemID ) )
 				{
+					string[] delimiters = { "&&" };
+					string[] clasIDArray = gemID.Split(delimiters, StringSplitOptions.None);
+					string selectedGemID = clasIDArray [0];
+					string selectedGemType = clasIDArray [1];
+					GemType currentGemType = GetGemType( selectedGemID );
+
+
 					progressBar.ShowProgressbar("Loading comments");
-					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(gemID, GemType.Goal, false);
+					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, false);
 					progressBar.HideProgressbar();
 
 
@@ -1037,6 +1050,18 @@ namespace PurposeColor
 				DisplayAlert(Constants.ALERT_TITLE, "Could not fetch comments, Please try again later.", Constants.ALERT_OK);
 			}
 			progressBar.HideProgressbar();
+		}
+
+		private GemType GetGemType( string gemType )
+		{
+			if (gemType == "goal")
+				return GemType.Goal;
+			else if (gemType == "action")
+				return GemType.Action;
+			else if (gemType == "event")
+				return GemType.Event;
+			else
+				return GemType.Goal;
 		}
 
 		async void OnShareButtonTapped(object sender, EventArgs e)

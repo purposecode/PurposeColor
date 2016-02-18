@@ -237,10 +237,10 @@ namespace PurposeColor
 			try
 			{
 
-			
 
 
-			
+
+
 
 
 
@@ -278,7 +278,7 @@ namespace PurposeColor
 					likeButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					likeButton.VerticalOptions = LayoutOptions.Center;
-					likeButton.ClassId = item.gem_id;
+					likeButton.ClassId = item.gem_id + "&&"  + item.gem_type;
 					likeButton.GestureRecognizers.Add(likeButtonTap);
 
 					Label likeLabel = new Label
@@ -288,7 +288,7 @@ namespace PurposeColor
 						TextColor = Color.Gray,
 						VerticalOptions = LayoutOptions.Center,
 						FontSize = Device.OnPlatform(12, 12, 15),
-						ClassId = item.gem_id
+						ClassId = item.gem_id + "&&"  + item.gem_type
 					};
 					likeLabel.GestureRecognizers.Add(likeButtonTap);
 
@@ -340,9 +340,14 @@ namespace PurposeColor
 							progressBar.ShowProgressbar("Requesting...   ");
 							/////////////// for testing /////////////
 
+							string[] delimiters = { "&&" };
+							string[] clasIDArray = gemID.Split(delimiters, StringSplitOptions.None);
+							string selectedGemID = clasIDArray [0];
+							string selectedGemType = clasIDArray [1];
+
 							if( !string.IsNullOrEmpty( gemID ) )
 							{
-								LikeResponse likeRes = await ServiceHelper.LikeGem( gemID );
+								LikeResponse likeRes = await ServiceHelper.LikeGem( selectedGemID, selectedGemType );
 								if( likeRes != null )
 								{
 									string source = ( likeRes.like_status == 1 ) ? "icn_liked.png" : "icn_like.png";
@@ -355,7 +360,7 @@ namespace PurposeColor
 							{
 								progressBar.ShowToast( "Invalid Gem ID." );
 							}
-	
+
 							progressBar.HideProgressbar();
 
 						}
@@ -565,7 +570,7 @@ namespace PurposeColor
 
 								bottomAndLowerControllStack.Children.Add(imgContainer);
 							}
-						
+
 						}
 
 					}
@@ -698,7 +703,7 @@ namespace PurposeColor
 							await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
 							try
 							{
-								
+
 							}
 							catch (Exception)
 							{

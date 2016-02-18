@@ -163,12 +163,9 @@ namespace PurposeColor.screens
                 }
                 else if ("Community GEMs" == selItem.Name)
                 {
-					IProgressBar progress = DependencyService.Get<IProgressBar>();
-					progress.ShowProgressbar( "Loading community gems" );
 					App.masterPage.IsPresented = false;
 					DetailsPageModel model = new DetailsPageModel();
 					App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
-					progress.HideProgressbar();
                 }
                 else if (Constants.APPLICATION_SETTTINGS == selItem.Name)
                 {

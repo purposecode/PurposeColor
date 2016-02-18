@@ -37,6 +37,7 @@ namespace PurposeColor.Droid.Dependency
 					.SetContentTitle(title)
 					.SetContentText(messege)
 					.SetDefaults(NotificationDefaults.Sound)
+					.SetAutoCancel( true )
 					.SetSmallIcon(Resource.Drawable.app_icon);
 
 				builder.SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate);

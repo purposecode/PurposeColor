@@ -1114,6 +1114,7 @@ namespace PurposeColor.Database
 					resultArray.share_status = item.share_status;
 					resultArray.firstname = item.firstname;
 					resultArray.profileimg = item.profileimg;
+					resultArray.gem_type = item.gem_type;
 
 
 					// Title
@@ -1166,7 +1167,7 @@ namespace PurposeColor.Database
 						detail.profileimg = item.profileimg;
 						detail.share_status = item.share_status;
 						detail.user_id = item.user_id;
-
+						detail.gem_type = item.gem_type;
 						listCommunityGemsDetails.Add( detail );
 					}
 

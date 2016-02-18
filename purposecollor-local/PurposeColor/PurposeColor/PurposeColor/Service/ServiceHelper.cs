@@ -1984,7 +1984,7 @@ namespace PurposeColor.Service
         }
 
 
-		public static async Task<LikeResponse> LikeGem(string gemId )
+		public static async Task<LikeResponse> LikeGem(string gemId, string gemType )
 		{
 			try
 			{
@@ -2011,10 +2011,11 @@ namespace PurposeColor.Service
 
 				if (!string.IsNullOrEmpty(gemId))
 				{
-					content.Add(new StringContent(gemId, Encoding.UTF8), "goal_id");
+					content.Add(new StringContent(gemId, Encoding.UTF8), "gem_id");
 				}
 
 				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
+				content.Add(new StringContent(gemType, Encoding.UTF8), "gem_type");
 				HttpResponseMessage response = await client.PostAsync(url, content);
 
 
@@ -2022,7 +2023,7 @@ namespace PurposeColor.Service
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
 					LikeResponse rootobject = JsonConvert.DeserializeObject<LikeResponse>(responseJson);
-					if (rootobject != null && rootobject.code != null)
+					if (rootobject != null )
 					{
 						return rootobject;
 					}
@@ -2193,7 +2194,8 @@ namespace PurposeColor.Service
 			return null;
 		}
 
-		public static async Task<ChatUsersObject> GetAllChatUsers()
+
+		public static async Task<ChatObject> GetAllChatUsers()
 		{
 			try
 			{
@@ -2203,11 +2205,16 @@ namespace PurposeColor.Service
 					return null;
 				}
 
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return null;
+
 				var client = new System.Net.Http.HttpClient();
 
 				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-				string uriString = "api.php?action=userlist";
+				string uriString = "api.php?action=chatuserlist&user_id="+ user.UserId.ToString();
+
 
 				var response = await client.GetAsync(uriString);
 
@@ -2216,7 +2223,7 @@ namespace PurposeColor.Service
 					var actionsJson = response.Content.ReadAsStringAsync().Result;
 
 
-					var rootobject = JsonConvert.DeserializeObject<ChatUsersObject>(actionsJson);
+					var rootobject = JsonConvert.DeserializeObject<ChatObject>(actionsJson);
 					if (rootobject != null && rootobject.resultarray != null)
 					{
 						client.Dispose();
@@ -2239,6 +2246,7 @@ namespace PurposeColor.Service
 				return null;
 			}
 		}
+
 
 		public static async Task<string> Addtosupportemotion(string emotionId)
 		{

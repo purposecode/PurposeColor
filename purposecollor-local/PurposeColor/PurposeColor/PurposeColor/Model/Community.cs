@@ -8,6 +8,19 @@ using System.IO;
 
 namespace PurposeColor.Model
 {
+	public class ChatError
+	{
+		public string error { get; set; }
+	}
+
+	public class ChatRespObject
+	{
+		public long multicast_id { get; set; }
+		public int success { get; set; }
+		public int failure { get; set; }
+		public int canonical_ids { get; set; }
+		public List<ChatError> results { get; set; }
+	}
 
 	public class NotificationRespResult
 	{
@@ -83,16 +96,17 @@ namespace PurposeColor.Model
 
 	public class ChatDetails
 	{
-		public string user_id { get; set; }
+		public string FromUserID { get; set; }
 		public string AuthorName { get; set; }
 		public string Message{ get; set; }
 		public string Timestamp{ get; set; }
+		public string CurrentUserid { get; set; }
 
 		public LayoutOptions BubblePos
 		{
 			get
 			{
-				if (AuthorName == "test")
+				if (CurrentUserid != FromUserID)
 					return LayoutOptions.Start;
 				else
 					return LayoutOptions.End;
@@ -103,7 +117,7 @@ namespace PurposeColor.Model
 		{
 			get
 			{
-				if (AuthorName == "test")
+				if (CurrentUserid != FromUserID)
 					return true;
 				else
 					return false;
@@ -114,7 +128,7 @@ namespace PurposeColor.Model
 		{
 			get
 			{
-				if (AuthorName == "test")
+				if (CurrentUserid != FromUserID)
 					return Color.FromRgb( 0, 153, 255 );
 				else
 					return Color.FromRgb( 250, 250, 250 );
@@ -126,7 +140,7 @@ namespace PurposeColor.Model
 		{
 			get 
 			{
-				if (AuthorName == "test")
+				if (CurrentUserid != FromUserID)
 					return "blue_tip.png";
 				else
 					return "yellow_tip.png";

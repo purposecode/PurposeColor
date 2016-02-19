@@ -2539,8 +2539,6 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-
-
 				if (!CrossConnectivity.Current.IsConnected)
 				{
 					return false;
@@ -2554,7 +2552,7 @@ namespace PurposeColor.Service
 				client.DefaultRequestHeaders.Add("Post", "application/json");
 				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-				string uriString =   "api.php?action=setusertoken&user_id=" + user.UserId.ToString() + "&registration_id=" +  regToken + "&device=" + Device.OnPlatform( "ios", "android", "windows" );
+				string uriString =   "api.php?action=setusertoken&user_id=" + user.UserId.ToString() + "&registration_id=" +  regToken + "&device_os=" + Device.OnPlatform( "ios", "android", "windows" );
 
 				var response = await client.GetAsync(uriString);
 
@@ -2575,6 +2573,52 @@ namespace PurposeColor.Service
 				{
 					return false;
 				}
+
+				return true;
+
+			/*	if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
+
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return false;
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				var url = "api.php?action=setusertoken";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				//string uriString =   "api.php?action=updatefollowstatus&followrequest_id="+ folowReqID + "&follow_status=" + status;
+
+				content.Add(new StringContent( Device.OnPlatform( "ios", "android", "win" ) , Encoding.UTF8), "device_os");//  to be confirmed - status id of new goal // for testing only // test
+				content.Add(new StringContent(regToken, Encoding.UTF8), "registration_id"); // category_id = 1 for testing only // test
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+
+				var response = await client.PostAsync(url, content);
+
+
+				if (response != null && response.StatusCode == HttpStatusCode.OK)
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<RegTokenResponse>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}*/
 			}
 			catch (Exception ex)
 			{
@@ -2744,5 +2788,62 @@ namespace PurposeColor.Service
 			return "404";
 		}
 
+
+		public static async Task<bool> SendChatMessage(  string fromID, string toid, string chatMessage )
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
+
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return false;
+
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+
+				var url = "api.php?action=chatmessage";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+
+				content.Add(new StringContent(fromID, Encoding.UTF8), "from_id");
+				content.Add(new StringContent(toid, Encoding.UTF8), "to_id");
+				content.Add(new StringContent(chatMessage, Encoding.UTF8), "msg");
+
+
+				var response = await client.PostAsync(url, content);
+				//var response = await client.GetAsync(uriString);
+
+				if (response != null )
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<ChatRespObject>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+			return false;
+		}
+
     }
+
 }

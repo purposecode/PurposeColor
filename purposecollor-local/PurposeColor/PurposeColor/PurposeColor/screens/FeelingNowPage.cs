@@ -829,7 +829,11 @@ namespace PurposeColor
             {
                 base.OnAppearing();
 
-				await ServiceHelper.SendNotificationToken (App.NotificationToken);
+				var tokenResp =  await ServiceHelper.SendNotificationToken (App.NotificationToken);
+				if(!tokenResp  )
+				{
+					DisplayAlert( Constants.ALERT_TITLE, "Token updation failed.", Constants.ALERT_OK );
+				}
 
                 if (App.emotionsListSource == null || App.emotionsListSource.Count < 1)
                 {

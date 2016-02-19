@@ -9,6 +9,7 @@ using PurposeColor.Service;
 using PurposeColor.Model;
 using PurposeColor.interfaces;
 using System.Collections.ObjectModel;
+using PushNotifictionListener;
 
 namespace PurposeColor
 {
@@ -19,20 +20,32 @@ namespace PurposeColor
 	public class ChatDetailsPage : ContentPage, IDisposable
 	{
 		PurposeColorTitleBar mainTitleBar;
-		CommunityGemSubTitleBar subTitleBar;
+		CommunityGemChatTitleBar subTitleBar;
 		CustomLayout masterLayout;
 		IProgressBar progressBar;
 		ListView chatHistoryListView;
 		ObservableCollection<ChatDetails> chatList = null;
+		User currentuser;
+		string touserID;
 
-		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats )
+		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats, string tosusrID, string userImageUrl, string toUserName )
 		{
 
 			chatList = chats;
+			touserID = tosusrID;
+			currentuser = App.Settings.GetUser ();
+			string chatTouser = toUserName;
+
+			if (chatTouser.Length > 30)
+			{
+				chatTouser = chatTouser.Substring(0, 30);
+				chatTouser += "...";
+			}
+
 
 			progressBar = DependencyService.Get< IProgressBar > ();
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
-			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), chatTouser, Color.Black, userImageUrl, false);
+			subTitleBar = new CommunityGemChatTitleBar(Constants.SUB_TITLE_BG_COLOR, chatTouser, userImageUrl, false);
 
 			masterLayout = new CustomLayout ();
 			masterLayout.WidthRequest = App.screenWidth;
@@ -80,7 +93,7 @@ namespace PurposeColor
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout ( chatHistoryListView, 0, 10 );
+			masterLayout.AddChildToLayout ( chatHistoryListView, 0, 17 );
 			masterLayout.AddChildToLayout ( inputCountainer, 0, 85 );
 
 			ScrollView masterScroll = new ScrollView ();
@@ -93,10 +106,33 @@ namespace PurposeColor
 				ChatDetails detail = new ChatDetails();
 				detail.AuthorName = "prvn";
 				detail.Message = chatEntry.Text;
+				detail.FromUserID = currentuser.UserId.ToString();
+				detail.CurrentUserid = currentuser.UserId.ToString();
 				chatList.Add( detail );
 				chatEntry.Text = "";
 				chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+				await ServiceHelper.SendChatMessage( currentuser.UserId.ToString(), touserID, detail.Message );
 			};
+
+
+			MessagingCenter.Subscribe<CrossPushNotificationListener, string>(this, "boom", (page, message) =>
+				{
+					string pushResult = message;
+					string[] delimiters = { "&&" };
+					string[] clasIDArray = pushResult.Split(delimiters, StringSplitOptions.None);
+					string chatMessage = clasIDArray [0];
+					string fromUser = clasIDArray [1];
+
+					ChatDetails detail = new ChatDetails();
+					detail.AuthorName = fromUser;
+					detail.Message = chatMessage;
+					detail.FromUserID = fromUser;
+					detail.CurrentUserid = currentuser.UserId.ToString();
+					chatList.Add( detail );
+					//chatEntry.Text = "";
+					chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+
+				});
 
 			Content = masterScroll;
 
@@ -104,7 +140,7 @@ namespace PurposeColor
 
 		public void Dispose ()
 		{
-			
+
 		}
 
 		private Cell CreateMessageCell()
@@ -128,7 +164,7 @@ namespace PurposeColor
 				Orientation = StackOrientation.Horizontal,
 				Children = {authorLabel, messageLabel}
 			};
-					
+
 
 			var view = new MessageViewCell
 			{
@@ -157,7 +193,7 @@ namespace PurposeColor
 
 			mainLayout.BackgroundColor = Color.FromRgb(54, 79, 120);// Color.FromRgb(54, 79, 120);
 			mainLayout.Padding = new Thickness (10, 10, 10, 10);
-		 	mainLayout.Spacing = 0;
+			mainLayout.Spacing = 0;
 
 
 			StackLayout tipContainer = new StackLayout ();
@@ -196,7 +232,7 @@ namespace PurposeColor
 			tipContainer.Children.Add ( imgTip );
 			labelContainer.Children.Add ( chat );
 
-	
+
 
 			mainLayout.Children.Add ( labelContainer );
 			mainLayout.Children.Add ( tipContainer );

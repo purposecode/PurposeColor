@@ -29,7 +29,8 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
-			string messge = "new messege";
+			string messge = null;
+			string fromID = null;
 
 			int index = 0;
 			foreach (var pair in Parameters)
@@ -41,26 +42,37 @@ namespace PushNotifictionListener
 						App.NotificationReqID = pair.Value.ToString ();
 					else if (header == "message")
 						messge = pair.Value.ToString ();
+					else if (header == "offline")
+						messge = pair.Value.ToString ();
+					else if (header == "from_id")
+						fromID = pair.Value.ToString ();
+					else if (header == "chat")
+						MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", pair.Value.ToString() + "&&" + fromID);
 
-					MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", pair.Value.ToString());
 					index++;
 				}
 
 			}
 
-			ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-			notify.ShowNotification ( "Purpose Color", messge, true );
+			if( messge != null )
+			{
+				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+				notify.ShowNotification ( "Purpose Color", messge, true );
+			}
+
 		}
 
 		public async void OnRegistered(string Token, DeviceType deviceType)
 		{
+			IProgressBar progres = DependencyService.Get<IProgressBar> ();
+			progres.ShowProgressbarWithCancel ( "token-->" + Token, () =>{ progres.HideProgressbarWithCancel(); } );
+
+
 			User user = App.Settings.GetUser ();
 			App.NotificationToken = Token;
-			Debug.WriteLine ( "#################################token----------------" + Token );
 			if (user != null)
 			{
-				IProgressBar progres = DependencyService.Get<IProgressBar> ();
-				progres.ShowToast ( "token updated" );
+				
 				await ServiceHelper.SendNotificationToken (Token);
 			}
 		}

@@ -34,6 +34,10 @@ namespace PurposeColor
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
+			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
+			{
+				await Navigation.PopAsync();
+			};
 
 			this.Appearing += OnChatPageAppearing;
 			masterLayout = new CustomLayout ();
@@ -49,29 +53,15 @@ namespace PurposeColor
 			chatContactsListView.HasUnevenRows = true;
 			//chatContactsListView.RowHeight = (int) App.screenHeight * 10 / 100;
 			chatContactsListView.SeparatorColor = Color.FromRgb (8, 135, 224);
-			chatContactsListView.ItemSelected +=  (object sender, SelectedItemChangedEventArgs e) => 
+			chatContactsListView.ItemSelected +=  async (object sender, SelectedItemChangedEventArgs e) => 
 			{
-				ObservableCollection<ChatDetails> chathistory = new ObservableCollection<ChatDetails>();
-
-				for( int index = 0; index < 20; index++ )
+				ChatUsersInfo selItem = chatContactsListView.SelectedItem as ChatUsersInfo;
+				if( selItem != null )
 				{
-					ChatDetails chat1 = new ChatDetails();
-					chat1.AuthorName = "prvn";
-					chat1.Message = "new chat messge ";
-					chathistory.Add( chat1 );
+					ObservableCollection<ChatDetails> chathistory = new ObservableCollection<ChatDetails>();
+					await Navigation.PushAsync( new ChatDetailsPage( chathistory, selItem.user_id, selItem.profileImgUrl,  selItem.firstname ) );
 				}
-
-
-				for( int index = 0; index < 20; index++ )
-				{
-					ChatDetails chat1 = new ChatDetails();
-					chat1.AuthorName = "test";
-					chat1.Message = "test chat messge";
-					chathistory.Add( chat1 );
-				}
-
-
-				Navigation.PushAsync( new ChatDetailsPage( chathistory ) );
+				chatContactsListView.SelectedItem= null;
 			};
 
 

@@ -15,6 +15,7 @@ namespace PurposeColor.screens
         PurposeColorBlueSubTitleBar subTitleBar = null;
         Button signOutButton = null;
         Button changePassword = null;
+		Button profileButton = null;
         CustomLayout masterLayout = null;
         PurposeColorTitleBar mainTitleBar = null;
         double screenWidth;
@@ -36,6 +37,7 @@ namespace PurposeColor.screens
                 App.masterPage.IsPresented = !App.masterPage.IsPresented;
             };
             progressBar = DependencyService.Get<IProgressBar>();
+
             signOutButton = new Button
             {
                 Text = "Sign out",
@@ -44,6 +46,15 @@ namespace PurposeColor.screens
                 BorderWidth = 0,
                 BackgroundColor = Constants.BLUE_BG_COLOR
             };
+
+			profileButton = new Button
+			{
+				Text = "Profile settings",
+				TextColor = Color.White,
+				BorderColor = Color.Transparent,
+				BorderWidth = 0,
+				BackgroundColor = Constants.BLUE_BG_COLOR
+			};
 
             changePassword = new Button
             {
@@ -56,14 +67,27 @@ namespace PurposeColor.screens
 
             signOutButton.WidthRequest = screenWidth * 80 / 100;
             changePassword.WidthRequest = screenWidth * 80 / 100;
+			profileButton.WidthRequest = screenWidth * 80 / 100;
+
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(signOutButton, 10, 20);
-            masterLayout.AddChildToLayout(changePassword, 10, Device.OnPlatform(30, 30,28));
+			masterLayout.AddChildToLayout(profileButton, 10, 20);
+			masterLayout.AddChildToLayout(changePassword, 10, Device.OnPlatform(30, 30,28));
+			masterLayout.AddChildToLayout( signOutButton, 10, Device.OnPlatform(40, 40,38));
             signOutButton.Clicked += OnSignOutButtonClicked;
             changePassword.Clicked += ChangePassword_Clicked;
+			profileButton.Clicked += ProfileButton_Clicked;
 
             Content = masterLayout;
+        }
+
+		async void ProfileButton_Clicked (object sender, EventArgs e)
+        {
+			try {
+				await Navigation.PushAsync(new ProfileSettingsPage());
+			} catch (Exception ex) {
+				
+			}
         }
 
         async void ChangePassword_Clicked(object sender, EventArgs e)
@@ -72,7 +96,8 @@ namespace PurposeColor.screens
             {
                 if (App.Settings.GetUser() != null)
                 {
-                    await Navigation.PushModalAsync(new ChangePassword());
+                    //await Navigation.PushModalAsync(new ChangePassword());
+					await Navigation.PushAsync(new ChangePassword());
                 }
                 else
                 {

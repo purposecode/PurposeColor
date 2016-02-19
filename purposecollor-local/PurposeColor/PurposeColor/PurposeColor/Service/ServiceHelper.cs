@@ -2687,5 +2687,62 @@ namespace PurposeColor.Service
 			}
 			return null;
 		}
+
+		public static async Task<string> SendProfilePicAndStatusNote(string note, string profileImgae, string imageType)
+		{
+			try {
+				if (!CrossConnectivity.Current.IsConnected) {
+					return "404";
+				}
+				User user = App.Settings.GetUser();
+				if (user == null) { // for testing only// test
+					user = new User{UserId = 2};
+				}
+				var client = new HttpClient();
+
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				var url = "api.php?action=profileimageandstatus";
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+
+				if(!string.IsNullOrEmpty(profileImgae))
+				{
+					content.Add(new StringContent("media info string ", Encoding.UTF8), "profileimg");
+					if (!string.IsNullOrEmpty(imageType)) {
+						content.Add(new StringContent(imageType, Encoding.UTF8), "filetype");
+					}
+				}
+
+				if (!string.IsNullOrEmpty(note)) {
+					content.Add(new StringContent(note, Encoding.UTF8), "note");
+				}
+
+				var response = await client.PostAsync(url, content);
+				if (response != null )
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<RegTokenResponse>(responseJson);
+					if (rootobject != null && rootobject.code != null)
+					{
+						return rootobject.code;
+					}
+					else
+					{
+						return "404";
+					}
+				}
+				else
+				{
+					return "404";
+				}
+
+			} catch (Exception ex) {
+
+			}
+			return "404";
+		}
+
     }
 }

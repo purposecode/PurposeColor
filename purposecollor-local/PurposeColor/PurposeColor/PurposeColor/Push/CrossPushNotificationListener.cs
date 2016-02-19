@@ -31,6 +31,7 @@ namespace PushNotifictionListener
 		{
 			string messge = null;
 			string fromID = null;
+			string chat = "";
 
 			int index = 0;
 			foreach (var pair in Parameters)
@@ -46,18 +47,27 @@ namespace PushNotifictionListener
 						messge = pair.Value.ToString ();
 					else if (header == "from_id")
 						fromID = pair.Value.ToString ();
-					else if (header == "chat")
+					else if (header == "chat") 
+					{
+						chat = pair.Value.ToString ();
 						MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", pair.Value.ToString() + "&&" + fromID);
+					}
+						
 
 					index++;
 				}
 
 			}
 
-			if( messge != null )
+			if (messge != null) 
 			{
 				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-				notify.ShowNotification ( "Purpose Color", messge, true );
+				notify.ShowNotification ("Purpose Color", messge, true);
+			} 
+			else 
+			{
+				ILocalNotification sample = DependencyService.Get<ILocalNotification> ();
+				sample.ShowNotification ( "Purpose Color", chat, true );
 			}
 
 		}

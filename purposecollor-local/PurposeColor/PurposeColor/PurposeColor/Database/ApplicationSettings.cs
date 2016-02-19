@@ -162,7 +162,12 @@ namespace PurposeColor.Database
 
         public User GetUser()
         {
-            return Connection.Table<User>().FirstOrDefault();
+
+			try {
+				return Connection.Table<User>().FirstOrDefault();
+			} catch (Exception ex) {
+				return null;
+			}
         }
 
         public List<User> GetAllUsers()
@@ -228,47 +233,54 @@ namespace PurposeColor.Database
             }
         }
 
-        public async Task<bool> SaveUser(User user)
-        {
-            bool isUserAdded = false;
+		public async Task<bool> SaveUser(User user)
+		{
+			bool isUserAdded = false;
 
-            var newUser = new User();
-            try
-            {
-                newUser.UserName = user.UserName;
-                newUser.DisplayName = user.DisplayName;
-                newUser.AuthenticationToken = user.AuthenticationToken;
-                newUser.Password = user.Password;
-                //newUser.PreferredGEMS = user.PreferredGEMS;
-                newUser.Mobile = user.Mobile;
-                newUser.Gender = user.Gender;
-                newUser.Age = user.Age;
-                newUser.Country = user.Country;
-                newUser.UserId = user.UserId;
-                newUser.UserType = user.UserType;
+			var newUser = new User();
+			try
+			{
+				newUser.UserName = user.UserName;
+				newUser.DisplayName = user.DisplayName;
+				newUser.AuthenticationToken = user.AuthenticationToken;
+				newUser.Password = user.Password;
+				//newUser.PreferredGEMS = user.PreferredGEMS;
+				newUser.Mobile = user.Mobile;
+				newUser.Gender = user.Gender;
+				newUser.Age = user.Age;
+				newUser.Country = user.Country;
+				newUser.UserId = user.UserId;
+				newUser.UserType = user.UserType;
 				newUser.AllowCommunitySharing = user.AllowCommunitySharing;
+				newUser.StatusNote = user.StatusNote;
+				newUser.ProfileImageUrl = user.ProfileImageUrl;
+				newUser.Email = user.Email;
+				newUser.Gender = user.Gender;
+				newUser.RegistrationDate = user.RegistrationDate;
+				newUser.UserName = user.UserName;
+				newUser.VerifiedStatus = user.VerifiedStatus;
 
-                if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
-                {
-                    Connection.Insert(newUser);
-                }
-                else
-                {
-                    newUser.ID = user.ID;
-                    Connection.Update(newUser);
-                }
+				if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
+				{
+					Connection.Insert(newUser);
+				}
+				else
+				{
+					newUser.ID = user.ID;
+					Connection.Update(newUser);
+				}
 
-                isUserAdded = true;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("SaveUser :: " + ex.Message);
-                isUserAdded = false;
-                return isUserAdded;
-            }
+				isUserAdded = true;
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("SaveUser :: " + ex.Message);
+				isUserAdded = false;
+				return isUserAdded;
+			}
 
-            return isUserAdded;
-        }
+			return isUserAdded;
+		}
 
         #endregion
 

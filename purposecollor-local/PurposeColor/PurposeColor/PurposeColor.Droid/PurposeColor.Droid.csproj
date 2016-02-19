@@ -311,6 +311,7 @@
     <AndroidResource Include="Resources\drawable\follow_disable.png" />
     <AndroidResource Include="Resources\drawable\favoriteIconActive.png" />
     <AndroidResource Include="Resources\drawable\shareActive.png" />
+    <AndroidResource Include="Resources\drawable\photoCamera_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

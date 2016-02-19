@@ -138,6 +138,7 @@
     <None Include="Resources\roundNextBtn%401x.png" />
     <None Include="Resources\favoriteIconActive%401x.png" />
     <None Include="Resources\shareActive%401x.png" />
+    <None Include="Resources\photoCamera_icon%401x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

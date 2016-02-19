@@ -73,6 +73,8 @@ namespace PurposeColor.Model
 
 		public bool AllowCommunitySharing { get; set; }
 
+		public object VerifiedStatus { get; set; }
+
         /// <summary>
         /// Gets or sets the PreferredGEMS
         /// </summary>
@@ -89,6 +91,7 @@ namespace PurposeColor.Model
         public string note;
         public string regdate;
         public string usertype_id;
+		public int verified_status;
     }
 
     public class UserDetailsOnLogin

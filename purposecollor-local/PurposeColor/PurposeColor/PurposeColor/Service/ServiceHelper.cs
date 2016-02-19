@@ -2732,7 +2732,7 @@ namespace PurposeColor.Service
 			return null;
 		}
 
-		public static async Task<string> SendProfilePicAndStatusNote(string note, string profileImgae, string imageType)
+		public static async Task<string> SendProfilePicAndStatusNote(string note, MediaItem profileImgae, string imageType)
 		{
 			try {
 				if (!CrossConnectivity.Current.IsConnected) {
@@ -2750,17 +2750,23 @@ namespace PurposeColor.Service
 				MultipartFormDataContent content = new MultipartFormDataContent();
 
 				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
-
-				if(!string.IsNullOrEmpty(profileImgae))
-				{
-					content.Add(new StringContent("media info string ", Encoding.UTF8), "profileimg");
-					if (!string.IsNullOrEmpty(imageType)) {
-						content.Add(new StringContent(imageType, Encoding.UTF8), "filetype");
-					}
-				}
+				//
+				//				if(!string.IsNullOrEmpty(profileImgae))
+				//				{
+				//					content.Add(new StringContent("media info string ", Encoding.UTF8), "profileimg");
+				//					if (!string.IsNullOrEmpty(imageType)) {
+				//						content.Add(new StringContent(imageType, Encoding.UTF8), "filetype");
+				//					}
+				//				}
 
 				if (!string.IsNullOrEmpty(note)) {
 					content.Add(new StringContent(note, Encoding.UTF8), "note");
+				}
+
+				if(profileImgae != null)
+				{
+					content.Add(new StringContent(profileImgae.MediaString, Encoding.UTF8), "profileimg");
+					content.Add(new StringContent(imageType, Encoding.UTF8), "filetype");
 				}
 
 				var response = await client.PostAsync(url, content);
@@ -2770,7 +2776,12 @@ namespace PurposeColor.Service
 					var rootobject = JsonConvert.DeserializeObject<RegTokenResponse>(responseJson);
 					if (rootobject != null && rootobject.code != null)
 					{
-						return rootobject.code;
+						if (!string.IsNullOrEmpty(imageType)) {
+							return rootobject.text;// return the url of uploaded picture.
+						}
+						else{
+							return rootobject.code;
+						}
 					}
 					else
 					{
@@ -2787,7 +2798,6 @@ namespace PurposeColor.Service
 			}
 			return "404";
 		}
-
 
 		public static async Task<bool> SendChatMessage(  string fromID, string toid, string chatMessage )
 		{

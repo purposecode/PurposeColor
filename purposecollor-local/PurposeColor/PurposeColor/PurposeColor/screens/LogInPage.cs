@@ -249,6 +249,7 @@ namespace PurposeColor.screens
                                 newUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
                                 newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
                                 newUser.UserId = loggedInUser.user_id;
+								newUser.VerifiedStatus = loggedInUser.verified_status;
 
                                 if (loggedInUser.usertype_id != null)
                                 {

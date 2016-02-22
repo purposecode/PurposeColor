@@ -124,6 +124,8 @@ namespace PurposeColor.screens
 			};
 			if (userInfo.StatusNote != null) {
 				statusEntry.Text = userInfo.StatusNote.Trim ();
+			} else {
+				statusEntry.Text = "Please provide your status message..";
 			}
 
 			profilePic = new Image {
@@ -168,7 +170,7 @@ namespace PurposeColor.screens
 			StackLayout nameEmailStack = new StackLayout {
 				Orientation = StackOrientation.Vertical,
 				HorizontalOptions = LayoutOptions.Center,
-				Spacing = 5,
+				Spacing = 3,
 				Children = {userDisplayName, emailLabel}
 			};
 			masterLayout.AddChildToLayout(nameEmailStack,10, 40);
@@ -177,6 +179,22 @@ namespace PurposeColor.screens
 			statusEntry.Completed += StatusEntry_Completed;
 
 			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+
+			if (userInfo.VerifiedStatus != 0) {
+				// display verified icon over name.
+				Image verifiedBadge = new Image {
+					Source = "verified_icon.png",
+					HeightRequest = App.screenHeight * .06,
+					WidthRequest = App.screenWidth * .06,
+					HorizontalOptions = LayoutOptions.Center
+				};
+				//nameAndBadgeStack.Children.Add (verifiedBadge);
+				masterLayout.AddChildToLayout(verifiedBadge, 53, 37);
+				if (emailLabel.Text != null) {
+
+					verifiedBadge.TranslationX = userDisplayName.Text.Length*3;
+				}
+			}
 
 
 			Content = masterLayout;

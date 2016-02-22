@@ -73,7 +73,7 @@ namespace PurposeColor.Model
 
 		public bool AllowCommunitySharing { get; set; }
 
-		public object VerifiedStatus { get; set; }
+		public int VerifiedStatus { get; set; }
 
         /// <summary>
         /// Gets or sets the PreferredGEMS

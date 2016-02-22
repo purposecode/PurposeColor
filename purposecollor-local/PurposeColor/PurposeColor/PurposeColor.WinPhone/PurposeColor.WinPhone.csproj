@@ -175,6 +175,7 @@
     <None Include="Assets\Sliderfeedback2.png" />
     <None Include="Assets\SliderfeedbackMinues2.png" />
     <None Include="Assets\SliderfeedbackMinues1.png" />
+    <None Include="Assets\verified_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\add_btn.png" />

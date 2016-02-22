@@ -237,37 +237,37 @@ namespace PurposeColor.Database
 		{
 			bool isUserAdded = false;
 
-			var newUser = new User();
+			//var newUser = new User();
 			try
 			{
-				newUser.UserName = user.UserName;
-				newUser.DisplayName = user.DisplayName;
-				newUser.AuthenticationToken = user.AuthenticationToken;
-				newUser.Password = user.Password;
-				//newUser.PreferredGEMS = user.PreferredGEMS;
-				newUser.Mobile = user.Mobile;
-				newUser.Gender = user.Gender;
-				newUser.Age = user.Age;
-				newUser.Country = user.Country;
-				newUser.UserId = user.UserId;
-				newUser.UserType = user.UserType;
-				newUser.AllowCommunitySharing = user.AllowCommunitySharing;
-				newUser.StatusNote = user.StatusNote;
-				newUser.ProfileImageUrl = user.ProfileImageUrl;
-				newUser.Email = user.Email;
-				newUser.Gender = user.Gender;
-				newUser.RegistrationDate = user.RegistrationDate;
-				newUser.UserName = user.UserName;
-				newUser.VerifiedStatus = user.VerifiedStatus;
+//				newUser.UserName = user.UserName;
+//				newUser.DisplayName = user.DisplayName;
+//				newUser.AuthenticationToken = user.AuthenticationToken;
+//				newUser.Password = user.Password;
+//				//newUser.PreferredGEMS = user.PreferredGEMS;
+//				newUser.Mobile = user.Mobile;
+//				newUser.Gender = user.Gender;
+//				newUser.Age = user.Age;
+//				newUser.Country = user.Country;
+//				newUser.UserId = user.UserId;
+//				newUser.UserType = user.UserType;
+//				newUser.AllowCommunitySharing = user.AllowCommunitySharing;
+//				newUser.StatusNote = user.StatusNote;
+//				newUser.ProfileImageUrl = user.ProfileImageUrl;
+//				newUser.Email = user.Email;
+//				newUser.Gender = user.Gender;
+//				newUser.RegistrationDate = user.RegistrationDate;
+//				newUser.UserName = user.UserName;
+//				newUser.VerifiedStatus = user.VerifiedStatus;
 
 				if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
 				{
-					Connection.Insert(newUser);
+					Connection.Insert(user);
 				}
 				else
 				{
-					newUser.ID = user.ID;
-					Connection.Update(newUser);
+					//newUser.ID = user.ID;
+					Connection.Update(user);
 				}
 
 				isUserAdded = true;

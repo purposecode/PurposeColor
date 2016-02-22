@@ -28,12 +28,16 @@ namespace PurposeColor
 		User currentuser;
 		string touserID;
 
-		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats, string tosusrID, string userImageUrl, string toUserName )
-		{
 
+
+
+
+		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
+		{
 			chatList = chats;
 			touserID = tosusrID;
 			currentuser = App.Settings.GetUser ();
+
 			string chatTouser = toUserName;
 
 			if (chatTouser.Length > 30)
@@ -114,6 +118,20 @@ namespace PurposeColor
 				await ServiceHelper.SendChatMessage( currentuser.UserId.ToString(), touserID, detail.Message );
 			};
 
+			/*	this.Appearing += async (object sender, EventArgs e) => 
+			{
+
+				progressBar.ShowProgressbar( "Preparing chat window..." );
+				masterScroll.IsVisible = true;
+
+				chatUsersList = await ServiceHelper.GetAllChatUsers ();
+
+
+
+				progressBar.HideProgressbar();
+
+			};*/
+
 
 			MessagingCenter.Subscribe<CrossPushNotificationListener, string>(this, "boom", (page, message) =>
 				{
@@ -123,16 +141,21 @@ namespace PurposeColor
 					string chatMessage = clasIDArray [0];
 					string fromUser = clasIDArray [1];
 
-					ChatDetails detail = new ChatDetails();
-					detail.AuthorName = fromUser;
-					detail.Message = chatMessage;
-					detail.FromUserID = fromUser;
-					detail.CurrentUserid = currentuser.UserId.ToString();
-					chatList.Add( detail );
-					//chatEntry.Text = "";
-					chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+
+					if( touserID == fromUser )
+					{
+						ChatDetails detail = new ChatDetails();
+						detail.AuthorName = fromUser;
+						detail.Message = chatMessage;
+						detail.FromUserID = fromUser;
+						detail.CurrentUserid = currentuser.UserId.ToString();
+						chatList.Add( detail );
+						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+					}
+
 
 				});
+
 
 			Content = masterScroll;
 

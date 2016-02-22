@@ -18,7 +18,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -235,6 +235,7 @@
     <Compile Include="Dependency\AndroidLocationImpl.cs" />
     <Compile Include="Dependency\AndroidDownloader.cs" />
     <Compile Include="NotificationClick.cs" />
+    <Compile Include="FormsActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -267,12 +267,6 @@ namespace PurposeColor
 
 				RenderGems( communityGems );
 
-				/*MessagingCenter.Subscribe<CrossPushNotificationListener, string>  (this, "boom", "", (page, reqID, updatesStatus) =>
-				{
-
-					ServiceHelper.UpdateNotificationRequest( reqID, updatesStatus );
-
-				});*/
 
 			} 
 			catch (Exception ex) 
@@ -579,7 +573,7 @@ namespace PurposeColor
 					masterStack.AddChildToLayout(title, 23, 7);
 
 					if( item.user_id != currentUser.UserId.ToString() )
-					masterStack.AddChildToLayout(followButton, 70, 3 );
+						masterStack.AddChildToLayout(followButton, 70, 3 );
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();
 					moreTap.Tapped += async (object senderr, EventArgs ee) =>

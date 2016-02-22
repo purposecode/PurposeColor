@@ -24,7 +24,8 @@ namespace PurposeColor.Droid.Dependency
 				// Set up an intent so that tapping the notifications returns to this app:
 				Intent intent = new Intent ( Application.Context , typeof(  NotificationClick ));
 				//intent.RemoveExtra ("MyData");
-				intent.PutExtra ("MyData", messege);
+				intent.PutExtra ("Message", messege);
+				intent.PutExtra ("Title", title);
 
 				// Create a PendingIntent; we're only using one PendingIntent (ID = 0):
 				const int pendingIntentId = 0;
@@ -42,8 +43,8 @@ namespace PurposeColor.Droid.Dependency
 				builder.SetDefaults(NotificationDefaults.Sound | NotificationDefaults.Vibrate);
 
 				if( handleClickNeeded )
-				builder.SetContentIntent( pendingIntent );
-				
+					builder.SetContentIntent( pendingIntent );
+
 				// Build the notification: 
 				Notification notification = builder.Build();
 

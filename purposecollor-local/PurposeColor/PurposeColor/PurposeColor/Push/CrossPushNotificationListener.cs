@@ -12,6 +12,7 @@ using PurposeColor.Service;
 using Xamarin.Forms;
 using System.Diagnostics;
 using PurposeColor.interfaces;
+using System.Collections.ObjectModel;
 
 namespace PushNotifictionListener
 {
@@ -29,9 +30,9 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
-			string messge = null;
+			string followMessege = null;
 			string fromID = null;
-			string chat = "";
+			string chat = null;
 
 			int index = 0;
 			foreach (var pair in Parameters)
@@ -42,32 +43,40 @@ namespace PushNotifictionListener
 					if (header == "followrequest_id")
 						App.NotificationReqID = pair.Value.ToString ();
 					else if (header == "message")
-						messge = pair.Value.ToString ();
+						followMessege = pair.Value.ToString ();
 					else if (header == "offline")
-						messge = pair.Value.ToString ();
+						followMessege = pair.Value.ToString ();
 					else if (header == "from_id")
 						fromID = pair.Value.ToString ();
 					else if (header == "chat") 
 					{
-						chat = pair.Value.ToString ();
-						MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", pair.Value.ToString() + "&&" + fromID);
+						chat = pair.Value.ToString () + "&&" + fromID;
+
 					}
-						
+
 
 					index++;
 				}
 
 			}
 
-			if (messge != null) 
+
+
+			if (followMessege != null) 
 			{
 				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-				notify.ShowNotification ("Purpose Color", messge, true);
+				notify.ShowNotification ("follow", followMessege, true);
+			} 
+			else if (chat != null) 
+			{
+				MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", chat);
+				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+				notify.ShowNotification ("chat", chat, true);
 			} 
 			else 
 			{
 				ILocalNotification sample = DependencyService.Get<ILocalNotification> ();
-				sample.ShowNotification ( "Purpose Color", chat, true );
+				sample.ShowNotification ( "Purpose Color", chat, false );
 			}
 
 		}
@@ -82,7 +91,7 @@ namespace PushNotifictionListener
 			App.NotificationToken = Token;
 			if (user != null)
 			{
-				
+
 				await ServiceHelper.SendNotificationToken (Token);
 			}
 		}

@@ -12,6 +12,8 @@ using Android.Views;
 using Android.Widget;
 using Xamarin.Forms;
 using PushNotifictionListener;
+using PurposeColor.Model;
+using Native2Forms;
 
 namespace PurposeColor.Droid
 {
@@ -27,32 +29,57 @@ namespace PurposeColor.Droid
 			curentActivity = this;
 			base.OnCreate (bundle);
 
-			string text = Intent.GetStringExtra ("MyData") ?? "Data not available";
+			string message = Intent.GetStringExtra ("Message") ?? "Data not available";
+			string title = Intent.GetStringExtra ("Title") ?? "Data not available";
 
-			LinearLayout layout = FindViewById<LinearLayout>(Resource.Id.MyLayout);
-			if( layout != null )
-				layout.SetBackgroundColor ( Android.Graphics.Color.Rgb( 244, 244, 244 ) );
 
-			//set alert for executing the task
-			AlertDialog.Builder alert = new AlertDialog.Builder (this);
+			if (title == "chat")
+			{
+				Intent intent = new Intent ( Android.App.Application.Context , typeof(  FormsActivity ));
 
-			alert.SetTitle ( text );
 
-			alert.SetPositiveButton ("Accept", async  (senderAlert, args) => 
-				{
-					await App.UpdateNotificationStatus(  App.NotificationReqID , "2") ;
+				string[] delimiters = { "&&" };
+				string[] clasIDArray = message.Split(delimiters, StringSplitOptions.None);
+				string selectedMessage = clasIDArray [0];
+				string selectedFromID = clasIDArray [1];
+
+				//intent.RemoveExtra ("MyData");
+				intent.PutExtra ("FromID", selectedFromID);
+				intent.PutExtra ("Message", selectedMessage);
+
+				StartActivity ( intent );
+			}
+			else if (title == "follow")
+			{
+
+				LinearLayout layout = FindViewById<LinearLayout>(Resource.Id.MyLayout);
+				if( layout != null )
+					layout.SetBackgroundColor ( Android.Graphics.Color.Rgb( 244, 244, 244 ) );
+
+				//set alert for executing the task
+				AlertDialog.Builder alert = new AlertDialog.Builder (this);
+
+				alert.SetTitle ( "Purpose Color" );
+
+				alert.SetPositiveButton ("Accept", async  (senderAlert, args) => 
+					{
+						await App.UpdateNotificationStatus(  App.NotificationReqID , "2") ;
+					} );
+
+				alert.SetNegativeButton ("Reject", async (senderAlert, args) => 
+					{
+						await App.UpdateNotificationStatus( "0", App.NotificationReqID ) ;
+					} );
+				//run the alert in UI thread to display in the screen
+				RunOnUiThread (() => {
+					alert.Show();
 				} );
 
-			alert.SetNegativeButton ("Reject", async (senderAlert, args) => 
-				{
-					await App.UpdateNotificationStatus( "0", App.NotificationReqID ) ;
-				} );
-			//run the alert in UI thread to display in the screen
-			RunOnUiThread (() => {
-				alert.Show();
-			} );
+				SetContentView ( Resource.Layout.samplenotificationclick );
+			}
 
-			SetContentView ( Resource.Layout.samplenotificationclick );
+
+
 			// Create your application here
 		}
 

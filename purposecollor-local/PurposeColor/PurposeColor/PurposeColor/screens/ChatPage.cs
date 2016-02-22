@@ -58,8 +58,8 @@ namespace PurposeColor
 				ChatUsersInfo selItem = chatContactsListView.SelectedItem as ChatUsersInfo;
 				if( selItem != null )
 				{
-					ObservableCollection<ChatDetails> chathistory = new ObservableCollection<ChatDetails>();
-					await Navigation.PushAsync( new ChatDetailsPage( chathistory, selItem.user_id, selItem.profileImgUrl,  selItem.firstname ) );
+					ObservableCollection<ChatDetails> chats = new ObservableCollection<ChatDetails>();
+					await Navigation.PushAsync( new ChatDetailsPage( chats, selItem.user_id, selItem.profileImgUrl,  selItem.firstname ) );
 				}
 				chatContactsListView.SelectedItem= null;
 			};

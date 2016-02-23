@@ -130,7 +130,7 @@ namespace PurposeColor.screens
 
 			profilePic = new Image {
 				Source = Constants.SERVICE_BASE_URL + userInfo.ProfileImageUrl,
-				HeightRequest = 100,
+				HeightRequest = 110,
 				WidthRequest = 100,
 				Aspect = Aspect.AspectFill,
 				HorizontalOptions = LayoutOptions.End
@@ -184,16 +184,25 @@ namespace PurposeColor.screens
 				// display verified icon over name.
 				Image verifiedBadge = new Image {
 					Source = "verified_icon.png",
-					HeightRequest = App.screenHeight * .06,
-					WidthRequest = App.screenWidth * .06,
-					HorizontalOptions = LayoutOptions.Center
+					HeightRequest = App.screenHeight * .05, //.04, = if near name   //.06, = if near profile image 
+					WidthRequest = App.screenWidth * .05,//.04, = if near name // //.06, = if near profile image 
+					HorizontalOptions = LayoutOptions.Center,
+					BackgroundColor = Color.Transparent
 				};
-				//nameAndBadgeStack.Children.Add (verifiedBadge);
-				masterLayout.AddChildToLayout(verifiedBadge, 53, 37);
-				if (emailLabel.Text != null) {
 
-					verifiedBadge.TranslationX = userDisplayName.Text.Length*3;
-				}
+				//  aligned to name.
+//				masterLayout.AddChildToLayout(verifiedBadge, 51, 39); //  aligned to name.
+//				if (emailLabel.Text != null) 
+//				{
+//					if (userDisplayName.Text.Length < 33)
+//						verifiedBadge.TranslationX = userDisplayName.Text.Length * 4;
+//					else
+//						verifiedBadge.TranslationX = 100;
+//				}
+
+				//  aligned to profile pic.
+				masterLayout.AddChildToLayout(verifiedBadge, 62, 18); //  aligned to profile pic.
+
 			}
 
 
@@ -228,12 +237,13 @@ namespace PurposeColor.screens
 		async void StatusEntry_Completed (object sender, EventArgs e)
 		{
 			try {
-				progressBar.ShowProgressbar("Saving your settings");
+
 				string newStatus = (sender as CustomEntry).Text;
 
 				if (!string.IsNullOrEmpty(newStatus)) {
 					if(newStatus.Trim() != userInfo.StatusNote.Trim())
 					{
+						progressBar.ShowProgressbar("Saving your settings");
 						string responceCode = await PurposeColor.Service.ServiceHelper.SendProfilePicAndStatusNote(newStatus,null,string.Empty);
 						if (responceCode == null|| responceCode != "200") {
 							await DisplayAlert(Constants.ALERT_TITLE,"Network error, Please try again later. " + responceCode, Constants.ALERT_OK); // responceCode fro testing // test

@@ -143,12 +143,12 @@ namespace PurposeColor.Database
 				}
 
 				var eventITbl = Connection.GetTableInfo("EventWithImage");
-				if (eventITbl == null) {
+				if (eventITbl == null || eventITbl.Count < 1) {
 					Connection.CreateTable<EventWithImage>();
 				}
 
 				var actionITable = Connection.GetTableInfo("ActionWithImage");
-				if (actionITable == null) {
+				if (actionITable == null || actionITable.Count < 1) {
 					Connection.CreateTable<ActionWithImage>();
 				}
             }

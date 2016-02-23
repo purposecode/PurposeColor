@@ -2655,7 +2655,7 @@ namespace PurposeColor.Service
 
 				content.Add(new StringContent(folowReqID, Encoding.UTF8), "followrequest_id");//  to be confirmed - status id of new goal // for testing only // test
 				content.Add(new StringContent(status, Encoding.UTF8), "follow_status"); // category_id = 1 for testing only // test
-				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
 
 				var response = await client.PostAsync(url, content);
 				//var response = await client.GetAsync(uriString);

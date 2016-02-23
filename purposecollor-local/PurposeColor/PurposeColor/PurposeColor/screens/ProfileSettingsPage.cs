@@ -173,8 +173,7 @@ namespace PurposeColor.screens
 				Spacing = 3,
 				Children = {userDisplayName, emailLabel}
 			};
-			masterLayout.AddChildToLayout(nameEmailStack,10, 40);
-			masterLayout.AddChildToLayout(statusEntry, 10, 50);
+
 
 			statusEntry.Completed += StatusEntry_Completed;
 
@@ -201,7 +200,16 @@ namespace PurposeColor.screens
 //				}
 
 				//  aligned to profile pic.
-				masterLayout.AddChildToLayout(verifiedBadge, 62, 18); //  aligned to profile pic.
+				int xpos= 62;
+				if (App.screenDensity > 2) {
+					xpos = 64;
+					masterLayout.AddChildToLayout (nameEmailStack, 10, 40);
+					masterLayout.AddChildToLayout (statusEntry, 10, 50);
+				} else {
+					masterLayout.AddChildToLayout(nameEmailStack,10, 42);
+					masterLayout.AddChildToLayout(statusEntry, 10, 52);
+				}
+				masterLayout.AddChildToLayout(verifiedBadge, xpos, 18); //  aligned to profile pic.
 
 			}
 

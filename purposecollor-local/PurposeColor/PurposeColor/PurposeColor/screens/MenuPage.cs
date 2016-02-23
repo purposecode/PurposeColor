@@ -79,11 +79,12 @@ namespace PurposeColor.screens
             PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
 
             List<MenuItems> menuItems = new List<MenuItems>();
-
+			User user = null;
             try
             {
                 PurposeColor.Database.ApplicationSettings AppSettings = App.Settings;
                 PurposeColor.Model.GlobalSettings globalSettings = AppSettings.GetAppGlobalSettings();
+				user = App.Settings.GetUser();
             }
             catch (Exception ex)
             {
@@ -92,17 +93,56 @@ namespace PurposeColor.screens
 
             // add these items only if globalSettings.IsLoggedIn //
 
-            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_AWARENESS, ImageName = Device.OnPlatform("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotional_awrness_menu_icon.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GEM, ImageName = Device.OnPlatform("gem_menu_icon.png", "gem_menu_icon.png", "//Assets//gem_menu_icon.png") });
-            menuItems.Add(new MenuItems { Name = Constants.GOALS_AND_DREAMS, ImageName = Device.OnPlatform("goals_drms_menu_icon.png", "goals_drms_menu_icon.png", "//Assets//goals_drms_menu_icon.png") });
-            menuItems.Add(new MenuItems { Name = Constants.EMOTIONAL_INTELLIGENCE, ImageName = Device.OnPlatform("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion_intellegene_menu_icon.png") });
-            menuItems.Add(new MenuItems { Name = Constants.COMMUNITY_GEMS, ImageName = Device.OnPlatform("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//comunity_menu_icon.png") });
-            menuItems.Add(new MenuItems { Name = Constants.APPLICATION_SETTTINGS, ImageName = Device.OnPlatform("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//setings_menu_icon.png") });
-			// add these items only if globalSettings.IsLoggedIn //
+			if (user != null) {
 
+				if (App.burgerMenuItems == null) {
+					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
+				}
 
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_AWARENESS,
+					ImageName = Device.OnPlatform ("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotional_awrness_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GEM,
+					ImageName = Device.OnPlatform ("gem_menu_icon.png", "gem_menu_icon.png", "//Assets//gem_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GOALS_AND_DREAMS,
+					ImageName = Device.OnPlatform ("goals_drms_menu_icon.png", "goals_drms_menu_icon.png", "//Assets//goals_drms_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_INTELLIGENCE,
+					ImageName = Device.OnPlatform ("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion_intellegene_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.COMMUNITY_GEMS,
+					ImageName = Device.OnPlatform ("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//comunity_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.APPLICATION_SETTTINGS,
+					ImageName = Device.OnPlatform ("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//setings_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.SIGN_OUT_TEXT,
+					ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+				});
+
+				// add these items only if globalSettings.IsLoggedIn //
+			} else {
+
+				if (App.burgerMenuItems == null) {
+					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
+				}
+
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.SIGN_OUT_IN,
+					ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+				});
+			}
+			
             listView = new ListView();
-            listView.ItemsSource = menuItems;
+			listView.ItemsSource = App.burgerMenuItems;
             listView.ItemTemplate = new DataTemplate(typeof(CustomMenuItemCell));
             listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.ItemSelected += OnListViewItemSelected;
@@ -138,7 +178,6 @@ namespace PurposeColor.screens
                 if (listView.SelectedItem == null)
                     return;
 
-
                 MenuItems selItem = e.SelectedItem as MenuItems;
 
                 if ("Emotional Awareness" == selItem.Name)
@@ -171,6 +210,49 @@ namespace PurposeColor.screens
                 {
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new ApplicationSettingsPage());
+				}
+				else if(Constants.SIGN_OUT_TEXT == selItem.Name)
+				{
+
+					try
+					{
+						
+
+						#region SAVING SIGN OUT SETTINGS
+
+						PurposeColor.Model.User user = null;
+						user = App.Settings.GetUser();
+						App.Settings.DeleteAllUsers();
+						await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
+
+						if (user != null)
+						{
+							string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(user.UserId.ToString());
+							if (statusCode != "200")
+							{
+								await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
+							}
+						}
+						#endregion
+					}
+					catch (Exception)
+					{
+						DisplayAlert(Constants.ALERT_TITLE, "Network error, Could not process the request.", Constants.ALERT_OK);
+					}
+
+					App.masterPage.IsPresented = false;
+					App.masterPage.Detail = new NavigationPage(new LogInPage());
+					App.burgerMenuItems.Clear();
+					App.burgerMenuItems.Add (new MenuItems {
+						Name = Constants.SIGN_OUT_IN,
+						ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+					});
+
+				} //SIGN_OUT
+				else if(Constants.SIGN_OUT_IN == selItem.Name)
+				{
+					App.masterPage.IsPresented = false;
+					App.masterPage.Detail = new NavigationPage(new LogInPage());
 				}
 
                 listView.SelectedItem = null; // reset the list selection, other wise the same menu cannot be selected again consecutively.

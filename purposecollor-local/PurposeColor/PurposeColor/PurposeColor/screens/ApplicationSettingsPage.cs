@@ -73,7 +73,7 @@ namespace PurposeColor.screens
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
 			masterLayout.AddChildToLayout(profileButton, 10, 20);
 			masterLayout.AddChildToLayout(changePassword, 10, Device.OnPlatform(30, 30,28));
-			masterLayout.AddChildToLayout( signOutButton, 10, Device.OnPlatform(40, 40,38));
+			//masterLayout.AddChildToLayout( signOutButton, 10, Device.OnPlatform(40, 40,38));
             signOutButton.Clicked += OnSignOutButtonClicked;
             changePassword.Clicked += ChangePassword_Clicked;
 			profileButton.Clicked += ProfileButton_Clicked;
@@ -130,16 +130,15 @@ namespace PurposeColor.screens
 				App.Settings.DeleteAllUsers();
 				await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
 
-                if (user == null)
+                if (user != null)
                 {
-                    user = new Model.User { UserId = 2 }; // for testing only // test
+					string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(user.UserId.ToString());
+					if (statusCode != "200")
+					{
+						await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
+					}
                 }
-                string statusCode = await PurposeColor.Service.ServiceHelper.LogOut(user.UserId.ToString());
-
-                if (statusCode != "200")
-                {
-                    await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
-                }
+                
                 #endregion
                 
                 progressBar.HideProgressbar();

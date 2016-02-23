@@ -37,6 +37,9 @@ namespace PurposeColor
         public const string NETWORK_ERROR_MSG = "Network error occured. Please try again later.";
         public const string COMMENTS_VIEW_CLASS_ID = "commentsView";
         public const string CUSTOMLISTMENU_VIEW_CLASS_ID = "GemCustomListMenu";
+		public const string SIGN_OUT_TEXT = "Sign out";
+		public const string SIGN_OUT_IN = "Sign in";
+
         
 
         public const int PICKER_ANIMATION_OFFSET = 40;

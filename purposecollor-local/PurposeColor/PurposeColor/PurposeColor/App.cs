@@ -75,6 +75,7 @@ namespace PurposeColor
 		public static List<string> ExtentionArray { get; set; }
 		public static List<string> ContactsArray { get; set; }
 		public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
+		public static ObservableCollection<MenuItems> burgerMenuItems = null;
 		public static string newEmotionId;
 		public static bool IsTesting = false;
 		public static bool isEmotionsListing = false;
@@ -117,6 +118,7 @@ namespace PurposeColor
 				applicationSettings = new ApplicationSettings();
 			}
 			MenuPage menuPage = new MenuPage();
+			burgerMenuItems = new ObservableCollection<MenuItems> ();
 			masterPage = new PurposeMasterDetailPage();
 			MainPage = masterPage;
 

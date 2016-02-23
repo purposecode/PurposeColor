@@ -260,7 +260,7 @@ namespace PurposeColor.screens
                                     //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
                                     newUser.RegistrationDate = loggedInUser.regdate;
                                 }
-
+								UpdateBurgerMenuList();
                                 isSaveSuccess = await App.Settings.SaveUser(newUser);
 
                                 PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
@@ -275,6 +275,7 @@ namespace PurposeColor.screens
                                 progress.HideProgressbar();
                                 App.masterPage.IsPresented = false;
                                 App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+
                                 //if (Device.OS != TargetPlatform.WinPhone)
                                 //{
                                 //    Navigation.RemovePage(this);
@@ -358,6 +359,50 @@ namespace PurposeColor.screens
             {
             }
         }
+
+		void UpdateBurgerMenuList()
+		{
+			try {
+
+				if (App.burgerMenuItems == null) {
+					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
+				}
+
+				App.burgerMenuItems.Clear ();
+
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_AWARENESS,
+					ImageName = Device.OnPlatform ("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotional_awrness_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GEM,
+					ImageName = Device.OnPlatform ("gem_menu_icon.png", "gem_menu_icon.png", "//Assets//gem_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GOALS_AND_DREAMS,
+					ImageName = Device.OnPlatform ("goals_drms_menu_icon.png", "goals_drms_menu_icon.png", "//Assets//goals_drms_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_INTELLIGENCE,
+					ImageName = Device.OnPlatform ("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion_intellegene_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.COMMUNITY_GEMS,
+					ImageName = Device.OnPlatform ("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//comunity_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.APPLICATION_SETTTINGS,
+					ImageName = Device.OnPlatform ("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//setings_menu_icon.png")
+				});
+				App.burgerMenuItems.Add (new MenuItems {
+					Name = Constants.SIGN_OUT_TEXT,
+					ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+				});
+
+			} catch (Exception ex) {
+				var test = ex.Message;
+			}
+		}
 
         public void Dispose()
         {

@@ -104,7 +104,7 @@ namespace PurposeColor.screens
             bool isSuccess = false;
             try
             {
-                submitButton.Clicked -= OnSubmitButtonClicked;
+                
                 User user = App.Settings.GetUser();
                 if (user == null)
                 {
@@ -135,6 +135,7 @@ namespace PurposeColor.screens
                     return;
                 }
 
+				submitButton.Clicked -= OnSubmitButtonClicked;
                 progress.ShowProgressbar("Requesting new password.");
                 string statusCode = await PurposeColor.Service.ServiceHelper.UpdatePassword(user.UserId.ToString(), oldPaswordEntry.Text, newPaswordEntry.Text, confirmPaswordEntry.Text);
                 progress.HideProgressbar();

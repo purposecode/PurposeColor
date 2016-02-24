@@ -1324,7 +1324,7 @@ namespace PurposeColor.screens
 
 							User user = App.Settings.GetUser();
 							if( user == null )
-								user = new User(){ UserId = 2 };
+								user = new User(){ UserId = "2" };
 							
                             ActionModel details = new ActionModel();
                             if (!isUpdatePage)
@@ -1471,7 +1471,7 @@ namespace PurposeColor.screens
 
 							User user = App.Settings.GetUser();
 							if( user == null )
-								user = new User(){ UserId = 2 };
+								user = new User(){ UserId = "2" };
 							
                             //EventDetails newGoal = new EventDetails();
                             newGoal.goal_title = eventTitle.Text;

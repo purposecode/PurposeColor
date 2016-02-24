@@ -108,7 +108,7 @@ namespace PurposeColor.screens
                 User user = App.Settings.GetUser();
                 if (user == null)
                 {
-                    user = new User { UserId = 2 }; // for testing only
+                    user = new User { UserId = "2" }; // for testing only
                 }
 
                 if (user == null)

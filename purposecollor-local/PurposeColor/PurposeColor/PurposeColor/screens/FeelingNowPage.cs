@@ -527,7 +527,7 @@ namespace PurposeColor
 
 				User user = App.Settings.GetUser();
 				if( user == null )
-					user = new User(){ UserId = 2 };
+					user = new User(){ UserId = "2" };
 
 				progressBar.ShowProgressbar("Saving details..");
 				bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID,  user.UserId.ToString());

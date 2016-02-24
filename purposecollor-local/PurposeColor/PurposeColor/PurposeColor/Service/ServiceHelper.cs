@@ -144,7 +144,7 @@ namespace PurposeColor.Service
 
         }
 
-        public static async Task<List<CustomListViewItem>> GetAllGoals(int userID)
+		public static async Task<List<CustomListViewItem>> GetAllGoals(string userID)
         {
             List<CustomListViewItem> goalsList = null;
             try
@@ -197,7 +197,7 @@ namespace PurposeColor.Service
 
                 ///////// for testing
 
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = "2", UserName = "sam" };
 
                 if (user == null)
                 {
@@ -255,7 +255,7 @@ namespace PurposeColor.Service
 
                 ///////// for testing
 
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = "2", UserName = "sam" };
 
                 if (user == null)
                 {
@@ -314,7 +314,7 @@ namespace PurposeColor.Service
 
                 ///////// for testing
 
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = "2", UserName = "sam" };
 
                 if (user == null)
                 {
@@ -364,7 +364,7 @@ namespace PurposeColor.Service
             {
                 //////// for testing
 
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = "2", UserName = "sam" };
 
                 if (user == null)
                 {
@@ -828,7 +828,7 @@ namespace PurposeColor.Service
 
             try
             {
-                User user = new User { UserId = 2 }; // for testing only // test remove after testing
+                User user = new User { UserId = "2" }; // for testing only // test remove after testing
 
                 if (App.Settings.GetUser() != null)
                 {
@@ -896,7 +896,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+                User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
 
                 if (user == null)
                 {
@@ -949,7 +949,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" };// for testing only // testing
+                User user = new User { UserId = "2", UserName = "sam" };// for testing only // testing
 
                 if (user == null)
                 {
@@ -1569,7 +1569,7 @@ namespace PurposeColor.Service
 
 				if (user == null)
 				{
-					user = new User { UserId = 2, UserName = "sam" };
+					user = new User { UserId = "2", UserName = "sam" };
 				}
 
 				if (!CrossConnectivity.Current.IsConnected)
@@ -1618,7 +1618,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" };
+				User user = new User { UserId = "2", UserName = "sam" };
 
 				if (user == null)
 				{
@@ -1721,7 +1721,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = 2, UserName = "sam" };
+                User user = new User { UserId = "2", UserName = "sam" };
 
                 if (user == null)
                 {
@@ -1777,7 +1777,7 @@ namespace PurposeColor.Service
             {
 				User user = App.Settings.GetUser();
 				if( user == null )
-					user = new User { UserId = 2, UserName = "sam" };
+					user = new User { UserId = "2", UserName = "sam" };
 				
 
                 if (!CrossConnectivity.Current.IsConnected)
@@ -1992,7 +1992,7 @@ namespace PurposeColor.Service
 				User user = App.Settings.GetUser();
 
 				if( user == null )
-					user = new User(){ UserId = 2 };
+					user = new User(){ UserId = "2" };
 
 				if (!CrossConnectivity.Current.IsConnected)
 				{
@@ -2050,7 +2050,7 @@ namespace PurposeColor.Service
 				User user = App.Settings.GetUser();
 
 				if( user == null )
-					user = new User(){ UserId = 2 };
+					user = new User(){ UserId = "2" };
 
 				if (user == null)
 				{
@@ -2289,7 +2289,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
 
 				if (user == null)
 				{
@@ -2339,7 +2339,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
 
 				if (user == null)
 				{
@@ -2383,7 +2383,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
 
 				if (user == null)
 				{
@@ -2432,7 +2432,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = 2, UserName = "sam" }; // for testing only // test
+				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
 
 				if (user == null)
 				{
@@ -2740,7 +2740,7 @@ namespace PurposeColor.Service
 				}
 				User user = App.Settings.GetUser();
 				if (user == null) { // for testing only// test
-					user = new User{UserId = 2};
+					user = new User{UserId = "2"};
 				}
 				var client = new HttpClient();
 
@@ -2852,6 +2852,128 @@ namespace PurposeColor.Service
 				var test = ex.Message;
 			}
 			return false;
+		}
+
+		public static async Task<UserDetailsOnLogin> GoogleUserLogin(string email, string name, string id, string imageUrl, string gender)
+		{
+			if (!CrossConnectivity.Current.IsConnected)
+			{
+				return null;
+			}
+
+			try
+			{
+				string result = String.Empty;
+				var client = new HttpClient();
+				client.Timeout = new TimeSpan(0, 15, 0);
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+				var url = "api.php?action=googlelogin";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				if (!string.IsNullOrEmpty(email))
+				{
+					content.Add(new StringContent(email, Encoding.UTF8), "emailId");
+				}
+
+				if (!string.IsNullOrEmpty(name))
+				{
+					content.Add(new StringContent(name, Encoding.UTF8), "name");
+				}
+
+				if (!string.IsNullOrEmpty(imageUrl))
+				{
+					content.Add(new StringContent(imageUrl, Encoding.UTF8), "imageUrl");
+				}
+
+				if (!string.IsNullOrEmpty(id))
+				{
+					content.Add(new StringContent(id, Encoding.UTF8), "googleId");
+				}
+
+				if (!string.IsNullOrEmpty(gender))
+				{
+					content.Add(new StringContent(gender.ToLower() == "male"?"0":"1", Encoding.UTF8), "gender");
+				}
+
+				HttpResponseMessage response = await client.PostAsync(url, content);
+
+				if (response != null && response.Content != null)
+				{
+
+					var eventsJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<UserDetailsOnLogin>(eventsJson);
+					if (rootobject != null)
+					{
+						return rootobject;
+					}
+				}
+				client.Dispose();
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+
+			return null;
+		}
+
+		public static async Task<UserDetailsOnLogin> FacebookLogin(string email, string name, string id)
+		{
+			if (!CrossConnectivity.Current.IsConnected)
+			{
+				return null;
+			}
+
+			try
+			{
+				string result = String.Empty;
+				var client = new HttpClient();
+				client.Timeout = new TimeSpan(0, 15, 0);
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
+
+				var url = "api.php?action=fblogin";
+
+				MultipartFormDataContent content = new MultipartFormDataContent();
+
+				if (!string.IsNullOrEmpty(email))
+				{
+					content.Add(new StringContent(email, Encoding.UTF8), "femail");
+				}
+
+				if (!string.IsNullOrEmpty(name))
+				{
+					content.Add(new StringContent(name, Encoding.UTF8), "fbfullname");
+				}
+				//fbid
+				if (!string.IsNullOrEmpty(id))
+				{
+					content.Add(new StringContent(id, Encoding.UTF8), "fbid");
+				}
+
+				HttpResponseMessage response = await client.PostAsync(url, content);
+
+				if (response != null && response.Content != null)
+				{
+
+					var eventsJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<UserDetailsOnLogin>(eventsJson);
+					if (rootobject != null)
+					{
+						return rootobject;
+					}
+				}
+				client.Dispose();
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+
+			return null;
 		}
 
     }

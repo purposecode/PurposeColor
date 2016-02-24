@@ -292,7 +292,7 @@ namespace PurposeColor.CustomControls
 
 						User user = App.Settings.GetUser();
 						if( user == null )
-							user = new User(){ UserId = 2 };
+							user = new User(){ UserId = "2" };
 						
                         listTitle.IsVisible = true;
                         addButton.IsVisible = true;

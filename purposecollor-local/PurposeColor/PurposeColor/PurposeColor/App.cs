@@ -87,13 +87,10 @@ namespace PurposeColor
 				return applicationSettings;
 			}
 		}
-
 		public static string Token
 		{
 			get { return token; }
 		}
-
-
 		IDeviceSpec deviceSpec;
 		public static double screenHeight;
 		public static double screenWidth;
@@ -147,16 +144,59 @@ namespace PurposeColor
 			// Handle when your app resumes
 		}
 
-		public static void NavigateToChangePassword(User userInfo)
+		public static async Task<bool> SaveUserData(User userInfo, bool isGoogleuser)
 		{
-			if (userInfo != null) {
-				App.Settings.SaveUser (userInfo);
-			}
+			UserDetailsOnLogin userdetails = null;
+			User currentUser = null;
+			try 
+			{
+				
+				if (isGoogleuser) {
+					// call api  to save google user
+					userdetails = await ServiceHelper.GoogleUserLogin(userInfo.Email, userInfo.UserName, userInfo.UserId,userInfo.ProfileImageUrl,userInfo.Gender);
 
-			Device.BeginInvokeOnMainThread(() =>
+					//get useer//
+
+				} else {
+					// call api for saving facebook user
+					userdetails = await ServiceHelper.FacebookLogin(userInfo.Email, userInfo.UserName, userInfo.UserId);
+				}
+
+				if(userdetails!= null && userdetails.resultarray!= null && userdetails.code == "200")
 				{
-					Navigator.PushAsync(new ChangePassword());
-				});
+					currentUser = new User();
+					var loggedInUser = userdetails.resultarray;
+					currentUser.StatusNote = string.IsNullOrEmpty(loggedInUser.note) ? string.Empty : loggedInUser.note;
+					currentUser.DisplayName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
+					currentUser.Email = string.IsNullOrEmpty(loggedInUser.email) ? string.Empty : loggedInUser.email;
+					currentUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
+					currentUser.UserId = loggedInUser.user_id;
+					currentUser.VerifiedStatus = loggedInUser.verified_status;
+					currentUser.UserName = string.IsNullOrEmpty(loggedInUser.firstname) ? string.Empty : loggedInUser.firstname;
+
+					if (loggedInUser.usertype_id != null)
+					{
+						currentUser.UserType = int.Parse(loggedInUser.usertype_id);
+					}
+					if (loggedInUser.regdate != null)
+					{
+						currentUser.RegistrationDate = loggedInUser.regdate;
+					}
+				}
+
+				if (currentUser != null) 
+				{
+					App.Settings.SaveUser (currentUser);
+				}
+				
+
+
+				return true;
+			} catch (Exception ex) 
+			{
+				var test = ex.Message;
+			}
+			return false;
 		}
 
 		public static void NavigateToChatDetailsPage(User userInfo, string tosusrID, string userImageUrl, string toUserName )
@@ -167,7 +207,7 @@ namespace PurposeColor
 
 					ChatDetails test = new ChatDetails();
 					test.AuthorName = "prvn";
-					test.CurrentUserid = App.Settings.GetUser().UserId.ToString();
+					test.CurrentUserid = App.Settings.GetUser().UserId;
 					test.Message = "test chat";
 
 					chats.Add( test );
@@ -201,8 +241,6 @@ namespace PurposeColor
 			return emotionsListSource;
 		}
 
-
-
 		public static List<CustomListViewItem> GetEventsList()
 		{
 			if (eventsListSource != null && eventsListSource.Count > 0)
@@ -218,7 +256,6 @@ namespace PurposeColor
 			return eventsListSource;
 		}
 
-
 		public static  List<CustomListViewItem> GetActionsList()
 		{
 			if (actionsListSource != null && actionsListSource.Count > 0)
@@ -226,7 +263,6 @@ namespace PurposeColor
 
 			return actionsListSource;
 		}
-
 
 		public static List<CustomListViewItem> GetGoalsList()
 		{
@@ -254,7 +290,6 @@ namespace PurposeColor
 						try
 						{
 							Navigator.PushModalAsync(navPage);
-							//Navigator.PushAsync(new FeelingNowPage());
 						}
 						catch (Exception ex)
 						{

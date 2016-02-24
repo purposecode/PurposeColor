@@ -60,7 +60,7 @@ namespace PurposeColor
             {
                 user = App.Settings.GetUser();
                 ////////////// for testing only // test //////////////
-                user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
+                user = new User { UserId = "2", AllowCommunitySharing = true }; // for testing only // test
                 ////////////// for testing only // test //////////////
             }
             catch (Exception ex)
@@ -679,7 +679,7 @@ namespace PurposeColor
                 User user = App.Settings.GetUser();
 
                 /////////////// for testing /////////////
-                user = new User { UserId = 2, DisplayName = "TestUser"};
+                user = new User { UserId = "2", DisplayName = "TestUser"};
                 /////////////// for testing /////////////
 
                 if (user == null)

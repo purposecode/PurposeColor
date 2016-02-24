@@ -70,7 +70,7 @@ namespace PurposeColor.screens
                 currentUser = App.Settings.GetUser();
                 if (currentUser == null)
                 {
-                    currentUser = new User { UserName = "me", UserId = 2, AllowCommunitySharing = true };
+                    currentUser = new User { UserName = "me", UserId = "2", AllowCommunitySharing = true };
                 }
                 else
                 {
@@ -334,7 +334,7 @@ namespace PurposeColor.screens
                 isPosting = true;
 
                 PurposeColor.Model.User user = App.Settings.GetUser();
-				user = new User{UserName = "Sam", UserId = 2, AllowCommunitySharing = true, DisplayName="Sam"};
+				user = new User{UserName = "Sam", UserId = "2", AllowCommunitySharing = true, DisplayName="Sam"};
 				if( user == null )
 				{
 					progressBar.HideProgressbar();

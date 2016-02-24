@@ -15,7 +15,7 @@ namespace PurposeColor.Model
         /// <summary>
         /// Gets or sets the UserId
         /// </summary>
-        public int UserId { get; set; }
+		public string UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the UserName.
@@ -84,7 +84,7 @@ namespace PurposeColor.Model
 
     public class LoginUser
     {
-        public int user_id;
+        public string user_id;
         public string firstname;
         public string email;
         public string profileurl;

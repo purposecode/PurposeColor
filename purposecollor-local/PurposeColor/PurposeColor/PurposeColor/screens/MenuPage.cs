@@ -239,7 +239,7 @@ namespace PurposeColor.screens
 					{
 						DisplayAlert(Constants.ALERT_TITLE, "Network error, Could not process the request.", Constants.ALERT_OK);
 					}
-
+					App.IsLoggedIn = false;
 					App.masterPage.IsPresented = false;
 					App.masterPage.Detail = new NavigationPage(new LogInPage());
 					App.burgerMenuItems.Clear();

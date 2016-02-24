@@ -69,13 +69,14 @@ namespace XamarinFormsOAuth2Demo.Droid
 				progress.Dismiss();
 				progress = null;
 			}*/
-			user.UserName = googleInfo.name;
+			user.UserName = !string.IsNullOrWhiteSpace(googleInfo.name)?googleInfo.name:(!string.IsNullOrWhiteSpace(googleInfo.email)?googleInfo.email:"");
 			user.DisplayName = googleInfo.name;
 			user.AllowCommunitySharing = true;
 			user.AuthenticationToken = access_token;
 			user.Email = googleInfo.email;
 			user.Gender = googleInfo.gender;
 			user.ProfileImageUrl = googleInfo.picture;
+			user.UserId = googleInfo.id;
 				
             return user;
 		}

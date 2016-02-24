@@ -54,8 +54,10 @@ namespace XamarinFormsOAuth2Demo.Droid
                         if (eve.IsAuthenticated)
                         {
                             var user = await myAuth.GetProfileInfoFromGoogle(eve.Account.Properties["access_token"].ToString());
-                            //  PurposeColor.App.NavigateToChangePassword( user);
+                            
+							await App.SaveUserData(user,true);
                             App.IsLoggedIn = true;
+							App.SuccessfulLoginAction.Invoke();
                         }
                         //  dlg2.Hide();
                     };
@@ -67,17 +69,18 @@ namespace XamarinFormsOAuth2Demo.Droid
                 else if (App.IsFacebookLogin && !App.IsLoggedIn)
                 {
                     var auth = new OAuth2Authenticator(
-                        clientId: "1218463084847397", // your OAuth2 client id
+
+						////- purposeColor facebook developer user id - purposecode@gmail.com // passsword: ultimate.123
+
+						clientId: "1064717540213918",
                         scope: "", // the scopes for the particular API you're accessing, delimited by "+" symbols
                         authorizeUrl: new Uri("https://m.facebook.com/dialog/oauth/"),//new Uri(""), // the auth URL for the service
                         redirectUrl: new Uri("http://www.facebook.com/connect/login_success.html")); // the redirect URL for the service
 
-                    auth.Completed += (sender, eventArgs) =>
+                    auth.Completed += async (sender, eventArgs) => 
                     {
                         if (eventArgs.IsAuthenticated)
                         {
-                            App.SuccessfulLoginAction.Invoke();
-                            
                             try
                             {
                                 App.IsLoggedIn = true;
@@ -89,10 +92,8 @@ namespace XamarinFormsOAuth2Demo.Droid
                             {
                                 Console.WriteLine("auth.Completed ::: " + ex.Message);
                             }
-                            
-
-                            var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me"), null, eventArgs.Account);
-                            request.GetResponseAsync().ContinueWith(t =>
+							var request = new OAuth2Request("GET", new Uri("https://graph.facebook.com/me?fields=id,name,email"), null, eventArgs.Account);
+                           	await request.GetResponseAsync().ContinueWith(t =>
                             {
                                 if (t.IsFaulted)
                                     Console.WriteLine("Error: " + t.Exception.InnerException.Message);
@@ -100,10 +101,10 @@ namespace XamarinFormsOAuth2Demo.Droid
                                 {
                                     string json = t.Result.GetResponseText();
                                     Console.WriteLine(json);
-
-                                    // save user details for profile page - to local DB
+									SerialiseFacebookUserData (json);
                                 }
                             });
+							App.SuccessfulLoginAction.Invoke();
                         }
                         else
                         {
@@ -114,5 +115,27 @@ namespace XamarinFormsOAuth2Demo.Droid
                 } // end - else if
             } //end - if (!done)
         }// end - OnElementChanged()
+
+		async void SerialiseFacebookUserData(string json)
+		{
+			FacebookInfo fbUser = JsonConvert.DeserializeObject<FacebookInfo>(json);
+			User user = new User ();
+			user.UserName = fbUser.name;
+			user.DisplayName = fbUser.name;
+			user.Email = fbUser.email;
+			user.UserId = fbUser.id;
+
+			await PurposeColor.App.SaveUserData( user, false);
+
+			//App.SuccessfulLoginAction.Invoke(); // was working//
+
+		}
     }
+
+	class FacebookInfo
+	{
+		public string id { get; set; }
+		public string email { get; set; }
+		public string name { get; set; }
+	}
 }

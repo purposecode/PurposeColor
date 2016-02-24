@@ -217,7 +217,7 @@ namespace PurposeColor
 				{
 					user = App.Settings.GetUser();
 					////////////// for testing only // test //////////////
-					user = new User { UserId = 2, AllowCommunitySharing = true }; // for testing only // test
+					user = new User { UserId = "2", AllowCommunitySharing = true }; // for testing only // test
 					////////////// for testing only // test //////////////
 				}
 				catch (Exception ex)

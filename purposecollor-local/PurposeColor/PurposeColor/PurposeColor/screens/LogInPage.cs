@@ -32,6 +32,7 @@ namespace PurposeColor.screens
 
         public LogInPage()
         {
+			App.IsLoggedIn = false;
             NavigationPage.SetHasNavigationBar(this, false);
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
@@ -176,6 +177,7 @@ namespace PurposeColor.screens
         {
             try
             {
+				App.IsLoggedIn = false;
                 if (String.IsNullOrEmpty(userNameEntry.Text))
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Please provide username.", Constants.ALERT_OK);
@@ -187,7 +189,7 @@ namespace PurposeColor.screens
                 if (userNameEntry.Text == "apptester")
                 {
                     App.IsTesting = true;
-                    bool userSaved = await App.Settings.SaveUser(new User { UserId = 2 }); // for testing only
+                    bool userSaved = await App.Settings.SaveUser(new User { UserId = "2" }); // for testing only
                     if (!userSaved)
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
@@ -322,7 +324,7 @@ namespace PurposeColor.screens
         {
             try
             {
-
+				App.IsLoggedIn = false;
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 // progress.ShowProgressbar(true, "Loading..");
                 App.IsGoogleLogin = true;
@@ -351,6 +353,7 @@ namespace PurposeColor.screens
         {
             try
             {
+				App.IsLoggedIn = false;
                 App.IsFacebookLogin = true;
                 App.IsGoogleLogin = false;
                 Navigation.PushModalAsync(new LoginWebViewHolder());

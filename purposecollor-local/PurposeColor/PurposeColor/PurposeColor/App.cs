@@ -149,6 +149,10 @@ namespace PurposeColor
 
 		public static void NavigateToChangePassword(User userInfo)
 		{
+			if (userInfo != null) {
+				App.Settings.SaveUser (userInfo);
+			}
+
 			Device.BeginInvokeOnMainThread(() =>
 				{
 					Navigator.PushAsync(new ChangePassword());

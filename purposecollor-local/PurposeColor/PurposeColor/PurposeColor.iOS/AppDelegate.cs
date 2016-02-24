@@ -32,6 +32,12 @@ namespace PurposeColor.iOS
             LoadApplication(new App());
 
             CrossPushNotification.Initialize<CrossPushNotificationListener>();
+
+			var settings = UIUserNotificationSettings.GetSettingsForTypes(
+				UIUserNotificationType.Alert |  UIUserNotificationType.Sound
+				, null);
+			
+			UIApplication.SharedApplication.RegisterUserNotificationSettings (settings);
             return base.FinishedLaunching(app, options);
         }
 
@@ -71,5 +77,17 @@ namespace PurposeColor.iOS
                 ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
             }
         }
+
+		public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
+		{
+			// show an alert
+			UIAlertController okayAlertController = UIAlertController.Create (notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
+			okayAlertController.AddAction (UIAlertAction.Create ("OK", UIAlertActionStyle.Default, null));
+			var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First().ChildViewControllers.Last().ChildViewControllers.First();
+			firstController.PresentViewController (okayAlertController, true, null);
+
+			// reset our badge
+			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+		}
     }
 }

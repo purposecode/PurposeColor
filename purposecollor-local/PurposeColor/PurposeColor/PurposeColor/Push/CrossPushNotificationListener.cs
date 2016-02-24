@@ -30,6 +30,7 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
+
 			string followMessege = null;
 			string fromID = null;
 			string chat = null;
@@ -85,6 +86,8 @@ namespace PushNotifictionListener
 		{
 			IProgressBar progres = DependencyService.Get<IProgressBar> ();
 			progres.ShowProgressbarWithCancel ( "token-->" + Token, () =>{ progres.HideProgressbarWithCancel(); } );
+
+
 
 
 			User user = App.Settings.GetUser ();

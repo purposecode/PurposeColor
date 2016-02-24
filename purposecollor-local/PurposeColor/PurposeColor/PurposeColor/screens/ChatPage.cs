@@ -31,6 +31,7 @@ namespace PurposeColor
 
 		public ChatPage ()
 		{
+			NavigationPage.SetHasNavigationBar(this, false);
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
@@ -137,14 +138,14 @@ namespace PurposeColor
 			userName.HorizontalOptions = LayoutOptions.CenterAndExpand;
 			userName.SetBinding ( Label.TextProperty, "firstname" );
 
-			CircleImage userImage = new CircleImage 
+		/*	CircleImage userImage = new CircleImage 
 			{
 				Aspect = Aspect.AspectFit,
 				WidthRequest = 75,
 				HeightRequest = 75,
 				HorizontalOptions = LayoutOptions.Start
 			};
-			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );
+			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );*/
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;
 			userImage.HeightRequest = App.screenWidth * 10 / 100;
@@ -168,7 +169,7 @@ namespace PurposeColor
 			availabelStatus.VerticalOptions = LayoutOptions.Center;
 			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
 
-			mainLayout.Children.Add ( userImage );
+			//mainLayout.Children.Add ( userImage );
 			mainLayout.Children.Add ( userName );
 			mainLayout.Children.Add ( availabelStatus );
 

@@ -34,6 +34,9 @@ namespace PurposeColor
 
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
+
+			NavigationPage.SetHasNavigationBar(this, false);
+
 			chatList = chats;
 			touserID = tosusrID;
 			currentuser = App.Settings.GetUser ();

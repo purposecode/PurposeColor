@@ -15,7 +15,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>PurposeColor</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.purposecode.purposecolor</string>
+	<string>com.purposecode.pc</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
@@ -40,5 +40,9 @@
 	<string>Get Locations</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Localtion always</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 </dict>
 </plist>

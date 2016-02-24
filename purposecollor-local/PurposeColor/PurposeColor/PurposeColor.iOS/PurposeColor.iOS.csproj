@@ -57,10 +57,9 @@
     <MtouchUseRefCounting>true</MtouchUseRefCounting>
     <IpaPackageName>
     </IpaPackageName>
-    <MtouchI18n>
-    </MtouchI18n>
     <MtouchLink>None</MtouchLink>
     <MtouchSdkVersion>9.1</MtouchSdkVersion>
+    <CodesignProvision>dd363087-d161-4fa4-8d88-0c24860c9d5f</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -140,6 +139,7 @@
     <None Include="Resources\shareActive%401x.png" />
     <None Include="Resources\photoCamera_icon%401x.png" />
     <None Include="Resources\verified_icon%401x.png" />
+    <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -273,6 +273,8 @@
     <BundleResource Include="Resources\follow_disable.png" />
     <BundleResource Include="Resources\follow.png" />
     <BundleResource Include="Resources\chat.png" />
+    <BundleResource Include="Resources\blue_tip.png" />
+    <BundleResource Include="Resources\yellow_tip.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

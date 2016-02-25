@@ -34,14 +34,18 @@ namespace PurposeColor
 		public AppTest ( string msg, string fromID )
 		{
 			ObservableCollection<ChatDetails> chatInfos = new ObservableCollection<ChatDetails> ();
-			ChatUsersInfo userInfo = App.chatList.resultarray.Find (itm => itm.user_id == fromID);
 
-			if (userInfo != null) 
+			if (App.chatList != null && App.chatList.resultarray != null)
 			{
-				chatInfos.Add ( new ChatDetails{ CurrentUserid = App.Settings.GetUser().UserId.ToString(), FromUserID = fromID, Message = msg } );
-				MainPage = new NavigationPage (new ChatDetailsPage ( chatInfos, fromID, userInfo.profileImgUrl, userInfo.firstname ));
-			}
+				ChatUsersInfo userInfo = App.chatList.resultarray.Find (itm => itm.user_id == fromID);
 
+				if (userInfo != null) 
+				{
+					chatInfos.Add ( new ChatDetails{ CurrentUserid = App.Settings.GetUser().UserId.ToString(), FromUserID = fromID, Message = msg } );
+					MainPage = new NavigationPage (new ChatDetailsPage ( chatInfos, fromID, userInfo.profileImgUrl, userInfo.firstname ));
+				}
+
+			}
 		}
 	}
 

@@ -96,6 +96,7 @@ namespace PurposeColor
 			userObject = await ServiceHelper.GetAllChatUsers ();
 			if (userObject != null)
 			{
+				App.chatList = userObject.resultarray;
 				List<string> profileImageUrlList = new List<string> ();
 
 				foreach ( var item in userObject.resultarray ) 

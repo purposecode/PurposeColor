@@ -50,7 +50,10 @@ namespace PurposeColor
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), chatTouser, Color.Black, userImageUrl, false);
 			subTitleBar = new CommunityGemChatTitleBar(Constants.SUB_TITLE_BG_COLOR, chatTouser, userImageUrl, false);
-
+			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
+			{
+				await Navigation.PopAsync();
+			};
 			masterLayout = new CustomLayout ();
 			masterLayout.WidthRequest = App.screenWidth;
 			masterLayout.HeightRequest = App.screenHeight - 50;

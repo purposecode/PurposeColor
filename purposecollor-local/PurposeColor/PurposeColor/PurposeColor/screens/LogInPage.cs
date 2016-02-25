@@ -189,12 +189,15 @@ namespace PurposeColor.screens
                 if (userNameEntry.Text == "apptester")
                 {
                     App.IsTesting = true;
-                    bool userSaved = await App.Settings.SaveUser(new User { UserId = "2" }); // for testing only
+					UpdateBurgerMenuList();
+					App.IsLoggedIn = true;
+					bool userSaved = await App.Settings.SaveUser(new User { UserId = "2", UserName = "App tester", AllowCommunitySharing = true, Email= "tester@test.com", StatusNote="Testing.." }); // for testing only
                     if (!userSaved)
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
                     }
                     App.masterPage.IsPresented = false;
+					UpdateBurgerMenuList();
                     App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
                     return;
                 }
@@ -232,6 +235,7 @@ namespace PurposeColor.screens
                         var serviceResult = await PurposeColor.Service.ServiceHelper.Login(userNameEntry.Text, passwordEntry.Text);
                         if (serviceResult.code != null && serviceResult.code == "200")
                         {
+							UpdateBurgerMenuList();
                             var loggedInUser = serviceResult.resultarray;
                             if (loggedInUser != null)
                             {
@@ -262,7 +266,7 @@ namespace PurposeColor.screens
                                     //newUser.RegistrationDate = DateTime.ParseExact(serviceResult.regdate, "yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture);
                                     newUser.RegistrationDate = loggedInUser.regdate;
                                 }
-								UpdateBurgerMenuList();
+
                                 isSaveSuccess = await App.Settings.SaveUser(newUser);
 
                                 PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
@@ -369,6 +373,11 @@ namespace PurposeColor.screens
 
 				if (App.burgerMenuItems == null) {
 					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
+				}
+
+				if(App.burgerMenuItems.Count > 1)
+				{
+					return; // its alredy loged in menu, no need to change.
 				}
 
 				App.burgerMenuItems.Clear ();

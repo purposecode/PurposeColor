@@ -93,11 +93,12 @@ namespace PurposeColor.screens
 
             // add these items only if globalSettings.IsLoggedIn //
 
-			if (user != null) {
+			if (user != null && App.burgerMenuItems.Count <= 1) {
 
 				if (App.burgerMenuItems == null) {
 					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
 				}
+				App.burgerMenuItems.Clear ();
 
 				App.burgerMenuItems.Add (new MenuItems {
 					Name = Constants.EMOTIONAL_AWARENESS,
@@ -129,7 +130,10 @@ namespace PurposeColor.screens
 				});
 
 				// add these items only if globalSettings.IsLoggedIn //
-			} else {
+			} 
+			else 
+			{
+				App.burgerMenuItems.Clear ();
 
 				if (App.burgerMenuItems == null) {
 					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
@@ -148,7 +152,7 @@ namespace PurposeColor.screens
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
             listView.RowHeight =(int) screenHeight * 10 / 100;
-
+			listView.HeightRequest = App.screenHeight;
 
             Icon = Device.OnPlatform("bottom_menu_icon.png", "bottom_menu_icon.png", "//Assets//bottom_menu_icon.png");
             Title = "Menu";

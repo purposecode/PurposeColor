@@ -2597,7 +2597,7 @@ namespace PurposeColor.Service
 
 				content.Add(new StringContent( Device.OnPlatform( "ios", "android", "win" ) , Encoding.UTF8), "device_os");//  to be confirmed - status id of new goal // for testing only // test
 				content.Add(new StringContent(regToken, Encoding.UTF8), "registration_id"); // category_id = 1 for testing only // test
-				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id`;
 
 				var response = await client.PostAsync(url, content);
 
@@ -2749,7 +2749,7 @@ namespace PurposeColor.Service
 				var url = "api.php?action=profileimageandstatus";
 				MultipartFormDataContent content = new MultipartFormDataContent();
 
-				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id ");
+				content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
 				//
 				//				if(!string.IsNullOrEmpty(profileImgae))
 				//				{

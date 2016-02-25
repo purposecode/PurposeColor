@@ -148,6 +148,12 @@ namespace PurposeColor.screens
                     isSuccess = true;
                     //await Navigation.PushAsync(new LogInPage());
                     App.masterPage.IsPresented = false;
+					App.IsLoggedIn = false;
+					App.burgerMenuItems.Clear();
+					App.burgerMenuItems.Add (new MenuItems {
+						Name = Constants.SIGN_OUT_IN,
+						ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+					});
                     App.masterPage.Detail = new NavigationPage(new LogInPage());
                     //if (Device.OS != TargetPlatform.WinPhone)
                     //{

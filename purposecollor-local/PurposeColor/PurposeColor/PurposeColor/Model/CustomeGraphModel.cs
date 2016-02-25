@@ -3,7 +3,6 @@ using OxyPlot.Axes;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
@@ -44,7 +43,7 @@ namespace PurposeColor.Model
 			pieSeries.Stroke = OxyColors.Transparent;
 			pieSeries.StrokeThickness = 0;
 			pieSeries.InsideLabelPosition = 0.6; // 0.8; -for stright label
-			pieSeries.FontSize = Device.OnPlatform(10,22,22);
+			pieSeries.FontSize = App.screenDensity >= 2 ? Device.OnPlatform(10,22,22) : Device.OnPlatform(6,12,16);
 			pieSeries.AngleSpan = 360;
 			pieSeries.StartAngle = 0;
 			pieSeries.TickRadialLength = 2;

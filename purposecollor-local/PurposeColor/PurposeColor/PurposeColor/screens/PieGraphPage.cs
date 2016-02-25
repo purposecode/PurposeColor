@@ -69,7 +69,7 @@ namespace PurposeColor.screens
 				Text = "My Emotional Zone",
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 				TextColor = Constants.BLUE_BG_COLOR, //Color.FromRgb(40, 47, 50),
-				FontSize = Device.OnPlatform(14, 16, 20),
+				FontSize = App.screenDensity >= 2 ? Device.OnPlatform(14, 16, 20) : Device.OnPlatform(10, 12, 16),
 				VerticalOptions = LayoutOptions.Center
 			};
 
@@ -77,7 +77,7 @@ namespace PurposeColor.screens
 				Source = "filter.png",
 				HeightRequest = 25,
 				WidthRequest = 25,
-				Aspect = Aspect.Fill,
+				Aspect = Aspect.AspectFill,
 				HorizontalOptions = LayoutOptions.End
 			};
 			TapGestureRecognizer filterTapRecognizer = new TapGestureRecognizer();

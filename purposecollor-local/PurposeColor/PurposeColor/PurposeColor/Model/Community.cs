@@ -8,6 +8,20 @@ using System.IO;
 
 namespace PurposeColor.Model
 {
+	public class ChatHistoryDetails
+	{
+		public string from_id { get; set; }
+		public string msg { get; set; }
+		public string chat_datetime { get; set; }
+	}
+
+	public class ChatHistoryObject
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<ChatHistoryDetails> resultarray { get; set; }
+	}
+
 	public class ChatError
 	{
 		public string error { get; set; }

@@ -31,7 +31,6 @@ namespace PurposeColor
 
 		public ChatPage ()
 		{
-			NavigationPage.SetHasNavigationBar(this, false);
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
@@ -56,10 +55,25 @@ namespace PurposeColor
 			chatContactsListView.SeparatorColor = Color.FromRgb (8, 135, 224);
 			chatContactsListView.ItemSelected +=  async (object sender, SelectedItemChangedEventArgs e) => 
 			{
+				string curentUserId = App.Settings.GetUser().UserId.ToString();
+				ObservableCollection<ChatDetails> chats = new ObservableCollection<ChatDetails>();
 				ChatUsersInfo selItem = chatContactsListView.SelectedItem as ChatUsersInfo;
 				if( selItem != null )
 				{
-					ObservableCollection<ChatDetails> chats = new ObservableCollection<ChatDetails>();
+					ChatHistoryObject history = await ServiceHelper.GetChatHistory ( selItem.user_id, curentUserId );
+
+					if (history != null)
+					{
+						foreach (var item in history.resultarray) 
+						{
+							ChatDetails detail = new ChatDetails ();
+							detail.CurrentUserid = curentUserId;
+							detail.FromUserID = item.from_id;
+							detail.Message = item.msg;
+							chats.Add ( detail );
+						}
+					}
+
 					await Navigation.PushAsync( new ChatDetailsPage( chats, selItem.user_id, selItem.profileImgUrl,  selItem.firstname ) );
 				}
 				chatContactsListView.SelectedItem= null;
@@ -138,14 +152,14 @@ namespace PurposeColor
 			userName.HorizontalOptions = LayoutOptions.CenterAndExpand;
 			userName.SetBinding ( Label.TextProperty, "firstname" );
 
-		/*	CircleImage userImage = new CircleImage 
+			CircleImage userImage = new CircleImage 
 			{
 				Aspect = Aspect.AspectFit,
 				WidthRequest = 75,
 				HeightRequest = 75,
 				HorizontalOptions = LayoutOptions.Start
 			};
-			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );*/
+			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;
 			userImage.HeightRequest = App.screenWidth * 10 / 100;
@@ -169,7 +183,7 @@ namespace PurposeColor
 			availabelStatus.VerticalOptions = LayoutOptions.Center;
 			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
 
-			//mainLayout.Children.Add ( userImage );
+			mainLayout.Children.Add ( userImage );
 			mainLayout.Children.Add ( userName );
 			mainLayout.Children.Add ( availabelStatus );
 

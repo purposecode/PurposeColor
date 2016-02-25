@@ -34,9 +34,6 @@ namespace PurposeColor
 
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
-
-			NavigationPage.SetHasNavigationBar(this, false);
-
 			chatList = chats;
 			touserID = tosusrID;
 			currentuser = App.Settings.GetUser ();
@@ -67,6 +64,14 @@ namespace PurposeColor
 			chatHistoryListView.BackgroundColor =  Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
 
+			this.Appearing += (object sender, EventArgs e) => 
+			{
+				if( chatList.Count >  0)
+				{
+					chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+				}
+
+			};
 
 			CustomEditor chatEntry = new CustomEditor
 			{
@@ -121,20 +126,6 @@ namespace PurposeColor
 				await ServiceHelper.SendChatMessage( currentuser.UserId.ToString(), touserID, detail.Message );
 			};
 
-			/*	this.Appearing += async (object sender, EventArgs e) => 
-			{
-
-				progressBar.ShowProgressbar( "Preparing chat window..." );
-				masterScroll.IsVisible = true;
-
-				chatUsersList = await ServiceHelper.GetAllChatUsers ();
-
-
-
-				progressBar.HideProgressbar();
-
-			};*/
-
 
 			MessagingCenter.Subscribe<CrossPushNotificationListener, string>(this, "boom", (page, message) =>
 				{
@@ -153,6 +144,8 @@ namespace PurposeColor
 						detail.FromUserID = fromUser;
 						detail.CurrentUserid = currentuser.UserId.ToString();
 						chatList.Add( detail );
+
+						if( chatList.Count > 0 )
 						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
 					}
 
@@ -167,6 +160,11 @@ namespace PurposeColor
 		public void Dispose ()
 		{
 
+		}
+
+		protected override bool OnBackButtonPressed ()
+		{
+			return base.OnBackButtonPressed ();
 		}
 
 		private Cell CreateMessageCell()

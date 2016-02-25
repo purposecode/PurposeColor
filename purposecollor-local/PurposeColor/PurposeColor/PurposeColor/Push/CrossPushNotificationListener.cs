@@ -30,7 +30,6 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
-
 			string followMessege = null;
 			string fromID = null;
 			string chat = null;
@@ -38,27 +37,20 @@ namespace PushNotifictionListener
 			int index = 0;
 			foreach (var pair in Parameters)
 			{
-				if (index < Parameters.Count - 1) 
+				string header = pair.Key.ToString ();
+				if (header == "followrequest_id")
+					App.NotificationReqID = pair.Value.ToString ();
+				else if (header == "message")
+					followMessege = pair.Value.ToString ();
+				else if (header == "offline")
+					followMessege = pair.Value.ToString ();
+				else if (header == "from_id")
+					fromID = pair.Value.ToString ();
+				else if (header == "chat") 
 				{
-					string header = pair.Key.ToString ();
-					if (header == "followrequest_id")
-						App.NotificationReqID = pair.Value.ToString ();
-					else if (header == "message")
-						followMessege = pair.Value.ToString ();
-					else if (header == "offline")
-						followMessege = pair.Value.ToString ();
-					else if (header == "from_id")
-						fromID = pair.Value.ToString ();
-					else if (header == "chat") 
-					{
-						chat = pair.Value.ToString () + "&&" + fromID;
+					chat = pair.Value.ToString () + "&&" + fromID;
 
-					}
-
-
-					index++;
 				}
-
 			}
 
 
@@ -84,10 +76,9 @@ namespace PushNotifictionListener
 
 		public async void OnRegistered(string Token, DeviceType deviceType)
 		{
-			IProgressBar progres = DependencyService.Get<IProgressBar> ();
-			progres.ShowProgressbarWithCancel ( "token-->" + Token, () =>{ progres.HideProgressbarWithCancel(); } );
 
-
+			/*	IProgressBar progres = DependencyService.Get<IProgressBar> ();
+			progres.ShowProgressbarWithCancel ( "token-->" + Token, () =>{ progres.HideProgressbarWithCancel(); } );*/
 
 
 			User user = App.Settings.GetUser ();

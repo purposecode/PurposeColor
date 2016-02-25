@@ -60,7 +60,7 @@ namespace PurposeColor.screens
 			this.Appearing += OnAppearing;
 			this.Disappearing += GemsMainPage_Disappearing;
 			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "My Supporting Emotions", Color.White, "", false);
-
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			masterScroll = new ScrollView();
 			masterScroll.WidthRequest = App.screenWidth;
 			masterScroll.HeightRequest = App.screenHeight * 85 / 100;
@@ -756,6 +756,11 @@ namespace PurposeColor.screens
 				return false;
 			}
 			return true;
+		}
+
+		void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)
+		{
+			App.masterPage.IsPresented = !App.masterPage.IsPresented;
 		}
 
 		public void Dispose()

@@ -69,6 +69,7 @@ namespace PurposeColor
             }
 
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
             subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
@@ -394,6 +395,11 @@ namespace PurposeColor
             #endregion
             Content = masterLayout;
         }
+
+		void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)
+		{
+			App.masterPage.IsPresented = !App.masterPage.IsPresented;
+		}
 
         async void GemsDetailsPage_Appearing(object sender, EventArgs e)
         {

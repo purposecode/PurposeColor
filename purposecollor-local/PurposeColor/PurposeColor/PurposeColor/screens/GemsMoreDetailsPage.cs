@@ -67,17 +67,6 @@ namespace PurposeColor.screens
             {
                 mainTitleBar.title.Text = goalsMasterList.goal_title;
             }
-			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
-			{
-                try
-                {
-                    App.Navigator.PopModalAsync();
-                }
-                catch (Exception )
-                {
-                    
-                }
-			};
 
 
             masterScroll = new ScrollView();

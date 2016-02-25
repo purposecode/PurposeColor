@@ -93,11 +93,12 @@ namespace PurposeColor.screens
 
             // add these items only if globalSettings.IsLoggedIn //
 
-			if (user != null && App.burgerMenuItems.Count <= 1) {
+			if (user != null ) {
 
 				if (App.burgerMenuItems == null) {
 					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
 				}
+
 				App.burgerMenuItems.Clear ();
 
 				App.burgerMenuItems.Add (new MenuItems {
@@ -133,8 +134,6 @@ namespace PurposeColor.screens
 			} 
 			else 
 			{
-				App.burgerMenuItems.Clear ();
-
 				if (App.burgerMenuItems == null) {
 					App.burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
 				}
@@ -246,6 +245,7 @@ namespace PurposeColor.screens
 					App.IsLoggedIn = false;
 					App.masterPage.IsPresented = false;
 					App.masterPage.Detail = new NavigationPage(new LogInPage());
+
 					App.burgerMenuItems.Clear();
 					App.burgerMenuItems.Add (new MenuItems {
 						Name = Constants.SIGN_OUT_IN,

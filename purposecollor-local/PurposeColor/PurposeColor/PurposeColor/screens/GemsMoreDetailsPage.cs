@@ -51,7 +51,7 @@ namespace PurposeColor.screens
 			{
                 try
                 {
-                    Navigation.PopAsync();
+					App.masterPage.IsPresented = !App.masterPage.IsPresented;
                 }
                 catch (Exception)
                 {

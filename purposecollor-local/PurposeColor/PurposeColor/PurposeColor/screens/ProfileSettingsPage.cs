@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using System.IO;
 using PurposeColor.interfaces;
 using Media.Plugin;
+using PurposeColor.Service;
 
 namespace PurposeColor.screens
 {
@@ -26,15 +27,16 @@ namespace PurposeColor.screens
 		int ICON_SIZE = 8;
 		public Image profilePic = null;
 		public PurposeColor.interfaces.IProgressBar progressBar = null;
+		ProfileDetails userProfile = null;
+		PurposeColorTitleBar mainTitleBar = null;
+		PurposeColorSubTitleBar subTitleBar = null;
 
 		public ProfileSettingsPage(int userId = 0)
 		{
 			NavigationPage.SetHasNavigationBar(this, false);
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
-
-			PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Profile Info", false, true);
-
+			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "       Profile Info", false, true);
 			subTitleBar.BackButtonTapRecognizer.Tapped += (s, e) =>
 			{
 				try
@@ -46,8 +48,41 @@ namespace PurposeColor.screens
 				}
 			};
 			subTitleBar.NextButtonTapRecognizer.Tapped += SubTitleBar_NextButtonTapRecognizer_Tapped;
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
 
-			PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
+			if (userId != 0) {
+				userIdForProfileInfo = userId;
+				// get user info from service.
+			} 
+			else 
+			{
+				User user = App.Settings.GetUser ();
+				if (user == null)
+				{
+					return ;
+
+//					user = new User {
+//						DisplayName = "Sam Fernando Disusa",
+//						Age = 25,
+//						Email = "sam@testmail.com",
+//						StatusNote = "Feeling hungry.. :-P",
+//						ProfileImageUrl = "admin/uploads/default/noprofile.png"
+//					};
+				}
+
+				userInfo = user;
+			}
+
+			this.Appearing += ProfileSettingsPage_Appearing;
+
+		}
+
+		async void  ProfileSettingsPage_Appearing (object sender, EventArgs e)
+		{
+			if(userIdForProfileInfo > 0)
+			{
+				await GetProfileInfo ();
+			}
 
 			galleryInput = new Image()
 			{
@@ -71,7 +106,7 @@ namespace PurposeColor.screens
 
 			galleryInputStackTapRecognizer = new TapGestureRecognizer();
 			galleryInputStack.GestureRecognizers.Add(galleryInputStackTapRecognizer);
-			galleryInputStackTapRecognizer.Tapped += async (se, e) =>
+			galleryInputStackTapRecognizer.Tapped += async (se, ee) =>
 			{
 				try {
 					StackLayout send = se as StackLayout;
@@ -85,31 +120,6 @@ namespace PurposeColor.screens
 
 			};
 
-
-			if (userId != 0) {
-				userIdForProfileInfo = userId;
-				// get user info from service.
-
-			} else {
-				User user = App.Settings.GetUser ();
-
-				// for testing only. //test
-				if (user == null)
-				{
-					user = new User {
-						DisplayName = "Sam Fernando Disusa",
-						Age = 25,
-						Email = "sam@testmail.com",
-						StatusNote = "Feeling hungry.. :-P",
-						ProfileImageUrl = Constants.SERVICE_BASE_URL + "admin/uploads/default/noprofile.png"
-					};
-				}
-				// for testing only// test
-
-				userInfo = user;
-			}
-			//////// for testing only //
-
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(subTitleBar, 0, 10);
@@ -122,23 +132,44 @@ namespace PurposeColor.screens
 				TextColor = Color.Black,
 				WidthRequest = App.screenWidth * 80 / 100,
 			};
-			if (userInfo.StatusNote != null) {
-				statusEntry.Text = userInfo.StatusNote.Trim ();
-			} else {
-				statusEntry.Text = "Please provide your status message..";
+
+			if (userIdForProfileInfo > 0) 
+			{
+				// viewing others profile info.
+				statusEntry.IsEnabled = false;
+				if (userInfo.StatusNote != null) {
+					statusEntry.Text = userInfo.StatusNote.Trim ();
+				} else {
+					statusEntry.IsVisible = false;
+				}
+			} 
+			else 
+			{
+				// user == current logged in user // owner.
+				if (userInfo.StatusNote != null) {
+					statusEntry.Text = userInfo.StatusNote.Trim ();
+				} else {
+					statusEntry.Text = "Please provide your status message..";
+				}
+
+				statusEntry.Completed += StatusEntry_Completed;
 			}
 
 			profilePic = new Image {
-				Source = Constants.SERVICE_BASE_URL + userInfo.ProfileImageUrl,
+				Source = Constants.SERVICE_BASE_URL + (!string.IsNullOrEmpty(userInfo.ProfileImageUrl)? userInfo.ProfileImageUrl : "admin/uploads/default/noprofile.png"),
 				HeightRequest = 110,
 				WidthRequest = 100,
 				Aspect = Aspect.AspectFill,
 				HorizontalOptions = LayoutOptions.End
 			};
 
-			TapGestureRecognizer imageTapRecognizer = new TapGestureRecognizer ();
-			imageTapRecognizer.Tapped += ImageTapRecognizer_Tapped;
-			profilePic.GestureRecognizers.Add (imageTapRecognizer);
+			if (userIdForProfileInfo <= 0) 
+			{
+				TapGestureRecognizer imageTapRecognizer = new TapGestureRecognizer ();
+				imageTapRecognizer.Tapped += ImageTapRecognizer_Tapped;
+				profilePic.GestureRecognizers.Add (imageTapRecognizer);
+			}
+
 			profilePic.ClassId = "camera";
 			masterLayout.AddChildToLayout(profilePic, 35, 20);
 
@@ -152,7 +183,6 @@ namespace PurposeColor.screens
 				TextColor = Color.Black,
 				FontAttributes = FontAttributes.Bold
 			};
-			//masterLayout.AddChildToLayout(userDisplayName,40, 28);
 
 			Label emailLabel = new Label {
 				Text = !string.IsNullOrEmpty (userInfo.Email) ? userInfo.Email : "",
@@ -165,7 +195,6 @@ namespace PurposeColor.screens
 				FontAttributes = FontAttributes.None
 
 			};
-			//masterLayout.AddChildToLayout(emailLabel, 40, 40);
 
 			StackLayout nameEmailStack = new StackLayout {
 				Orientation = StackOrientation.Vertical,
@@ -174,8 +203,6 @@ namespace PurposeColor.screens
 				Children = {userDisplayName, emailLabel}
 			};
 
-
-			statusEntry.Completed += StatusEntry_Completed;
 
 			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
 			int xpos= 62;
@@ -189,20 +216,7 @@ namespace PurposeColor.screens
 					BackgroundColor = Color.Transparent
 				};
 
-				//  aligned to name.
-//				masterLayout.AddChildToLayout(verifiedBadge, 51, 39); //  aligned to name.
-//				if (emailLabel.Text != null) 
-//				{
-//					if (userDisplayName.Text.Length < 33)
-//						verifiedBadge.TranslationX = userDisplayName.Text.Length * 4;
-//					else
-//						verifiedBadge.TranslationX = 100;
-//				}
-
-				//  aligned to profile pic.
-
 				masterLayout.AddChildToLayout(verifiedBadge, xpos, 18); //  aligned to profile pic.
-
 			}
 
 			if (App.screenDensity > 2) {
@@ -215,6 +229,26 @@ namespace PurposeColor.screens
 			}
 
 			Content = masterLayout;
+		}
+
+		async System.Threading.Tasks.Task<bool> GetProfileInfo()
+		{
+
+			try {
+				userProfile = await ServiceHelper.GetProfileInfoByUserId (userIdForProfileInfo);
+				if (userProfile != null) {
+					userInfo = new User ();
+					userInfo.UserName = userProfile.firstname;
+					userInfo.StatusNote = userProfile.note;
+					userInfo.VerifiedStatus = userProfile.verified_status;
+					userInfo.Email = userProfile.email;
+					userInfo.ProfileImageUrl = userProfile.profileurl;
+				}
+				return true;
+			} catch (Exception ex) {
+
+			}
+			return false;
 		}
 
 		async void ImageTapRecognizer_Tapped (object sender, EventArgs e)

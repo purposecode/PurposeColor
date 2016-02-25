@@ -2528,7 +2528,7 @@ namespace PurposeColor.Service
 			catch (Exception)
 			{
 
-				throw;
+				return null;
 			}
 		}
 
@@ -3020,13 +3020,48 @@ namespace PurposeColor.Service
 					client.Dispose();
 					return null;
 				}
-
-
 			}
 			catch (Exception)
 			{
+				return null;
+			}
+		}
 
-				throw;
+
+		public static async Task<ProfileDetails> GetProfileInfoByUserId( int userId )
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				string uriString =  "api.php?action=userprofile&user_id=" + userId;
+				var response = await client.GetAsync(uriString);
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<ProfileDetailsResponse>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject.resultarray; 
+					}
+					client.Dispose();
+					return null;
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+			}
+			catch (Exception)
+			{
+				return null;
 			}
 		}
 

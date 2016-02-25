@@ -140,4 +140,50 @@ namespace PurposeColor.Model
 			set;
 		}
 	}
+
+	public class ProfileDetails
+	{
+		public string firstname {
+			get;
+			set;
+		}
+
+		public string email {
+			get;
+			set;
+		}
+
+		public string note {
+			get;
+			set;
+		}
+
+		public int verified_status {
+			get;
+			set;
+		}
+
+		public string profileurl {
+			get;
+			set;
+		}
+	}
+	public class ProfileDetailsResponse
+	{
+		public string code {
+			get;
+			set;
+		}
+		public string text {
+			get;
+			set;
+		}
+
+		public ProfileDetails resultarray {
+			get;
+			set;
+		}
+	}
+
+
 }

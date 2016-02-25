@@ -496,6 +496,10 @@ namespace PurposeColor
 					profileImage.WidthRequest = 60;
 					profileImage.HeightRequest = 60;
 					profileImage.Aspect = Aspect.Fill;
+					profileImage.ClassId = item.user_id;
+					TapGestureRecognizer profileImageTag = new TapGestureRecognizer();
+					profileImageTag.Tapped += ProfileImageTag_Tapped;
+					profileImage.GestureRecognizers.Add(profileImageTag);
 
 					Label userName = new Label();
 					userName.Text = item.firstname;
@@ -529,6 +533,8 @@ namespace PurposeColor
 						HeightRequest = 20,
 						ClassId = item.gem_id
 					};
+
+		
 					menuButton.Clicked += GemMenuButton_Clicked;
 
 					CustomImageButton followButton = new CustomImageButton();
@@ -720,11 +726,26 @@ namespace PurposeColor
 			}
 			catch (Exception ex) 
 			{
-
+				
 			}
 		}
 
 
+		void ProfileImageTag_Tapped (object sender, EventArgs e)
+		{
+			try {
+				if (sender == null) {
+					return;
+				}
+				
+				string userId = (sender as Image).ClassId;
+				if (!string.IsNullOrEmpty (userId)) {
+					int id = Convert.ToInt32 (userId);
+					Navigation.PushModalAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+				}
+			} catch (Exception ex) {
+			}
+		}
 
 		void OnLoadPreviousGemsClicked (object sender, EventArgs e)
 		{

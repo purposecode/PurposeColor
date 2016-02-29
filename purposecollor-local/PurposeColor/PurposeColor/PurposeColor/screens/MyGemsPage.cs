@@ -800,7 +800,7 @@ namespace PurposeColor
 				List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments( gemID, GemType.Goal, false);
 				progressBar.HideProgressbar();
 
-				PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, "44", CurrentGemType, false);
+				PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, gemID, CurrentGemType, false);
 				commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
 				commentsView.HeightRequest = App.screenHeight;
 				commentsView.WidthRequest = App.screenWidth;

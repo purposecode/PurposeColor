@@ -34,10 +34,11 @@ namespace PurposeColor.iOS
                     "https://www.googleapis.com/auth/userinfo.email",
                     "https://accounts.google.com/o/oauth2/auth",
                     "https://www.googleapis.com/plus/v1/people/me");
+				UIViewController vc = myAuth.authenticator.GetUI();
 
                 myAuth.authenticator.Completed += async (object sender, AuthenticatorCompletedEventArgs eve) =>
                 {
-                    dialog.DismissViewController(true, null);
+                    //dialog.DismissViewController(true, null);
                     window.Hidden = true;
                     dialog.Dispose();
                     window.Dispose();
@@ -45,10 +46,12 @@ namespace PurposeColor.iOS
                     {
                         var user = await myAuth.GetProfileInfoFromGoogle(eve.Account.Properties["access_token"].ToString());
 						await App.SaveUserData(user,true);
+						//dialog.DismissViewController(true, null);
+						App.IsLoggedIn = true;
+						App.SuccessfulLoginAction.Invoke();
                     }
                 };
 
-                UIViewController vc = myAuth.authenticator.GetUI();
                 dialog.PresentViewController(vc, true, null);
             }
         }
@@ -78,14 +81,19 @@ namespace PurposeColor.iOS
 						           scope: "", // the scopes for the particular API you're accessing, delimited by "+" symbols
 						           authorizeUrl: new Uri ("https://m.facebook.com/dialog/oauth/"),//new Uri(""), // the auth URL for the service
 						           redirectUrl: new Uri ("http://www.facebook.com/connect/login_success.html")); // the redirect URL for the service
-					
-					auth.Completed += (sender, eventArgs) => {
+
+					auth.Completed += async (sender, eventArgs) => {
+						
+						window.Hidden = true;
+						dialog.Dispose();
+						window.Dispose();
+
 						if (eventArgs.IsAuthenticated) {
 							App.SuccessfulLoginAction.Invoke ();
 							App.SaveToken (eventArgs.Account.Properties ["access_token"]);
 					
 							var request = new OAuth2Request ("GET", new Uri ("https://graph.facebook.com/me"), null, eventArgs.Account);
-							request.GetResponseAsync ().ContinueWith (t => {
+							await request.GetResponseAsync ().ContinueWith (t => {
 								if (t.IsFaulted)
 									Console.WriteLine ("Error: " + t.Exception.InnerException.Message);
 								else {
@@ -94,6 +102,10 @@ namespace PurposeColor.iOS
 									SerialiseFacebookUserData (json);
 								}
 							});
+
+							dialog.DismissViewController(false, null);
+							App.SuccessfulLoginAction.Invoke();
+
 						}
 					};
 

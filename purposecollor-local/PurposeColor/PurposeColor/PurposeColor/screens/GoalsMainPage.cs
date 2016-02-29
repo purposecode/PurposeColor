@@ -337,6 +337,10 @@ namespace PurposeColor.screens
 						trans.WidthRequest = App.screenWidth;
 						masterStack.Children.Add(trans);
 					}
+					else
+					{
+						masterStack.Children.Add(cellContainer);
+					}
 
 				}
 			} 

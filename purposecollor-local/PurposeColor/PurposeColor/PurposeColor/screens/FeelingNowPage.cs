@@ -174,7 +174,10 @@ namespace PurposeColor
 			sliderValueImage = new Image {
 				Source = "Sliderfeedback0.png",
 				HeightRequest = 30,
-				Aspect = Aspect.Fill
+				Aspect = Aspect.Fill, 
+				InputTransparent = true,
+				BackgroundColor = Color.Transparent,
+
 			};
 
 			#region SLIDER LABEL TAP
@@ -526,8 +529,6 @@ namespace PurposeColor
 			{
 
 				User user = App.Settings.GetUser();
-				if( user == null )
-					user = new User(){ UserId = "2" };
 
 				progressBar.ShowProgressbar("Saving details..");
 				bool isDataSaved = await ServiceHelper.SaveEmotionAndEvent(selectedEmotionItem.EmotionID, selectedEventItem.EventID,  user.UserId.ToString());

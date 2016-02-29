@@ -64,6 +64,7 @@ namespace PurposeColor
 
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
 			subTitleBar.myGemsTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
@@ -73,6 +74,7 @@ namespace PurposeColor
 				CommunityGemsObject myGems = await ServiceHelper.GetMyGemsDetails();
 				if( myGems != null )
 				{
+					communityGems = null;
 					Navigation.PushAsync( new MyGemsPage( myGems ) );
 					myGemsCount = myGems.resultarray.Count;
 				}
@@ -91,7 +93,7 @@ namespace PurposeColor
 			{
 				try
 				{
-					await Navigation.PopAsync();
+					App.masterPage.IsPresented = !App.masterPage.IsPresented;
 				}
 				catch (Exception)
 				{
@@ -145,7 +147,10 @@ namespace PurposeColor
 			Content = masterLayout;
 		}
 
-
+		void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)
+		{
+			App.masterPage.IsPresented = !App.masterPage.IsPresented;
+		}
 		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)
 		{
 			if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
@@ -216,9 +221,6 @@ namespace PurposeColor
 				try
 				{
 					user = App.Settings.GetUser();
-					////////////// for testing only // test //////////////
-					user = new User { UserId = "2", AllowCommunitySharing = true }; // for testing only // test
-					////////////// for testing only // test //////////////
 				}
 				catch (Exception ex)
 				{
@@ -578,8 +580,10 @@ namespace PurposeColor
 					masterStack.AddChildToLayout(userName, 23, 3);
 					masterStack.AddChildToLayout(title, 23, 7);
 
-					if( item.user_id != currentUser.UserId.ToString() )
+					if( (item.user_id != currentUser.UserId.ToString() ) && item.can_follow == "1")
+					{
 						masterStack.AddChildToLayout(followButton, 70, 3 );
+					}
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();
 					moreTap.Tapped += async (object senderr, EventArgs ee) =>
@@ -741,7 +745,8 @@ namespace PurposeColor
 				string userId = (sender as Image).ClassId;
 				if (!string.IsNullOrEmpty (userId)) {
 					int id = Convert.ToInt32 (userId);
-					Navigation.PushModalAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+					//Navigation.PushModalAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+					Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage (id));
 				}
 			} catch (Exception ex) {
 			}
@@ -1049,13 +1054,11 @@ namespace PurposeColor
 					string selectedGemType = clasIDArray [1];
 					GemType currentGemType = GetGemType( selectedGemID );
 
-
 					progressBar.ShowProgressbar("Loading comments");
 					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, false);
 					progressBar.HideProgressbar();
 
-
-					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, gemID, CurrentGemType, false);
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false);
 					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
 					commentsView.HeightRequest = App.screenHeight;
 					commentsView.WidthRequest = App.screenWidth;

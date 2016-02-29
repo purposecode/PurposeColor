@@ -1301,7 +1301,12 @@ namespace PurposeColor.screens
 
         async void NextButtonTapRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            
+			User user = null;
+			try {
+				user = App.Settings.GetUser();
+			} catch (Exception ex) {
+
+			}
             IProgressBar progress = DependencyService.Get<IProgressBar>();
             try
             {
@@ -1322,10 +1327,8 @@ namespace PurposeColor.screens
                         {
 							GoalDetails newGoal = new GoalDetails();
 
-							User user = App.Settings.GetUser();
-							if( user == null )
-								user = new User(){ UserId = "2" };
-							
+
+
                             ActionModel details = new ActionModel();
                             if (!isUpdatePage)
                             {
@@ -1338,7 +1341,7 @@ namespace PurposeColor.screens
                             }
                             details.action_title = eventTitle.Text;
                             details.action_details = eventDescription.Text;
-							details.user_id = user.UserId.ToString();
+							details.user_id = user.UserId;
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
 							if(!string.IsNullOrEmpty(currentAddress))
@@ -1425,7 +1428,7 @@ namespace PurposeColor.screens
                             EventDetails details = new EventDetails();
                             details.event_title = eventTitle.Text;
                             details.event_details = eventDescription.Text;
-                            details.user_id = "2";// for tezsting only // test
+							details.user_id = user.UserId;
                             details.location_latitude = lattitude;
                             details.location_longitude = longitude;
 							if (!string.IsNullOrEmpty(currentAddress))
@@ -1469,14 +1472,10 @@ namespace PurposeColor.screens
                         {
                             GoalDetails newGoal = new GoalDetails();
 
-							User user = App.Settings.GetUser();
-							if( user == null )
-								user = new User(){ UserId = "2" };
-							
                             //EventDetails newGoal = new EventDetails();
                             newGoal.goal_title = eventTitle.Text;
                             newGoal.goal_details = eventDescription.Text;
-							newGoal.user_id = user.UserId.ToString();
+							newGoal.user_id = user.UserId;
                             newGoal.location_latitude = lattitude;
                             newGoal.location_longitude = longitude;
                             newGoal.category_id = "1";
@@ -1510,7 +1509,7 @@ namespace PurposeColor.screens
                             {
                                 try
                                 {
-									var goals = await ServiceHelper.GetAllGoals( user.UserId ); //for testing only
+									var goals = await ServiceHelper.GetAllGoals( user.UserId );
                                     if (goals != null)
                                     {
                                         App.goalsListSource = null;
@@ -1592,9 +1591,9 @@ namespace PurposeColor.screens
                 MediaPost mediaWeb = new MediaPost();
                 mediaWeb.event_details = string.IsNullOrWhiteSpace(eventDescription.Text) ? string.Empty : eventDescription.Text;
                 mediaWeb.event_title = string.IsNullOrWhiteSpace(eventTitle.Text) ? string.Empty : eventTitle.Text;
+				User user = App.Settings.GetUser();
                 
-                
-                mediaWeb.user_id = 2; /// for testing only// test
+				mediaWeb.user_id = Convert.ToInt32(user.UserId);
 
                 string imgType = System.IO.Path.GetExtension(path);
                 string fileName = System.IO.Path.GetFileName(path);
@@ -1741,7 +1740,8 @@ namespace PurposeColor.screens
                 MediaPost mediaWeb = new MediaPost();
                 mediaWeb.event_details = string.IsNullOrWhiteSpace(eventDescription.Text) ? string.Empty : eventDescription.Text;
                 mediaWeb.event_title = string.IsNullOrWhiteSpace(eventTitle.Text) ? string.Empty : eventTitle.Text;
-                mediaWeb.user_id = 2;
+				User user = App.Settings.GetUser();
+				mediaWeb.user_id = Convert.ToInt32(user.UserId);
 
                 string imgType = System.IO.Path.GetExtension(path);
                 string fileName = System.IO.Path.GetFileName(path);

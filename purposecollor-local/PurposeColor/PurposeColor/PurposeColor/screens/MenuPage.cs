@@ -151,7 +151,7 @@ namespace PurposeColor.screens
             listView.ItemSelected += OnListViewItemSelected;
             listView.BackgroundColor = Constants.MENU_BG_COLOR;
             listView.RowHeight =(int) screenHeight * 10 / 100;
-			listView.HeightRequest = App.screenHeight;
+			listView.HeightRequest = App.screenHeight * .8;
 
             Icon = Device.OnPlatform("bottom_menu_icon.png", "bottom_menu_icon.png", "//Assets//bottom_menu_icon.png");
             Title = "Menu";
@@ -225,8 +225,25 @@ namespace PurposeColor.screens
 
 						PurposeColor.Model.User user = null;
 						user = App.Settings.GetUser();
-						App.Settings.DeleteAllUsers();
-						await App.Settings.SaveAppGlobalSettings(new PurposeColor.Model.GlobalSettings());
+						App.Settings.DeleteAllUsers(); // the same user may log in again.
+						App.Settings.DeleteAllCompletedGoals();
+						App.Settings.DeleteAllEmotions();
+						App.Settings.DeleteAllEvents();
+						App.Settings.DeleteAllGemsActions();
+						App.Settings.DeleteAllGemsEvents();
+						App.Settings.DeleteAllPendingGoals();
+						App.Settings.DeleteAllActionWithImage();
+						App.Settings.DeleteAllEventWithImage();
+						//App.Settings.DeleteCommunityGems(); // as its common for all users.
+
+						PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();
+						if(globalSettings != null)
+						{
+							globalSettings.ShowRegistrationScreen = false;
+							globalSettings.IsLoggedIn = false;
+							globalSettings.IsFirstLogin = false;
+							await App.Settings.SaveAppGlobalSettings(globalSettings);
+						}
 
 						if (user != null)
 						{

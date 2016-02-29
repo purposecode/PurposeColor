@@ -32,11 +32,26 @@ namespace PurposeColor.Model
 
 			var pieSeries = new PieSeries();
 
-			//in actual implementation PieSlice has to be derived from a dictionary or comining arrays.
-			pieSeries.Slices.Add(new PieSlice("Warm", warmCount) { IsExploded = true , Fill = OxyColor.FromRgb(249,68,0)});
-			pieSeries.Slices.Add(new PieSlice("Patient", patientCount) { IsExploded = true , Fill = OxyColor.FromRgb(30,163,1)}); //31, 145, 2
-			pieSeries.Slices.Add(new PieSlice("Assertive", assertiveCount){ IsExploded = true, Fill = OxyColor.FromRgb(255,201,60)});
-			pieSeries.Slices.Add(new PieSlice("Detailed", detailedCount) { IsExploded = true, Fill = OxyColor.FromRgb(2,76,234)});
+			if(warmCount > 0)
+			{
+				pieSeries.Slices.Add(new PieSlice("Warm", warmCount) { IsExploded = true , Fill = OxyColor.FromRgb(249,68,0)});
+			}
+
+			if(patientCount>0)
+			{
+				pieSeries.Slices.Add(new PieSlice("Patient", patientCount) { IsExploded = true , Fill = OxyColor.FromRgb(30,163,1)}); //31, 145, 2
+			}
+
+			if(assertiveCount > 0)
+			{
+				pieSeries.Slices.Add(new PieSlice("Assertive", assertiveCount){ IsExploded = true, Fill = OxyColor.FromRgb(255,201,60)});
+			}
+
+			if (detailedCount > 0) 
+			{
+				pieSeries.Slices.Add(new PieSlice("Detailed", detailedCount) { IsExploded = true, Fill = OxyColor.FromRgb(2,76,234)});	
+			}
+
 
 			pieSeries.InnerDiameter = 0; //0.3;
 			pieSeries.ExplodedDistance = 0.0;

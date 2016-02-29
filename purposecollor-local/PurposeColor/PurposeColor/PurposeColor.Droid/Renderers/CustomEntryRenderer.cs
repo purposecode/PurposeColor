@@ -35,11 +35,11 @@ namespace PurposeColor.Droid.Renderers
 			if (formsEntry != null && !string.IsNullOrEmpty (formsEntry.BackGroundImageName)) {
 				Android.Graphics.Drawables.Drawable drawable = Resources.GetDrawable (Resource.Drawable.comnt_box);
 				nativeTextView.Background = drawable;
-
 			} 
 			else 
 			{
 				nativeTextView.SetBackgroundColor(Android.Graphics.Color.White);
+				nativeTextView.SetHintTextColor(Android.Graphics.Color.Gray);
 			}
 
             nativeTextView.SetTextColor(Android.Graphics.Color.Gray);

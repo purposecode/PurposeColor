@@ -16,7 +16,7 @@ namespace PurposeColor.Model
         public string text { get; set; }
         public int comment_id { get; set; }
     }
-    public class ReoveCommentResponse
+    public class CodeAndTextOnlyResponce
     {
         public string code{ get; set; }
         public string text { get; set; }
@@ -44,7 +44,7 @@ namespace PurposeColor.Model
 	{
 		public string code { get; set; }
 		public string text { get; set; }
-		public string warm_percent {
+		public int warm_percent {
 			get;
 			set;
 		}
@@ -109,7 +109,7 @@ namespace PurposeColor.Model
 			get;
 			set;
 		}
-		public int goalaction_id {
+		public string goalaction_id {
 			get;
 			set;
 		}

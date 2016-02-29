@@ -234,6 +234,7 @@ namespace PurposeColor.Model
 		public int follow_status { get; set; }
 		public string firstname { get; set; }
 		public string profileimg { get; set; }
+		public string can_follow { get; set; }
 		public List<GemMedia> gem_media { get; set; }
 	}
 

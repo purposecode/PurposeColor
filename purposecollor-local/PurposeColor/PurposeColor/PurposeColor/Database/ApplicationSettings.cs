@@ -237,36 +237,14 @@ namespace PurposeColor.Database
 		{
 			bool isUserAdded = false;
 
-			//var newUser = new User();
 			try
 			{
-//				newUser.UserName = user.UserName;
-//				newUser.DisplayName = user.DisplayName;
-//				newUser.AuthenticationToken = user.AuthenticationToken;
-//				newUser.Password = user.Password;
-//				//newUser.PreferredGEMS = user.PreferredGEMS;
-//				newUser.Mobile = user.Mobile;
-//				newUser.Gender = user.Gender;
-//				newUser.Age = user.Age;
-//				newUser.Country = user.Country;
-//				newUser.UserId = user.UserId;
-//				newUser.UserType = user.UserType;
-//				newUser.AllowCommunitySharing = user.AllowCommunitySharing;
-//				newUser.StatusNote = user.StatusNote;
-//				newUser.ProfileImageUrl = user.ProfileImageUrl;
-//				newUser.Email = user.Email;
-//				newUser.Gender = user.Gender;
-//				newUser.RegistrationDate = user.RegistrationDate;
-//				newUser.UserName = user.UserName;
-//				newUser.VerifiedStatus = user.VerifiedStatus;
-
 				if (Connection.Table<User>().FirstOrDefault(t => t.UserName == user.UserName) == null)
 				{
 					Connection.Insert(user);
 				}
 				else
 				{
-					//newUser.ID = user.ID;
 					Connection.Update(user);
 				}
 
@@ -1243,6 +1221,18 @@ namespace PurposeColor.Database
 			return null;
 		}
 
+		public async Task<bool> DeleteAllEventWithImage()
+		{
+			try
+			{
+				Connection.DeleteAll<EventWithImage>();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("DeleteAllUsers :: " + ex.Message);
+			}
+			return true;
+		}
 
 		#endregion
 
@@ -1275,6 +1265,19 @@ namespace PurposeColor.Database
 				var test = ex.Message;
 			}
 			return null;
+		}
+
+		public async Task<bool> DeleteAllActionWithImage()
+		{
+			try
+			{
+				Connection.DeleteAll<ActionWithImage>();
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine("DeleteAllUsers :: " + ex.Message);
+			}
+			return true;
 		}
 
 		#endregion

@@ -74,6 +74,10 @@ namespace PurposeColor.Model
 		public bool AllowCommunitySharing { get; set; }
 
 		public int VerifiedStatus { get; set; }
+		public bool AllowFollowers {
+			get;
+			set;
+		}
 
         /// <summary>
         /// Gets or sets the PreferredGEMS
@@ -84,14 +88,28 @@ namespace PurposeColor.Model
 
     public class LoginUser
     {
-        public string user_id;
-        public string firstname;
-        public string email;
-        public string profileurl;
-        public string note;
-        public string regdate;
-        public string usertype_id;
-		public int verified_status;
+//        public string user_id;
+//        public string firstname;
+//        public string email;
+//        public string profileurl;
+//        public string note;
+//        public string regdate;
+//        public string usertype_id;
+//		public int verified_status;
+//
+//
+
+		public string user_id { get; set; }
+		public string usertype_id { get; set; }
+		public string firstname { get; set; }
+		public string email { get; set; }
+		public string note { get; set; }
+		public string regdate { get; set; }
+		public string logged_status { get; set; }
+		public int verified_status { get; set; }
+		public string profileurl { get; set; }
+		public string follow_status { get; set; }
+		public string community_status { get; set; }
     }
 
     public class UserDetailsOnLogin

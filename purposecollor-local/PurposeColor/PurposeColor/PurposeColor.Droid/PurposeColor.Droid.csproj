@@ -315,6 +315,7 @@
     <AndroidResource Include="Resources\drawable\photoCamera_icon.png" />
     <AndroidResource Include="Resources\drawable\verified_icon.png" />
     <AndroidResource Include="Resources\drawable\logout_icon.png" />
+    <AndroidResource Include="Resources\drawable\roundNextBtn.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

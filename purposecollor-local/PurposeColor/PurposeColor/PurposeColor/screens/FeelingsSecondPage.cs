@@ -285,7 +285,9 @@ namespace PurposeColor
         {
             try
             {
-                var goals = await ServiceHelper.GetAllGoals("2"); //for testing only
+				User user = App.Settings.GetUser();
+
+				var goals = await ServiceHelper.GetAllGoals(user.UserId);
                 if (goals != null)
                 {
                     App.goalsListSource = null;

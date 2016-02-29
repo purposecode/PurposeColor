@@ -54,6 +54,8 @@ namespace PurposeColor
 			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
 			communityGems = gemsObject;
+			App.Settings.DeleteCommunityGems ();
+			App.Settings.SaveCommunityGemsDetails (gemsObject);
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "My Gems", false);
@@ -145,6 +147,8 @@ namespace PurposeColor
 				CommunityGemsDetails firstItem =   communityGems.resultarray.First ();
 
 				CommunityGemsObject gemsObj =  App.Settings.GetCommunityGemsObject ();
+
+
 				int firstRendererItemIndex = gemsObj.resultarray.FindIndex (itm => itm.gem_id == firstItem.gem_id);;//gemsObj.resultarray.IndexOf ( lastItem );
 				if (firstRendererItemIndex > 0 && ( firstRendererItemIndex + 1 ) < gemsObj.resultarray.Count )
 				{

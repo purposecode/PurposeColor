@@ -193,11 +193,7 @@ namespace PurposeColor.Service
                 }
 
                 var client = new System.Net.Http.HttpClient();
-                //User user = App.Settings.GetUser();
-
-                ///////// for testing
-
-                User user = new User { UserId = "2", UserName = "sam" };
+                User user = App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -251,11 +247,7 @@ namespace PurposeColor.Service
                 }
 
                 var client = new System.Net.Http.HttpClient();
-                //User user = App.Settings.GetUser();
-
-                ///////// for testing
-
-                User user = new User { UserId = "2", UserName = "sam" };
+                User user = App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -310,11 +302,7 @@ namespace PurposeColor.Service
                 }
 
                 var client = new System.Net.Http.HttpClient();
-                //User user = App.Settings.GetUser();
-
-                ///////// for testing
-
-                User user = new User { UserId = "2", UserName = "sam" };
+                User user = App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -362,9 +350,7 @@ namespace PurposeColor.Service
             List<CustomListViewItem> actionsList = null;
             try
             {
-                //////// for testing
-
-                User user = new User { UserId = "2", UserName = "sam" };
+				User user =  App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -828,12 +814,7 @@ namespace PurposeColor.Service
 
             try
             {
-                User user = new User { UserId = "2" }; // for testing only // test remove after testing
-
-                if (App.Settings.GetUser() != null)
-                {
-                    user = App.Settings.GetUser();
-                }
+				User user =  App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -865,7 +846,7 @@ namespace PurposeColor.Service
                 }
                 content.Add(new StringContent(supportValue.ToString(), Encoding.UTF8), "emotion_value");
                 content.Add(new StringContent(goalId.ToString(), Encoding.UTF8), "goal_id");
-                content.Add(new StringContent(user.UserId.ToString(), Encoding.UTF8), "user_id");
+                content.Add(new StringContent(user.UserId, Encoding.UTF8), "user_id");
                 
 
                 HttpResponseMessage response = await client.PostAsync(url, content);
@@ -896,7 +877,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
+				User user = App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -949,7 +930,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = "2", UserName = "sam" };// for testing only // testing
+				User user = App.Settings.GetUser();
 
                 if (user == null)
                 {
@@ -1477,7 +1458,7 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var responseJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(responseJson);
                     if (rootobject != null && rootobject.code != null)
                     {
                         return rootobject.code;
@@ -1567,11 +1548,6 @@ namespace PurposeColor.Service
 			{
 				User user = App.Settings.GetUser();
 
-				if (user == null)
-				{
-					user = new User { UserId = "2", UserName = "sam" };
-				}
-
 				if (!CrossConnectivity.Current.IsConnected)
 				{
 					return null;
@@ -1618,7 +1594,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = "2", UserName = "sam" };
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
@@ -1721,8 +1697,7 @@ namespace PurposeColor.Service
         {
             try
             {
-                User user = new User { UserId = "2", UserName = "sam" };
-
+				User user = App.Settings.GetUser();
                 if (user == null)
                 {
                     return null;
@@ -1776,10 +1751,6 @@ namespace PurposeColor.Service
             try
             {
 				User user = App.Settings.GetUser();
-				if( user == null )
-					user = new User { UserId = "2", UserName = "sam" };
-				
-
                 if (!CrossConnectivity.Current.IsConnected)
                 {
                     return null;
@@ -1861,7 +1832,7 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var responseJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(responseJson);
                     if (rootobject != null && rootobject.code != null)
                     {
                         return rootobject.code;
@@ -1916,7 +1887,7 @@ namespace PurposeColor.Service
 				if (response != null && response.StatusCode == HttpStatusCode.OK)
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
-					var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+					var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(responseJson);
 					if (rootobject != null && rootobject.code != null)
 					{
 						return rootobject.code;
@@ -1967,7 +1938,7 @@ namespace PurposeColor.Service
                 if (response != null && response.StatusCode == HttpStatusCode.OK)
                 {
                     var responseJson = response.Content.ReadAsStringAsync().Result;
-                    var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+                    var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(responseJson);
                     if (rootobject != null && rootobject.code != null)
                     {
                         return rootobject.code;
@@ -1990,9 +1961,6 @@ namespace PurposeColor.Service
 			{
 
 				User user = App.Settings.GetUser();
-
-				if( user == null )
-					user = new User(){ UserId = "2" };
 
 				if (!CrossConnectivity.Current.IsConnected)
 				{
@@ -2048,9 +2016,6 @@ namespace PurposeColor.Service
 			try
 			{
 				User user = App.Settings.GetUser();
-
-				if( user == null )
-					user = new User(){ UserId = "2" };
 
 				if (user == null)
 				{
@@ -2175,7 +2140,7 @@ namespace PurposeColor.Service
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
 					var rootobject = JsonConvert.DeserializeObject<AllEmotions>(responseJson);
-					if (rootobject != null && rootobject.resultarray != null)
+					if (rootobject != null)
 					{
 						return rootobject;
 					}
@@ -2267,7 +2232,7 @@ namespace PurposeColor.Service
 				if (response != null && response.StatusCode == HttpStatusCode.OK)
 				{
 					var responseJson = response.Content.ReadAsStringAsync().Result;
-					var rootobject = JsonConvert.DeserializeObject<ReoveCommentResponse>(responseJson);
+					var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(responseJson);
 					if (rootobject != null && rootobject != null)
 					{
 						return rootobject.code;
@@ -2289,7 +2254,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
@@ -2339,7 +2304,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
@@ -2383,7 +2348,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
@@ -2432,7 +2397,7 @@ namespace PurposeColor.Service
 		{
 			try
 			{
-				User user = new User { UserId = "2", UserName = "sam" }; // for testing only // test
+				User user = App.Settings.GetUser();
 
 				if (user == null)
 				{
@@ -2739,9 +2704,7 @@ namespace PurposeColor.Service
 					return "404";
 				}
 				User user = App.Settings.GetUser();
-				if (user == null) { // for testing only// test
-					user = new User{UserId = "2"};
-				}
+
 				var client = new HttpClient();
 
 				client.DefaultRequestHeaders.Add("Post", "application/json");
@@ -3065,6 +3028,52 @@ namespace PurposeColor.Service
 			}
 		}
 
+		public static async Task<string> UpdateShreAndFollowStatus( string userId, string communityStatus, string followStatus )
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return "404";
+				}
+
+				var client = new System.Net.Http.HttpClient();
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				string uriString =  "api.php?action=settings&user_id=" + userId;
+
+				if(!string.IsNullOrEmpty(communityStatus))
+				{
+					uriString += "&community_status=" + communityStatus;
+				}
+
+				if (!string.IsNullOrEmpty(followStatus)) {
+					uriString += "&follow_status=" + followStatus;
+				}
+
+				var response = await client.GetAsync(uriString);
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<CodeAndTextOnlyResponce>(actionsJson);
+					if (rootobject != null && rootobject != null)
+					{
+						client.Dispose();
+						return rootobject.code; 
+					}
+					client.Dispose();
+					return "404";
+				}
+				else
+				{
+					client.Dispose();
+					return "404";
+				}
+			}
+			catch (Exception)
+			{
+				return "404";
+			}
+		}
 
     }
 

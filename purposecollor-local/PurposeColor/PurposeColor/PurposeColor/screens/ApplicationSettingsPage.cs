@@ -97,7 +97,7 @@ namespace PurposeColor.screens
                 if (App.Settings.GetUser() != null)
                 {
                     //await Navigation.PushModalAsync(new ChangePassword());
-					await Navigation.PushAsync(new ChangePassword());
+					await Navigation.PushModalAsync(new ChangePassword());
                 }
                 else
                 {

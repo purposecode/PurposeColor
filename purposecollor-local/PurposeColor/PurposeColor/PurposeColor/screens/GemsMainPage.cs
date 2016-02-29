@@ -237,7 +237,8 @@ namespace PurposeColor.screens
 		{
 			if (!isLoadingFromDetailsPage) 
 			{
-				IProgressBar progress = DependencyService.Get<IProgressBar> ();
+				progressBar = DependencyService.Get<IProgressBar> ();
+				progressBar.ShowProgressbar ("Loading gems..");
 
 				try {
 					//progress.ShowProgressbar ("Loading gems..");
@@ -286,15 +287,12 @@ namespace PurposeColor.screens
 					// call - ShowEmotionsTapGesture_Tapped //
 
 					ShowEmotionsTapGesture_Tapped (emotionsButtion, null);	
-				
-
-
-					progress.HideProgressbar ();
-
-				} catch (Exception ex) {
-					var test = ex.Message;
 				}
-				progress.HideProgressbar ();
+				catch (Exception ex) {
+					var test = ex.Message;
+					progressBar.HideProgressbar ();
+				}
+
 			}
 		}
 
@@ -342,7 +340,9 @@ namespace PurposeColor.screens
 
 				IDownload downloader = DependencyService.Get<IDownload> ();
 				List<string> filesTodownliad = new List<string> ();
-				for (int i = index; i < max; i++) {//eventsWithImage.Count - 1
+				for (int i = index; i < max; i++) 
+				{
+
 					filesTodownliad.Add (Constants.SERVICE_BASE_URL + eventsWithImage [i].event_media);
 				}
 
@@ -433,7 +433,13 @@ namespace PurposeColor.screens
 				List<string> filesTodownliad = new List<string> ();
 				for (int i = index; i < max; i++)
 				{
-					filesTodownliad.Add (Constants.SERVICE_BASE_URL + actionsWithImage[i].action_media);
+					if(!string.IsNullOrEmpty(actionsWithImage[i].action_media)&& 
+						!string.IsNullOrEmpty(actionsWithImage[i].action_details)&& 
+						!string.IsNullOrEmpty(actionsWithImage[i].goalaction_id) && 
+						!string.IsNullOrEmpty(actionsWithImage[i].goal_title))
+					{
+						filesTodownliad.Add (Constants.SERVICE_BASE_URL + actionsWithImage[i].action_media);
+					}
 				}
 
 				bool doneDownloading = await downloader.DownloadFiles (filesTodownliad);

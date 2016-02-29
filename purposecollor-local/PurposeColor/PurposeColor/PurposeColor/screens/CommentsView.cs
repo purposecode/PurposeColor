@@ -28,7 +28,7 @@ namespace PurposeColor.screens
         StackLayout listContainer = null;
         TapGestureRecognizer removeLabelTap = null;
         StackLayout commentLayout = null;
-        string currentUserId = "2"; ///  = 2 for testing
+        string currentUserId = "0";
         User currentUser;
         Button closeButton;
         int popupHeightValue = 10;
@@ -68,15 +68,7 @@ namespace PurposeColor.screens
             {
 
                 currentUser = App.Settings.GetUser();
-                if (currentUser == null)
-                {
-                    currentUser = new User { UserName = "me", UserId = "2", AllowCommunitySharing = true };
-                }
-                else
-                {
-                    currentUserId = currentUser.UserId.ToString();
-                }
-
+				currentUserId = currentUser.UserId;
             }
             catch (Exception ex)
             {
@@ -334,30 +326,11 @@ namespace PurposeColor.screens
                 isPosting = true;
 
                 PurposeColor.Model.User user = App.Settings.GetUser();
-				user = new User{UserName = "Sam", UserId = "2", AllowCommunitySharing = true, DisplayName="Sam"};
-				if( user == null )
-				{
-					progressBar.HideProgressbar();
-					progressBar.ShowToast( "user name is not valid." );
-					return;
-				}
-
-                ////////////// for testing  //test //////////////
-
-                //isCommunityShared = false; /// for testing only 
-        /*        user = new PurposeColor.Model.User
-                {
-                    UserId = 2,
-                    AllowCommunitySharing = true,
-                    UserName = "Test user"
-                };
-                await App.Settings.SaveUser(user);*/
-
-
-                ////////////// for testing  //test //////////////
 
                 if (user == null)
                 {
+					progressBar.HideProgressbar();
+					progressBar.ShowToast( "user name is not valid." );
                     isPosting = false;
                     return;
                 }

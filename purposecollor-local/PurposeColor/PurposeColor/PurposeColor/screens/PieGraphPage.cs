@@ -489,42 +489,58 @@ namespace PurposeColor.screens
 
 				progressBar.ShowProgressbar ("Analysing your emotions.");
 
-				AllEmotions getEmotionsResult = await PurposeColor.Service.ServiceHelper.GetEmotionsDetailsForGraph ("2"); // user id for testing only.. in actual get it from app.settings.
-
-				if (getEmotionsResult.resultarray != null) 
+				User user = App.Settings.GetUser();
+				if(user == null)
 				{
-					emotionList = getEmotionsResult.resultarray;
-					isValueReceied = true;
+					return;
+				}
+				AllEmotions getEmotionsResult = await PurposeColor.Service.ServiceHelper.GetEmotionsDetailsForGraph (user.UserId); // user id for testing only.. in actual get it from app.settings.
 
-					#region OXYPLOT VIEW
+				if (getEmotionsResult != null) 
+				{
+					//if(getEmotionsResult.resultarray != null)
+					{
+						if(getEmotionsResult.resultarray == null) {
+							emotionList = new List<EmotionValues>();
+							emotionList.Add(new EmotionValues());
+						}
+						else {
+							emotionList = getEmotionsResult.resultarray;
+						}
+						isValueReceied = true;
 
-					plotView = new OxyPlotView();
-					plotView.HeightRequest = App.screenWidth * .80;//.60;//300;
-					plotView.WidthRequest = App.screenWidth * .80; //.60; // H & W same to keep it square. //300;
-					plotView.BackgroundColor = Color.Transparent;
+						#region OXYPLOT VIEW
 
-					graphModel = new CustomeGraphModel(emotionList);
-					plotView.Model = graphModel.plotModel;
-					plotView.VerticalOptions = LayoutOptions.Center;
-					plotView.HorizontalOptions = LayoutOptions.Center;
+						plotView = new OxyPlotView();
+						plotView.HeightRequest = App.screenWidth * .80;//.60;//300;
+						plotView.WidthRequest = App.screenWidth * .80; //.60; // H & W same to keep it square. //300;
+						plotView.BackgroundColor = Color.Transparent;
 
-					graphAndEmotionListContainer.Children.Add(plotView);
+						graphModel = new CustomeGraphModel(emotionList);
+						plotView.Model = graphModel.plotModel;
+						plotView.VerticalOptions = LayoutOptions.Center;
+						plotView.HorizontalOptions = LayoutOptions.Center;
+
+						graphAndEmotionListContainer.Children.Add(plotView);
+
+
+
+
+						#endregion
+					}
+
+					region1WarmLabel.Text =  "Warm (" + getEmotionsResult.warm_percent+ "%)";
+					region2AssertiveLabel.Text = "Assertive (" + getEmotionsResult.assertive_percent + "%)";
+					region3PatientLabel.Text = "Patient (" + getEmotionsResult.patient_percent + "%)";
+					region4DetailedLabel.Text = "Detailed (" + getEmotionsResult.detailed_percent + "%)";
+
 					graphAndEmotionListContainer.Children.Add(BottomStackContainer);
-
 					StackLayout emptySpacingAtBottom = new StackLayout
 					{
 						HeightRequest = 50,
 						BackgroundColor = Color.Transparent
 					};
 					graphAndEmotionListContainer.Children.Add(emptySpacingAtBottom);
-
-					#endregion
-
-					region1WarmLabel.Text = "Warm (" + getEmotionsResult.warm_percent+ "%)";
-					region2AssertiveLabel.Text = "Assertive (" + getEmotionsResult.assertive_percent + "%)";
-					region3PatientLabel.Text = "Patient (" + getEmotionsResult.patient_percent + "%)";
-					region4DetailedLabel.Text = "Detailed (" + getEmotionsResult.detailed_percent + "%)";
-
 					isValueReceied = true;
 				}
 				else

@@ -290,10 +290,8 @@ namespace PurposeColor.CustomControls
                         progressBar.ShowProgressbar("sending new emotion");
 
 
-						User user = App.Settings.GetUser();
-						if( user == null )
-							user = new User(){ UserId = "2" };
-						
+						//User user = App.Settings.GetUser();
+
                         listTitle.IsVisible = true;
                         addButton.IsVisible = true;
                         addEmotionButton.IsVisible = false;
@@ -313,7 +311,11 @@ namespace PurposeColor.CustomControls
                             progressBar.HideProgressbar();
                             return;
                         }
-						var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text,  user.UserId.ToString() );
+						User user = App.Settings.GetUser();
+						if (user == null) {
+							return;
+						}
+						var addService = await ServiceHelper.AddEmotion(FeelingNowPage.sliderValue.ToString(), emotionsEntry.Text,  user.UserId);
 
                         await FeelingsPage.DownloadAllEmotions();
 

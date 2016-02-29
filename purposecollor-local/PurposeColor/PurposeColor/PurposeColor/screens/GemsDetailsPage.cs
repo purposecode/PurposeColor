@@ -59,9 +59,6 @@ namespace PurposeColor
             try
             {
                 user = App.Settings.GetUser();
-                ////////////// for testing only // test //////////////
-                user = new User { UserId = "2", AllowCommunitySharing = true }; // for testing only // test
-                ////////////// for testing only // test //////////////
             }
             catch (Exception ex)
             {
@@ -406,7 +403,11 @@ namespace PurposeColor
             base.OnAppearing();
             try
             {
-                ShareStatusAndCommentsCount shareStatusResult = await PurposeColor.Service.ServiceHelper.GetShareStatusAndCommentsCount(CurrentGemId, CurrentGemType, "2");
+				User user = App.Settings.GetUser();
+				if (user == null) {
+					return;
+				}
+				ShareStatusAndCommentsCount shareStatusResult = await PurposeColor.Service.ServiceHelper.GetShareStatusAndCommentsCount(CurrentGemId, CurrentGemType, user.UserId);
                 if (shareStatusResult != null)
                 {
                     if (shareStatusResult.share_status != null)
@@ -683,10 +684,6 @@ namespace PurposeColor
 				favoriteButtonTap.Tapped -= FavoriteButtonTapped;
                 progressBar.ShowProgressbar("Requesting...   ");
                 User user = App.Settings.GetUser();
-
-                /////////////// for testing /////////////
-                user = new User { UserId = "2", DisplayName = "TestUser"};
-                /////////////// for testing /////////////
 
                 if (user == null)
                 {

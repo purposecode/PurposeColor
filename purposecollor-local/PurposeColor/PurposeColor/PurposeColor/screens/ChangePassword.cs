@@ -106,11 +106,7 @@ namespace PurposeColor.screens
             {
                 
                 User user = App.Settings.GetUser();
-                if (user == null)
-                {
-                    user = new User { UserId = "2" }; // for testing only
-                }
-
+                
                 if (user == null)
                 {
                     await DisplayAlert(Constants.ALERT_TITLE, "Could not change password, please try after relogin.", Constants.ALERT_OK);

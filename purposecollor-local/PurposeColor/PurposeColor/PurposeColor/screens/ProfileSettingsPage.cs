@@ -31,6 +31,16 @@ namespace PurposeColor.screens
 		PurposeColorTitleBar mainTitleBar = null;
 		PurposeColorSubTitleBar subTitleBar = null;
 
+		Label CommunitySharingLabel= null;
+		Image communityShareIcon = null;
+		StackLayout communityStatusBtn = null;
+		User currentUser = null;
+		TapGestureRecognizer communityShareTap = null;
+		TapGestureRecognizer followIconTap = null;
+
+		Image allowFollowIcon = null;
+		StackLayout followStatusBtn = null;
+
 		public ProfileSettingsPage(int userId = 0)
 		{
 			NavigationPage.SetHasNavigationBar(this, false);
@@ -47,8 +57,14 @@ namespace PurposeColor.screens
 				{
 				}
 			};
-			subTitleBar.NextButtonTapRecognizer.Tapped += SubTitleBar_NextButtonTapRecognizer_Tapped;
+
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
+
+			try {
+				currentUser = App.Settings.GetUser ();
+			} catch (Exception ex) {
+				
+			}
 
 			if (userId != 0) {
 				userIdForProfileInfo = userId;
@@ -56,21 +72,13 @@ namespace PurposeColor.screens
 			} 
 			else 
 			{
-				User user = App.Settings.GetUser ();
-				if (user == null)
-				{
-					return ;
-
-//					user = new User {
-//						DisplayName = "Sam Fernando Disusa",
-//						Age = 25,
-//						Email = "sam@testmail.com",
-//						StatusNote = "Feeling hungry.. :-P",
-//						ProfileImageUrl = "admin/uploads/default/noprofile.png"
-//					};
+				if (currentUser == null) {
+					return;
 				}
-
-				userInfo = user;
+				else
+				{
+					userInfo = currentUser;
+				}
 			}
 
 			this.Appearing += ProfileSettingsPage_Appearing;
@@ -133,28 +141,6 @@ namespace PurposeColor.screens
 				WidthRequest = App.screenWidth * 80 / 100,
 			};
 
-			if (userIdForProfileInfo > 0) 
-			{
-				// viewing others profile info.
-				statusEntry.IsEnabled = false;
-				if (userInfo.StatusNote != null) {
-					statusEntry.Text = userInfo.StatusNote.Trim ();
-				} else {
-					statusEntry.IsVisible = false;
-				}
-			} 
-			else 
-			{
-				// user == current logged in user // owner.
-				if (userInfo.StatusNote != null) {
-					statusEntry.Text = userInfo.StatusNote.Trim ();
-				} else {
-					statusEntry.Text = "Please provide your status message..";
-				}
-
-				statusEntry.Completed += StatusEntry_Completed;
-			}
-
 			profilePic = new Image {
 				Source = Constants.SERVICE_BASE_URL + (!string.IsNullOrEmpty(userInfo.ProfileImageUrl)? userInfo.ProfileImageUrl : "admin/uploads/default/noprofile.png"),
 				HeightRequest = 110,
@@ -163,11 +149,104 @@ namespace PurposeColor.screens
 				HorizontalOptions = LayoutOptions.End
 			};
 
-			if (userIdForProfileInfo <= 0) 
+			if (userIdForProfileInfo <= 0 || userIdForProfileInfo.ToString () == currentUser.UserId)  // display info of current logged in user.
 			{
-				TapGestureRecognizer imageTapRecognizer = new TapGestureRecognizer ();
-				imageTapRecognizer.Tapped += ImageTapRecognizer_Tapped;
-				profilePic.GestureRecognizers.Add (imageTapRecognizer);
+				#region Profile image tap
+				TapGestureRecognizer profileImageTapRecognizer = new TapGestureRecognizer ();
+				profileImageTapRecognizer.Tapped += ProfileImage_Tapped;
+				profilePic.GestureRecognizers.Add (profileImageTapRecognizer);
+				#endregion
+
+				#region Ststus entry
+				if (userInfo.StatusNote != null) {
+					statusEntry.Text = userInfo.StatusNote.Trim ();
+				} else {
+					statusEntry.Text = "Please provide your status message..";
+				}
+				statusEntry.Completed += StatusEntry_Completed;
+				#endregion
+
+				#region Community Sharing
+				CommunitySharingLabel = new Label {
+					Text = "Share to community",
+					FontSize = App.screenDensity >= 2 ? 15 : 12,
+					TextColor = Color.Gray,
+				};
+
+				communityShareIcon = new Image ();
+
+				communityStatusBtn = new StackLayout ();
+				communityStatusBtn.WidthRequest = 50;
+				communityStatusBtn.HeightRequest = 50;
+				communityStatusBtn.BackgroundColor = Color.Transparent;
+				communityStatusBtn.VerticalOptions = LayoutOptions.Center;
+
+				//communityShareIcon.IsEnabled = false;
+				if (currentUser.AllowCommunitySharing) {
+					communityShareIcon.Source = Device.OnPlatform ("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+				} else {
+					communityShareIcon.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+				}
+				communityShareIcon.Aspect = Aspect.AspectFill;
+				communityShareIcon.WidthRequest = 20;
+				communityShareIcon.HeightRequest = 20;
+				communityShareIcon.ClassId = "Cshare";
+				communityShareIcon.HorizontalOptions = LayoutOptions.Center;
+				communityShareIcon.VerticalOptions = LayoutOptions.End;
+				//communityShareIcon.TranslationY = 15;
+				communityStatusBtn.Children.Add (communityShareIcon);
+
+				communityShareTap = new TapGestureRecognizer ();
+				communityShareTap.Tapped += UpdateShareToCommunityStatus;
+				communityStatusBtn.GestureRecognizers.Add (communityShareTap);
+
+				masterLayout.AddChildToLayout (CommunitySharingLabel, 10, 65);
+				masterLayout.AddChildToLayout (communityStatusBtn, 50, 65);
+				#endregion
+
+				#region Allow Follow
+
+				Label followLabel = new Label {
+					Text = "Allow others to follow",
+					FontSize = App.screenDensity >= 2 ? 15 : 12,
+					TextColor = Color.Gray,
+				};
+
+				allowFollowIcon = new Image ();
+				if (currentUser.AllowFollowers) {
+					allowFollowIcon.Source = Device.OnPlatform ("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+				} else {
+					allowFollowIcon.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+				}
+				allowFollowIcon.Aspect = Aspect.AspectFill;
+				allowFollowIcon.WidthRequest = 20;
+				allowFollowIcon.HeightRequest = 20;
+				allowFollowIcon.HorizontalOptions = LayoutOptions.Center;
+				allowFollowIcon.VerticalOptions = LayoutOptions.End;
+
+				followStatusBtn = new StackLayout ();
+				followStatusBtn.WidthRequest = 50;
+				followStatusBtn.HeightRequest = 50;
+				followStatusBtn.BackgroundColor = Color.Transparent;
+				followStatusBtn.VerticalOptions = LayoutOptions.Center;
+				followStatusBtn.Children.Add (allowFollowIcon);
+				followIconTap = new TapGestureRecognizer ();
+				followIconTap.Tapped += UpdateFollowStatus;
+				followStatusBtn.GestureRecognizers.Add (followIconTap);
+
+				masterLayout.AddChildToLayout (followLabel, 10, 70);
+				masterLayout.AddChildToLayout (followStatusBtn, 50, 70);
+				#endregion
+
+			}
+			else 
+			{
+				statusEntry.IsEnabled = false;
+				if (userInfo.StatusNote != null) {
+					statusEntry.Text = userInfo.StatusNote.Trim ();
+				} else {
+					statusEntry.IsVisible = false;
+				}
 			}
 
 			profilePic.ClassId = "camera";
@@ -175,7 +254,7 @@ namespace PurposeColor.screens
 
 			Label userDisplayName = new Label {
 				Text = !string.IsNullOrEmpty (userInfo.DisplayName) ? userInfo.DisplayName : (!string.IsNullOrEmpty (userInfo.UserName) ? userInfo.UserName : ""),
-				WidthRequest = App.screenWidth * 0.80,
+				//WidthRequest = App.screenWidth * 0.80,
 				HorizontalOptions = LayoutOptions.Center,
 				XAlign = TextAlignment.Center,
 				VerticalOptions = LayoutOptions.Center,
@@ -186,7 +265,7 @@ namespace PurposeColor.screens
 
 			Label emailLabel = new Label {
 				Text = !string.IsNullOrEmpty (userInfo.Email) ? userInfo.Email : "",
-				WidthRequest = App.screenWidth * 0.50,
+				//WidthRequest = App.screenWidth * 0.50,
 				HorizontalOptions = LayoutOptions.Center,
 				XAlign = TextAlignment.Center,
 				VerticalOptions = LayoutOptions.Center,
@@ -196,29 +275,27 @@ namespace PurposeColor.screens
 
 			};
 
+			Image verifiedBadge = new Image {
+				Source = "verified_icon.png",
+				HeightRequest = App.screenHeight * .05,
+				WidthRequest = App.screenWidth * .05,
+				HorizontalOptions = LayoutOptions.Start,
+				BackgroundColor = Color.Transparent,
+				IsVisible = userInfo.VerifiedStatus != 0
+			};
+
 			StackLayout nameEmailStack = new StackLayout {
 				Orientation = StackOrientation.Vertical,
 				HorizontalOptions = LayoutOptions.Center,
+				WidthRequest = App.screenWidth * 0.80,
 				Spacing = 3,
-				Children = {userDisplayName, emailLabel}
+				Children = {new StackLayout{ Spacing = 2,Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.Center, 
+						Children = {userDisplayName, verifiedBadge}}, 
+						emailLabel}
 			};
 
-
 			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
-			int xpos= 62;
-			if (userInfo.VerifiedStatus != 0) {
-				// display verified icon over name.
-				Image verifiedBadge = new Image {
-					Source = "verified_icon.png",
-					HeightRequest = App.screenHeight * .05, //.04, = if near name   //.06, = if near profile image 
-					WidthRequest = App.screenWidth * .05,//.04, = if near name // //.06, = if near profile image 
-					HorizontalOptions = LayoutOptions.Center,
-					BackgroundColor = Color.Transparent
-				};
-
-				masterLayout.AddChildToLayout(verifiedBadge, xpos, 18); //  aligned to profile pic.
-			}
-
+			int xpos = 62;
 			if (App.screenDensity > 2) {
 				xpos = 64;
 				masterLayout.AddChildToLayout (nameEmailStack, 10, 40);
@@ -229,6 +306,98 @@ namespace PurposeColor.screens
 			}
 
 			Content = masterLayout;
+		}
+
+		async void UpdateFollowStatus (object sender, EventArgs e)
+		{
+			try {
+				if(currentUser == null)
+				{
+					return;
+				}
+				//
+				progressBar.ShowProgressbar("updating status");
+
+				string newAllowFollowersStatus = "1";
+
+				if (currentUser.AllowFollowers) 
+				{
+					newAllowFollowersStatus = "0";
+				}
+
+				string responce = await ServiceHelper.UpdateShreAndFollowStatus(currentUser.UserId, string.Empty, newAllowFollowersStatus);
+
+				if(responce == null || responce != "200")
+				{
+					progressBar.HideProgressbar();
+					progressBar.ShowToast("Network error, please try again later");
+				}
+				else
+				{
+					currentUser.AllowFollowers= !currentUser.AllowFollowers;
+
+					// update icon 
+					if (currentUser.AllowFollowers) {
+						allowFollowIcon.Source = Device.OnPlatform ("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+					} else {
+						allowFollowIcon.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					}
+					await App.Settings.SaveUser(currentUser);
+
+					progressBar.HideProgressbar();
+					progressBar.ShowToast("Status updated");
+				}
+
+			} catch (Exception ex) {
+				progressBar.HideProgressbar();
+			}
+		}
+
+		async void UpdateShareToCommunityStatus(object sender, EventArgs e)
+		{
+			try {
+				if(currentUser == null)
+				{
+					return;
+				}
+				communityShareTap.Tapped -= UpdateShareToCommunityStatus;
+				progressBar.ShowProgressbar("updating status");
+
+				string newCommunitySharingStatus = "1";
+
+				if (currentUser.AllowCommunitySharing) 
+				{
+					newCommunitySharingStatus = "0";
+				}
+
+				string responce = await ServiceHelper.UpdateShreAndFollowStatus(currentUser.UserId, newCommunitySharingStatus,string.Empty);
+
+				if(responce == null || responce != "200")
+				{
+					progressBar.HideProgressbar();
+					progressBar.ShowToast("Network error, please try again later");
+				}
+				else
+				{
+					currentUser.AllowCommunitySharing = !currentUser.AllowCommunitySharing;
+
+
+					// update icon 
+					if (currentUser.AllowCommunitySharing) {
+						communityShareIcon.Source = Device.OnPlatform ("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+					} else {
+						communityShareIcon.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					}
+					await App.Settings.SaveUser(currentUser);
+
+					progressBar.HideProgressbar();
+					progressBar.ShowToast("Status updated");
+				}
+
+			} catch (Exception ex) {
+				progressBar.HideProgressbar();
+			}
+			communityShareTap.Tapped += UpdateShareToCommunityStatus;
 		}
 
 		async System.Threading.Tasks.Task<bool> GetProfileInfo()
@@ -251,7 +420,7 @@ namespace PurposeColor.screens
 			return false;
 		}
 
-		async void ImageTapRecognizer_Tapped (object sender, EventArgs e)
+		async void ProfileImage_Tapped (object sender, EventArgs e)
 		{
 			try {
 				// show image selection options.
@@ -260,17 +429,6 @@ namespace PurposeColor.screens
 				SourceChooser chooser = new SourceChooser(masterLayout, id, this);
 				chooser.ClassId = "mediachooser";
 				masterLayout.AddChildToLayout(chooser, 0, 0);
-
-				//				User user = App.Settings.GetUser();
-				//				if(user != null && profilePic != null)
-				//				{
-				//
-				//					if(System.IO.Path.GetFileName(user.ProfileImageUrl)!= null)
-				//					{
-				//						profilePic.Source = user.ProfileImageUrl;
-				//					}
-				//				}
-
 			} catch (Exception ex) {
 				DisplayAlert("Camera", ex.Message + " Please try again later", "ok");
 			}
@@ -289,12 +447,11 @@ namespace PurposeColor.screens
 						string responceCode = await PurposeColor.Service.ServiceHelper.SendProfilePicAndStatusNote(newStatus,null,string.Empty);
 						if (responceCode == null|| responceCode != "200") {
 							await DisplayAlert(Constants.ALERT_TITLE,"Network error, Please try again later. " + responceCode, Constants.ALERT_OK); // responceCode fro testing // test
-						}else
+						}
+						else
 						{
-
-							User user = App.Settings.GetUser();
-							user.StatusNote = newStatus;
-							App.Settings.SaveUser(user);
+							currentUser.StatusNote = newStatus;
+							App.Settings.SaveUser(currentUser);
 							progressBar.HideProgressbar();
 							progressBar.HideProgressbar();
 							progressBar.ShowToast("Status updated.");
@@ -307,11 +464,6 @@ namespace PurposeColor.screens
 			}
 		}
 
-		void SubTitleBar_NextButtonTapRecognizer_Tapped (object sender, EventArgs e)
-		{
-			// chk if any values changes if so save changes.
-		}
-
 		void imageAreaTapGestureRecognizer_Tapped(object sender, System.EventArgs e)
 		{
 			App.masterPage.IsPresented = !App.masterPage.IsPresented;
@@ -320,12 +472,24 @@ namespace PurposeColor.screens
 		public void Dispose()
 		{
 			this.statusEntry = null;
+			userInfo = null;
+			masterLayout = null;
+			galleryInputStackTapRecognizer = null;
+			galleryInputStack = null;
+			galleryInput = null;
+			profilePic = null;
+			progressBar = null;
+			userProfile = null;
+			mainTitleBar = null;
+			subTitleBar = null;
+			CommunitySharingLabel= null;
+			communityShareIcon = null;
+			communityStatusBtn = null;
+			User currentUser = null;
+
 			GC.Collect();
 		}
-
 	}
-
-
 
 	public class SourceChooser : ContentView
 	{
@@ -399,21 +563,17 @@ namespace PurposeColor.screens
 					if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
 					{
 						string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
 						var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
 							{
-
 								Directory = "Purposecolor",
 								Name = fileName
 							});
-
-
+						
 						if (file == null)
 						{
 							callerObject.progressBar.HideProgressbar();
 							return;
 						}
-
 
 						IMediaVIew mediaView = DependencyService.Get<IMediaVIew>();
 						if( mediaView != null )
@@ -435,7 +595,6 @@ namespace PurposeColor.screens
 					callerObject.progressBar.HideProgressbar();
 				}
 
-
 				View mediaChooserView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
 				PageContainer.Children.Remove(mediaChooserView);
 				mediaChooserView = null;
@@ -454,14 +613,11 @@ namespace PurposeColor.screens
 		{
 			try
 			{
-
-
 				if (Device.OS != TargetPlatform.iOS)
 					callerObject.progressBar.ShowProgressbar("Saving your settings..");
 
 				try
 				{
-
 					if (!CrossMedia.Current.IsPickPhotoSupported)
 					{
 						callerObject.progressBar.HideProgressbar();
@@ -475,7 +631,6 @@ namespace PurposeColor.screens
 						callerObject.progressBar.HideProgressbar();
 						return;
 					}
-
 
 					MemoryStream ms = new MemoryStream();
 					file.GetStream().CopyTo(ms);
@@ -494,7 +649,7 @@ namespace PurposeColor.screens
 				View pickView = PageContainer.Children.FirstOrDefault(pick => pick.ClassId == "mediachooser");
 				PageContainer.Children.Remove(pickView);
 				pickView = null;
-				callerObject.progressBar.HideProgressbar();
+				//callerObject.progressBar.HideProgressbar();
 
 				GC.Collect();
 
@@ -573,16 +728,15 @@ namespace PurposeColor.screens
 						if(user != null)
 						{
 							user.ProfileImageUrl = serviceResult;
-							App.Settings.SaveUser(user);
+							await App.Settings.SaveUser(user);
 						}
 					}
 				}
 
+				mediaItem = null;
 				if (callerObject != null) {
 					callerObject.progressBar.HideProgressbar();
 				}
-
-				mediaItem = null;
 			}
 			catch (Exception ex)
 			{

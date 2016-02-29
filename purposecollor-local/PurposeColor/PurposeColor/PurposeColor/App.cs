@@ -192,8 +192,6 @@ namespace PurposeColor
 				{
 					App.Settings.SaveUser (currentUser);
 				}
-				
-
 
 				return true;
 			} catch (Exception ex) 
@@ -293,13 +291,67 @@ namespace PurposeColor
 					{
 						try
 						{
-							Navigator.PushModalAsync(navPage);
+							//Navigator.PushModalAsync(navPage);
+							UpdateBurgerMenuList();
+
+							App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
+							Navigator.PopModalAsync();
+							//Navigator.PushModalAsync(navPage);
 						}
 						catch (Exception ex)
 						{
 							Debug.WriteLine("SuccessfulLoginAction : " + ex.Message);
 						}
 					});
+			}
+		}
+
+		public static void UpdateBurgerMenuList()
+		{
+			try {
+
+				if (burgerMenuItems == null) {
+					burgerMenuItems = new System.Collections.ObjectModel.ObservableCollection<MenuItems> ();
+				}
+
+				if(burgerMenuItems.Count > 1)
+				{
+					return; // its alredy loged in menu, no need to change.
+				}
+
+				burgerMenuItems.Clear ();
+
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_AWARENESS,
+					ImageName = Device.OnPlatform ("emotional_awrness_menu_icon.png", "emotional_awrness_menu_icon.png", "//Assets//emotional_awrness_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GEM,
+					ImageName = Device.OnPlatform ("gem_menu_icon.png", "gem_menu_icon.png", "//Assets//gem_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.GOALS_AND_DREAMS,
+					ImageName = Device.OnPlatform ("goals_drms_menu_icon.png", "goals_drms_menu_icon.png", "//Assets//goals_drms_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.EMOTIONAL_INTELLIGENCE,
+					ImageName = Device.OnPlatform ("emotion_intellegene_menu_icon.png", "emotion_intellegene_menu_icon.png", "//Assets//emotion_intellegene_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.COMMUNITY_GEMS,
+					ImageName = Device.OnPlatform ("comunity_menu_icon.png", "comunity_menu_icon.png", "//Assets//comunity_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.APPLICATION_SETTTINGS,
+					ImageName = Device.OnPlatform ("setings_menu_icon.png", "setings_menu_icon.png", "//Assets//setings_menu_icon.png")
+				});
+				burgerMenuItems.Add (new MenuItems {
+					Name = Constants.SIGN_OUT_TEXT,
+					ImageName = Device.OnPlatform ("logout_icon.png", "logout_icon.png", "//Assets//logout_icon.png")
+				});
+
+			} catch (Exception ex) {
+				var test = ex.Message;
 			}
 		}
 	}

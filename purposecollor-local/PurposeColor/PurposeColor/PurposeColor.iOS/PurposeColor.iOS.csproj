@@ -140,6 +140,8 @@
     <None Include="Resources\photoCamera_icon%401x.png" />
     <None Include="Resources\verified_icon%401x.png" />
     <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
+    <None Include="Resources\next.png" />
+    <None Include="Resources\prev.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

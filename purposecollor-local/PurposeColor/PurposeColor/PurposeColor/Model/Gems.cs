@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace PurposeColor.Model
 {
+	public class AddEmotionResponse
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<string> emotion_id { get; set; }
+		public List<string> emotion_title { get; set; }
+	}
+
 	public class EventTitle
 	{
 		public string event_id { get; set; }

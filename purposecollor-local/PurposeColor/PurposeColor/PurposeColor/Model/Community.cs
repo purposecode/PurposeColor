@@ -225,6 +225,7 @@ namespace PurposeColor.Model
 		public string user_id { get; set; }
 		public int like_status { get; set; }
 		public int likecount { get; set; }
+		public int comment_count { get; set; }
 		public string gem_id { get; set; }
 		public string gem_type { get; set; }
 		public string gem_title { get; set; }

@@ -472,17 +472,24 @@ namespace PurposeColor
 					commentButton.ClassId = item.gem_id + "&&"  + item.gem_type;
 					Label commentsLabel = new Label
 					{
-						Text = "Comment",
 						VerticalOptions = LayoutOptions.Center,
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
 						FontSize = Device.OnPlatform(12, 12, 15),
 						ClassId = item.gem_id + "&&"  + item.gem_type
 					};
+					if( item.comment_count > 0 )
+					{
+						commentsLabel.Text = "Comments (" + item.comment_count.ToString() + ")";
+					}
+					else
+					{
+						commentsLabel.Text = "Comments";
+					}
 
 					commentButtonTap = new TapGestureRecognizer();
 					commentButtonTap.Tapped += OnCommentButtonTapped;
-					commentButton.GestureRecognizers.Add(commentButtonTap);
+					//commentButton.GestureRecognizers.Add(commentButtonTap);
 					commentsLabel.GestureRecognizers.Add(commentButtonTap);
 
 					toolsLayout.Children.Add(commentButton);
@@ -1056,9 +1063,10 @@ namespace PurposeColor
 
 					progressBar.ShowProgressbar("Loading comments");
 					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, false);
+
 					progressBar.HideProgressbar();
 
-					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false);
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false, commentLabel);
 					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
 					commentsView.HeightRequest = App.screenHeight;
 					commentsView.WidthRequest = App.screenWidth;

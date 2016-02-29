@@ -371,7 +371,7 @@ namespace PurposeColor.screens
                             comment_id = string.IsNullOrEmpty(response.comment_id.ToString()) ? "000" : response.comment_id.ToString(),
                             comment_txt = commentText,
                             user_id = currentUserId,
-                            firstname = user.UserName,
+							firstname = !string.IsNullOrEmpty(user.UserName)? user.UserName:(!string.IsNullOrEmpty(user.DisplayName)? user.DisplayName :" "),
                             profileurl = string.IsNullOrEmpty(user.ProfileImageUrl) ? "admin/uploads/default/noprofile.png" : user.ProfileImageUrl,// profile picture should be of this person// can take it from local. ==>  user.prfilePicUrl
                             comment_datetime = DateTime.UtcNow.ToLocalTime().ToString("f")
                         };
@@ -500,9 +500,16 @@ namespace PurposeColor.screens
                     /////////////////////////  comment_datetime  /////////////////////////
                     if (!string.IsNullOrEmpty(comment.comment_datetime))
                     {
+						var test = DateTime.SpecifyKind(
+								DateTime.Parse(comment.comment_datetime),
+							DateTimeKind.Utc);
+						var test2 = DateTime.SpecifyKind(
+							DateTime.Parse(test.ToString()),
+							DateTimeKind.Local);
+						
                         Label dateText = new Label
                         {
-                            Text = comment.comment_datetime,
+							Text = test2.ToString("g"), //comment.comment_datetime,
                             TextColor = Color.Gray,
                             FontSize = Device.OnPlatform(8, 8, 16),
                             HorizontalOptions = LayoutOptions.Start

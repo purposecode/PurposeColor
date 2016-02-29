@@ -413,10 +413,11 @@ namespace PurposeColor
                     if (shareStatusResult.share_status != null)
                     {
                         isSharedToCommunity = shareStatusResult.share_status == 0 ? false : true;
-						if(isSharedToCommunity)
+						if(isSharedToCommunity && shareButton != null)
 						{
 							shareButton.Source = Device.OnPlatform("shareActive.png", "shareActive.png", "//Assets//shareActive.png");
-						}else
+						}
+						else if( shareButton != null )
 						{
 							shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
 						}

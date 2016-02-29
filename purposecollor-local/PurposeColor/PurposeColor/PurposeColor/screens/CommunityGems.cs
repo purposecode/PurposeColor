@@ -1059,14 +1059,13 @@ namespace PurposeColor
 					string[] clasIDArray = gemID.Split(delimiters, StringSplitOptions.None);
 					string selectedGemID = clasIDArray [0];
 					string selectedGemType = clasIDArray [1];
-					GemType currentGemType = GetGemType( selectedGemID );
+					GemType currentGemType = GetGemType( selectedGemType );
 
 					progressBar.ShowProgressbar("Loading comments");
-					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, false);
-
+					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, true);
 					progressBar.HideProgressbar();
 
-					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false, commentLabel);
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, true, commentLabel);
 					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
 					commentsView.HeightRequest = App.screenHeight;
 					commentsView.WidthRequest = App.screenWidth;

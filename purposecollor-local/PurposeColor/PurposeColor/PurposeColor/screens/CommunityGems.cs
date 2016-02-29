@@ -480,7 +480,7 @@ namespace PurposeColor
 					};
 					if( item.comment_count > 0 )
 					{
-						commentsLabel.Text = "Comments ( " + item.comment_count.ToString() + " )";
+						commentsLabel.Text = "Comments (" + item.comment_count.ToString() + ")";
 					}
 					else
 					{
@@ -1066,7 +1066,7 @@ namespace PurposeColor
 
 					progressBar.HideProgressbar();
 
-					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false);
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, false, commentLabel);
 					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
 					commentsView.HeightRequest = App.screenHeight;
 					commentsView.WidthRequest = App.screenWidth;

@@ -407,7 +407,7 @@ namespace PurposeColor
 					commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 					commentButton.VerticalOptions = LayoutOptions.Center;
-					commentButton.ClassId = item.gem_id;
+					commentButton.ClassId = item.gem_id + "&&"  + item.gem_type;
 					Label commentsLabel = new Label
 					{
 						Text = "Comment",
@@ -415,7 +415,7 @@ namespace PurposeColor
 						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 						TextColor = Color.Gray,
 						FontSize = Device.OnPlatform(12, 12, 15),
-						ClassId = item.gem_id
+						ClassId = item.gem_id + "&&"  + item.gem_type
 					};
 					if( item.comment_count > 0 )
 					{
@@ -791,29 +791,37 @@ namespace PurposeColor
 			{
 				string gemID = "";
 				Image shareImg = sender as Image;
-				Label shareText = sender as Label;
+				Label commentLabel = sender as Label;
 				if (shareImg != null)
 				{
 					if (shareImg.ClassId != null)
 						gemID = shareImg.ClassId;
 				}
 
-				if (shareText != null)
+				if (commentLabel != null)
 				{
-					if (shareText.ClassId != null)
-						gemID = shareText.ClassId;
+					if (commentLabel.ClassId != null)
+						gemID = commentLabel.ClassId;
 				}
 
-				progressBar.ShowProgressbar("Loading comments");
+				if( !string.IsNullOrEmpty( gemID ) )
+				{
+					string[] delimiters = { "&&" };
+					string[] clasIDArray = gemID.Split(delimiters, StringSplitOptions.None);
+					string selectedGemID = clasIDArray [0];
+					string selectedGemType = clasIDArray [1];
+					GemType currentGemType = GetGemType( selectedGemType );
 
-				List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments( gemID, GemType.Goal, false);
-				progressBar.HideProgressbar();
+					progressBar.ShowProgressbar("Loading comments");
+					List<Comment> comments = await PurposeColor.Service.ServiceHelper.GetComments(selectedGemID, currentGemType, true);
+					progressBar.HideProgressbar();
 
-				PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, gemID, CurrentGemType, false);
-				commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
-				commentsView.HeightRequest = App.screenHeight;
-				commentsView.WidthRequest = App.screenWidth;
-				masterLayout.AddChildToLayout(commentsView, 0, 0);
+					PurposeColor.screens.CommentsView commentsView = new PurposeColor.screens.CommentsView(masterLayout, comments, selectedGemID, currentGemType, true, commentLabel);
+					commentsView.ClassId = Constants.COMMENTS_VIEW_CLASS_ID;
+					commentsView.HeightRequest = App.screenHeight;
+					commentsView.WidthRequest = App.screenWidth;
+					masterLayout.AddChildToLayout(commentsView, 0, 0);
+				}
 
 			}
 			catch (Exception ex)
@@ -823,6 +831,20 @@ namespace PurposeColor
 			}
 			progressBar.HideProgressbar();
 		}
+
+
+		private GemType GetGemType( string gemType )
+		{
+			if (gemType == "goal")
+				return GemType.Goal;
+			else if (gemType == "action")
+				return GemType.Action;
+			else if (gemType == "event")
+				return GemType.Event;
+			else
+				return GemType.Goal;
+		}
+
 
 		async void OnShareButtonTapped(object sender, EventArgs e)
 		{

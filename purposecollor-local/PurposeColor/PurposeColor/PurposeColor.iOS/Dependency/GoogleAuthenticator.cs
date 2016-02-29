@@ -50,6 +50,15 @@ namespace XamarinFormsOAuth2Demo.iOS
 				//step 4: Deserialize the JSON response to get data in class object
 				googleInfo = JsonConvert.DeserializeObject<GoogleInfo>(userInfo);
                 LoggedInUserName = googleInfo.email;
+
+				user.UserName = !string.IsNullOrWhiteSpace(googleInfo.name)?googleInfo.name:(!string.IsNullOrWhiteSpace(googleInfo.email)?googleInfo.email:"");
+				user.DisplayName = googleInfo.name;
+				user.AllowCommunitySharing = true;
+				user.AuthenticationToken = access_token;
+				user.Email = googleInfo.email;
+				user.Gender = googleInfo.gender;
+				user.ProfileImageUrl = googleInfo.picture;
+				user.UserId = googleInfo.id;
 			}
 			else
 			{

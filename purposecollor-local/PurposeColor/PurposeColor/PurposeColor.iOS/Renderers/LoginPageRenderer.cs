@@ -9,6 +9,8 @@ using UIKit;
 using MonoTouch;
 using MonoTouch.Dialog;
 using PurposeColor.screens;
+using Newtonsoft.Json;
+using PurposeColor.Model;
 
 
 [assembly: ExportRenderer(typeof(LoginWebViewHolder), typeof(LoginPageRenderer))]
@@ -42,6 +44,7 @@ namespace PurposeColor.iOS
                     if (eve.IsAuthenticated)
                     {
                         var user = await myAuth.GetProfileInfoFromGoogle(eve.Account.Properties["access_token"].ToString());
+						await App.SaveUserData(user,true);
                     }
                 };
 
@@ -49,6 +52,18 @@ namespace PurposeColor.iOS
                 dialog.PresentViewController(vc, true, null);
             }
         }
+
+		async void SerialiseFacebookUserData(string json)
+		{
+			FacebookInfo fbUser = JsonConvert.DeserializeObject<FacebookInfo>(json);
+			User user = new User ();
+			user.UserName = fbUser.name;
+			user.DisplayName = fbUser.name;
+			user.Email = fbUser.email;
+			user.UserId = fbUser.id;
+
+			await PurposeColor.App.SaveUserData( user, false);
+		}
 
         public override void ViewDidAppear(bool animated)
         {
@@ -59,7 +74,7 @@ namespace PurposeColor.iOS
 				
 				try {
 					var auth = new OAuth2Authenticator (
-						           clientId: "1218463084847397", // new : 1218463084847397    // your OAuth2 client id
+									clientId: "1064717540213918", //App OAuth2 client id
 						           scope: "", // the scopes for the particular API you're accessing, delimited by "+" symbols
 						           authorizeUrl: new Uri ("https://m.facebook.com/dialog/oauth/"),//new Uri(""), // the auth URL for the service
 						           redirectUrl: new Uri ("http://www.facebook.com/connect/login_success.html")); // the redirect URL for the service
@@ -76,6 +91,7 @@ namespace PurposeColor.iOS
 								else {
 									string json = t.Result.GetResponseText ();
 									Console.WriteLine (json);
+									SerialiseFacebookUserData (json);
 								}
 							});
 						}
@@ -92,4 +108,11 @@ namespace PurposeColor.iOS
             }
         }
     }
+
+	class FacebookInfo
+	{
+		public string id { get; set; }
+		public string email { get; set; }
+		public string name { get; set; }
+	}
 }

@@ -22,7 +22,7 @@ namespace PurposeColor.iOS
         UIWindow window;
         public LoginPageRenderer()
         {
-            dialog = new DialogViewController(new RootElement("Sample"));
+            dialog = new DialogViewController(new RootElement("Login"));
 
             window = new UIWindow(UIScreen.MainScreen.Bounds);
             window.RootViewController = new UINavigationController(dialog);
@@ -88,11 +88,11 @@ namespace PurposeColor.iOS
 						dialog.Dispose();
 						window.Dispose();
 
-						if (eventArgs.IsAuthenticated) {
-							App.SuccessfulLoginAction.Invoke ();
+						if (eventArgs.IsAuthenticated) 
+						{
 							App.SaveToken (eventArgs.Account.Properties ["access_token"]);
 					
-							var request = new OAuth2Request ("GET", new Uri ("https://graph.facebook.com/me"), null, eventArgs.Account);
+							var request = new OAuth2Request ("GET", new Uri ("https://graph.facebook.com/me?fields=id,name,email"), null, eventArgs.Account);
 							await request.GetResponseAsync ().ContinueWith (t => {
 								if (t.IsFaulted)
 									Console.WriteLine ("Error: " + t.Exception.InnerException.Message);
@@ -104,8 +104,8 @@ namespace PurposeColor.iOS
 							});
 
 							dialog.DismissViewController(false, null);
+							App.IsLoggedIn = true;
 							App.SuccessfulLoginAction.Invoke();
-
 						}
 					};
 

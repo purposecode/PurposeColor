@@ -277,6 +277,7 @@
     <BundleResource Include="Resources\chat.png" />
     <BundleResource Include="Resources\blue_tip.png" />
     <BundleResource Include="Resources\yellow_tip.png" />
+    <BundleResource Include="Resources\logout_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

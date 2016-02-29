@@ -201,7 +201,7 @@ namespace PurposeColor.screens
 				communityStatusBtn.GestureRecognizers.Add (communityShareTap);
 
 				masterLayout.AddChildToLayout (CommunitySharingLabel, 10, 65);
-				masterLayout.AddChildToLayout (communityStatusBtn, 50, 65);
+				masterLayout.AddChildToLayout (communityStatusBtn, Device.OnPlatform(55,50,50), 65);
 				#endregion
 
 				#region Allow Follow
@@ -235,7 +235,7 @@ namespace PurposeColor.screens
 				followStatusBtn.GestureRecognizers.Add (followIconTap);
 
 				masterLayout.AddChildToLayout (followLabel, 10, 70);
-				masterLayout.AddChildToLayout (followStatusBtn, 50, 70);
+				masterLayout.AddChildToLayout (followStatusBtn, Device.OnPlatform(55,50,50), 70);
 				#endregion
 
 			}

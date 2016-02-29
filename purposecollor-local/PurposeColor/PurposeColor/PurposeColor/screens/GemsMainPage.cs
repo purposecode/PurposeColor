@@ -199,7 +199,7 @@ namespace PurposeColor.screens
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
 				// display the emotions list and change color of Goals selection uttion
-				progressBar.ShowProgressbar ("loading gems..");
+				progressBar.ShowProgressbar ("Loading gems..");
 
 				bool isSuccess = await AddEventsToView (0);
 				if (isSuccess) 
@@ -237,11 +237,13 @@ namespace PurposeColor.screens
 		{
 			if (!isLoadingFromDetailsPage) 
 			{
+				if(progressBar == null)
 				progressBar = DependencyService.Get<IProgressBar> ();
+
+				if(Device.OS != TargetPlatform.iOS)
 				progressBar.ShowProgressbar ("Loading gems..");
 
 				try {
-					//progress.ShowProgressbar ("Loading gems..");
 					try {
 						if (eventsWithImage == null) {
 							eventsWithImage = await ServiceHelper.GetAllEventsWithImage ();
@@ -292,7 +294,7 @@ namespace PurposeColor.screens
 					var test = ex.Message;
 					progressBar.HideProgressbar ();
 				}
-
+				progressBar.HideProgressbar ();
 			}
 		}
 

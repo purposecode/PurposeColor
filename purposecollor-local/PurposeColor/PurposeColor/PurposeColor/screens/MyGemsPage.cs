@@ -417,6 +417,15 @@ namespace PurposeColor
 						FontSize = Device.OnPlatform(12, 12, 15),
 						ClassId = item.gem_id
 					};
+					if( item.comment_count > 0 )
+					{
+						commentsLabel.Text = "Comments (" + item.comment_count.ToString() + ")";
+					}
+					else
+					{
+						commentsLabel.Text = "Comments";
+					}
+
 
 					commentButtonTap = new TapGestureRecognizer();
 					commentButtonTap.Tapped += CommentButtonTapped;

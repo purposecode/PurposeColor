@@ -74,7 +74,7 @@ namespace PurposeColor
 				CommunityGemsObject myGems = await ServiceHelper.GetMyGemsDetails();
 				if( myGems != null )
 				{
-					communityGems = null;
+					//communityGems = null;
 					Navigation.PushAsync( new MyGemsPage( myGems ) );
 					myGemsCount = myGems.resultarray.Count;
 				}

@@ -60,7 +60,7 @@ namespace PurposeColor.Service
 
         }
 
-        public static async Task<List<CustomListViewItem>> GetAllEmotions(int userID)
+		public static async Task<List<CustomListViewItem>> GetAllEmotions(string userID)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace PurposeColor.Service
 
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
-                string uriString = "api.php?action=getallemotions&user_id=" + userID.ToString();
+				string uriString = "api.php?action=getallemotions&user_id=" + userID;
 
                 var response = await client.GetAsync(uriString);
 
@@ -438,29 +438,50 @@ namespace PurposeColor.Service
 
             try
             {
-                string url = "http://purposecodes.com/pc/api.php?action=newemotion";
-                string result = String.Empty;
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return false;
+				}
 
-                using (var client = new HttpClient())
-                {
-                    var content = new FormUrlEncodedContent(new[]
-                           {
-                                 new KeyValuePair<string, string>("emotion_value", emotionID),
-                                 new KeyValuePair<string, string>("user_id", userID),
-                                  new KeyValuePair<string, string>("emotion_title",  title )
-                            });
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return false;
 
+				var client = new System.Net.Http.HttpClient();
+				client.DefaultRequestHeaders.Add("Post", "application/json");
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
 
+				var url = "api.php?action=newemotion";
 
-                    using (var response = await client.PostAsync(url, content))
-                    {
-                        using (var responseContent = response.Content)
-                        {
+				MultipartFormDataContent content = new MultipartFormDataContent();
 
 
-                        }
-                    }
-                }
+				content.Add(new StringContent(title, Encoding.UTF8), "emotion_title");
+				content.Add(new StringContent(userID, Encoding.UTF8), "user_id");
+				content.Add(new StringContent(emotionID, Encoding.UTF8), "emotion_value");
+
+
+				var response = await client.PostAsync(url, content);
+				//var response = await client.GetAsync(uriString);
+
+				if (response != null )
+				{
+					var responseJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<AddEmotionResponse>(responseJson);
+					if (rootobject != null )
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+             
                 return true;
             }
             catch (Exception ex)

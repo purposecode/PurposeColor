@@ -902,8 +902,11 @@ namespace PurposeColor
 		{
 			try
 			{
+				User user = App.Settings.GetUser();
+				if( user == null )
+					return false;
 
-				var emotionsReult = await ServiceHelper.GetAllEmotions(2);
+				var emotionsReult = await ServiceHelper.GetAllEmotions( user.UserId );
 				if (emotionsReult != null)
 				{
 					App.emotionsListSource = null;

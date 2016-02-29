@@ -54,8 +54,8 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Username",
                 Keyboard = Keyboard.Email,
-                HeightRequest = Device.OnPlatform(50, 50,75),
-                Text = "apptester" // for testing only // remove after testing
+                HeightRequest = Device.OnPlatform(50, 50,75)
+               // Text = "apptester" // for testing only // remove after testing
             };
 
             passwordEntry = new CustomEntry

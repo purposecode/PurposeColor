@@ -24,17 +24,18 @@ namespace PurposeColor.screens
 				{
 					globalSettings = AppSettings.GetAppGlobalSettings();
 				}
-				if (globalSettings == null && AppSettings.GetUser() == null)
-				{
-					App.IsLoggedIn = false;
-					UpdateBurgerMenuList();
-					Detail = new NavigationPage(new LogInPage());
-				}
-				else if (globalSettings.IsLoggedIn || App.IsLoggedIn && AppSettings.GetUser() != null)
+
+				if (AppSettings.GetUser() != null && AppSettings.GetUser().UserId != null)
 				{
 					App.IsLoggedIn = true;
 					UpdateBurgerMenuList();
 					Detail = new NavigationPage(new FeelingNowPage());
+				}
+				else if ( (globalSettings == null || globalSettings.IsLoggedIn)  && AppSettings.GetUser() == null)
+				{
+					App.IsLoggedIn = false;
+					UpdateBurgerMenuList();
+					Detail = new NavigationPage(new LogInPage());
 				}
 				else if (globalSettings.ShowRegistrationScreen)
 				{
@@ -48,7 +49,6 @@ namespace PurposeColor.screens
 					UpdateBurgerMenuList();
 					Detail = new NavigationPage(new LogInPage());
 				}
-
             }
             catch (Exception ex)
             {
@@ -56,7 +56,6 @@ namespace PurposeColor.screens
 
                 Detail = new NavigationPage(new LogInPage());
             }
-            
         }
 
 		void UpdateBurgerMenuList()

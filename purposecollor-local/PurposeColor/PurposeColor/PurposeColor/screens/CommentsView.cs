@@ -33,6 +33,8 @@ namespace PurposeColor.screens
         Button closeButton;
         int popupHeightValue = 10;
         Label commentLabel;
+		StackLayout inputCountainer = null;
+		StackLayout commentsAndInputs = null;
 
         public CommentsView(CustomLayout parentLayout, List<Comment> allComments, string gemId, GemType gemType, bool isCommunityGem, Label commentsLabel = null)
         {
@@ -85,7 +87,7 @@ namespace PurposeColor.screens
             layout.BackgroundColor = Color.Black;
             layout.Opacity = .8;
             layout.WidthRequest = App.screenWidth;
-            layout.HeightRequest = App.screenHeight + 20;
+			layout.HeightRequest = App.screenHeight + 20;
 
             masterLayout.AddChildToLayout(layout, 0, Device.OnPlatform(-10, 0, 0));
 
@@ -196,6 +198,9 @@ namespace PurposeColor.screens
 
             };
 
+			newCommentEntry.Focused += NewCommentEntry_Focused;
+			newCommentEntry.Unfocused += NewCommentEntry_Unfocused;
+
             addCommentButton = new Image();
             addCommentButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
 
@@ -205,7 +210,7 @@ namespace PurposeColor.screens
             addCommentButtonTap.Tapped += addCommentButtonTapped;
             addCommentButton.GestureRecognizers.Add(addCommentButtonTap);
 
-            StackLayout inputCountainer = new StackLayout
+            inputCountainer = new StackLayout
             {
                 Spacing = Device.OnPlatform(5, 5, 1),
                 Padding = Device.OnPlatform(5, 5, 5),
@@ -228,7 +233,7 @@ namespace PurposeColor.screens
                 IsClippedToBounds = true
             };
 
-            StackLayout commentsAndInputs = new StackLayout
+            commentsAndInputs = new StackLayout
             {
                 Spacing = 1,
                 Children = { scrollView, new BoxView { HeightRequest = 1, BackgroundColor = Constants.INPUT_GRAY_LINE_COLOR }, inputCountainer },
@@ -237,7 +242,7 @@ namespace PurposeColor.screens
                 Orientation = StackOrientation.Vertical
             };
 
-            masterLayout.AddChildToLayout(commentsAndInputs, 2, popupHeightValue - Device.OnPlatform(1, 1, 1));
+			masterLayout.AddChildToLayout(commentsAndInputs, 2, popupHeightValue - Device.OnPlatform(1, 1, 1));
 
             #endregion
 
@@ -247,7 +252,25 @@ namespace PurposeColor.screens
                 addCommentButton.HeightRequest = 60;
             }
 
-            Content = masterLayout;
+			Content = masterLayout;
+        }
+
+        void NewCommentEntry_Unfocused (object sender, FocusEventArgs e)
+        {
+			//commentsAndInputs.TranslationY = 0;
+			masterLayout.TranslationY = 0;
+        }
+
+        void NewCommentEntry_Focused (object sender, FocusEventArgs e)
+        {
+			//commentsAndInputs.TranslationY = newCommentEntry.Y - 180;
+
+			if (Comments != null && Comments.Count <= 2) {
+				var test = App.screenDensity; // samsung s6 = 4(220), Gionee = 3(190)
+				masterLayout.TranslationY = masterLayout.Y - 220; // fine upto 2 comments //	 180 - gionee
+			} else if (Comments != null && Comments.Count > 2) {
+				masterLayout.TranslationY = masterLayout.Y - 245;
+			}
         }
 
         async void RemoveLabelTap_Tapped(object sender, EventArgs e)

@@ -134,9 +134,6 @@
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
     <Compile Include="Dependency\IOSDownloader.cs" />
-    <None Include="Resources\roundNextBtn%401x.png" />
-    <None Include="Resources\favoriteIconActive%401x.png" />
-    <None Include="Resources\shareActive%401x.png" />
     <None Include="Resources\photoCamera_icon%401x.png" />
     <None Include="Resources\verified_icon%401x.png" />
     <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
@@ -278,6 +275,10 @@
     <BundleResource Include="Resources\logout_icon.png" />
     <BundleResource Include="Resources\next.png" />
     <BundleResource Include="Resources\prev.png" />
+    <BundleResource Include="Resources\roundNextBtn.png" />
+    <BundleResource Include="Resources\favoriteIconActive.png" />
+    <BundleResource Include="Resources\shareActive.png" />
+    <BundleResource Include="Resources\favoriteIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />
@@ -422,7 +423,6 @@
     <BundleResource Include="Resources\splash%402x.png" />
     <BundleResource Include="Resources\splash%403x.png" />
     <BundleResource Include="Resources\audio.png" />
-    <BundleResource Include="Resources\favoriteIcon.png" />
     <BundleResource Include="Resources\icon_cmnt%401x.png" />
     <BundleResource Include="Resources\icon_cmnt%402x.png" />
     <BundleResource Include="Resources\icon_cmnt%403x.png" />

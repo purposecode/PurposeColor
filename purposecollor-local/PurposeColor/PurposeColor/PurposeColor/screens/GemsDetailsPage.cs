@@ -197,9 +197,9 @@ namespace PurposeColor
             {
 				Source = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
                 HorizontalOptions = LayoutOptions.End,
-				BackgroundColor = Color.White,
-                WidthRequest = Device.OnPlatform(30, 25, 60),
-                HeightRequest = Device.OnPlatform(30, 25, 40),
+				BackgroundColor = Color.Transparent,
+                WidthRequest = Device.OnPlatform(25, 25, 60),
+                HeightRequest = Device.OnPlatform(25, 25, 40),
 				Aspect = Aspect.AspectFit
             };
 
@@ -207,9 +207,9 @@ namespace PurposeColor
 			editMenuGesture.Tapped += GemMenuButton_Clicked;
 			menuButton.GestureRecognizers.Add(editMenuGesture);
 
-            masterStack.AddChildToLayout(pageTitle, 1, 1);
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 80, 79), 1);
-            masterStack.AddChildToLayout(title,1,7);
+			masterStack.AddChildToLayout(pageTitle, 1, Device.OnPlatform(0,1,1));
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 80, 79), Device.OnPlatform(0,1,1));
+			masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
 			#endregion
 
             StackLayout bottomAndLowerControllStack = new StackLayout
@@ -237,7 +237,7 @@ namespace PurposeColor
                     Image img = new Image();
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
-                    img.Aspect = Aspect.AspectFill;
+					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (mediaList[index] != null && mediaList[index].media_type == "mp4")
                     {
@@ -282,7 +282,7 @@ namespace PurposeColor
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
-                    img.Aspect = Aspect.AspectFill;
+					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
                     {
@@ -334,7 +334,7 @@ namespace PurposeColor
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     img.WidthRequest = App.screenWidth * 90 / 100;
                     img.HeightRequest = App.screenWidth * 90 / 100;
-                    img.Aspect = Aspect.AspectFill;
+					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
                     {
@@ -387,7 +387,7 @@ namespace PurposeColor
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(masterScroll, 5, 18);
+			masterLayout.AddChildToLayout(masterScroll, 5, Device.OnPlatform(16,18,18));
 
             #region CUSTOM LIST MENU
 

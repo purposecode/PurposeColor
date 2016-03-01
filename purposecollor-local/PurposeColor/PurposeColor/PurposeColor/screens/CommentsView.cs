@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
 using System.Globalization;
+using XLabs.Forms.Controls;
 
 namespace PurposeColor.screens
 {
@@ -18,7 +19,8 @@ namespace PurposeColor.screens
         int bottomSpacing = 75; // space between comments list and screen top end
         TapGestureRecognizer addCommentButtonTap;
         Image addCommentButton;
-        PurposeColor.CustomControls.CustomEditor newCommentEntry;
+        //PurposeColor.CustomControls.CustomEditor newCommentEntry;
+		ExtendedEntry newCommentEntry = null;
         bool isPosting = false;
         PurposeColor.interfaces.IProgressBar progressBar = null;
         GemType curentGemType;
@@ -188,14 +190,16 @@ namespace PurposeColor.screens
             #endregion
 
             #region INPUT
-            newCommentEntry = new PurposeColor.CustomControls.CustomEditor
+            //newCommentEntry = new PurposeColor.CustomControls.CustomEditor
+			newCommentEntry = new ExtendedEntry
             {
                 Placeholder = "Add new comment",
                 HeightRequest = Device.OnPlatform(50, 50, 72),
                 BackgroundColor = Color.Transparent,//Color.White,
                 WidthRequest = App.screenWidth * .80,
                 HorizontalOptions = LayoutOptions.Start,
-                Text = Device.OnPlatform(string.Empty, string.Empty, "Add new Comment..")
+                Text = Device.OnPlatform(string.Empty, string.Empty, "Add new Comment.."),
+				TextColor  = Color.Black
 
             };
 
@@ -259,6 +263,7 @@ namespace PurposeColor.screens
         void NewCommentEntry_Unfocused (object sender, FocusEventArgs e)
         {
 			//commentsAndInputs.TranslationY = 0;
+
 			masterLayout.TranslationY = 0;
         }
 
@@ -267,9 +272,9 @@ namespace PurposeColor.screens
 			//commentsAndInputs.TranslationY = newCommentEntry.Y - 180;
 
 			if (Comments != null && Comments.Count <= 2) {
-				masterLayout.TranslationY = masterLayout.Y - 220; // fine upto 2 comments //	 180 - gionee
+				masterLayout.TranslationY = masterLayout.Y - Device.OnPlatform(250, 220, 220); // fine upto 2 comments //	 180 - gionee
 			} else if (Comments != null && Comments.Count > 2) {
-				masterLayout.TranslationY = masterLayout.Y - 245;
+				masterLayout.TranslationY = masterLayout.Y - Device.OnPlatform(275, 245, 245);
 			}
         }
 

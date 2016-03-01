@@ -37,6 +37,12 @@ namespace PurposeColor.Droid
             LoadApplication(new App());
         }
 
+		protected override void OnPause ()
+		{
+			App.CurrentChatUserID = null;
+			base.OnPause ();
+		}
+
         public static Activity GetMainActivity()
         {
             return curentActivity;

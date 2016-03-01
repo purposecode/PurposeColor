@@ -34,6 +34,12 @@ namespace Native2Forms
 			Xamarin.Forms.Forms.Init (this, bundle);
 			LoadApplication (new AppTest ( message, fromID ));
 		}
+
+		protected override void OnPause ()
+		{
+			App.CurrentChatUserID = null;
+			base.OnPause ();
+		}
 	}
 }
 

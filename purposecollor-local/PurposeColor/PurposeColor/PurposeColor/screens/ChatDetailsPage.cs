@@ -29,8 +29,6 @@ namespace PurposeColor
 		User currentuser;
 		string touserID;
 
-
-
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
 
@@ -178,6 +176,13 @@ namespace PurposeColor
 
 			Content = masterScroll;
 
+		}
+
+		protected override bool OnBackButtonPressed ()
+		{
+			App.CurrentChatUserID = null;
+			Dispose ();
+			return base.OnBackButtonPressed ();
 		}
 
 		public void Dispose ()

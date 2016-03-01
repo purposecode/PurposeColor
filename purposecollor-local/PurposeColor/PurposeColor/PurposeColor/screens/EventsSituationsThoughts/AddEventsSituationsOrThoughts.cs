@@ -1027,8 +1027,8 @@ namespace PurposeColor.screens
                 CalendarView endCalendarView = new CalendarView()
                 {
                     BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                    MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
-                    MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
+					MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+					MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
                     HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                     ShouldHighlightDaysOfWeekLabels = false,
                     SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
@@ -1079,8 +1079,8 @@ namespace PurposeColor.screens
                 CalendarView calendarView = new CalendarView()
                 {
                     BackgroundColor = Color.FromRgb(30, 126, 210),// Color.FromRgb(200, 219, 238),
-                    MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
-                    MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
+					MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+					MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
                     HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                     ShouldHighlightDaysOfWeekLabels = false,
                     SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
@@ -1355,7 +1355,7 @@ namespace PurposeColor.screens
 
                             if (!string.IsNullOrEmpty(App.SelectedActionStartDate))
                             {
-                                DateTime myDate = DateTime.UtcNow;//DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture);
+								DateTime myDate = DateTime.Now;//DateTime.ParseExact("2009-05-08 14:40:52,531", "yyyy-MM-dd HH:mm:ss,fff", System.Globalization.CultureInfo.InvariantCulture);
                                 myDate = DateTime.Parse(App.SelectedActionStartDate);
                                 details.start_date = App.SelectedActionStartDate;
                                 details.end_date = App.SelectedActionEndDate;

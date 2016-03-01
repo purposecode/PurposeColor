@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
+using System.Globalization;
 
 namespace PurposeColor.screens
 {
@@ -266,7 +267,6 @@ namespace PurposeColor.screens
 			//commentsAndInputs.TranslationY = newCommentEntry.Y - 180;
 
 			if (Comments != null && Comments.Count <= 2) {
-				var test = App.screenDensity; // samsung s6 = 4(220), Gionee = 3(190)
 				masterLayout.TranslationY = masterLayout.Y - 220; // fine upto 2 comments //	 180 - gionee
 			} else if (Comments != null && Comments.Count > 2) {
 				masterLayout.TranslationY = masterLayout.Y - 245;
@@ -396,7 +396,7 @@ namespace PurposeColor.screens
                             user_id = currentUserId,
 							firstname = !string.IsNullOrEmpty(user.UserName)? user.UserName:(!string.IsNullOrEmpty(user.DisplayName)? user.DisplayName :" "),
                             profileurl = string.IsNullOrEmpty(user.ProfileImageUrl) ? "admin/uploads/default/noprofile.png" : user.ProfileImageUrl,// profile picture should be of this person// can take it from local. ==>  user.prfilePicUrl
-                            comment_datetime = DateTime.UtcNow.ToLocalTime().ToString("f")
+							comment_datetime = DateTime.UtcNow.ToString("f",  CultureInfo.InvariantCulture)
                         };
                         Comments.Add(newComment);
 
@@ -523,16 +523,9 @@ namespace PurposeColor.screens
                     /////////////////////////  comment_datetime  /////////////////////////
                     if (!string.IsNullOrEmpty(comment.comment_datetime))
                     {
-						var test = DateTime.SpecifyKind(
-								DateTime.Parse(comment.comment_datetime),
-							DateTimeKind.Utc);
-						var test2 = DateTime.SpecifyKind(
-							DateTime.Parse(test.ToString()),
-							DateTimeKind.Local);
-						
-                        Label dateText = new Label
+						Label dateText = new Label
                         {
-							Text = test2.ToString("g"), //comment.comment_datetime,
+							Text = Convert.ToDateTime(comment.comment_datetime).ToLocalTime().ToString("f",  CultureInfo.InvariantCulture), //comment.comment_datetime,
                             TextColor = Color.Gray,
                             FontSize = Device.OnPlatform(8, 8, 16),
                             HorizontalOptions = LayoutOptions.Start

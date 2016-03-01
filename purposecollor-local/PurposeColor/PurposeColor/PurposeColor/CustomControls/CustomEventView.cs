@@ -140,8 +140,8 @@ namespace PurposeColor.CustomControls
         {
             CalendarView endCalendarView = new CalendarView()
             {
-                MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
-                MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
+				MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+				MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
                 HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                 ShouldHighlightDaysOfWeekLabels = false,
                 SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,
@@ -169,8 +169,8 @@ namespace PurposeColor.CustomControls
         {
             CalendarView startCalendarView = new CalendarView()
             {
-                MinDate = CalendarView.FirstDayOfMonth(DateTime.UtcNow),
-                MaxDate = CalendarView.LastDayOfMonth(DateTime.UtcNow.AddMonths(3)),
+				MinDate = CalendarView.FirstDayOfMonth(DateTime.Now),
+				MaxDate = CalendarView.LastDayOfMonth(DateTime.Now.AddMonths(3)),
                 HighlightedDateBackgroundColor = Color.FromRgb(227, 227, 227),
                 ShouldHighlightDaysOfWeekLabels = false,
                 SelectionBackgroundStyle = CalendarView.BackgroundStyle.CircleFill,

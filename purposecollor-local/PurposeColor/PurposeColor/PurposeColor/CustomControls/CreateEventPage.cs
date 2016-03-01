@@ -123,7 +123,7 @@ namespace PurposeColor.screens
 			{
                 try
                 {
-                    startDatePicker.Date = DateTime.UtcNow.AddDays(1);
+					startDatePicker.Date = DateTime.Now.AddDays(1);
                     startDatePicker.Focus();
                 }
                 catch (Exception ex)
@@ -169,7 +169,7 @@ namespace PurposeColor.screens
 			{
                 try
                 {
-                    endDatePicker.Date = DateTime.UtcNow.AddDays(1);
+					endDatePicker.Date = DateTime.Now.AddDays(1);
                     endDatePicker.Focus();
                 }
                 catch (Exception ex)

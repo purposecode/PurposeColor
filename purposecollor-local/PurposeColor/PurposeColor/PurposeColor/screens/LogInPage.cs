@@ -191,7 +191,7 @@ namespace PurposeColor.screens
                     App.IsTesting = true;
 					UpdateBurgerMenuList();
 					App.IsLoggedIn = true;
-					bool userSaved = await App.Settings.SaveUser(new User { UserId = "2", UserName = "App tester", AllowCommunitySharing = true, Email= "tester@test.com", StatusNote="Testing.." }); // for testing only
+					bool userSaved = await App.Settings.SaveUser(new User { UserId = "2", UserName = "App tester", AllowCommunitySharing = true, Email= "tester@test.com", StatusNote="Testing..", AllowFollowers = true }); // for testing only
                     if (!userSaved)
                     {
                         await DisplayAlert(Constants.ALERT_TITLE, "Could not save user to local database.", Constants.ALERT_OK);
@@ -256,7 +256,8 @@ namespace PurposeColor.screens
                                 newUser.ProfileImageUrl = string.IsNullOrEmpty(loggedInUser.profileurl) ? string.Empty : loggedInUser.profileurl;
                                 newUser.UserId = loggedInUser.user_id;
 								newUser.VerifiedStatus = loggedInUser.verified_status;
-
+								newUser.AllowCommunitySharing = string.IsNullOrEmpty(loggedInUser.community_status) ? false: (loggedInUser.community_status == "1" ? true : false);
+								newUser.AllowFollowers = string.IsNullOrEmpty(loggedInUser.follow_status) ? false: (loggedInUser.follow_status == "1" ? true : false); 
                                 if (loggedInUser.usertype_id != null)
                                 {
                                     newUser.UserType = int.Parse(loggedInUser.usertype_id);

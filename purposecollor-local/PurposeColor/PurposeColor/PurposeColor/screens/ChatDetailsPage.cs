@@ -85,6 +85,7 @@ namespace PurposeColor
 				BackgroundColor = Color.White,//Color.White,
 				WidthRequest = App.screenWidth * .80,
 				HorizontalOptions = LayoutOptions.Start,
+				TextColor = Color.Black
 			};
 
 			Image postChatButton = new Image();

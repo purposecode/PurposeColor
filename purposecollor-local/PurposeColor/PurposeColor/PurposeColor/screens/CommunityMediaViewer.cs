@@ -74,8 +74,18 @@ namespace PurposeColor
 			{
 
 				double curX = imgScrollView.ScrollX;
-				await imgScrollView.ScrollToAsync( curX + App.screenWidth * 90 /100, 0, true );
+				double imgWidth = App.screenWidth * 90 / 100;
 
+				if( Device.OS == TargetPlatform.iOS )
+				{
+					if( curX + imgWidth + 15 < imgScrollView.ContentSize.Width )
+						await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
+				}
+				else
+				{
+					await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
+				}
+					
 			};
 
 
@@ -86,7 +96,9 @@ namespace PurposeColor
 			prevImg.Clicked += async (object sender, EventArgs e) => 
 			{
 				double curX = imgScrollView.ScrollX;
-				await imgScrollView.ScrollToAsync( curX - App.screenWidth * 90 /100, 0, true );
+				double imgWidth = App.screenWidth * 90 / 100;
+				if( curX > 0 )
+				await imgScrollView.ScrollToAsync( curX - App.screenWidth , 0, true );
 			};
 
 			#region MEDIA LIST

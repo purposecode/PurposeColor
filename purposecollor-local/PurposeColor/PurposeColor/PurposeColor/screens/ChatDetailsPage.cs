@@ -10,6 +10,7 @@ using PurposeColor.Model;
 using PurposeColor.interfaces;
 using System.Collections.ObjectModel;
 using PushNotifictionListener;
+using XLabs.Forms.Controls;
 
 namespace PurposeColor
 {
@@ -30,10 +31,12 @@ namespace PurposeColor
 
 
 
-
-
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
+
+			//App.IsChatDetailsPageIsVisible = true;
+			NavigationPage.SetHasNavigationBar(this, false);
+
 			chatList = chats;
 			touserID = tosusrID;
 			currentuser = App.Settings.GetUser ();
@@ -49,11 +52,17 @@ namespace PurposeColor
 
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), chatTouser, Color.Black, userImageUrl, false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				App.masterPage.IsPresented = true;
+			};
 			subTitleBar = new CommunityGemChatTitleBar(Constants.SUB_TITLE_BG_COLOR, chatTouser, userImageUrl, false);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
+				//App.IsChatDetailsPageIsVisible = false;
 				await Navigation.PopAsync();
 			};
+
 			masterLayout = new CustomLayout ();
 			masterLayout.WidthRequest = App.screenWidth;
 			masterLayout.HeightRequest = App.screenHeight - 50;
@@ -67,23 +76,15 @@ namespace PurposeColor
 			chatHistoryListView.BackgroundColor =  Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
 
-			this.Appearing += (object sender, EventArgs e) => 
-			{
-				if( chatList.Count >  0)
-				{
-					chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
-				}
 
-			};
+		
 
-			CustomEditor chatEntry = new CustomEditor
+			ExtendedEntry chatEntry = new ExtendedEntry
 			{
 				Placeholder = "Enter your chat...",
 				BackgroundColor = Color.White,//Color.White,
 				WidthRequest = App.screenWidth * .80,
 				HorizontalOptions = LayoutOptions.Start,
-				Text = Device.OnPlatform(string.Empty, string.Empty, "Enter your chat...")
-
 			};
 
 			Image postChatButton = new Image();
@@ -126,8 +127,26 @@ namespace PurposeColor
 				chatList.Add( detail );
 				chatEntry.Text = "";
 				chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
-				await ServiceHelper.SendChatMessage( currentuser.UserId.ToString(), touserID, detail.Message );
+
+				if(!string.IsNullOrEmpty( detail.Message ))
+					await ServiceHelper.SendChatMessage( currentuser.UserId.ToString(), touserID, detail.Message );
 			};
+
+
+
+			/*	this.Appearing += async (object sender, EventArgs e) => 
+			{
+
+				progressBar.ShowProgressbar( "Preparing chat window..." );
+				masterScroll.IsVisible = true;
+
+				chatUsersList = await ServiceHelper.GetAllChatUsers ();
+
+
+
+				progressBar.HideProgressbar();
+
+			};*/
 
 
 			MessagingCenter.Subscribe<CrossPushNotificationListener, string>(this, "boom", (page, message) =>
@@ -148,7 +167,7 @@ namespace PurposeColor
 						detail.CurrentUserid = currentuser.UserId.ToString();
 						chatList.Add( detail );
 
-						if( chatList.Count > 0 )
+						if( chatList != null && chatList.Count > 1 )
 						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
 					}
 
@@ -162,12 +181,7 @@ namespace PurposeColor
 
 		public void Dispose ()
 		{
-
-		}
-
-		protected override bool OnBackButtonPressed ()
-		{
-			return base.OnBackButtonPressed ();
+			//App.IsChatDetailsPageIsVisible = false;
 		}
 
 		private Cell CreateMessageCell()

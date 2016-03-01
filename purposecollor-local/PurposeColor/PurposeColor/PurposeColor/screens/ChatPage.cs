@@ -31,8 +31,13 @@ namespace PurposeColor
 
 		public ChatPage ()
 		{
+			NavigationPage.SetHasNavigationBar(this, false);
 			progressBar = DependencyService.Get< IProgressBar > ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				App.masterPage.IsPresented = true;
+			};
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
@@ -153,14 +158,14 @@ namespace PurposeColor
 			userName.HorizontalOptions = LayoutOptions.CenterAndExpand;
 			userName.SetBinding ( Label.TextProperty, "firstname" );
 
-			CircleImage userImage = new CircleImage 
+			Image userImage = new Image 
 			{
 				Aspect = Aspect.AspectFit,
-				WidthRequest = 75,
-				HeightRequest = 75,
+				WidthRequest = 50,
+				HeightRequest = 50,
 				HorizontalOptions = LayoutOptions.Start
 			};
-			userImage.SetBinding ( CircleImage.SourceProperty, "profileImgUrl" );
+			userImage.SetBinding ( CircleImage.SourceProperty, "profileUrl" );
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;
 			userImage.HeightRequest = App.screenWidth * 10 / 100;

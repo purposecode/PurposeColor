@@ -235,7 +235,7 @@ namespace PurposeColor.CustomControls
 				Source = userImageSource
 			};
 
-			masterLayout.AddChildToLayout(userImg, 83, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+		//	masterLayout.AddChildToLayout(userImg, 83, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 			Content = masterLayout;
 
 		}

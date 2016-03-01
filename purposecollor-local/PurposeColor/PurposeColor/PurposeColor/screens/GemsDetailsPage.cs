@@ -193,16 +193,20 @@ namespace PurposeColor
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             
-            CustomImageButton menuButton = new CustomImageButton
+			Image menuButton = new Image
             {
-                ImageName = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
-                Text = string.Empty,
+				Source = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
                 HorizontalOptions = LayoutOptions.End,
 				BackgroundColor = Color.White,
-                WidthRequest = Device.OnPlatform(20, 20, 60),
-                HeightRequest = Device.OnPlatform(20, 20, 40)
+                WidthRequest = Device.OnPlatform(30, 25, 60),
+                HeightRequest = Device.OnPlatform(30, 25, 40),
+				Aspect = Aspect.AspectFit
             };
-            menuButton.Clicked += GemMenuButton_Clicked;
+
+			TapGestureRecognizer editMenuGesture = new TapGestureRecognizer();
+			editMenuGesture.Tapped += GemMenuButton_Clicked;
+			menuButton.GestureRecognizers.Add(editMenuGesture);
+
             masterStack.AddChildToLayout(pageTitle, 1, 1);
 			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 80, 79), 1);
             masterStack.AddChildToLayout(title,1,7);
@@ -481,7 +485,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 52, 52), Device.OnPlatform(2, 4, 4));
+			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 53, 52), Device.OnPlatform(2, 4, 4));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)

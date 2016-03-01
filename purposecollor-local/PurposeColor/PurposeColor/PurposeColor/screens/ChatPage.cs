@@ -163,9 +163,10 @@ namespace PurposeColor
 				Aspect = Aspect.AspectFit,
 				WidthRequest = 50,
 				HeightRequest = 50,
-				HorizontalOptions = LayoutOptions.Start
+				HorizontalOptions = LayoutOptions.Center
 			};
-			userImage.SetBinding ( CircleImage.SourceProperty, "profileUrl" );
+			userImage.SetBinding ( Image.SourceProperty, "profileImgUrl" );
+			userImage.TranslationX = 20;
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;
 			userImage.HeightRequest = App.screenWidth * 10 / 100;

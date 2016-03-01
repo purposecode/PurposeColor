@@ -86,7 +86,7 @@ namespace PurposeColor.screens
 				await DisplayAlert(Constants.ALERT_TITLE,"Filter option to be implemented",Constants.ALERT_OK);
 			};
 
-			graphAndEmotionListContainer.Children.Add(new StackLayout{ Spacing = 70, Padding  = new Thickness(80,0,10,0), Orientation = StackOrientation.Horizontal , Children = {headingLabel,filter}});
+			graphAndEmotionListContainer.Children.Add(new StackLayout{ Spacing = 70, Padding  = new Thickness(80,2,10,0), Orientation = StackOrientation.Horizontal , Children = {headingLabel,filter}});
 
 
 			#region REGION 1 BUTTON STACK

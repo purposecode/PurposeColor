@@ -48,7 +48,7 @@ namespace PushNotifictionListener
 					fromID = pair.Value.ToString ();
 				else if (header == "chat") 
 				{
-					chat = pair.Value.ToString () + "&&" + fromID;
+					chat = pair.Value.ToString ();
 
 				}
 			}
@@ -62,6 +62,7 @@ namespace PushNotifictionListener
 			} 
 			else if (chat != null) 
 			{
+				chat = chat + "&&" + fromID;
 				MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", chat);
 				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
 				notify.ShowNotification ("chat", chat, true);

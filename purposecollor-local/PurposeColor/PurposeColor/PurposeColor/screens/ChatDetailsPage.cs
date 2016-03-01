@@ -166,6 +166,8 @@ namespace PurposeColor
 						detail.FromUserID = fromUser;
 						detail.CurrentUserid = currentuser.UserId.ToString();
 						chatList.Add( detail );
+
+						if( chatList != null && chatList.Count > 1 )
 						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
 					}
 

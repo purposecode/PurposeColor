@@ -73,6 +73,11 @@ namespace PushNotifictionListener
 					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
 					notify.ShowNotification ("chat", fromUserMessage, chat, true);	
 				}
+				else if( App.CurrentChatUserID == null )
+				{
+					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+					notify.ShowNotification ("chat", fromUserMessage, chat, true);	
+				}
 
 			} 
 			else 

@@ -27,6 +27,19 @@ namespace PurposeColor.Droid.Dependency
 				intent.PutExtra ("Message", messege);
 				intent.PutExtra ("Title", title);
 
+				string chatMsg = messege;
+				string chatTouserID = "";
+
+				if( title == "chat" )
+				{
+					string[] delimiters = { "&&" };
+					string[] clasIDArray = messege.Split(delimiters, StringSplitOptions.None);
+					chatMsg = clasIDArray [0];
+					chatTouserID = clasIDArray [1];
+				}
+
+
+
 				// Create a PendingIntent; we're only using one PendingIntent (ID = 0):
 				const int pendingIntentId = 0;
 				PendingIntent pendingIntent = 
@@ -35,7 +48,7 @@ namespace PurposeColor.Droid.Dependency
 				// Instantiate the builder and set notification elements:
 				Notification.Builder builder = new Notification.Builder(MainActivity.GetMainActivity())
 					.SetContentTitle(title)
-					.SetContentText(messege)
+					.SetContentText(chatMsg)
 					.SetDefaults(NotificationDefaults.Sound)
 					.SetAutoCancel( true )
 					.SetSmallIcon(Resource.Drawable.app_icon);

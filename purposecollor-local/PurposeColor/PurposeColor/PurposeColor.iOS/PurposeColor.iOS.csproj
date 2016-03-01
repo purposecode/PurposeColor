@@ -140,8 +140,6 @@
     <None Include="Resources\photoCamera_icon%401x.png" />
     <None Include="Resources\verified_icon%401x.png" />
     <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
-    <None Include="Resources\next.png" />
-    <None Include="Resources\prev.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -278,6 +276,8 @@
     <BundleResource Include="Resources\blue_tip.png" />
     <BundleResource Include="Resources\yellow_tip.png" />
     <BundleResource Include="Resources\logout_icon.png" />
+    <BundleResource Include="Resources\next.png" />
+    <BundleResource Include="Resources\prev.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

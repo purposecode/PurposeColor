@@ -18,12 +18,21 @@ namespace PurposeColor.iOS
 		{
 			try
 			{
+				string chatMsg = messege;
+				string chatTouserID = "";
+				if( title == "chat" )
+				{
+					string[] delimiters = { "&&" };
+					string[] clasIDArray = messege.Split(delimiters, StringSplitOptions.None);
+					chatMsg = clasIDArray [0];
+					chatTouserID = clasIDArray [1];
+				}
 				AppDelegate.CurrentNotificationType = title;
 				UILocalNotification notification = new UILocalNotification();
 				notification.AlertTitle = messageTitle;
 				notification.FireDate = NSDate.Now;
 				notification.AlertAction = messageTitle;
-				notification.AlertBody = messege;
+				notification.AlertBody = chatMsg;
 				notification.SoundName = UILocalNotification.DefaultSoundName;
 				UIApplication.SharedApplication.ScheduleLocalNotification(notification);
 			} 

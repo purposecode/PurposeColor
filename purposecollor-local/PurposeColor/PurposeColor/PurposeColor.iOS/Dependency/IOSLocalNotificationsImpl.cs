@@ -14,12 +14,15 @@ namespace PurposeColor.iOS
 {
 	class IOSLocalNotificationsImpl : ILocalNotification
 	{
-		public void ShowNotification(string title, string messege, bool handleClickNeeded )
+		public void ShowNotification(string title, string messageTitle, string messege, bool handleClickNeeded )
 		{
 			try
 			{
+				AppDelegate.CurrentNotificationType = title;
 				UILocalNotification notification = new UILocalNotification();
+				notification.AlertTitle = messageTitle;
 				notification.FireDate = NSDate.Now;
+				notification.AlertAction = messageTitle;
 				notification.AlertBody = messege;
 				notification.SoundName = UILocalNotification.DefaultSoundName;
 				UIApplication.SharedApplication.ScheduleLocalNotification(notification);

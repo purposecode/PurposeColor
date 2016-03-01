@@ -1402,11 +1402,11 @@ namespace PurposeColor.screens
                             ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
                             if (!isUpdatePage)
                             {
-								notfiy.ShowNotification("Purpose Color - Action Created", eventTitle.Text, false);
+								notfiy.ShowNotification("Purpose Color - Action Created", "", eventTitle.Text, false);
                             }
                             else
                             {
-								notfiy.ShowNotification("Purpose Color - Action Updated", eventTitle.Text, false);
+								notfiy.ShowNotification("Purpose Color - Action Updated","", eventTitle.Text, false);
                             }
                         }
                         catch (Exception ex)

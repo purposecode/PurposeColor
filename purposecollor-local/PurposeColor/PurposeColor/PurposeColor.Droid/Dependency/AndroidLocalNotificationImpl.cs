@@ -17,7 +17,7 @@ namespace PurposeColor.Droid.Dependency
 {
 	class AndroidLocalNotificationImpl : ILocalNotification
 	{
-		public void ShowNotification(string title, string messege, bool handleClickNeeded )
+		public void ShowNotification(string title, string messageTitle, string messege, bool handleClickNeeded )
 		{
 			try
 			{

@@ -7,6 +7,8 @@ using UIKit;
 using PushNotification.Plugin;
 using PushNotifictionListener;
 using ImageCircle.Forms.Plugin.iOS;
+using PurposeColor.Model;
+using System.Collections.ObjectModel;
 
 namespace PurposeColor.iOS
 {
@@ -23,6 +25,7 @@ namespace PurposeColor.iOS
         //
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
+		public static string CurrentNotificationType;
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
@@ -80,14 +83,52 @@ namespace PurposeColor.iOS
 
 		public override void ReceivedLocalNotification(UIApplication application, UILocalNotification notification)
 		{
-			// show an alert
-			UIAlertController okayAlertController = UIAlertController.Create (notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
-			okayAlertController.AddAction (UIAlertAction.Create ("OK", UIAlertActionStyle.Default, null));
-			var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First().ChildViewControllers.Last().ChildViewControllers.First();
-			firstController.PresentViewController (okayAlertController, true, null);
+			if ("follow" == CurrentNotificationType) 
+			{
+				// show an alert
+				UIAlertController okayAlertController = UIAlertController.Create (notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
+				okayAlertController.AddAction (UIAlertAction.Create ("Reject", UIAlertActionStyle.Cancel, action => OnReject ()));
+				okayAlertController.AddAction (UIAlertAction.Create ("Accept", UIAlertActionStyle.Default, action => OnAccept ()));
+				var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First ().ChildViewControllers.Last ().ChildViewControllers.First ();
+				firstController.PresentViewController (okayAlertController, true, null);
 
-			// reset our badge
-			UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+				// reset our badge
+				UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+
+			}
+			else if ("chat" == CurrentNotificationType) 
+			{
+				// show an alert
+				UIAlertController okayAlertController = UIAlertController.Create (notification.AlertAction, notification.AlertBody, UIAlertControllerStyle.Alert);
+				okayAlertController.AddAction (UIAlertAction.Create ("OK", UIAlertActionStyle.Default, null));
+				var firstController = UIApplication.SharedApplication.KeyWindow.RootViewController.ChildViewControllers.First().ChildViewControllers.Last().ChildViewControllers.First();
+				firstController.PresentViewController (okayAlertController, true, null);
+			}
 		}
+
+
+		async void OnGoToChatPage()
+		{
+
+			//await App.NavigateToChatDetailsPage (  "", "", "" );
+		}
+
+
+		async void OnDismiss()
+		{
+			await App.UpdateNotificationStatus(  App.NotificationReqID , "0") ;
+		}
+
+
+		async void OnReject()
+		{
+			await App.UpdateNotificationStatus(  App.NotificationReqID , "0") ;
+		}
+
+		async void OnAccept()
+		{
+			await App.UpdateNotificationStatus(  App.NotificationReqID , "2") ;
+		}
+
     }
 }

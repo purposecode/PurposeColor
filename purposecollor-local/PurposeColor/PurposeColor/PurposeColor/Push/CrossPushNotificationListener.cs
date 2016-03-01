@@ -61,23 +61,24 @@ namespace PushNotifictionListener
 			if (followMessege != null) 
 			{
 				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-				notify.ShowNotification ("follow", followMessege, true);
+				notify.ShowNotification ("follow", "", followMessege, true);
 			} 
 			else if (chat != null) 
 			{
 				chat = chat + "&&" + fromID;
+				string fromUserMessage = fromuser + "  send a chat message";
 				MessagingCenter.Send<CrossPushNotificationListener, string>(this, "boom", chat);
 				if (App.CurrentChatUserID != null && App.CurrentChatUserID != fromID) 
 				{
 					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-					notify.ShowNotification ("chat", chat, true);	
+					notify.ShowNotification ("chat", fromUserMessage, chat, true);	
 				}
 
 			} 
 			else 
 			{
 				ILocalNotification sample = DependencyService.Get<ILocalNotification> ();
-				sample.ShowNotification ( "Purpose Color", chat, false );
+				sample.ShowNotification ( "Purpose Color", "", chat, false );
 			}
 
 		}

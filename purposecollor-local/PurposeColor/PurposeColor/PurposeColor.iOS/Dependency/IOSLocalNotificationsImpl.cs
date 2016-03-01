@@ -20,7 +20,6 @@ namespace PurposeColor.iOS
 			{
 				UILocalNotification notification = new UILocalNotification();
 				notification.FireDate = NSDate.Now;
-
 				notification.AlertBody = messege;
 				notification.SoundName = UILocalNotification.DefaultSoundName;
 				UIApplication.SharedApplication.ScheduleLocalNotification(notification);

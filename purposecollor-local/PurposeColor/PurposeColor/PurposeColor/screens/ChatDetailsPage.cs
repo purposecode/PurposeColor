@@ -34,7 +34,7 @@ namespace PurposeColor
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
 
-			//App.IsChatDetailsPageIsVisible = true;
+			App.CurrentChatUserID = tosusrID;
 			NavigationPage.SetHasNavigationBar(this, false);
 
 			chatList = chats;
@@ -59,7 +59,7 @@ namespace PurposeColor
 			subTitleBar = new CommunityGemChatTitleBar(Constants.SUB_TITLE_BG_COLOR, chatTouser, userImageUrl, false);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
-				//App.IsChatDetailsPageIsVisible = false;
+				App.CurrentChatUserID = null;
 				await Navigation.PopAsync();
 			};
 
@@ -181,7 +181,7 @@ namespace PurposeColor
 
 		public void Dispose ()
 		{
-			//App.IsChatDetailsPageIsVisible = false;
+			App.CurrentChatUserID = null;
 		}
 
 		private Cell CreateMessageCell()

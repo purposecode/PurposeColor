@@ -54,6 +54,7 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
+			progressBar.ShowProgressbar ("Loading gems..");
 			App.isEmotionsListing = false;
 			isLoadingFromDetailsPage = false;
 
@@ -118,6 +119,7 @@ namespace PurposeColor.screens
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(new StackLayout{HeightRequest =  App.screenHeight * 0.08, Orientation = StackOrientation.Horizontal, Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,Device.OnPlatform(9,10,10));
+
 		}
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
@@ -183,8 +185,9 @@ namespace PurposeColor.screens
 
 			} catch (Exception ex) {
 				var test = ex.Message;
+				progressBar.HideProgressbar ();
 			}
-			progressBar.HideProgressbar ();
+
 		}
 
 		async void ShowEmotionsTapGesture_Tapped (object sender, EventArgs e)
@@ -294,7 +297,7 @@ namespace PurposeColor.screens
 					var test = ex.Message;
 					progressBar.HideProgressbar ();
 				}
-				progressBar.HideProgressbar ();
+				//progressBar.HideProgressbar ();
 			}
 		}
 
@@ -302,6 +305,7 @@ namespace PurposeColor.screens
 
 		async Task<bool> AddEventsToView(int index, bool showNextGems = true)
 		{
+			progressBar.ShowProgressbar ("Loading gems..");
 			try {
 				isLoading = true;
 				int listCapacity = 10;
@@ -314,6 +318,7 @@ namespace PurposeColor.screens
 					{
 						displayedLastGem = true;
 						isLoading = false;
+						progressBar.HideProgressbar();
 						return false;
 					}
 				}
@@ -379,17 +384,20 @@ namespace PurposeColor.screens
 
 
 				//await masterScroll.ScrollToAsync( 0, 10, false );
+				progressBar.HideProgressbar();
 				return true;
 
 			} catch (Exception ex) {
 				var test = ex.Message;
 			}
-
+			progressBar.HideProgressbar();
 			return false;
 		}
 
 		async Task<bool> AddActionsToView(int index, bool showNextGems = true)
 		{
+			progressBar.ShowProgressbar ("Loading gems..");
+
 			int listCapacity = 10;
 			int max  = 0;
 
@@ -405,6 +413,7 @@ namespace PurposeColor.screens
 					{
 						displayedLastGem = true;
 						isLoading = false;
+						progressBar.HideProgressbar();
 						return false;
 					}
 				}
@@ -475,12 +484,12 @@ namespace PurposeColor.screens
 
 
 				//await masterScroll.ScrollToAsync( 0, 0, false );
-
+				progressBar.HideProgressbar();
 				return true;
 			} catch (Exception ex) {
 				var test = ex.Message;
 			}
-
+			progressBar.HideProgressbar();
 			return false;
 		}
 

@@ -32,8 +32,9 @@ namespace PurposeColor.Droid
 				{
 					string fileName = System.IO.Path.GetFileName(item);
 					WebClient webClient = new WebClient();
-					if( !File.Exists( App.DownloadsPath + fileName ) )
-					{	await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );
+					if(  !File.Exists( App.DownloadsPath + fileName ))
+					{	
+						await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );
 						webClient.Dispose();
 
 						try {
@@ -44,12 +45,47 @@ namespace PurposeColor.Droid
 								fs.Close();
 								fs.Dispose();
 							}
+							int streamLength = (int)memStream.ToArray().Length;
+
 							if (memStream != null &&  memStream.ToArray().Length > 0) {
 								Bitmap originalImage = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
 								Bitmap resizedImage = Bitmap.CreateScaledBitmap(originalImage,  imgWidth, imgHeight, false);
 
 								FileStream stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
-								resizedImage.Compress(Bitmap.CompressFormat.Png, 100, stream);
+								//int compressionRate = streamLength < 25000 ? 100: (streamLength < 100000 ? 80 : (streamLength < 200000 ? 60): (streamLength < 300000? 50: (streamLength < 400000? 50 :(streamLength < 500000? 40: 30))));
+
+								//int compressionRate = streamLength < 25000 ? 100 :(streamLength < 50000? 90: (streamLength < 100000? 80: (streamLength < 200000? 70: (streamLength < 300000? 60:(streamLength < 400000? 50: (streamLength < 500000: 40:30))))))
+								int compressionRate  = 100;
+
+								if (streamLength < 20000) {
+									compressionRate = 100;
+								}
+								else if (streamLength < 40000) {
+									compressionRate = 90;
+								}
+								else if (streamLength < 50000) {
+									compressionRate = 85;
+								}
+								else if (streamLength < 100000) {
+									compressionRate = 80;
+								}
+								else if (streamLength < 200000) {
+									compressionRate = 70;
+								}
+								else if (streamLength <300000) {
+									compressionRate = 65;
+								}
+								else if (streamLength < 400000) {
+									compressionRate = 60;
+								}
+								else if (streamLength < 500000) {
+									compressionRate = 50;
+								}
+								else {
+									compressionRate = 40;
+								}
+
+								resizedImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);
 
 								stream.Close();
 								stream.Dispose();

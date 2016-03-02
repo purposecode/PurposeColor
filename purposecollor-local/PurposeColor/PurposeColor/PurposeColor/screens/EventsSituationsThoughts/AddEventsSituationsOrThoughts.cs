@@ -1622,10 +1622,42 @@ namespace PurposeColor.screens
                         IResize resize = DependencyService.Get<IResize>();
 						Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenHeight * App.screenDensity), path);
                         MemoryStream resizedStream = new MemoryStream(resizedOutput);
-                        compressedStream = resize.CompessImage(25, resizedStream);
+						int streamLength = (int)resizedStream.Length;
 
-                        Byte[] inArray = compressedStream.ToArray();
-                        Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
+						int compressionRate  = 100;
+
+						if (streamLength < 20000) {
+							compressionRate = 100;
+						}
+						else if (streamLength < 40000) {
+							compressionRate = 90;
+						}
+						else if (streamLength < 50000) {
+							compressionRate = 85;
+						}
+						else if (streamLength < 100000) {
+							compressionRate = 80;
+						}
+						else if (streamLength < 200000) {
+							compressionRate = 70;
+						}
+						else if (streamLength <300000) {
+							compressionRate = 65;
+						}
+						else if (streamLength < 400000) {
+							compressionRate = 60;
+						}
+						else if (streamLength < 500000) {
+							compressionRate = 50;
+						}
+						else {
+							compressionRate = 40;
+						}
+
+						compressedStream = resize.CompessImage(compressionRate, resizedStream);
+
+						Byte[] inArray = resizedStream.ToArray();
+						Char[] outArray = new Char[(int)(resizedStream.ToArray().Length * 1.34)];
                         Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
                         string test2 = new string(outArray);
                         App.ExtentionArray.Add(imgType);

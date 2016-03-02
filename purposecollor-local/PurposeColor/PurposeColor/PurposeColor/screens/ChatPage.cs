@@ -92,6 +92,7 @@ namespace PurposeColor
 			Content = masterLayout;
 		}
 
+
 		async void OnChatPageAppearing (object sender, EventArgs e)
 		{
 			if (userObject != null)
@@ -158,6 +159,7 @@ namespace PurposeColor
 			userName.HorizontalOptions = LayoutOptions.CenterAndExpand;
 			userName.SetBinding ( Label.TextProperty, "firstname" );
 
+
 			Image userImage = new Image 
 			{
 				Aspect = Aspect.AspectFit,
@@ -165,7 +167,13 @@ namespace PurposeColor
 				HeightRequest = 50,
 				HorizontalOptions = LayoutOptions.Center
 			};
-			userImage.SetBinding ( Image.SourceProperty, "profileImgUrl" );
+			if (Device.OS == TargetPlatform.iOS) {
+				userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
+			}
+			else 
+			{
+				userImage.SetBinding ( Image.SourceProperty, "profileImgUrl" );				
+			}
 			userImage.TranslationX = 20;
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;
@@ -190,11 +198,8 @@ namespace PurposeColor
 			availabelStatus.VerticalOptions = LayoutOptions.Center;
 			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
 
-			if (Device.OS == TargetPlatform.Android) 
-			{
-				mainLayout.Children.Add ( userImage );
-			}
 
+			mainLayout.Children.Add ( userImage );
 			mainLayout.Children.Add ( userName );
 			mainLayout.Children.Add ( availabelStatus );
 

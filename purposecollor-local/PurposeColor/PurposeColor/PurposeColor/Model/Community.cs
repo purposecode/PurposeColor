@@ -168,11 +168,23 @@ namespace PurposeColor.Model
 		public string user_id { get; set; }
 		public string firstname { get; set; }
 		public string profileimage { get; set; }
-		public string profileImgUrl {
+		public string profileImgUrl 
+		{
 			get 
 			{
 				string fileName = Path.GetFileName(profileimage);
 				return App.DownloadsPath + fileName;
+			}
+			set
+			{
+			}
+		}
+
+		public string profilImageWebUrl 
+		{
+			get 
+			{
+				return Constants.SERVICE_BASE_URL + profileimage;
 			}
 			set
 			{

@@ -50,8 +50,17 @@ namespace PurposeColor.Droid
 							if (memStream != null &&  memStream.ToArray().Length > 0) {
 								Bitmap originalImage = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
 								Bitmap resizedImage = Bitmap.CreateScaledBitmap(originalImage,  imgWidth, imgHeight, false);
+								FileStream stream= null;
+								if(originalImage.Width < originalImage.Height)
+								{
+									resizedImage = Bitmap.CreateScaledBitmap(originalImage,  imgWidth, imgHeight, false);
+								}
+								else
+								{
+									resizedImage = Bitmap.CreateScaledBitmap(originalImage, imgHeight, imgWidth, false);
+								}
 
-								FileStream stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+								stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
 								//int compressionRate = streamLength < 25000 ? 100: (streamLength < 100000 ? 80 : (streamLength < 200000 ? 60): (streamLength < 300000? 50: (streamLength < 400000? 50 :(streamLength < 500000? 40: 30))));
 
 								//int compressionRate = streamLength < 25000 ? 100 :(streamLength < 50000? 90: (streamLength < 100000? 80: (streamLength < 200000? 70: (streamLength < 300000? 60:(streamLength < 400000? 50: (streamLength < 500000: 40:30))))))
@@ -61,28 +70,28 @@ namespace PurposeColor.Droid
 									compressionRate = 100;
 								}
 								else if (streamLength < 40000) {
-									compressionRate = 90;
+									compressionRate = App.screenDensity > 2 ? 90: 80;
 								}
 								else if (streamLength < 50000) {
-									compressionRate = 85;
+									compressionRate = App.screenDensity > 2 ? 85: 70;
 								}
 								else if (streamLength < 100000) {
-									compressionRate = 80;
+									compressionRate = App.screenDensity > 2 ? 80: 60;
 								}
 								else if (streamLength < 200000) {
-									compressionRate = 70;
+									compressionRate = App.screenDensity > 2 ? 70: 30;
 								}
 								else if (streamLength <300000) {
-									compressionRate = 65;
+									compressionRate = App.screenDensity > 2 ? 65: 25;
 								}
 								else if (streamLength < 400000) {
-									compressionRate = 60;
+									compressionRate = App.screenDensity > 2 ? 60: 20;
 								}
 								else if (streamLength < 500000) {
-									compressionRate = 50;
+									compressionRate = App.screenDensity > 2 ? 50: 15;
 								}
 								else {
-									compressionRate = 40;
+									compressionRate = App.screenDensity > 2 ? 40: 10;
 								}
 
 								resizedImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);

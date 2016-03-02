@@ -162,7 +162,7 @@ namespace PurposeColor
 
 			Image userImage = new Image 
 			{
-				Aspect = Aspect.AspectFit,
+				Aspect = Aspect.Fill,
 				WidthRequest = 50,
 				HeightRequest = 50,
 				HorizontalOptions = LayoutOptions.Center
@@ -173,6 +173,7 @@ namespace PurposeColor
 			else 
 			{
 				userImage.SetBinding ( Image.SourceProperty, "profileImgUrl" );				
+				//userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
 			}
 			userImage.TranslationX = 20;
 			/*Image userImage = new Image ();

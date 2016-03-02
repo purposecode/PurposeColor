@@ -190,7 +190,11 @@ namespace PurposeColor
 			availabelStatus.VerticalOptions = LayoutOptions.Center;
 			availabelStatus.HorizontalOptions = LayoutOptions.EndAndExpand;
 
-			mainLayout.Children.Add ( userImage );
+			if (Device.OS == TargetPlatform.Android) 
+			{
+				mainLayout.Children.Add ( userImage );
+			}
+
 			mainLayout.Children.Add ( userName );
 			mainLayout.Children.Add ( availabelStatus );
 

@@ -30,10 +30,12 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
+
 			string followMessege = null;
 			string fromID = null;
 			string chat = null;
 			string fromuser = null;
+			string offlineMessage = null;
 
 			int index = 0;
 			foreach (var pair in Parameters)
@@ -44,7 +46,7 @@ namespace PushNotifictionListener
 				else if (header == "message")
 					followMessege = pair.Value.ToString ();
 				else if (header == "offline")
-					followMessege = pair.Value.ToString ();
+					offlineMessage = pair.Value.ToString ();
 				else if (header == "from_id")
 					fromID = pair.Value.ToString ();
 				else if (header == "from_user")
@@ -80,6 +82,11 @@ namespace PushNotifictionListener
 				}
 
 			} 
+			else if( offlineMessage != null )
+			{
+				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+				notify.ShowNotification ("offline", offlineMessage, chat, true);	
+			}
 			else 
 			{
 				ILocalNotification sample = DependencyService.Get<ILocalNotification> ();

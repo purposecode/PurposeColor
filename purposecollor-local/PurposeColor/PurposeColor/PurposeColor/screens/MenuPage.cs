@@ -253,6 +253,8 @@ namespace PurposeColor.screens
 								await DisplayAlert(Constants.ALERT_TITLE, "Network error, please try again later.", Constants.ALERT_OK);
 							}
 						}
+
+						App.Current.Properties["IsLoggedIn"] = false;
 						#endregion
 					}
 					catch (Exception)

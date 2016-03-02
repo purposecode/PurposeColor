@@ -24,8 +24,19 @@ namespace PurposeColor.screens
 				{
 					globalSettings = AppSettings.GetAppGlobalSettings();
 				}
+				bool isUserLoggedIn = false;
+				if(App.Current.Properties.ContainsKey("IsLoggedIn"))
+				{
+					isUserLoggedIn = (bool)App.Current.Properties["IsLoggedIn"];
+				}
 
-				if (AppSettings.GetUser() != null && AppSettings.GetUser().UserId != null)
+				if(isUserLoggedIn)
+				{
+					App.IsLoggedIn = true;
+					UpdateBurgerMenuList();
+					Detail = new NavigationPage(new FeelingNowPage());
+				}
+				else if ( AppSettings.GetUser() != null && AppSettings.GetUser().UserId != null)
 				{
 					App.IsLoggedIn = true;
 					UpdateBurgerMenuList();

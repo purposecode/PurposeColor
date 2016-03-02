@@ -12,6 +12,7 @@ using System.IO;
 using PurposeColor.interfaces;
 using Media.Plugin;
 using PurposeColor.Service;
+using Media.Plugin.Abstractions;
 
 namespace PurposeColor.screens
 {
@@ -566,7 +567,8 @@ namespace PurposeColor.screens
 						var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
 							{
 								Directory = "Purposecolor",
-								Name = fileName
+								Name = fileName,
+								DefaultCamera = CameraDevice.Front
 							});
 						
 						if (file == null)

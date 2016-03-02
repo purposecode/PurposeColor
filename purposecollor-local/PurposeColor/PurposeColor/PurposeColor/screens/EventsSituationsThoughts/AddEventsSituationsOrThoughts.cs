@@ -1886,11 +1886,9 @@ namespace PurposeColor.screens
                         if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                         {
                             string fileName = string.Format("Img{0}.png", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-
                             var file = await Media.Plugin.CrossMedia.Current.TakePhotoAsync(new Media.Plugin.Abstractions.StoreCameraMediaOptions
                             {
-
-                                Directory = "Purposecolor",
+								Directory = "Purposecolor",
                                 Name = fileName
                             });
 
@@ -1994,7 +1992,6 @@ namespace PurposeColor.screens
                         }
                         else if (Media.Plugin.CrossMedia.Current.IsCameraAvailable)
                         {
-
                             if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakeVideoSupported)
                             {
                                 progres.HideProgressbar();
@@ -2005,7 +2002,8 @@ namespace PurposeColor.screens
                             var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
                             {
                                 Name = fileName,
-                                Directory = "DefaultVideos",
+								Directory = "DefaultVideos",
+								DesiredLength = TimeSpan.FromMinutes(5)
                             });
 
                             if (file == null)

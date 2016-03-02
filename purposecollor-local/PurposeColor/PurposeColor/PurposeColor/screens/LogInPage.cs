@@ -268,6 +268,8 @@ namespace PurposeColor.screens
                                     newUser.RegistrationDate = loggedInUser.regdate;
                                 }
 
+								App.Current.Properties["IsLoggedIn"] = true; // Persist Data - Save data in Xamarin.Forms
+
                                 isSaveSuccess = await App.Settings.SaveUser(newUser);
 
                                 PurposeColor.Model.GlobalSettings globalSettings = App.Settings.GetAppGlobalSettings();

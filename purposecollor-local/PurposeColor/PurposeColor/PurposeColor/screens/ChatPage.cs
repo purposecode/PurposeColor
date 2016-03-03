@@ -167,7 +167,8 @@ namespace PurposeColor
 				HeightRequest = 50,
 				HorizontalOptions = LayoutOptions.Center
 			};
-			if (Device.OS == TargetPlatform.iOS) {
+			if (Device.OS == TargetPlatform.iOS) 
+			{
 				userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
 			}
 			else 

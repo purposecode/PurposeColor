@@ -37,27 +37,73 @@ namespace PushNotifictionListener
 			string fromuser = null;
 			string offlineMessage = null;
 
-			int index = 0;
-			foreach (var pair in Parameters)
+
+			if (Device.OS == TargetPlatform.iOS)
 			{
-				string header = pair.Key.ToString ();
-				if (header == "followrequest_id")
-					App.NotificationReqID = pair.Value.ToString ();
-				else if (header == "message")
-					followMessege = pair.Value.ToString ();
-				else if (header == "offline")
-					offlineMessage = pair.Value.ToString ();
-				else if (header == "from_id")
-					fromID = pair.Value.ToString ();
-				else if (header == "from_user")
-					fromuser = pair.Value.ToString ();
-				else if (header == "chat") 
-				{
-					chat = pair.Value.ToString ();
+				// See whether Dictionary contains this string.
+				if (Parameters.ContainsKey ("aps")) {
+					IDictionary dictionry = (IDictionary)Parameters ["aps"];
+					ICollection valuesCollection = dictionry.Values;
+					ICollection keysCollection = dictionry.Keys;
+
+					string[] arraykeys = new string[10];
+
+					IList keylist = keysCollection as IList;
+					IList valueList = valuesCollection as IList;
+
+					Dictionary<string, string> createdDictionary = new Dictionary<string, string> ();
+
+					for (int itemIndex = 0; itemIndex < valuesCollection.Count; itemIndex++) {
+						createdDictionary.Add (keylist [itemIndex].ToString (), valueList [itemIndex].ToString ());
+					}
+
+					foreach (var pair in createdDictionary) {
+						string val = pair.Value.ToString ();
+						Debug.WriteLine (val);
+						string header = pair.Key.ToString ();
+						if (header == "followrequest_id")
+							App.NotificationReqID = pair.Value.ToString ();
+						else if (header == "follow")
+							followMessege = pair.Value.ToString ();
+						else if (header == "offline")
+							offlineMessage = pair.Value.ToString ();
+						else if (header == "from_id")
+							fromID = pair.Value.ToString ();
+						else if (header == "from_user")
+							fromuser = pair.Value.ToString ();
+						else if (header == "chat") {
+							chat = pair.Value.ToString ();
+
+						}
+					}
 
 				}
 			}
+			else if (Device.OS == TargetPlatform.Android) 
+			{
 
+				foreach (var pair in Parameters)
+				{
+					string val = pair.Value.ToString ();
+					Debug.WriteLine ( val );
+					string header = pair.Key.ToString ();
+					if (header == "followrequest_id")
+						App.NotificationReqID = pair.Value.ToString ();
+					else if (header == "follow")
+						followMessege = pair.Value.ToString ();
+					else if (header == "offline")
+						offlineMessage = pair.Value.ToString ();
+					else if (header == "from_id")
+						fromID = pair.Value.ToString ();
+					else if (header == "from_user")
+						fromuser = pair.Value.ToString ();
+					else if (header == "chat") 
+					{
+						chat = pair.Value.ToString ();
+
+					}
+				}
+			}
 
 
 			if (followMessege != null) 

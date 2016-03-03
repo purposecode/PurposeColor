@@ -329,7 +329,7 @@ namespace PurposeColor
 
                     Image img = new Image();
                     bool isValidUrl = (model.goal_media[index].goal_media != null && !string.IsNullOrEmpty(model.goal_media[index].goal_media)) ? true : false;
-                    string source = (isValidUrl) ? Constants.SERVICE_BASE_URL + model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+                    string source = (isValidUrl) ?  model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
                     img.WidthRequest = App.screenWidth * 90 / 100;

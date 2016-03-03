@@ -351,6 +351,8 @@ namespace PurposeColor.screens
 		
         }
 
+
+
         async void OnActionTapped (object sender, EventArgs e)
         {
 			CustomLayout clikedLayout = sender as CustomLayout;
@@ -605,6 +607,9 @@ namespace PurposeColor.screens
                     model.gemType = GemType.Goal;
                     model.gemId = goalID;
                     progress.HideProgressbar();
+
+					List<SelectedGoalMedia> downloadedMediaList = new List<SelectedGoalMedia> ();
+					downloadedMediaList = await DownloadMedias ( goalInfo.resultarray.goal_media );
                     await Navigation.PushAsync(new GemsDetailsPage(model));
                 }
                 else
@@ -620,6 +625,31 @@ namespace PurposeColor.screens
             }
 
         }
+
+
+		async Task<List<SelectedGoalMedia>>  DownloadMedias( List<SelectedGoalMedia> mediaList )
+		{
+			IDownload downloader =  DependencyService.Get<IDownload> ();
+			List<string> mediaListToDownload = new List<string> ();
+			List<SelectedGoalMedia> newList = new List<SelectedGoalMedia> ();
+
+			foreach (var item in mediaList )
+			{
+				SelectedGoalMedia newMedia = new SelectedGoalMedia ();
+				newMedia = item;
+				if (item.media_type == "png" || item.media_type == "jpg" || item.media_type == "jpeg") 
+				{
+					mediaListToDownload.Add( Constants.SERVICE_BASE_URL + item.goal_media );
+					string fileName = System.IO.Path.GetFileName(item.goal_media);
+					newMedia.goal_media = App.DownloadsPath + fileName;
+				}
+				newList.Add ( newMedia );
+					
+			}
+
+			var val = await downloader.DownloadFiles ( mediaListToDownload );
+			return newList;
+		}
 
         private async  Task<bool> DeletePendingActionRowFromStack(string selectedGoalID, string selectedSavedGoalID)
         {

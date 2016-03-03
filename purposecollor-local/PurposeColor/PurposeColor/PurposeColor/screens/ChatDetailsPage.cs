@@ -73,6 +73,14 @@ namespace PurposeColor
 			chatHistoryListView.HasUnevenRows = true;
 			chatHistoryListView.BackgroundColor =  Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
+			chatHistoryListView.ItemTapped += (object sender, ItemTappedEventArgs e) => 
+			{
+				chatHistoryListView.SelectedItem = null;
+			};
+			chatHistoryListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) => 
+			{
+				chatHistoryListView.SelectedItem = null;
+			};
 
 
 		

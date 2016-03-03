@@ -203,7 +203,7 @@ namespace PurposeColor
 
 			mainLayout.Children.Add ( userImage );
 			mainLayout.Children.Add ( userName );
-			mainLayout.Children.Add ( availabelStatus );
+			//mainLayout.Children.Add ( availabelStatus );
 
 			View = mainLayout;
 

@@ -24,8 +24,11 @@ namespace PurposeColor.Droid
 
 		public async  Task<bool> DownloadFiles ( List<string> downloadUrlList )
 		{
-			int imgWidth = (int)(App.screenWidth * App.screenDensity);
-			int imgHeight = (int)(App.screenHeight * App.screenDensity);
+			int imgMaxWidth = (int)(App.screenWidth * App.screenDensity);
+			int imgMaxHeight = (int)(App.screenHeight * .50 * App.screenDensity);
+//			int imgMaxWidth = (int)(App.screenWidth);
+//			int imgMaxHeight = (int)(App.screenHeight);
+			int streamLength = 0;
 			try 
 			{
 				foreach (var item in downloadUrlList)
@@ -38,77 +41,127 @@ namespace PurposeColor.Droid
 						webClient.Dispose();
 
 						try {
-							MemoryStream memStream = new MemoryStream();
-							using (FileStream fs = File.OpenRead(App.DownloadsPath + fileName))
+
+							BitmapFactory.Options imgOptions = new BitmapFactory.Options();
+							imgOptions.InJustDecodeBounds = true;
+							MemoryStream memStream = null;
+							await BitmapFactory.DecodeFileAsync(App.DownloadsPath + fileName,imgOptions);
+
+							if(imgOptions.OutHeight <= 5500 && imgOptions.OutWidth <= 5500 )
 							{
-								fs.CopyTo(memStream);
-								fs.Close();
-								fs.Dispose();
-							}
-							int streamLength = (int)memStream.ToArray().Length;
-
-							if (memStream != null &&  memStream.ToArray().Length > 0) {
-								Bitmap originalImage = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
-								Bitmap resizedImage = Bitmap.CreateScaledBitmap(originalImage,  imgWidth, imgHeight, false);
-								FileStream stream= null;
-								if(originalImage.Width < originalImage.Height)
+								using (FileStream fs = File.OpenRead(App.DownloadsPath + fileName))
 								{
-									resizedImage = Bitmap.CreateScaledBitmap(originalImage,  imgWidth, imgHeight, false);
+									streamLength = (int)fs.Length;
+									if(streamLength < 5242880) // 5MB = 5242880 byts, 2.5 MB = 2621440 byts
+									{
+										memStream = new MemoryStream();
+										fs.CopyTo(memStream);
+									}
+									fs.Close();
+									fs.Dispose();
 								}
-								else
+
+								if (memStream != null &&  memStream.ToArray().Length > 0) 
 								{
-									resizedImage = Bitmap.CreateScaledBitmap(originalImage, imgHeight, imgWidth, false);
-								}
+									Bitmap originalImage = null;
+									streamLength = (int)memStream.ToArray().Length;
+									if(streamLength < 5242880 ) // 5MB = 5242880 byts, 2.5 MB = 2621440 byts
+									{
+										try {
+											originalImage  = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
 
-								stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
-								//int compressionRate = streamLength < 25000 ? 100: (streamLength < 100000 ? 80 : (streamLength < 200000 ? 60): (streamLength < 300000? 50: (streamLength < 400000? 50 :(streamLength < 500000? 40: 30))));
+//												imgOptions.InSampleSize = calculateInSampleSize(imgOptions,imgMaxWidth,imgMaxHeight);
+//												imgOptions.InJustDecodeBounds = false;
+//		
+//												originalImage  = BitmapFactory.DecodeFile(App.DownloadsPath + fileName, imgOptions);
+//											
+										} 
+										catch (Exception ex) 
+										{
+											var test = ex.Message;
+											FileStream fstream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+											fstream.Close();
+											fstream.Dispose();
+											fstream = null;
+											break;
+										}
+										if(originalImage.Height > originalImage.Width)
+										{
+											originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxHeight, true);
+										}
+										else
+										{
+											originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxWidth, true);
+										}
 
-								//int compressionRate = streamLength < 25000 ? 100 :(streamLength < 50000? 90: (streamLength < 100000? 80: (streamLength < 200000? 70: (streamLength < 300000? 60:(streamLength < 400000? 50: (streamLength < 500000: 40:30))))))
-								int compressionRate  = 100;
 
-								if (streamLength < 20000) {
-									compressionRate = 100;
-								}
-								else if (streamLength < 40000) {
-									compressionRate = App.screenDensity > 2 ? 90: 80;
-								}
-								else if (streamLength < 50000) {
-									compressionRate = App.screenDensity > 2 ? 85: 70;
-								}
-								else if (streamLength < 100000) {
-									compressionRate = App.screenDensity > 2 ? 80: 60;
-								}
-								else if (streamLength < 200000) {
-									compressionRate = App.screenDensity > 2 ? 70: 30;
-								}
-								else if (streamLength <300000) {
-									compressionRate = App.screenDensity > 2 ? 65: 25;
-								}
-								else if (streamLength < 400000) {
-									compressionRate = App.screenDensity > 2 ? 60: 20;
-								}
-								else if (streamLength < 500000) {
-									compressionRate = App.screenDensity > 2 ? 50: 15;
-								}
-								else {
-									compressionRate = App.screenDensity > 2 ? 40: 10;
-								}
+										int compressionRate  = 100;
 
-								resizedImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);
+										#region compression ratio
+										if (streamLength < 20000) {
+											compressionRate = 100;
+										}
+										else if (streamLength < 40000) {
+											compressionRate = App.screenDensity > 2 ? 100: 80;
+										}
+										else if (streamLength < 50000) {
+											compressionRate = App.screenDensity > 2 ? 100: 70;
+										}
+										else if (streamLength < 100000) {
+											compressionRate = App.screenDensity > 2 ? 100: 60;
+										}
+										else if (streamLength < 200000) {
+											compressionRate = App.screenDensity > 2 ? 99: 30;
+										}
+										else if (streamLength <300000) {
+											compressionRate = App.screenDensity > 2 ? 98: 25;
+										}
+										else if (streamLength < 400000) {
+											compressionRate = App.screenDensity > 2 ? 97: 20;
+										}
+										else if (streamLength < 500000) {
+											compressionRate = App.screenDensity > 2 ? 96: 15;
+										}
+										else {
+											compressionRate = App.screenDensity > 2 ? 95: 10;
+										}
+										#endregion
+										FileStream stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+										originalImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);
 
-								stream.Close();
-								stream.Dispose();
-								stream = null;
-								memStream.Dispose();
-								memStream = null;
-								resizedImage.Dispose();
-								resizedImage = null;
-								originalImage.Dispose();
-								originalImage = null;
+										stream.Close();
+										stream.Dispose();
+										stream = null;
+										memStream.Dispose();
+										memStream = null;
+										//resizedImage.Dispose();
+										//resizedImage = null;
+										originalImage.Recycle();
+										originalImage.Dispose();
+										originalImage = null;
+									}
+									else
+									{
+										FileStream fstream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+										fstream.Close();
+										fstream.Dispose();
+										fstream = null;
+									}
+								}
 							}
-
+							else
+							{
+								FileStream fstream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+								fstream.Close();
+								fstream.Dispose();
+								fstream = null;
+							}
 						} catch (Exception ex) {
 							var test = ex.Message;
+							FileStream fstream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
+							fstream.Close();
+							fstream.Dispose();
+							fstream = null;
 						}
 					}// if file exists
 
@@ -123,6 +176,29 @@ namespace PurposeColor.Droid
 
 		}
 
+
+		public int calculateInSampleSize( BitmapFactory.Options options, int reqWidth, int reqHeight) 
+		{
+			// Raw height and width of image
+			int height = options.OutHeight;
+			int width = options.OutWidth;
+			int inSampleSize = 1;
+
+			if (height > reqHeight || width > reqWidth) {
+
+				int halfHeight = height / 2;
+				int halfWidth = width / 2;
+
+				// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+				// height and width larger than the requested height and width.
+				while ((halfHeight / inSampleSize) > reqHeight
+					&& (halfWidth / inSampleSize) > reqWidth) {
+					inSampleSize *= 2;
+				}
+			}
+
+			return inSampleSize;
+		}
 	}
 }
 

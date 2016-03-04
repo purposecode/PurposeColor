@@ -1952,7 +1952,7 @@ namespace PurposeColor.Service
                         break;
                 }
 
-                string uriString = "api.php?action=deletemedia&"+ gemIdString + gemId+"&media_file=" + mediaName ;
+                string uriString = "api.php?action=deletemedia"+ gemIdString + gemId+"&media_file=" + mediaName ;
 
                 var response = await client.GetAsync(uriString);
 

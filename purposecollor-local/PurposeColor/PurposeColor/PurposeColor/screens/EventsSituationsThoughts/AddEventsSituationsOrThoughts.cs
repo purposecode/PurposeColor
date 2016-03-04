@@ -378,7 +378,9 @@ namespace PurposeColor.screens
                 {
                     foreach (EventMedia eventObj in detailsPageModel.eventMediaArray)
                     {
-                        AddFilenameToMediaList(eventObj.event_media);
+						if (eventObj.event_media != null && !eventObj.event_media.Contains("default")) {
+							AddFilenameToMediaList(eventObj.event_media);
+						}
                     }
                 }
 
@@ -386,7 +388,9 @@ namespace PurposeColor.screens
                 {
                     foreach (SelectedGoalMedia goalObj in detailsPageModel.goal_media)
                     {
-                        AddFilenameToMediaList(goalObj.goal_media);
+						if (goalObj.goal_media != null && !goalObj.goal_media.Contains("default")) {
+							AddFilenameToMediaList(goalObj.goal_media);
+						}
                     }
                 }
 
@@ -394,7 +398,9 @@ namespace PurposeColor.screens
                 {
                     foreach (ActionMedia actionObj in detailsPageModel.actionMediaArray)
                     {
-                        AddFilenameToMediaList(actionObj.action_media);
+						if (actionObj.action_media != null && !actionObj.action_media.Contains("default")) {
+							AddFilenameToMediaList(actionObj.action_media);
+						}
                     }
                 }
 
@@ -1454,6 +1460,7 @@ namespace PurposeColor.screens
                             {
                                 await FeelingNowPage.DownloadAllEvents();
                                 serviceResultOK = true;
+								await Navigation.PopModalAsync();
                             }
                         }
                         catch (Exception ex)

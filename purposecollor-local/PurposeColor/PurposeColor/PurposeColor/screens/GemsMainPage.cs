@@ -640,6 +640,36 @@ namespace PurposeColor.screens
 						SelectedEventDetails eventDetails = await ServiceHelper.GetSelectedEventDetails(btnId);
 						if (eventDetails != null)
 						{
+
+							List<string> listToDownload = new List<string>();
+
+							foreach (var eventi in eventDetails.event_media) 
+							{
+								if(string.IsNullOrEmpty(eventi.event_media))
+								{
+									continue;
+								}
+
+								if (eventi.media_type == "png" || eventi.media_type == "jpg" || eventi.media_type == "jpeg") 
+								{
+
+									listToDownload.Add(Constants.SERVICE_BASE_URL+eventi.event_media);
+									string fileName = System.IO.Path.GetFileName(eventi.event_media);
+									eventi.event_media = App.DownloadsPath + fileName;
+								}
+								else
+								{
+									eventi.event_media = Constants.SERVICE_BASE_URL + eventi.event_media ;
+								}
+							}
+
+							if (listToDownload != null && listToDownload.Count > 0) {
+								IDownload downloader = DependencyService.Get<IDownload>();
+								progressBar.ShowProgressbar("loading details..");
+								await downloader.DownloadFiles(listToDownload);
+								progressBar.HideProgressbar();
+							}
+
 							DetailsPageModel model = new DetailsPageModel();
 							model.actionMediaArray = null;
 							model.eventMediaArray = eventDetails.event_media;
@@ -655,6 +685,8 @@ namespace PurposeColor.screens
 								progressBar.HideProgressbar();
 							}
 							isLoadingFromDetailsPage = true;
+
+
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							eventDetails = null;
 						}
@@ -668,6 +700,36 @@ namespace PurposeColor.screens
 					try {
 
 						SelectedActionDetails actionDetails = await ServiceHelper.GetSelectedActionDetails(btnId);
+
+						List<string> listToDownload = new List<string>();
+
+						foreach (var action in actionDetails.action_media) 
+						{
+							if( string.IsNullOrEmpty(action.action_media))
+							{
+								continue;
+							}
+
+							if (action.media_type == "png" || action.media_type == "jpg" || action.media_type == "jpeg")
+							{
+
+								listToDownload.Add(Constants.SERVICE_BASE_URL+action.action_media);
+								string fileName = System.IO.Path.GetFileName(action.action_media);
+								action.action_media = App.DownloadsPath + fileName;
+							}
+							else
+							{
+								action.action_media = Constants.SERVICE_BASE_URL + action.action_media;
+							}
+						}
+
+						if (listToDownload != null && listToDownload.Count > 0) {
+							IDownload downloader = DependencyService.Get<IDownload>();
+							progressBar.ShowProgressbar("loading details..");
+							await downloader.DownloadFiles(listToDownload);
+							progressBar.HideProgressbar();
+						}
+
 						if (actionDetails != null) {
 							DetailsPageModel model = new DetailsPageModel();
 							model.actionMediaArray = actionDetails.action_media;
@@ -684,6 +746,10 @@ namespace PurposeColor.screens
 								progressBar.HideProgressbar();
 							}
 							isLoadingFromDetailsPage = true;
+
+
+							// download images//
+
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							actionDetails = null;
 						}

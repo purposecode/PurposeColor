@@ -83,7 +83,7 @@ namespace PurposeColor.Droid
 											fstream.Close();
 											fstream.Dispose();
 											fstream = null;
-											break;
+											continue;
 										}
 										if(originalImage.Height > originalImage.Width)
 										{

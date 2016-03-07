@@ -20,6 +20,7 @@ using System.Net;
 using Newtonsoft.Json;
 using Plugin.Contacts;
 using Plugin.Contacts.Abstractions;
+using Media.Plugin.Abstractions;
 
 namespace PurposeColor.screens
 {
@@ -2040,6 +2041,7 @@ namespace PurposeColor.screens
                             string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
                             var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
                             {
+								Quality = VideoQuality.Low,
                                 Name = fileName,
 								Directory = "DefaultVideos",
 								DesiredLength = TimeSpan.FromMinutes(5)
@@ -2149,7 +2151,7 @@ namespace PurposeColor.screens
                         }
                         else if (CrossMedia.Current.IsPickVideoSupported)
                         {
-                            var file = await CrossMedia.Current.PickVideoAsync();
+							var file = await CrossMedia.Current.PickVideoAsync();
 
                             if (file == null)
                             {

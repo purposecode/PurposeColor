@@ -47,7 +47,7 @@ namespace PurposeColor.Droid
 							MemoryStream memStream = null;
 							await BitmapFactory.DecodeFileAsync(App.DownloadsPath + fileName,imgOptions);
 
-							if(imgOptions.OutHeight <= 5500 && imgOptions.OutWidth <= 5500 )
+							if(imgOptions.OutHeight <= 5000 && imgOptions.OutWidth <= 5000 )
 							{
 								using (FileStream fs = File.OpenRead(App.DownloadsPath + fileName))
 								{
@@ -65,7 +65,7 @@ namespace PurposeColor.Droid
 								{
 									Bitmap originalImage = null;
 									streamLength = (int)memStream.ToArray().Length;
-									if(streamLength < 5242880 ) // 5MB = 5242880 byts, 2.5 MB = 2621440 byts
+									if(streamLength < 4242880 ) // 5MB = 5242880 byts, 2.5 MB = 2621440 byts
 									{
 										try {
 											originalImage  = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
@@ -87,11 +87,15 @@ namespace PurposeColor.Droid
 										}
 										if(originalImage.Height > originalImage.Width)
 										{
-											originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxHeight, true);
+											if (originalImage.Height > imgMaxHeight || originalImage.Width > imgMaxWidth) {
+												originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxHeight, true);
+											}
 										}
 										else
 										{
-											originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxWidth, true);
+											if (originalImage.Width > imgMaxHeight || originalImage.Height > imgMaxWidth) {
+												originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxWidth, true);
+											}
 										}
 
 

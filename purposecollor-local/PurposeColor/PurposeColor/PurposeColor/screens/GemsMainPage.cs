@@ -54,7 +54,7 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
-			progressBar.ShowProgressbar ("Loading gems.. 1");
+			progressBar.ShowProgressbar ("Loading gems..");
 			App.isEmotionsListing = false;
 			isLoadingFromDetailsPage = false;
 
@@ -246,7 +246,7 @@ namespace PurposeColor.screens
 				progressBar = DependencyService.Get<IProgressBar> ();
 
 				if(Device.OS != TargetPlatform.iOS)
-				progressBar.ShowProgressbar ("Loading gems.. 4");
+				progressBar.ShowProgressbar ("Loading gems..");
 
 				try {
 					try {
@@ -307,7 +307,7 @@ namespace PurposeColor.screens
 
 		async Task<bool> AddEventsToView(int index, bool showNextGems = true)
 		{
-			progressBar.ShowProgressbar ("Loading gems.. 5");
+			progressBar.ShowProgressbar ("Loading gems..");
 			try {
 				isLoading = true;
 				int listCapacity = 10;
@@ -398,7 +398,7 @@ namespace PurposeColor.screens
 
 		async Task<bool> AddActionsToView(int index, bool showNextGems = true)
 		{
-			progressBar.ShowProgressbar ("Loading gems.. 6");
+			progressBar.ShowProgressbar ("Loading gems..");
 
 			int listCapacity = 10;
 			int max  = 0;
@@ -779,7 +779,7 @@ namespace PurposeColor.screens
 				if (masterScroll.ScrollY > (masterStack.Height - Device.OnPlatform (512, 550, 0))) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
-						progressBar.ShowProgressbar ("loading gems.. 7");
+						progressBar.ShowProgressbar ("loading gems..");
 						await LoadMoreGemsClicked ();
 						progressBar.HideProgressbar ();
 					} else {
@@ -790,7 +790,7 @@ namespace PurposeColor.screens
 				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 5, 0)) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!reachedFront) {
-						progressBar.ShowProgressbar ("loading gems.. 8");
+						progressBar.ShowProgressbar ("loading gems..");
 						await LoadPreviousGems ();
 						progressBar.HideProgressbar ();
 					} else {

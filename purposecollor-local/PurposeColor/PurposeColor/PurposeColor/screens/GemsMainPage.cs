@@ -54,7 +54,7 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
-			progressBar.ShowProgressbar ("Loading gems..");
+			progressBar.ShowProgressbar ("Loading gems.. 1");
 			App.isEmotionsListing = false;
 			isLoadingFromDetailsPage = false;
 
@@ -120,6 +120,7 @@ namespace PurposeColor.screens
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(new StackLayout{HeightRequest =  App.screenHeight * 0.08, Orientation = StackOrientation.Horizontal, Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,Device.OnPlatform(9,10,10));
 
+			progressBar.HideProgressbar ();
 		}
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
@@ -136,7 +137,7 @@ namespace PurposeColor.screens
 				if (progressBar == null) {
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
-				progressBar.ShowProgressbar ("Loading gems..");
+				//progressBar.ShowProgressbar ("Loading gems.. 2");
 
 				if (actionsWithImage == null) 
 				{
@@ -185,9 +186,9 @@ namespace PurposeColor.screens
 
 			} catch (Exception ex) {
 				var test = ex.Message;
-				progressBar.HideProgressbar ();
-			}
 
+			}
+			//progressBar.HideProgressbar ();
 		}
 
 		async void ShowEmotionsTapGesture_Tapped (object sender, EventArgs e)
@@ -202,7 +203,7 @@ namespace PurposeColor.screens
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
 				// display the emotions list and change color of Goals selection uttion
-				progressBar.ShowProgressbar ("Loading gems..");
+				//progressBar.ShowProgressbar ("Loading gems.. 3");
 
 				bool isSuccess = await AddEventsToView (0);
 				if (isSuccess) 
@@ -221,8 +222,9 @@ namespace PurposeColor.screens
 				}
 				progressBar.HideProgressbar();
 			} catch (Exception ex) {
-
+				
 			}
+			//progressBar.HideProgressbar ();
 		}
 
 		void OnBackButtonTapRecognizerTapped(object sender, EventArgs e)
@@ -244,7 +246,7 @@ namespace PurposeColor.screens
 				progressBar = DependencyService.Get<IProgressBar> ();
 
 				if(Device.OS != TargetPlatform.iOS)
-				progressBar.ShowProgressbar ("Loading gems..");
+				progressBar.ShowProgressbar ("Loading gems.. 4");
 
 				try {
 					try {
@@ -305,7 +307,7 @@ namespace PurposeColor.screens
 
 		async Task<bool> AddEventsToView(int index, bool showNextGems = true)
 		{
-			progressBar.ShowProgressbar ("Loading gems..");
+			progressBar.ShowProgressbar ("Loading gems.. 5");
 			try {
 				isLoading = true;
 				int listCapacity = 10;
@@ -396,7 +398,7 @@ namespace PurposeColor.screens
 
 		async Task<bool> AddActionsToView(int index, bool showNextGems = true)
 		{
-			progressBar.ShowProgressbar ("Loading gems..");
+			progressBar.ShowProgressbar ("Loading gems.. 6");
 
 			int listCapacity = 10;
 			int max  = 0;
@@ -607,7 +609,9 @@ namespace PurposeColor.screens
 		async void DetailsTapgesture_Tapped (object sender, EventArgs e)
 		{
 			try {
+				if(progressBar == null)
 				progressBar = DependencyService.Get<IProgressBar>();
+
 				progressBar.ShowProgressbar("Retriving details");
 
 				string btnId = "0";
@@ -632,6 +636,7 @@ namespace PurposeColor.screens
 
 				if(btnId == "0")
 				{
+					progressBar.HideProgressbar();
 					return;
 				}
 
@@ -665,9 +670,9 @@ namespace PurposeColor.screens
 
 							if (listToDownload != null && listToDownload.Count > 0) {
 								IDownload downloader = DependencyService.Get<IDownload>();
-								progressBar.ShowProgressbar("loading details..");
+								//progressBar.ShowProgressbar("loading details..");
 								await downloader.DownloadFiles(listToDownload);
-								progressBar.HideProgressbar();
+
 							}
 
 							DetailsPageModel model = new DetailsPageModel();
@@ -685,7 +690,6 @@ namespace PurposeColor.screens
 								progressBar.HideProgressbar();
 							}
 							isLoadingFromDetailsPage = true;
-
 
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							eventDetails = null;
@@ -725,9 +729,9 @@ namespace PurposeColor.screens
 
 						if (listToDownload != null && listToDownload.Count > 0) {
 							IDownload downloader = DependencyService.Get<IDownload>();
-							progressBar.ShowProgressbar("loading details..");
+							//progressBar.ShowProgressbar("loading details..");
 							await downloader.DownloadFiles(listToDownload);
-							progressBar.HideProgressbar();
+							//progressBar.HideProgressbar();
 						}
 
 						if (actionDetails != null) {
@@ -747,17 +751,14 @@ namespace PurposeColor.screens
 							}
 							isLoadingFromDetailsPage = true;
 
-
-							// download images//
-
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							actionDetails = null;
 						}
 					} catch (Exception ex) {
 						
 					}
-
 				}
+				progressBar.HideProgressbar();
 			}
 			catch (Exception ex)
 			{
@@ -778,7 +779,7 @@ namespace PurposeColor.screens
 				if (masterScroll.ScrollY > (masterStack.Height - Device.OnPlatform (512, 550, 0))) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
-						progressBar.ShowProgressbar ("loading gems..");
+						progressBar.ShowProgressbar ("loading gems.. 7");
 						await LoadMoreGemsClicked ();
 						progressBar.HideProgressbar ();
 					} else {
@@ -789,7 +790,7 @@ namespace PurposeColor.screens
 				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 5, 0)) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!reachedFront) {
-						progressBar.ShowProgressbar ("loading gems..");
+						progressBar.ShowProgressbar ("loading gems.. 8");
 						await LoadPreviousGems ();
 						progressBar.HideProgressbar ();
 					} else {
@@ -799,7 +800,7 @@ namespace PurposeColor.screens
 					masterScroll.Scrolled += OnScroll;
 				}
 			} catch (Exception ex) {
-				
+				progressBar.HideProgressbar ();                                                                         
 			}
 		}
 

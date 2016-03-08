@@ -2053,11 +2053,27 @@ namespace PurposeColor.screens
                                 return;
                             }
 
+							MemoryStream ms = new MemoryStream();
+							file.GetStream().CopyTo(ms);
 
-                            MemoryStream ms = new MemoryStream();
-                            file.GetStream().CopyTo(ms);
-                            ms.Position = 0;
+							/*if( Device.OS == TargetPlatform.Android )
+							{
+								string videoFilename = Path.GetFileName( file.Path );
+								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
+								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename );
+								ms.Position = 0;
+							}
+							else if( Device.OS == TargetPlatform.iOS )
+							{
+								file.GetStream().CopyTo(ms);
+							}*/
+	
 
+							if( ms == null )
+							{
+								MasterObject.DisplayAlert("Error in adding video.");
+								return;
+							}
                             if (ms.Length > 15728640)
                             {
                                 MasterObject.DisplayAlert("Can not add video, Maximum file size limied to 15 MB");

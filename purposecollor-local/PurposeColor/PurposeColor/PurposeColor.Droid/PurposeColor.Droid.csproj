@@ -201,6 +201,12 @@
     <Reference Include="Xam.Plugin.DownloadManager.Droid, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Xam.Plugin.DownloadManager.1.0.0.1\lib\MonoAndroid10\Xam.Plugin.DownloadManager.Droid.dll</HintPath>
     </Reference>
+    <Reference Include="ffmpegAndroidJava">
+      <HintPath>..\..\packages\ffmpegAndroidJava.dll</HintPath>
+    </Reference>
+    <Reference Include="XamarinAndroidFFmpeg">
+      <HintPath>..\..\packages\AndroidFFMpeg\XamarinAndroidFFmpeg.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CrossVideoPlayer\CrossVideoPlayerView.cs" />
@@ -236,6 +242,7 @@
     <Compile Include="Dependency\AndroidDownloader.cs" />
     <Compile Include="NotificationClick.cs" />
     <Compile Include="FormsActivity.cs" />
+    <Compile Include="Dependency\AndroidVideoCompressor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -139,6 +139,7 @@
     <Compile Include="screens\ChatPage.cs" />
     <Compile Include="screens\ChatDetailsPage.cs" />
     <Compile Include="screens\ProfileSettingsPage.cs" />
+    <Compile Include="interfaces\IVideoCompressor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

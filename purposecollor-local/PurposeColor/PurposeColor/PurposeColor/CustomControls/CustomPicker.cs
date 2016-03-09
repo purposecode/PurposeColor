@@ -268,6 +268,7 @@ namespace PurposeColor.CustomControls
                     emotionsEntry.TextColor = Color.Black;
                     listTitle.IsVisible = false;
                     addButton.IsVisible = false;
+					emotionsEntry.TextChanged += EmotionsEntry_TextChanged;
 
                     addEmotionButton = new Image();
                     addEmotionButton.Source = (FileImageSource)ImageSource.FromFile(Device.OnPlatform("tick_with_bg.png", "tick_with_bg.png", "//Assets//tick_with_bg.png"));
@@ -346,6 +347,14 @@ namespace PurposeColor.CustomControls
             {
                 var test = ex.Message;
             }
+        }
+
+        void EmotionsEntry_TextChanged (object sender, TextChangedEventArgs e)
+        {
+			CustomEntry entry = sender as CustomEntry;
+			if (e.NewTextValue != null && e.NewTextValue.Length > 35) {
+				entry.Text = e.OldTextValue;
+			}
         }
 
 

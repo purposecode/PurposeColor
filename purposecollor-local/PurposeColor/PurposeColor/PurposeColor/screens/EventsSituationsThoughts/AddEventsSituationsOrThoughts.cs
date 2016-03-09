@@ -151,6 +151,7 @@ namespace PurposeColor.screens
                 HeightRequest = Device.OnPlatform(50,50,73),
                 WidthRequest = (int)(devWidth * .90) // 90% of screen,
             };
+			eventTitle.TextChanged += EventTitle_TextChanged;
 
             
             //if (App.screenDensity > 1.5)
@@ -175,6 +176,8 @@ namespace PurposeColor.screens
                 Placeholder = pageTitle,
                 BackgroundColor = Color.White
             };
+			eventDescription.TextChanged += EventDescription_TextChanged;
+				
 
             eventDescription.WidthRequest = textInputWidth;
 
@@ -826,6 +829,22 @@ namespace PurposeColor.screens
             #endregion
 
             Content = masterLayout;
+        }
+
+        void EventDescription_TextChanged (object sender, TextChangedEventArgs e)
+        {
+			CustomEditor editor = sender as CustomEditor;
+			if (e.NewTextValue != null && e.NewTextValue.Length > 1000) {
+				editor.Text = e.OldTextValue;
+			}
+        }
+
+        void EventTitle_TextChanged (object sender, TextChangedEventArgs e)
+        {
+			CustomEntry entry = sender as CustomEntry;
+			if (e.NewTextValue != null && e.NewTextValue.Length > 35) {
+				entry.Text = e.OldTextValue;
+			}
         }
 
         private void AddFilenameToMediaList(string fileName)

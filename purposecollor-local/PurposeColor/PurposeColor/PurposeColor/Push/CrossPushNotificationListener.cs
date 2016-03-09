@@ -30,7 +30,10 @@ namespace PushNotifictionListener
 
 		public  void OnMessage(IDictionary<string, object> Parameters, DeviceType deviceType)
 		{
-
+			User user = App.Settings.GetUser ();
+			if (user == null)
+				return;
+			
 			string followMessege = null;
 			string fromID = null;
 			string chat = null;

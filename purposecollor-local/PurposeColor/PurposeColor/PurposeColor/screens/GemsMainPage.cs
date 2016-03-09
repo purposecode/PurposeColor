@@ -54,7 +54,7 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
-			progressBar.ShowProgressbar ("Loading gems..");
+			//progressBar.ShowProgressbar ("Loading gems..");
 			App.isEmotionsListing = false;
 			isLoadingFromDetailsPage = false;
 
@@ -120,7 +120,7 @@ namespace PurposeColor.screens
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(new StackLayout{HeightRequest =  App.screenHeight * 0.08, Orientation = StackOrientation.Horizontal, Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,Device.OnPlatform(9,10,10));
 
-			progressBar.HideProgressbar ();
+			//progressBar.HideProgressbar ();
 		}
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
@@ -137,7 +137,7 @@ namespace PurposeColor.screens
 				if (progressBar == null) {
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
-				//progressBar.ShowProgressbar ("Loading gems.. 2");
+				progressBar.ShowProgressbar ("Loading gems..");
 
 				if (actionsWithImage == null) 
 				{
@@ -166,7 +166,7 @@ namespace PurposeColor.screens
 						}
 					}
 				}
-
+				progressBar.HideProgressbar ();
 				// do list the actions.....//
 				bool isSuccess = await AddActionsToView(0, true);
 				if (isSuccess) 
@@ -186,9 +186,9 @@ namespace PurposeColor.screens
 
 			} catch (Exception ex) {
 				var test = ex.Message;
-
+				progressBar.HideProgressbar ();
 			}
-			//progressBar.HideProgressbar ();
+
 		}
 
 		async void ShowEmotionsTapGesture_Tapped (object sender, EventArgs e)
@@ -292,7 +292,7 @@ namespace PurposeColor.screens
 					Content = masterLayout;
 
 					// call - ShowEmotionsTapGesture_Tapped //
-
+					progressBar.HideProgressbar ();
 					ShowEmotionsTapGesture_Tapped (emotionsButtion, null);	
 				}
 				catch (Exception ex) {

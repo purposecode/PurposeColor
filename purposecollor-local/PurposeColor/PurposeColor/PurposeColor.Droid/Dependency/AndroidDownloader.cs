@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Android.Graphics;
+using Android.Media;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidDownloader))]
 namespace PurposeColor.Droid
@@ -69,12 +70,6 @@ namespace PurposeColor.Droid
 									{
 										try {
 											originalImage  = BitmapFactory.DecodeByteArray(memStream.ToArray(), 0, memStream.ToArray().Length);
-
-//												imgOptions.InSampleSize = calculateInSampleSize(imgOptions,imgMaxWidth,imgMaxHeight);
-//												imgOptions.InJustDecodeBounds = false;
-//		
-//												originalImage  = BitmapFactory.DecodeFile(App.DownloadsPath + fileName, imgOptions);
-//											
 										} 
 										catch (Exception ex) 
 										{
@@ -130,8 +125,36 @@ namespace PurposeColor.Droid
 											compressionRate = App.screenDensity > 2 ? 95: 10;
 										}
 										#endregion
+										ExifInterface exif = new ExifInterface(App.DownloadsPath+fileName);
+										var orientation = exif.GetAttributeInt(ExifInterface.TagOrientation, (int)Android.Media.Orientation.Normal);
+										int rotate=0;
+										int orientationP = exif.GetAttributeInt (ExifInterface.TagOrientation, 0);
+										switch (orientation) 
+										{
+										case (int)Android.Media.Orientation.Rotate180:
+											rotate = 180;
+											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
+											break;
+										case (int) Android.Media.Orientation.Rotate270:
+											rotate = 270;
+											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
+											break;
+										case (int)Android.Media.Orientation.Rotate90:
+											rotate = 90;
+											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
+											break;
+										default:
+											break;
+										}
+										exif.Dispose();
+										exif = null;
+
 										FileStream stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
 										originalImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);
+
+
+
+
 
 										stream.Close();
 										stream.Dispose();
@@ -180,29 +203,47 @@ namespace PurposeColor.Droid
 
 		}
 
-
-		public int calculateInSampleSize( BitmapFactory.Options options, int reqWidth, int reqHeight) 
+		Bitmap changeOrientation (string filePath, Bitmap bitmap, int orientation)
 		{
-			// Raw height and width of image
-			int height = options.OutHeight;
-			int width = options.OutWidth;
-			int inSampleSize = 1;
-
-			if (height > reqHeight || width > reqWidth) {
-
-				int halfHeight = height / 2;
-				int halfWidth = width / 2;
-
-				// Calculate the largest inSampleSize value that is a power of 2 and keeps both
-				// height and width larger than the requested height and width.
-				while ((halfHeight / inSampleSize) > reqHeight
-					&& (halfWidth / inSampleSize) > reqWidth) {
-					inSampleSize *= 2;
-				}
+			var matrix = new Matrix ();
+			switch (orientation) {
+			case 2:
+				matrix.SetScale (-1, 1);
+				break;
+			case 3:
+				matrix.SetRotate (180);
+				break;
+			case 4:
+				matrix.SetRotate (180);
+				matrix.PostScale (-1, 1);
+				break;
+			case 5:
+				matrix.SetRotate (90);
+				matrix.PostScale (-1, 1);
+				break;
+			case 6:
+				matrix.SetRotate (90);
+				break;
+			case 7:
+				matrix.SetRotate (-90);
+				matrix.PostScale (-1, 1);
+				break;
+			case 8:
+				matrix.SetRotate (-90);
+				break;
+			default:
+				return bitmap;
 			}
 
-			return inSampleSize;
+			try {
+				Bitmap oriented = Bitmap.CreateBitmap (bitmap, 0, 0, bitmap.Width, bitmap.Height, matrix, true);
+				bitmap.Recycle ();
+				return oriented;
+			} catch (Exception e) {
+				return bitmap;
+			}
 		}
+
 	}
 }
 

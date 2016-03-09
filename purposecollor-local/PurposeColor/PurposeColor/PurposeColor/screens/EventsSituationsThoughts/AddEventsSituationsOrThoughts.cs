@@ -2038,15 +2038,19 @@ namespace PurposeColor.screens
                                 return;
                             }
 
+
                             string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
                             var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
                             {
-								Quality = VideoQuality.Low,
+								Quality = VideoQuality.Medium,
                                 Name = fileName,
 								Directory = "DefaultVideos",
 								DesiredLength = TimeSpan.FromMinutes(5)
                             });
 
+						//	progres.ShowToast( "video is compressing , please wait.." );
+
+							progres.ShowProgressbar( "video is compressing..." );
                             if (file == null)
                             {
                                 progres.HideProgressbar();
@@ -2054,21 +2058,24 @@ namespace PurposeColor.screens
                             }
 
 							MemoryStream ms = new MemoryStream();
-							file.GetStream().CopyTo(ms);
+							/*file.GetStream().CopyTo(ms);*/
 
-							/*if( Device.OS == TargetPlatform.Android )
+							if( Device.OS == TargetPlatform.Android )
 							{
 								string videoFilename = Path.GetFileName( file.Path );
 								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
-								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename );
+								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
 								ms.Position = 0;
+								//compressor.CreateVideoThumbnail( App.DownloadsPath + videoFilename, App.DownloadsPath + "first_thumb.jpg"  );
+
 							}
 							else if( Device.OS == TargetPlatform.iOS )
 							{
 								file.GetStream().CopyTo(ms);
-							}*/
+							}
 	
 
+			
 							if( ms == null )
 							{
 								MasterObject.DisplayAlert("Error in adding video.");
@@ -2176,8 +2183,21 @@ namespace PurposeColor.screens
                             }
 
                             MemoryStream ms = new MemoryStream();
-                            file.GetStream().CopyTo(ms);
-                            ms.Position = 0;
+                           /* file.GetStream().CopyTo(ms);
+                            ms.Position = 0;*/
+
+							if( Device.OS == TargetPlatform.Android )
+							{
+								string videoFilename = Path.GetFileName( file.Path );
+								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
+								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
+								ms.Position = 0;
+							}
+							else if( Device.OS == TargetPlatform.iOS )
+							{
+								file.GetStream().CopyTo(ms);
+							}
+
 
                             if (ms.Length > 15728640)
                             {

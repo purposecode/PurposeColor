@@ -6,7 +6,8 @@ namespace PurposeColor
 {
 	public interface IVideoCompressor
 	{
-		MemoryStream CompressVideo( string sourceFilePath, string destinationFilePath );
+		MemoryStream CompressVideo( string sourceFilePath, string destinationFilePath, bool deleteSourceFile );
+		void CreateVideoThumbnail ( string inputVideoPath, string outputImagePath );
 	}
 }
 

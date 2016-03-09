@@ -153,7 +153,8 @@ namespace PurposeColor
 		}
 		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)
 		{
-			if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
+			//if(  masterScroll.ScrollY > ( masterStackLayout.Height - Device.OnPlatform( 512, 650, 0 ) ) && !reachedEnd )
+			if(  masterScroll.ScrollY + masterScroll.Height > ( masterStackLayout.Height - masterStackLayout.Y ) && !reachedEnd )
 			{
 				masterScroll.Scrolled -= OnMasterScrollScrolled;
 				progressBar.ShowProgressbar( "loading gems..." );
@@ -827,7 +828,8 @@ namespace PurposeColor
 					communityGems = null;
 					communityGems = new CommunityGemsObject ();
 					communityGems.resultarray = new List<CommunityGemsDetails> ();
-					communityGems.resultarray = gemsObj.resultarray.Skip (lastRendererItemIndex + 1).Take (itemCountToCopy).ToList();
+
+					communityGems.resultarray = gemsObj.resultarray.Skip (lastRendererItemIndex).Take (itemCountToCopy).ToList();
 
 					gemsObj = null;
 

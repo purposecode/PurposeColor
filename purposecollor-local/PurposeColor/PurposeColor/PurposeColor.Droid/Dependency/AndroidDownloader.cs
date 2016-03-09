@@ -101,28 +101,28 @@ namespace PurposeColor.Droid
 											compressionRate = 100;
 										}
 										else if (streamLength < 40000) {
-											compressionRate = App.screenDensity > 2 ? 100: 80;
+											compressionRate = App.screenDensity > 2 ? 100: 95;
 										}
 										else if (streamLength < 50000) {
-											compressionRate = App.screenDensity > 2 ? 100: 70;
+											compressionRate = App.screenDensity > 2 ? 100: 90;
 										}
 										else if (streamLength < 100000) {
-											compressionRate = App.screenDensity > 2 ? 100: 60;
+											compressionRate = App.screenDensity > 2 ? 100: 85;
 										}
 										else if (streamLength < 200000) {
-											compressionRate = App.screenDensity > 2 ? 99: 30;
+											compressionRate = App.screenDensity > 2 ? 99: 80;
 										}
 										else if (streamLength <300000) {
-											compressionRate = App.screenDensity > 2 ? 98: 25;
+											compressionRate = App.screenDensity > 2 ? 98: 78;
 										}
 										else if (streamLength < 400000) {
-											compressionRate = App.screenDensity > 2 ? 97: 20;
+											compressionRate = App.screenDensity > 2 ? 97: 77;
 										}
 										else if (streamLength < 500000) {
-											compressionRate = App.screenDensity > 2 ? 96: 15;
+											compressionRate = App.screenDensity > 2 ? 96: 76;
 										}
 										else {
-											compressionRate = App.screenDensity > 2 ? 95: 10;
+											compressionRate = App.screenDensity > 2 ? 95: 75;//65
 										}
 										#endregion
 										ExifInterface exif = new ExifInterface(App.DownloadsPath+fileName);
@@ -151,11 +151,6 @@ namespace PurposeColor.Droid
 
 										FileStream stream = new FileStream(App.DownloadsPath + fileName, FileMode.Create);
 										originalImage.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, stream);
-
-
-
-
-
 										stream.Close();
 										stream.Dispose();
 										stream = null;

@@ -310,7 +310,7 @@ namespace PurposeColor.screens
 			progressBar.ShowProgressbar ("Loading gems..");
 			try {
 				isLoading = true;
-				int listCapacity = 10;
+				int listCapacity = 5;
 				int max;
 
 				if (showNextGems)
@@ -349,6 +349,24 @@ namespace PurposeColor.screens
 
 				IDownload downloader = DependencyService.Get<IDownload> ();
 				List<string> filesTodownliad = new List<string> ();
+
+
+				// handle single gem view..
+				if(max - index < 3)
+				{
+					if((index - 1) >= 0)
+					{
+						index = index - 1;
+					}
+					else
+					{
+						if(max + 1 < eventsWithImage.Count)
+						{
+							max = max + 1;
+						}
+					}
+				}
+
 				for (int i = index; i < max; i++) 
 				{
 
@@ -400,7 +418,7 @@ namespace PurposeColor.screens
 		{
 			progressBar.ShowProgressbar ("Loading gems..");
 
-			int listCapacity = 10;
+			int listCapacity = 5;
 			int max  = 0;
 
 			try 
@@ -422,7 +440,7 @@ namespace PurposeColor.screens
 				else
 				{
 					// show previous gems.
-					max = index;
+					max = index + 1;
 					index = (index - listCapacity) > 0 ? (index - listCapacity): 0;
 				}
 
@@ -776,7 +794,7 @@ namespace PurposeColor.screens
 				{
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
-				if (masterScroll.ScrollY > (masterStack.Height - Device.OnPlatform (512, 550, 0))) {
+				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y)) {//Device.OnPlatform (512, 550, 0)
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
 						progressBar.ShowProgressbar ("loading gems..");
@@ -785,9 +803,9 @@ namespace PurposeColor.screens
 					} else {
 						progressBar.ShowToast ("Reached end of the list..");
 					}
-					await Task.Delay (TimeSpan.FromSeconds (3));
+					await Task.Delay (TimeSpan.FromSeconds (2));
 					masterScroll.Scrolled += OnScroll;
-				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 5, 0)) {
+				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 2, 0)) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!reachedFront) {
 						progressBar.ShowProgressbar ("loading gems..");
@@ -796,7 +814,7 @@ namespace PurposeColor.screens
 					} else {
 						progressBar.ShowToast ("Reached starting of the list..");
 					}
-					await Task.Delay (TimeSpan.FromSeconds (3));
+					await Task.Delay (TimeSpan.FromSeconds (2));
 					masterScroll.Scrolled += OnScroll;
 				}
 			} catch (Exception ex) {
@@ -829,12 +847,13 @@ namespace PurposeColor.screens
 		{
 			try {
 				if (App.isEmotionsListing) { // the gems displayed will be Events for each emotion.
-					bool isSuccess = await AddEventsToView (firstGemIndexOnDisplay - 1, false); // false = load previous gems
+					bool isSuccess = await AddEventsToView (firstGemIndexOnDisplay, false); // false = load previous gems
 				}
 				else {
-					bool isSuccess = await AddActionsToView(firstGemIndexOnDisplay - 1, false); // false = load previous gems
+					bool isSuccess = await AddActionsToView(firstGemIndexOnDisplay, false); // false = load previous gems
 				}
-				await masterScroll.ScrollToAsync( 0, masterStack.Height - Device.OnPlatform( 512, 550, 0 ), false );
+				//await masterScroll.ScrollToAsync( 0, masterStack.Height - Device.OnPlatform( 512, 550, 0 ), false );
+				await masterScroll.ScrollToAsync( 0, masterStack.Height - masterStack.Y, false );
 			}
 			catch (Exception ex) {
 				return false;

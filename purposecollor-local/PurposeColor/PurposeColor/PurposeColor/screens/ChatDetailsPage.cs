@@ -93,6 +93,7 @@ namespace PurposeColor
 				HorizontalOptions = LayoutOptions.Start,
 				TextColor = Color.Black
 			};
+			chatEntry.TextChanged += ChatEntry_TextChanged;
 
 			Image postChatButton = new Image();
 			postChatButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
@@ -184,6 +185,14 @@ namespace PurposeColor
 
 			Content = masterScroll;
 
+		}
+
+		void ChatEntry_TextChanged (object sender, TextChangedEventArgs e)
+		{
+			ExtendedEntry cEntry = sender as ExtendedEntry;
+			if (e.OldTextValue != null && e.NewTextValue.Length > Constants.CHAT_MESSAGE_MAX_LENGTH) {
+				cEntry.Text = e.OldTextValue;
+			}
 		}
 
 		protected override bool OnBackButtonPressed ()

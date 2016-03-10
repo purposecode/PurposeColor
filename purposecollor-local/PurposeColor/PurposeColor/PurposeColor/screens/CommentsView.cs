@@ -205,7 +205,7 @@ namespace PurposeColor.screens
 
 			newCommentEntry.Focused += NewCommentEntry_Focused;
 			newCommentEntry.Unfocused += NewCommentEntry_Unfocused;
-
+			newCommentEntry.TextChanged += NewCommentEntry_TextChanged;
             addCommentButton = new Image();
             addCommentButton.Source = Device.OnPlatform("icon_send.png", "icon_send.png", "//Assets//icon_send.png");
 
@@ -258,6 +258,14 @@ namespace PurposeColor.screens
             }
 
 			Content = masterLayout;
+        }
+
+        void NewCommentEntry_TextChanged (object sender, TextChangedEventArgs e)
+        {
+			ExtendedEntry cEntry = sender as ExtendedEntry;
+			if (e.OldTextValue != null && e.NewTextValue.Length > Constants.COMMENTS_MAX_LENGTH) {
+				cEntry.Text = e.OldTextValue;
+			}
         }
 
         void NewCommentEntry_Unfocused (object sender, FocusEventArgs e)

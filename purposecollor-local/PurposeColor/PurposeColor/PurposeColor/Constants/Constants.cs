@@ -40,9 +40,9 @@ namespace PurposeColor
 		public const string SIGN_OUT_TEXT = "Sign out";
 		public const string SIGN_OUT_IN = "Sign in";
 
-        
-
         public const int PICKER_ANIMATION_OFFSET = 40;
+		public const int COMMENTS_MAX_LENGTH = 2000;
+		public const int CHAT_MESSAGE_MAX_LENGTH = 1000;
 
         public static Color MENU_BG_COLOR = Color.FromRgb(255, 255, 255);
 

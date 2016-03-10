@@ -47,6 +47,7 @@ namespace PurposeColor.screens
             masterScroll.WidthRequest = App.screenWidth - 20;
             masterScroll.HeightRequest = App.screenHeight * 85 / 100;
             masterScroll.BackgroundColor = Color.FromRgb( 244, 244, 244 );
+			masterScroll.IsClippedToBounds = true;
 
             masterStack = new StackLayout();
             masterStack.Orientation = StackOrientation.Vertical;

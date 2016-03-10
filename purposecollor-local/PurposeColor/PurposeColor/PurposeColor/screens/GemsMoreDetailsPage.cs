@@ -72,7 +72,7 @@ namespace PurposeColor.screens
             masterScroll = new ScrollView();
             masterScroll.WidthRequest = App.screenWidth;
             masterScroll.HeightRequest = App.screenHeight * 85 / 100;
-
+			masterScroll.IsClippedToBounds = true;
             masterStack = new StackLayout();
             masterStack.Orientation = StackOrientation.Vertical;
             masterStack.BackgroundColor = Color.Transparent;

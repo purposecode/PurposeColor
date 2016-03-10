@@ -54,6 +54,7 @@ namespace PurposeColor
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			masterScroll = new ScrollView();
+			masterScroll.IsClippedToBounds = true;
 			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
 			currentUser = App.Settings.GetUser ();
@@ -606,10 +607,38 @@ namespace PurposeColor
 							if (gemInfo != null)
 							{
 								List<PurposeColor.Constants.MediaDetails> mediaPlayerList = new List<PurposeColor.Constants.MediaDetails>();
+
+								List<string> listToDownload = new List<string>();
+
 								foreach (var mediaItem in  gemInfo.gem_media )
 								{
+									if(string.IsNullOrEmpty(mediaItem.gem_media))
+									{
+										continue;
+									}
+
+									if (mediaItem.media_type == "png" || mediaItem.media_type == "jpg" || mediaItem.media_type == "jpeg") 
+									{
+
+										listToDownload.Add(Constants.SERVICE_BASE_URL+ mediaItem.gem_media);
+										string fileName = System.IO.Path.GetFileName(mediaItem.gem_media);
+										mediaItem.gem_media = App.DownloadsPath + fileName;
+									}
+									else
+									{
+										mediaItem.gem_media = Constants.SERVICE_BASE_URL + mediaItem.gem_media ;
+									}
+
+
 									mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type });
 								}
+
+								// down load files //
+								if (listToDownload != null && listToDownload.Count > 0) {
+									IDownload downloader = DependencyService.Get<IDownload>();
+									await downloader.DownloadFiles(listToDownload);
+								}
+
 								await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));
 							}
 

@@ -27,8 +27,6 @@ namespace PurposeColor.Droid
 		{
 			int imgMaxWidth = (int)(App.screenWidth * App.screenDensity);
 			int imgMaxHeight = (int)(App.screenHeight * .50 * App.screenDensity);
-//			int imgMaxWidth = (int)(App.screenWidth);
-//			int imgMaxHeight = (int)(App.screenHeight);
 			int streamLength = 0;
 			try 
 			{
@@ -104,43 +102,39 @@ namespace PurposeColor.Droid
 											compressionRate = App.screenDensity > 2 ? 100: 95;
 										}
 										else if (streamLength < 50000) {
-											compressionRate = App.screenDensity > 2 ? 100: 90;
+											compressionRate = App.screenDensity > 2 ? 100: 91;
 										}
 										else if (streamLength < 100000) {
-											compressionRate = App.screenDensity > 2 ? 100: 85;
+											compressionRate = App.screenDensity > 2 ? 100: 90;
 										}
 										else if (streamLength < 200000) {
-											compressionRate = App.screenDensity > 2 ? 99: 80;
+											compressionRate = App.screenDensity > 2 ? 99: 89;
 										}
 										else if (streamLength <300000) {
-											compressionRate = App.screenDensity > 2 ? 98: 78;
+											compressionRate = App.screenDensity > 2 ? 98: 88;
 										}
 										else if (streamLength < 400000) {
-											compressionRate = App.screenDensity > 2 ? 97: 77;
+											compressionRate = App.screenDensity > 2 ? 97: 87;
 										}
 										else if (streamLength < 500000) {
-											compressionRate = App.screenDensity > 2 ? 96: 76;
+											compressionRate = App.screenDensity > 2 ? 96: 86;
 										}
 										else {
-											compressionRate = App.screenDensity > 2 ? 95: 75;//65
+											compressionRate = App.screenDensity > 2 ? 95: 85;//65
 										}
 										#endregion
 										ExifInterface exif = new ExifInterface(App.DownloadsPath+fileName);
 										var orientation = exif.GetAttributeInt(ExifInterface.TagOrientation, (int)Android.Media.Orientation.Normal);
-										int rotate=0;
 										int orientationP = exif.GetAttributeInt (ExifInterface.TagOrientation, 0);
 										switch (orientation) 
 										{
 										case (int)Android.Media.Orientation.Rotate180:
-											rotate = 180;
 											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
 											break;
 										case (int) Android.Media.Orientation.Rotate270:
-											rotate = 270;
 											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
 											break;
 										case (int)Android.Media.Orientation.Rotate90:
-											rotate = 90;
 											originalImage = changeOrientation (App.DownloadsPath + fileName, originalImage, orientationP);
 											break;
 										default:

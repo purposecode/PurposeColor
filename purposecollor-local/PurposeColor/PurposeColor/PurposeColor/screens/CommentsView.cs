@@ -195,7 +195,7 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Add new comment",
                 HeightRequest = Device.OnPlatform(50, 50, 72),
-                BackgroundColor = Color.Transparent,//Color.White,
+                BackgroundColor = Color.White,
                 WidthRequest = App.screenWidth * .80,
                 HorizontalOptions = LayoutOptions.Start,
                 Text = Device.OnPlatform(string.Empty, string.Empty, "Add new Comment.."),

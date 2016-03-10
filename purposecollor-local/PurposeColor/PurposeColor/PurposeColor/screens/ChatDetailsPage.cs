@@ -123,7 +123,7 @@ namespace PurposeColor
 			ScrollView masterScroll = new ScrollView ();
 			masterScroll.Orientation = ScrollOrientation.Vertical;
 			masterScroll.Content = masterLayout;
-
+			masterScroll.IsClippedToBounds = true;
 
 			postChatButtonTap.Tapped += async (object sender, EventArgs e) => 
 			{

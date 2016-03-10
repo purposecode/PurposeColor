@@ -114,7 +114,7 @@ namespace PurposeColor
 
 					Image img = new Image ();
 					bool isValidUrl = ( item.ImageName != null && !string.IsNullOrEmpty ( item.ImageName )) ? true : false;
-					string source = (isValidUrl) ? Constants.SERVICE_BASE_URL +  item.ImageName : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
+					string source = (isValidUrl) ? item.ImageName : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
 					string fileExtenstion = Path.GetExtension (source);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 					img.WidthRequest = App.screenWidth * 90 / 100;

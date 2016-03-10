@@ -47,6 +47,7 @@ namespace PurposeColor
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             masterScroll = new ScrollView();
             masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
+			masterScroll.IsClippedToBounds = true;
             progressBar = DependencyService.Get<IProgressBar>();
             masterStack = new CustomLayout();
             //masterStack.Orientation = StackOrientation.Vertical;

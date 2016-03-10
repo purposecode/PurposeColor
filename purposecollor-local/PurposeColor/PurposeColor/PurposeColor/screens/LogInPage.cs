@@ -152,11 +152,11 @@ namespace PurposeColor.screens
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-            masterLayout.AddChildToLayout(userNameEntry, 10, Device.OnPlatform(33, 33, 33));
-            masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(43, 43, 41));
-            masterLayout.AddChildToLayout(signInButton, 10, Device.OnPlatform(55, 55, 52));
-            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 13), Device.OnPlatform(65,64,47));
-            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(62, 66, 65), Device.OnPlatform(65,64,47));
+            masterLayout.AddChildToLayout(userNameEntry, 10, Device.OnPlatform(30, 30, 30));
+            masterLayout.AddChildToLayout(passwordEntry, 10, Device.OnPlatform(40, 40, 38));
+            masterLayout.AddChildToLayout(signInButton, 10, Device.OnPlatform(50, 50, 47));
+            masterLayout.AddChildToLayout(forgotPasswordLabel, Device.OnPlatform(11, 11, 13), Device.OnPlatform(60,59,47));
+            masterLayout.AddChildToLayout(registerLabel, Device.OnPlatform(62, 66, 65), Device.OnPlatform(60,59,47));
             
            // masterLayout.AddChildToLayout(googleSignInButton, 10, Device.OnPlatform(65,65,62));
            // masterLayout.AddChildToLayout(faceBookSignInButton, 10, Device.OnPlatform(75, 75, 70));

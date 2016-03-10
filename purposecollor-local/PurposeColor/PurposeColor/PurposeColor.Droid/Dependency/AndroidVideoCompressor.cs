@@ -6,6 +6,8 @@ using PurposeColor.Droid;
 using System.Threading.Tasks;
 using System.IO;
 using Android.Media;
+using Android.Graphics;
+using Java.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidVideoCompressor))]
 namespace PurposeColor.Droid
@@ -155,6 +157,10 @@ namespace PurposeColor.Droid
 		public void CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
 
+			MediaMetadataRetriever media = new MediaMetadataRetriever ();
+			media.SetDataSource ( inputVideoPath );
+			string videoRotation = media.ExtractMetadata ( MetadataKey.VideoRotation );
+
 			XamarinAndroidFFmpeg.FFMpeg ffmpeg = new FFMpeg ( MainApplication.Context, App.DownloadsPath);
 			var onComplete = new MyCommand ((_) => 
 				{
@@ -167,18 +173,55 @@ namespace PurposeColor.Droid
 				});
 
 			var callbacks = new FFMpegCallbacks (onComplete, onMessage);
-			string[] cmds = new string[] 
+
+			if (videoRotation != null && videoRotation == "90") 
 			{
-				"-i",
-				inputVideoPath,
-				"-ss",
-				"00:00:01.000",
-				"-vframes",
-				"1",
-				outputImagePath
-			};
-			ffmpeg.Execute ( cmds, callbacks );
+				string[] cmds = new string[] {
+					"-i",
+					inputVideoPath,
+					"-ss",
+					"00:00:01.000",
+					"-vf",
+					"transpose=1",
+					outputImagePath
+				};
+				ffmpeg.Execute (cmds, callbacks);
+			} 
+			else
+			{
+				string[] cmds = new string[]
+				{
+					"-i",
+					inputVideoPath,
+					"-ss",
+					"00:00:01.000",
+					outputImagePath
+				};
+				ffmpeg.Execute (cmds, callbacks);
+			}
+
 		}
+
+
+		private static void CreateFile(Bitmap bitmap, String outFilePath ) 
+		{
+			//Java.IO.File imageFile = new Java.IO.File(App.DownloadsPath, outFilePath  );
+
+			try 
+			{
+				FileStream os = new FileStream( outFilePath, FileMode.Create );
+				bitmap.Compress(Bitmap.CompressFormat.Png, 100, os);
+				os.Flush();
+				os.Close();
+			} 
+			catch (Exception e)
+			{
+				System.Diagnostics.Debug.WriteLine ( "Error in creating file.." );
+			}
+		}
+			
 	}
+
+
 }
 

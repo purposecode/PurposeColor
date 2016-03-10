@@ -2085,7 +2085,7 @@ namespace PurposeColor.screens
 								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
 								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
 								ms.Position = 0;
-								//compressor.CreateVideoThumbnail( App.DownloadsPath + videoFilename, App.DownloadsPath + "first_thumb.jpg"  );
+								compressor.CreateVideoThumbnail( App.DownloadsPath + videoFilename, App.DownloadsPath + "first_thumb.jpg"  );
 
 							}
 							else if( Device.OS == TargetPlatform.iOS )

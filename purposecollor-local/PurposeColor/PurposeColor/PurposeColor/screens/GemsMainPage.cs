@@ -20,7 +20,6 @@ namespace PurposeColor.screens
 	{
 		CustomLayout masterLayout;
 		IProgressBar progressBar;
-		int listViewVislbleIndex;
 		GemsPageTitleBar mainTitleBar;
 		ScrollView masterScroll;
 		StackLayout masterStack;
@@ -37,7 +36,6 @@ namespace PurposeColor.screens
 
 		//bool isEmotionsListing = false;
 		StackLayout listViewContainer;
-		bool isLoading = false;
 		string previousTitle = string.Empty;
 
 		bool reachedFront = true;
@@ -54,7 +52,7 @@ namespace PurposeColor.screens
 			masterLayout = new CustomLayout();
 			masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar>();
-			//progressBar.ShowProgressbar ("Loading gems..");
+			progressBar.ShowProgressbar ("Loading gems..");
 			App.isEmotionsListing = false;
 			isLoadingFromDetailsPage = false;
 
@@ -120,7 +118,7 @@ namespace PurposeColor.screens
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(new StackLayout{HeightRequest =  App.screenHeight * 0.08, Orientation = StackOrientation.Horizontal, Spacing = 0, Children = {emotionsButtion, goalsButton}}, 0,Device.OnPlatform(9,10,10));
 
-			//progressBar.HideProgressbar ();
+			progressBar.HideProgressbar ();
 		}
 
 		void GemsMainPage_Disappearing (object sender, EventArgs e)
@@ -137,6 +135,7 @@ namespace PurposeColor.screens
 				if (progressBar == null) {
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
+
 				progressBar.ShowProgressbar ("Loading gems..");
 
 				if (actionsWithImage == null) 
@@ -162,7 +161,7 @@ namespace PurposeColor.screens
 					{
 						if (Device.OS != TargetPlatform.WinPhone)
 						{
-							App.Settings.SaveActionsWithImage(actionsWithImage);
+							await App.Settings.SaveActionsWithImage(actionsWithImage);
 						}
 					}
 				}
@@ -172,7 +171,7 @@ namespace PurposeColor.screens
 				if (isSuccess) 
 				{
 					App.isEmotionsListing = false;
-					masterScroll.ScrollToAsync(0,0, true);
+					await masterScroll.ScrollToAsync(0,0, true);
 					#region button color
 					// hide emotions & show goals , change selection buttons color
 					Color goalBtnClr = goalsButton.BackgroundColor;
@@ -221,7 +220,7 @@ namespace PurposeColor.screens
 					#endregion
 				}
 				progressBar.HideProgressbar();
-			} catch (Exception ex) {
+			} catch (Exception ) {
 				
 			}
 			//progressBar.HideProgressbar ();
@@ -231,7 +230,7 @@ namespace PurposeColor.screens
 		{
 			try {
 				App.Navigator.PopAsync();
-			} catch (Exception ex) {
+			} catch (Exception ) {
 
 			}
 		}
@@ -309,7 +308,6 @@ namespace PurposeColor.screens
 		{
 			progressBar.ShowProgressbar ("Loading gems..");
 			try {
-				isLoading = true;
 				int listCapacity = 5;
 				int max;
 
@@ -319,7 +317,6 @@ namespace PurposeColor.screens
 					if (index >= max || eventsWithImage == null || eventsWithImage.Count == 0)
 					{
 						displayedLastGem = true;
-						isLoading = false;
 						progressBar.HideProgressbar();
 						return false;
 					}
@@ -352,7 +349,7 @@ namespace PurposeColor.screens
 
 
 				// handle single gem view..
-				if(max - index < 3)
+				if((max - index) < 3)
 				{
 					if((index - 1) >= 0)
 					{
@@ -360,10 +357,10 @@ namespace PurposeColor.screens
 					}
 					else
 					{
-						if(max + 1 < eventsWithImage.Count)
-						{
-							max = max + 1;
-						}
+//						if(max + 1 < eventsWithImage.Count)
+//						{
+//							max = max + 1;
+//						}
 					}
 				}
 
@@ -373,7 +370,7 @@ namespace PurposeColor.screens
 					filesTodownliad.Add (Constants.SERVICE_BASE_URL + eventsWithImage [i].event_media);
 				}
 
-				bool doneDownloading = await downloader.DownloadFiles (filesTodownliad);
+				await downloader.DownloadFiles (filesTodownliad);
 
 				downloader = null;
 				filesTodownliad.Clear();
@@ -384,7 +381,7 @@ namespace PurposeColor.screens
 					if (cou > 0) {
 						listViewContainer.Children.Clear ();
 					}
-				} catch (Exception ex) {
+				} catch (Exception ) {
 
 				}
 
@@ -423,8 +420,6 @@ namespace PurposeColor.screens
 
 			try 
 			{
-				isLoading = true;
-
 				if (showNextGems) 
 				{
 					//display next gems
@@ -432,7 +427,6 @@ namespace PurposeColor.screens
 					if (index >= max || actionsWithImage == null || actionsWithImage.Count == 0)
 					{
 						displayedLastGem = true;
-						isLoading = false;
 						progressBar.HideProgressbar();
 						return false;
 					}
@@ -456,6 +450,20 @@ namespace PurposeColor.screens
 				else {
 					reachedFront = false;
 				}
+				if( (max - index) < 3)
+				{
+					if((index - 2) >= 0)
+					{
+						index = index - 1;
+					}
+					else
+					{
+//						if(max + 1 < actionsWithImage.Count)
+//						{
+//							max = max + 1;
+//						}
+					}
+				}
 
 				firstGemIndexOnDisplay = index;
 				lastGemIndexOnDisplay = max;
@@ -472,8 +480,7 @@ namespace PurposeColor.screens
 						filesTodownliad.Add (Constants.SERVICE_BASE_URL + actionsWithImage[i].action_media);
 					}
 				}
-
-				bool doneDownloading = await downloader.DownloadFiles (filesTodownliad);
+				await downloader.DownloadFiles (filesTodownliad);
 
 				downloader = null;
 				filesTodownliad.Clear();
@@ -484,7 +491,7 @@ namespace PurposeColor.screens
 					if (cou > 0) {
 						listViewContainer.Children.Clear ();
 					}
-				} catch (Exception ex) {
+				} catch (Exception ) {
 
 				}
 
@@ -518,7 +525,6 @@ namespace PurposeColor.screens
 			try {
 				CustomLayout gemLayout = null;
 				Image image = null;
-				StackLayout cellSpacing = null;
 				StackLayout bgStack = null;
 				Label detailsLabel = null;
 				Label groupTitleLabel = null;
@@ -648,7 +654,7 @@ namespace PurposeColor.screens
 					{
 						btnId = (sender as StackLayout).ClassId;
 					}
-				} catch (Exception ex) {
+				} catch (Exception ) {
 					
 				}
 
@@ -712,7 +718,7 @@ namespace PurposeColor.screens
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							eventDetails = null;
 						}
-					} catch (Exception ex) {
+					} catch (Exception ) {
 						
 					}
 				}
@@ -772,7 +778,7 @@ namespace PurposeColor.screens
 							await Navigation.PushAsync(new GemsDetailsPage(model));
 							actionDetails = null;
 						}
-					} catch (Exception ex) {
+					} catch (Exception ) {
 						
 					}
 				}
@@ -797,9 +803,9 @@ namespace PurposeColor.screens
 				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y)) {//Device.OnPlatform (512, 550, 0)
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
-						progressBar.ShowProgressbar ("loading gems..");
+						//progressBar.ShowProgressbar ("loading gems..");
 						await LoadMoreGemsClicked ();
-						progressBar.HideProgressbar ();
+						//progressBar.HideProgressbar ();
 					} else {
 						progressBar.ShowToast ("Reached end of the list..");
 					}
@@ -808,9 +814,9 @@ namespace PurposeColor.screens
 				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 2, 0)) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!reachedFront) {
-						progressBar.ShowProgressbar ("loading gems..");
+						//progressBar.ShowProgressbar ("Lading gems..");
 						await LoadPreviousGems ();
-						progressBar.HideProgressbar ();
+						//progressBar.HideProgressbar ();
 					} else {
 						progressBar.ShowToast ("Reached starting of the list..");
 					}
@@ -827,7 +833,7 @@ namespace PurposeColor.screens
 			try 
 			{
 				if (App.isEmotionsListing) { // the gems displayed will be Events for each emotion.
-					bool isSuccess = await AddEventsToView (lastGemIndexOnDisplay);
+					await AddEventsToView (lastGemIndexOnDisplay);
 				}
 				else
 				{
@@ -835,7 +841,7 @@ namespace PurposeColor.screens
 				}
 				await masterScroll.ScrollToAsync( 0, 0, false );
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
 				return false;
@@ -847,15 +853,15 @@ namespace PurposeColor.screens
 		{
 			try {
 				if (App.isEmotionsListing) { // the gems displayed will be Events for each emotion.
-					bool isSuccess = await AddEventsToView (firstGemIndexOnDisplay, false); // false = load previous gems
+					await AddEventsToView (firstGemIndexOnDisplay, false); // false = load previous gems
 				}
 				else {
-					bool isSuccess = await AddActionsToView(firstGemIndexOnDisplay, false); // false = load previous gems
+					await AddActionsToView(firstGemIndexOnDisplay, false); // false = load previous gems
 				}
-				//await masterScroll.ScrollToAsync( 0, masterStack.Height - Device.OnPlatform( 512, 550, 0 ), false );
-				await masterScroll.ScrollToAsync( 0, masterStack.Height - masterStack.Y, false );
+				await masterScroll.ScrollToAsync( 0, masterStack.Height - Device.OnPlatform( 512, 550, 0 ), false );
+				//await masterScroll.ScrollToAsync( 0, masterStack.Height - masterStack.Y-20, false );
 			}
-			catch (Exception ex) {
+			catch (Exception) {
 				return false;
 			}
 			return true;
@@ -882,7 +888,7 @@ namespace PurposeColor.screens
 			emotionListingBtnTapgesture = null;
 			goalsListingBtnTapgesture = null;
 			listViewContainer = null;
-			bool isLoading = false;
+
 
 			//GC.SuppressFinalize(this);
 		}

@@ -120,18 +120,28 @@ namespace PurposeColor.screens
                     App.Settings.SaveCompletedGoalsDetails(gemsGoalsObject);
                 }
 				
+				if( pendingGoalsObject.resultarray.Count  + gemsGoalsObject.resultarray.Count < 30 )
+				{
+					#region PENDING GOALS
+					CreatePendingGoalsView( true );
+					#endregion
 
-                #region PENDING GOALS
-                CreatePendingGoalsView( true );
-                #endregion
+					#region ALL GOALS HEADING
+					CreateAllGoalsHeading();
+					#endregion
 
-                #region ALL GOALS HEADING
-                CreateAllGoalsHeading();
-                #endregion
+					#region ALL GOALS
+					CreateAllGoalsView();
+					#endregion
+				}
+				else if( pendingGoalsObject.resultarray.Count > 30 )
+				{
+					pendingGoalsObject.resultarray = pendingGoalsObject.resultarray.Skip(0).Take(30).ToList();
+					#region PENDING GOALS
+					CreatePendingGoalsView( true );
+					#endregion
+				}
 
-                #region ALL GOALS
-				CreateAllGoalsView();
-                #endregion
 
 
                 masterScroll.Padding = new Thickness(10, 10, 10, 0);

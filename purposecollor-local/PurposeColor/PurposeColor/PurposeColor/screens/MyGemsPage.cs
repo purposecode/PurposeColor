@@ -59,6 +59,7 @@ namespace PurposeColor
 			App.Settings.SaveCommunityGemsDetails (gemsObject);
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "My Gems", false);
 
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
@@ -98,6 +99,11 @@ namespace PurposeColor
 
 			masterScroll.Scrolled += OnMasterScrollScrolled;
 			Content = masterLayout;
+		}
+
+		void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)
+		{
+			App.masterPage.IsPresented = !App.masterPage.IsPresented;
 		}
 
 		async void OnMasterScrollScrolled (object sender, ScrolledEventArgs e)

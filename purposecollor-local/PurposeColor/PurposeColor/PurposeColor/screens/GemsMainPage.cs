@@ -812,7 +812,7 @@ namespace PurposeColor.screens
 					}
 					await Task.Delay (TimeSpan.FromSeconds (2));
 					masterScroll.Scrolled += OnScroll;
-				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 2, 0)) {
+				} else if (masterScroll.ScrollY < Device.OnPlatform (-15, 10, 0)) {
 					masterScroll.Scrolled -= OnScroll;
 					if (!reachedFront) {
 						//progressBar.ShowProgressbar ("Lading gems..");

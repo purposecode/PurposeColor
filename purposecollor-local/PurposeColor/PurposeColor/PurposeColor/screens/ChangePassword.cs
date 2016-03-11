@@ -29,7 +29,7 @@ namespace PurposeColor.screens
             {
                 try
                 {
-                    Navigation.PopModalAsync();
+                    Navigation.PopAsync();
                 }
                 catch (Exception ex)
                 {

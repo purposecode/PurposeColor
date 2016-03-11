@@ -305,7 +305,6 @@ namespace PurposeColor
                     }
                     img.Source = source;
                     img.GestureRecognizers.Add(videoTap);
-                    img.ClassId = (!isImage) ? source : null;
                     var indicator = new ActivityIndicator { Color = new Color(.5), };
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;

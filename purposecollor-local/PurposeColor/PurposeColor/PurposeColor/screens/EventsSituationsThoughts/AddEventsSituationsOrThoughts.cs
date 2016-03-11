@@ -855,7 +855,7 @@ namespace PurposeColor.screens
 	        {
                 AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Image);
 	        }
-			else if (imgType== ".3gpp" || imgType== ".wma" || imgType== ".mp3" || imgType== ".ogg"|| imgType== ".wav" || imgType== ".amr" || imgType== ".3gp" || imgType== ".aac")
+			else if (imgType== ".3gpp" || imgType== ".wma" || imgType== ".mp3" || imgType== ".ogg"|| imgType== ".wav" || imgType== ".amr" || imgType== ".3gp")
 	        {
                 AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Audio);
 	        }
@@ -2058,14 +2058,16 @@ namespace PurposeColor.screens
                             }
 
 
-                            string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
-                            var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
-                            {
-								Quality = VideoQuality.Low,
-                                Name = fileName,
-								Directory = "DefaultVideos",
-								DesiredLength = TimeSpan.FromMinutes(5)
-                            });
+
+							string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
+							StoreVideoOptions videoOptions = new StoreVideoOptions();
+							videoOptions.Name = fileName;
+							videoOptions.Directory = "DefaultVideos";
+							videoOptions.DesiredLength = TimeSpan.FromMinutes(5);
+							videoOptions.Quality = ( Device.OS == TargetPlatform.iOS ) ? VideoQuality.Low : VideoQuality.Medium;
+
+							var file = await CrossMedia.Current.TakeVideoAsync( videoOptions );
+
 
 						//	progres.ShowToast( "video is compressing , please wait.." );
 
@@ -2090,21 +2092,7 @@ namespace PurposeColor.screens
 							}
 							else if( Device.OS == TargetPlatform.iOS )
 							{
-								Device.BeginInvokeOnMainThread(() =>
-									{
-										try
-										{
-											IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
-											compressor.CreateVideoThumbnail( file.Path, App.DownloadsPath + "first_thumb.jpg"  );
-											file.GetStream().CopyTo(ms);
-										}
-										catch (Exception ex)
-										{
-											System.Diagnostics.Debug.WriteLine ( ex.Message );
-										}
-									});
-								
-
+								file.GetStream().CopyTo(ms);
 							}
 	
 

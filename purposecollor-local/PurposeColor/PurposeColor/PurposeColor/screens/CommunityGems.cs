@@ -695,7 +695,7 @@ namespace PurposeColor
 								img.ClassId = Constants.SERVICE_BASE_URL + gemMedia.gem_media ;
 								source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
 							}
-							else if ( gemMedia.gem_media != null && gemMedia.media_type == "3gpp")
+							else if ( gemMedia.gem_media != null && (gemMedia.media_type == "3gpp" || gemMedia.media_type == "aac" ))
 							{
 								img.ClassId = Constants.SERVICE_BASE_URL + gemMedia.gem_media;
 								source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -1165,7 +1165,7 @@ namespace PurposeColor
 						{
 							medaTypeToShare = Constants.MediaType.Video;
 						}
-						else if( mediaType == "3gpp" || mediaType == "wav" )
+						else if( mediaType == "3gpp" || mediaType == "wav" || mediaType == "aac")
 						{
 							medaTypeToShare = Constants.MediaType.Audio;
 						}

@@ -74,14 +74,14 @@ namespace PurposeColor.Droid.Dependency
             try
             {
                 Directory.CreateDirectory(directoryname);
-                fileName = string.Format("Audio{0}.3gpp", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                fileName = string.Format("Audio{0}.aac", DateTime.Now.ToString("yyyyMMddHHmmss"));
                 path = Path.Combine(directoryname, fileName);
 
                 _recorder = new MediaRecorder();
                 _recorder.Reset();
-                _recorder.SetAudioSource(AudioSource.Mic);
-                _recorder.SetOutputFormat(OutputFormat.ThreeGpp);
-                _recorder.SetAudioEncoder(AudioEncoder.Default);
+				_recorder.SetAudioSource(AudioSource.Mic);
+				_recorder.SetOutputFormat(OutputFormat.AacAdts);
+				_recorder.SetAudioEncoder(AudioEncoder.Aac);
                 _recorder.SetOutputFile(path);
                 _recorder.Prepare();
                 _recorder.Start();
@@ -113,6 +113,9 @@ namespace PurposeColor.Droid.Dependency
                 {
                     fs.CopyTo(memStream);
                 }
+
+				PlayAudio(); // for testing only// test
+
                 return memStream;
             }
             catch (Exception ex)

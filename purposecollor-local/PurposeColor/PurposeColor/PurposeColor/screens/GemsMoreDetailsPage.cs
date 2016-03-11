@@ -190,7 +190,7 @@ namespace PurposeColor.screens
                     {
                         firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (firstThumbMedia[0] != null && firstThumbMedia[0].media_type == "3gpp" )
+					else if (firstThumbMedia[0] != null && (firstThumbMedia[0].media_type == "3gpp" || firstThumbMedia[0].media_type == "aac" ) )
                     {
                         firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }
@@ -319,7 +319,7 @@ namespace PurposeColor.screens
                     {
                         firstImageSource = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (FirstThumbMedia[0].media_type == "3gpp")
+					else if (FirstThumbMedia[0].media_type == "3gpp" || FirstThumbMedia[0].media_type == "aac")
                     {
                         firstImageSource = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
                     }

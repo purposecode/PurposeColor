@@ -38,6 +38,7 @@ namespace PurposeColor
 		Label commentsLabel = null;
 		Image favoriteButton = null;
 		Image shareButton = null;
+		Label favoriteLabel = null;
 
         public GemsDetailsPage( DetailsPageModel model )
         {
@@ -102,7 +103,7 @@ namespace PurposeColor
 
             StackLayout toolsLayout = new StackLayout();
             toolsLayout.BackgroundColor = Color.White;
-            toolsLayout.Spacing = 10;
+			toolsLayout.Spacing = 20;//10;
             toolsLayout.Orientation = StackOrientation.Horizontal;
             toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
             toolsLayout.Padding = new Thickness(10, 10, 10, 10);
@@ -117,7 +118,7 @@ namespace PurposeColor
             favoriteButtonTap.Tapped += FavoriteButtonTapped;
             favoriteButton.GestureRecognizers.Add(favoriteButtonTap);
 
-            Label favoriteLabel = new Label
+            favoriteLabel = new Label
             {
 				Text = "Favorite",
                 FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
@@ -126,9 +127,10 @@ namespace PurposeColor
 				FontSize = Device.OnPlatform(12,12,15)
             };
             favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
+			toolsLayout.Children.Add( new StackLayout{Children = {favoriteButton,favoriteLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
 
-            toolsLayout.Children.Add(favoriteButton);
-            toolsLayout.Children.Add(favoriteLabel);
+            //toolsLayout.Children.Add(favoriteButton);
+            //toolsLayout.Children.Add(favoriteLabel);
 
             if (user.AllowCommunitySharing)
             {
@@ -149,8 +151,8 @@ namespace PurposeColor
                 shareButtonTap.Tapped += ShareButtonTapped;
                 shareButton.GestureRecognizers.Add(shareButtonTap);
                 shareLabel.GestureRecognizers.Add(shareButtonTap);
-                toolsLayout.Children.Add(shareButton);
-                toolsLayout.Children.Add(shareLabel);
+				toolsLayout.Children.Add(new StackLayout{Children = {shareButton,shareLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+                //toolsLayout.Children.Add(shareLabel);
             }
             
             
@@ -175,8 +177,9 @@ namespace PurposeColor
             commentButton.GestureRecognizers.Add(commentButtonTap);
             commentsLabel.GestureRecognizers.Add(commentButtonTap);
 
-            toolsLayout.Children.Add(commentButton);
-            toolsLayout.Children.Add(commentsLabel);
+			toolsLayout.Children.Add( new StackLayout{Children = {commentButton,commentsLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+            //toolsLayout.Children.Add(commentButton);
+            //toolsLayout.Children.Add(commentsLabel);
             
             #endregion
 
@@ -245,7 +248,7 @@ namespace PurposeColor
                         img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (mediaList[index] != null && mediaList[index].media_type == "3gpp")
+					else if (mediaList[index] != null && (mediaList[index].media_type == "3gpp" || mediaList[index].media_type == "aac") )
                     {
                         img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -290,7 +293,7 @@ namespace PurposeColor
                         img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (actionMediaList[index] != null && actionMediaList[index].media_type == "3gpp")
+					else if (actionMediaList[index] != null && (actionMediaList[index].media_type == "3gpp" || actionMediaList[index].media_type == "aac"))
                     {
                         img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -342,7 +345,7 @@ namespace PurposeColor
                         img.ClassId = source;
                         source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
                     }
-                    else if (model.goal_media[index] != null && model.goal_media[index].media_type == "3gpp")
+					else if (model.goal_media[index] != null && (model.goal_media[index].media_type == "3gpp" || model.goal_media[index].media_type == "aac"))
                     {
                         img.ClassId = source;
                         source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
@@ -421,19 +424,23 @@ namespace PurposeColor
 						if(isSharedToCommunity && shareButton != null)
 						{
 							shareButton.Source = Device.OnPlatform("shareActive.png", "shareActive.png", "//Assets//shareActive.png");
+							shareLabel.TextColor = Color.FromRgb(0,162,232);
 						}
 						else if( shareButton != null )
 						{
 							shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+							shareLabel.TextColor = Color.Gray;
 						}
                     }
 
                     if (shareStatusResult.favourite_count > 0)
                     {
 						favoriteButton.Source = Device.OnPlatform("favoriteIconActive.png", "favoriteIconActive.png", "//Assets//favoriteIconActive.png");
+						favoriteLabel.TextColor = Color.FromRgb(0,162,232);
 					}else
 					{
 						favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
+						favoriteLabel.TextColor = Color.Gray;
 					}
 
                     if (shareStatusResult.comment_count != null)
@@ -543,6 +550,7 @@ namespace PurposeColor
 							isSharedToCommunity = false;
 							shareButtonTap.Tapped += ShareButtonTapped;
 							shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+							shareLabel.TextColor = Color.Gray;
 							progressBar.ShowToast("Removed from connunity GEMs");
 							//item.Dispose();
 
@@ -669,6 +677,7 @@ namespace PurposeColor
 				progressBar.ShowToast ("GEM shard to community.");
                 isSharedToCommunity = true;
 				shareButton.Source = Device.OnPlatform("shareActive.png", "shareActive.png", "//Assets//shareActive.png");
+				shareLabel.TextColor = Color.FromRgb (0, 162, 232);
 			} else if (statusCode == "401") {
 				progressBar.ShowToast ("Could not process your request");
                 shareButtonTap.Tapped += ShareButtonTapped;
@@ -706,6 +715,7 @@ namespace PurposeColor
                         await DisplayAlert(Constants.ALERT_TITLE, "GEM added to favourites.", Constants.ALERT_OK);
                         isFavouriteGem = true;
 						favoriteButton.Source = Device.OnPlatform("favoriteIconActive.png", "favoriteIconActive.png", "//Assets//favoriteIconActive.png");
+						favoriteLabel.TextColor = Color.FromRgb(0,162,232);
                     }
                     else if (responceCode == "401")
                     {

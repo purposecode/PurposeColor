@@ -126,11 +126,11 @@ namespace PurposeColor
 						img.ClassId = source;
 						source = Device.OnPlatform ("video.png", "video.png", "//Assets//video.png");
 					}
-					else if ( item != null && item.MediaType == "3gpp")
+					else if ( item != null && (item.MediaType == "3gpp" || item.MediaType == "aac") )
 					{
 						img.ClassId = source;
 						source = Device.OnPlatform ("audio.png", "audio.png", "//Assets//audio.png");
-					} 
+					}
 					else if ( item != null && item.MediaType == "wav")
 					{
 						img.ClassId = source;

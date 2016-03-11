@@ -581,7 +581,7 @@ namespace PurposeColor
 								img.ClassId = source;
 								source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
 							}
-							else if ( gemMedia.gem_media != null && gemMedia.media_type == "3gpp")
+							else if ( gemMedia.gem_media != null && (gemMedia.media_type == "3gpp" || gemMedia.media_type == "aac"))
 							{
 								img.ClassId = source;
 								source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");

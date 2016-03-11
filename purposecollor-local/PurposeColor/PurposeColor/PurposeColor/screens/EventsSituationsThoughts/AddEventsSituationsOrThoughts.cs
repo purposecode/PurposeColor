@@ -855,7 +855,7 @@ namespace PurposeColor.screens
 	        {
                 AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Image);
 	        }
-			else if (imgType== ".3gpp" || imgType== ".wma" || imgType== ".mp3" || imgType== ".ogg"|| imgType== ".wav" || imgType== ".amr" || imgType== ".3gp")
+			else if (imgType== ".3gpp" || imgType== ".wma" || imgType== ".mp3" || imgType== ".ogg"|| imgType== ".wav" || imgType== ".amr" || imgType== ".3gp" || imgType== ".acc")
 	        {
                 AddFileToMediaArray(null, fileName, PurposeColor.Constants.MediaType.Audio);
 	        }

@@ -80,7 +80,7 @@ namespace PurposeColor.Droid.Dependency
                 _recorder = new MediaRecorder();
                 _recorder.Reset();
 				_recorder.SetAudioSource(AudioSource.Mic);
-				_recorder.SetOutputFormat(OutputFormat.AacAdts);
+				_recorder.SetOutputFormat(OutputFormat.Default);
 				_recorder.SetAudioEncoder(AudioEncoder.Aac);
                 _recorder.SetOutputFile(path);
                 _recorder.Prepare();
@@ -113,8 +113,6 @@ namespace PurposeColor.Droid.Dependency
                 {
                     fs.CopyTo(memStream);
                 }
-
-				PlayAudio(); // for testing only// test
 
                 return memStream;
             }

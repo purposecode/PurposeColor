@@ -2061,7 +2061,7 @@ namespace PurposeColor.screens
                             string fileName = string.Format("Video{0}.mp4", System.DateTime.Now.ToString("yyyyMMddHHmmss"));
                             var file = await CrossMedia.Current.TakeVideoAsync(new Media.Plugin.Abstractions.StoreVideoOptions
                             {
-								Quality = VideoQuality.Medium,
+								Quality = VideoQuality.Low,
                                 Name = fileName,
 								Directory = "DefaultVideos",
 								DesiredLength = TimeSpan.FromMinutes(5)
@@ -2090,7 +2090,21 @@ namespace PurposeColor.screens
 							}
 							else if( Device.OS == TargetPlatform.iOS )
 							{
-								file.GetStream().CopyTo(ms);
+								Device.BeginInvokeOnMainThread(() =>
+									{
+										try
+										{
+											IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
+											compressor.CreateVideoThumbnail( file.Path, App.DownloadsPath + "first_thumb.jpg"  );
+											file.GetStream().CopyTo(ms);
+										}
+										catch (Exception ex)
+										{
+											System.Diagnostics.Debug.WriteLine ( ex.Message );
+										}
+									});
+								
+
 							}
 	
 

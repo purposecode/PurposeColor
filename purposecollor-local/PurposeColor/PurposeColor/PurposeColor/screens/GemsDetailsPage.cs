@@ -565,7 +565,7 @@ namespace PurposeColor
                 else if (item.Name == "Edit")
                 {
 					try {
-						await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+						await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
 					} catch (Exception ex) {
 						DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
 					}
@@ -575,7 +575,7 @@ namespace PurposeColor
 					try {
 						detailsPageModel.gemId = "";
 						detailsPageModel.IsCopyingGem = true;
-						await Navigation.PushModalAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
+						await Navigation.PushAsync(new PurposeColor.screens.AddEventsSituationsOrThoughts("Edit GEM", detailsPageModel));
 					} catch (Exception ex) {
 						DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
 					}

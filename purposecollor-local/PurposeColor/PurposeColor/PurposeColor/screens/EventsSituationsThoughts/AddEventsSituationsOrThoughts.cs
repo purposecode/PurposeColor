@@ -1425,15 +1425,15 @@ namespace PurposeColor.screens
                                 }
                             }
 
-                            ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
-                            if (!isUpdatePage)
-                            {
-								notfiy.ShowNotification("Purpose Color - Action Created", "", eventTitle.Text, false);
-                            }
-                            else
-                            {
-								notfiy.ShowNotification("Purpose Color - Action Updated","", eventTitle.Text, false);
-                            }
+//                            ILocalNotification notfiy = DependencyService.Get<ILocalNotification>();
+//                            if (!isUpdatePage)
+//                            {
+//								notfiy.ShowNotification("Purpose Color - Action Created", "", eventTitle.Text, false);
+//                            }
+//                            else
+//                            {
+//								notfiy.ShowNotification("Purpose Color - Action Updated","", eventTitle.Text, false);
+//                            }
                         }
                         catch (Exception ex)
                         {
@@ -1480,7 +1480,14 @@ namespace PurposeColor.screens
                             {
                                 await FeelingNowPage.DownloadAllEvents();
                                 serviceResultOK = true;
-								await Navigation.PopModalAsync();
+
+//								if(!isUpdatePage)
+//								{
+//									await Navigation.PopModalAsync();
+//								}
+//								else {
+//									await Navigation.PopModalAsync();
+//								}
                             }
                         }
                         catch (Exception ex)
@@ -1565,29 +1572,137 @@ namespace PurposeColor.screens
 
                     if (serviceResultOK)
                     {
-                        //Navigation.PopAsync();
                         if (!isUpdatePage)
                         {
                             await Navigation.PopModalAsync();
                         }
                         else
                         {
-                            if (currentGemType == GemType.Goal)
-                            {
-                                // nav to goals n dreams main page
-                                App.masterPage.IsPresented = false;
-                                App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GoalsMainPage());
-                                
-                                //await Navigation.PushModalAsync(new GoalsMainPage());
-                            }
-                            else
-                            {
-                                //nav to gems main page
-                                App.masterPage.IsPresented = false;
-                                App.masterPage.Detail = new NavigationPage(new PurposeColor.screens.GemsMainPage());
+							await Navigation.PopToRootAsync();
 
-                                //await Navigation.PushModalAsync(new GemsMainPage());
-                            }
+							#region MyRegionNavigate back to GEM details page
+							//progress.ShowProgressbar("Loading");
+//
+//							if (App.isEmotionsListing) {
+//								try {
+//									SelectedEventDetails eventDetails = await ServiceHelper.GetSelectedEventDetails(currentGemId);
+//									if (eventDetails != null)
+//									{
+//										List<string> listToDownload = new List<string>();
+//
+//										foreach (var eventi in eventDetails.event_media) 
+//										{
+//											if(string.IsNullOrEmpty(eventi.event_media))
+//											{
+//												continue;
+//											}
+//
+//											if (eventi.media_type == "png" || eventi.media_type == "jpg" || eventi.media_type == "jpeg") 
+//											{
+//
+//												listToDownload.Add(Constants.SERVICE_BASE_URL+eventi.event_media);
+//												string fileName = System.IO.Path.GetFileName(eventi.event_media);
+//												eventi.event_media = App.DownloadsPath + fileName;
+//											}
+//											else
+//											{
+//												eventi.event_media = Constants.SERVICE_BASE_URL + eventi.event_media ;
+//											}
+//										}
+//
+//										if (listToDownload != null && listToDownload.Count > 0) {
+//											IDownload downloader = DependencyService.Get<IDownload>();
+//											//progressBar.ShowProgressbar("loading details..");
+//											await downloader.DownloadFiles(listToDownload);
+//
+//										}
+//
+//										DetailsPageModel model = new DetailsPageModel();
+//										model.actionMediaArray = null;
+//										model.eventMediaArray = eventDetails.event_media;
+//										model.goal_media = null;
+//										model.Media = null;
+//										model.NoMedia = null;
+//										model.pageTitleVal = "Event Details";
+//										model.titleVal = eventDetails.event_title;
+//										model.description = eventDetails.event_details;
+//										model.gemType = GemType.Event;
+//										model.gemId = currentGemId;
+//										progress.HideProgressbar();
+//
+//										await Navigation.PushAsync(new GemsDetailsPage(model));
+//										eventDetails = null;
+//									}
+//								} catch (Exception ) {
+//									progress.HideProgressbar();
+//									Navigation.PopAsync();
+//								}
+//							}
+//							else
+//							{
+//								//-- call service for Action details
+//								try {
+//
+//									SelectedActionDetails actionDetails = await ServiceHelper.GetSelectedActionDetails(currentGemId);
+//
+//									List<string> listToDownload = new List<string>();
+//
+//									foreach (var action in actionDetails.action_media) 
+//									{
+//										if( string.IsNullOrEmpty(action.action_media))
+//										{
+//											continue;
+//										}
+//
+//										if (action.media_type == "png" || action.media_type == "jpg" || action.media_type == "jpeg")
+//										{
+//
+//											listToDownload.Add(Constants.SERVICE_BASE_URL+action.action_media);
+//											string fileName = System.IO.Path.GetFileName(action.action_media);
+//											action.action_media = App.DownloadsPath + fileName;
+//										}
+//										else
+//										{
+//											action.action_media = Constants.SERVICE_BASE_URL + action.action_media;
+//										}
+//									}
+//
+//									if (listToDownload != null && listToDownload.Count > 0) {
+//										IDownload downloader = DependencyService.Get<IDownload>();
+//										//progressBar.ShowProgressbar("loading details..");
+//										await downloader.DownloadFiles(listToDownload);
+//										//progressBar.HideProgressbar();
+//									}
+//
+//									if (actionDetails != null) {
+//										DetailsPageModel model = new DetailsPageModel();
+//										model.actionMediaArray = actionDetails.action_media;
+//										model.eventMediaArray = null;
+//										model.goal_media = null;
+//										model.Media = null;
+//										model.NoMedia = null;
+//										model.pageTitleVal = "Action Details";
+//										model.titleVal = actionDetails.action_title;
+//										model.description = actionDetails.action_details;
+//										model.gemType = GemType.Action;
+//										model.gemId = currentGemId;
+//
+//										progress.HideProgressbar();
+//										await Navigation.PushAsync(new GemsDetailsPage(model));
+//
+//
+//
+//
+//										actionDetails = null;
+//									}
+//								} catch (Exception ) {
+//									progress.HideProgressbar();
+//									Navigation.PopAsync();
+//								}
+//        
+//							
+							#endregion
+
                         }
                     }
                 }
@@ -1596,14 +1711,19 @@ namespace PurposeColor.screens
             {
                 var test = ex.Message;
             }
-
         }
 
-        void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
+        async void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
             try
             {
-                Navigation.PopModalAsync();
+				if(!isUpdatePage) {
+					await Navigation.PopModalAsync();
+				}
+				else {
+					// Navigation.PopToRootAsync(); // this will take to GEMS page.
+					await Navigation.PopAsync();
+				}
             }
             catch (Exception ex)
             {

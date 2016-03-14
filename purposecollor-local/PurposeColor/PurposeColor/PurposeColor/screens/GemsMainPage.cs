@@ -801,7 +801,7 @@ namespace PurposeColor.screens
 				{
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
-				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y)) {//Device.OnPlatform (512, 550, 0)
+				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y-5)) {//Device.OnPlatform (512, 550, 0)
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
 						//progressBar.ShowProgressbar ("loading gems..");

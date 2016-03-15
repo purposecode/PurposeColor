@@ -53,8 +53,10 @@ namespace PurposeColor.iOS.Dependency
 				NSObject[] values =  imageProperties.Values;
 
 				string orientation =  values [7].ToString ();
-				if( "6" == orientation )
-					resizedImage = UIImage.FromImage(resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
+				if (orientation.Contains("6")) {
+					resizedImage = UIImage.FromImage (resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
+					Console.WriteLine("----img orientation------ 6 -------");
+				}
 
 
 				

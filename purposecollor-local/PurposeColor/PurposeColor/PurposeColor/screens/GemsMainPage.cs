@@ -367,8 +367,13 @@ namespace PurposeColor.screens
 
 				for (int i = index; i < max; i++) 
 				{
+					string fileExtenstion = Path.GetExtension(eventsWithImage [i].event_media);
 
-					filesTodownliad.Add (Constants.SERVICE_BASE_URL + eventsWithImage [i].event_media);
+
+					if (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") 
+					{
+						filesTodownliad.Add (Constants.SERVICE_BASE_URL + eventsWithImage [i].event_media);
+					}
 				}
 
 				await downloader.DownloadFiles (filesTodownliad);
@@ -801,7 +806,7 @@ namespace PurposeColor.screens
 				{
 					progressBar = DependencyService.Get<IProgressBar>();
 				}
-				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y-5)) {//Device.OnPlatform (512, 550, 0)
+				if (masterScroll.Height+ masterScroll.ScrollY > (masterStack.Height - masterStack.Y-20)) {//Device.OnPlatform (512, 550, 0)
 					masterScroll.Scrolled -= OnScroll;
 					if (!displayedLastGem) {
 						//progressBar.ShowProgressbar ("loading gems..");

@@ -1578,8 +1578,14 @@ namespace PurposeColor.screens
                         }
                         else
                         {
-							await Navigation.PopToRootAsync();
-
+							if(Device.OS != TargetPlatform.iOS)
+							{
+								await Navigation.PopToRootAsync();
+							}
+							else
+							{
+								await Navigation.PopModalAsync();
+							}
 							#region MyRegionNavigate back to GEM details page
 							//progress.ShowProgressbar("Loading");
 //

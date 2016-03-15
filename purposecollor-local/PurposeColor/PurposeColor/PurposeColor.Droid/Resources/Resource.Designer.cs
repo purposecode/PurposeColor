@@ -6414,9 +6414,6 @@ namespace PurposeColor.Droid
 			// aapt resource value: 0x7f06002c
 			public const int mr_user_route_category_name = 2131099692;
 			
-			// aapt resource value: 0x7f060047
-			public const int shipped_ffmpeg_version = 2131099719;
-			
 			// aapt resource value: 0x7f06003e
 			public const int status_bar_notification_info_overflow = 2131099710;
 			

@@ -154,7 +154,7 @@ namespace PurposeColor.Droid
 
 		}
 
-		public void CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
+		public MemoryStream CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
 
 			MediaMetadataRetriever media = new MediaMetadataRetriever ();
@@ -199,6 +199,11 @@ namespace PurposeColor.Droid
 				};
 				ffmpeg.Execute (cmds, callbacks);
 			}
+
+			MemoryStream ms = new MemoryStream ();
+			FileStream stream = new FileStream (outputImagePath, FileMode.Open);
+			stream.CopyTo (ms);
+			return ms;
 
 		}
 

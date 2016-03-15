@@ -17,5 +17,7 @@ namespace PurposeColor.Model
     {
         public string Name { get; set; }
         public string MediaString { get; set; }
+		public string MediaThumbString { get; set; }
+		public Constants.MediaType MediaType{ get; set; } 
     }
 }

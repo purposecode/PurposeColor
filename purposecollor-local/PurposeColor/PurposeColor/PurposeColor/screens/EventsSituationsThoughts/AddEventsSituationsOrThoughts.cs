@@ -1830,6 +1830,25 @@ namespace PurposeColor.screens
                         MediaItem item = new MediaItem();
                         item.MediaString = test2;
                         item.Name = fileName;
+						if( mediaType == Constants.MediaType.Video )
+						{
+							IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
+							string imgThumbPath =  App.DownloadsPath +  Path.GetFileNameWithoutExtension( path ) + ".jpg";
+							MemoryStream thumbStream = compressor.CreateVideoThumbnail( path, imgThumbPath );
+
+							Byte[] thumbInArray = thumbStream.ToArray();
+							Char[] thumbOutArray = new Char[(int)(thumbStream.ToArray().Length * 1.34)];
+							Convert.ToBase64CharArray(thumbInArray, 0, thumbInArray.Length, thumbOutArray, 0);
+							string thumbString = new string(thumbOutArray);
+
+							item.MediaType = Constants.MediaType.Video;
+							item.MediaThumbString = thumbString;
+							ms.Dispose();
+							thumbStream.Dispose();
+
+							thumbInArray = null;
+							thumbOutArray = null;
+						}
                         App.MediaArray.Add(item);
 
                         inArray = null;
@@ -2198,16 +2217,16 @@ namespace PurposeColor.screens
                                 return;
                             }
 
+							string videoFilename = Path.GetFileName( file.Path );
 							MemoryStream ms = new MemoryStream();
 							/*file.GetStream().CopyTo(ms);*/
 
 							if( Device.OS == TargetPlatform.Android )
 							{
-								string videoFilename = Path.GetFileName( file.Path );
+								
 								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
 								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
 								ms.Position = 0;
-								compressor.CreateVideoThumbnail( App.DownloadsPath + videoFilename, App.DownloadsPath + "first_thumb.jpg"  );
 
 							}
 							else if( Device.OS == TargetPlatform.iOS )
@@ -2232,7 +2251,7 @@ namespace PurposeColor.screens
                                 return;
                             }
 
-                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+							MasterObject.AddFileToMediaArray(ms, App.DownloadsPath + videoFilename, PurposeColor.Constants.MediaType.Video);
                         }
 
                     }

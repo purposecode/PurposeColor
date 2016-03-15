@@ -41,6 +41,7 @@ namespace PurposeColor.Model
 		public string media_type { get; set; }
 		public string event_media { get; set; }
 		public string emotion_id { get; set; }
+		public string video_thumb { get; set; }
 	}
 
 	public class GemsEmotionsDetails
@@ -303,19 +304,10 @@ namespace PurposeColor.Model
 
 	public class SelectedEventMedia
 	{
-		public int event_id {
-			get;
-			set;
-		}
-
-		public string media_type {
-			get;
-			set;
-		}
-		public string event_media {
-			get;
-			set;
-		}
+		public string event_id { get; set; }
+		public string media_type { get; set; }
+		public string event_media { get; set; }
+		public string video_thumb { get; set; }
 	}
 
 	public class SelectedEventDetails

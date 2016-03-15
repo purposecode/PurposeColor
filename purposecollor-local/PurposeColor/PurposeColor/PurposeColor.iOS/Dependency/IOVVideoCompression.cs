@@ -8,6 +8,8 @@ using AVFoundation;
 using CoreGraphics;
 using Xamarin.Forms;
 using CoreMedia;
+using AVFoundation;
+using MonoTouch;
 
 
 [assembly: Xamarin.Forms.Dependency(typeof(IOVVideoCompression))]
@@ -15,14 +17,49 @@ namespace PurposeColor.iOS
 {
 	public class IOVVideoCompression : IVideoCompressor
 	{
+
 		public IOVVideoCompression ()
 		{
 		}
 
 		public MemoryStream CompressVideo( string sourceFilePath, string destinationFilePath, bool deleteSourceFile )
 		{
-			return null;
+			
+			try 
+			{
+				string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+				string fileName = Path.GetFileNameWithoutExtension( sourceFilePath ) + ".mp4";
+				string downloadFilePath = Path.Combine(downloadPath, fileName );
+
+				var asset = AVAsset.FromUrl( NSUrl.FromFilename( sourceFilePath ) );
+
+
+				AVAssetExportSession export = new AVAssetExportSession (asset, AVAssetExportSession.PresetLowQuality );
+
+				export.OutputUrl = NSUrl.FromFilename( downloadFilePath );
+				export.OutputFileType = AVFileType.Mpeg4;
+				export.ShouldOptimizeForNetworkUse = true;
+
+				export.ExportAsynchronously(  ( ) => 
+				{
+						if( export.Error != null )
+							System.Diagnostics.Debug.WriteLine( export.Error.LocalizedDescription );
+				});
+
+
+
+				return null;
+
+			} 
+			catch (Exception ex) 
+			{
+				System.Diagnostics.Debug.WriteLine ( ex.Message );
+				return null;
+			}
+
+		
 		}
+
 
 		public void CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
@@ -30,21 +67,22 @@ namespace PurposeColor.iOS
 			try 
 			{
 				string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-				string downloadFilePath = Path.Combine(downloadPath, "first_video_thump.jpg");
+				string fileName = Path.GetFileNameWithoutExtension( inputVideoPath ) + ".jpg";
+				string downloadFilePath = Path.Combine(downloadPath, fileName );
 
-				/*NSUrl videourl = new NSUrl ( inputVideoPath );
-				MPMoviePlayerController moviePlayer = new MPMoviePlayerController ( videourl );
-				moviePlayer.ShouldAutoplay = false;
-				UIImage videoThumb = moviePlayer.ThumbnailImageAt (0.002, MPMovieTimeOption.Exact);
-				NSData videoData = videoThumb.AsJPEG ();
-				videoData.Save ( downloadFilePath, true );	*/
+				UIImage thumbImage = GetVideoThumbnail( inputVideoPath );
 
-				UIImage test = GetVideoThumbnail( inputVideoPath );
-				NSData videoData = test.AsJPEG ();
-				videoData.Save ( downloadFilePath, false );
-				string com = "com";
-
-
+				if( thumbImage.Orientation == UIImageOrientation.Up )
+				{
+					UIImage rotatedImage = UIImage.FromImage(  thumbImage.CGImage, thumbImage.CurrentScale, UIImageOrientation.Right );
+					NSData videoData = rotatedImage.AsJPEG ();
+					videoData.Save ( downloadFilePath, false );
+				}
+				else
+				{
+					NSData videoData = thumbImage.AsJPEG ();
+					videoData.Save ( downloadFilePath, false );
+				}
 
 			} 
 			catch (Exception ex) 

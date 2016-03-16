@@ -61,7 +61,7 @@ namespace PurposeColor.iOS
 		}
 
 
-		public void CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
+		public MemoryStream CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
 
 			try 
@@ -84,10 +84,18 @@ namespace PurposeColor.iOS
 					videoData.Save ( downloadFilePath, false );
 				}
 
+
+				MemoryStream ms = new MemoryStream();    
+				FileStream file = new FileStream(  downloadFilePath, FileMode.Open, FileAccess.Read);
+				file.CopyTo ( ms );
+				file.Close();
+				return ms;
+
 			} 
 			catch (Exception ex) 
 			{
 				System.Diagnostics.Debug.WriteLine ( ex.Message );
+				return null;
 			}
 
 		}

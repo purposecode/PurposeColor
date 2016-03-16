@@ -297,6 +297,8 @@ namespace PurposeColor
 								play.HeightRequest = 75;
 								play.HorizontalOptions = LayoutOptions.Center;
 								play.VerticalOptions = LayoutOptions.Center;
+								play.ClassId =  mediaList[index].event_media ;
+								play.GestureRecognizers.Add(videoTap);
 
 								BoxView box = new BoxView();
 								box.BackgroundColor = Color.Red;

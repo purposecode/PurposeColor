@@ -280,6 +280,7 @@
     <BundleResource Include="Resources\favoriteIconActive.png" />
     <BundleResource Include="Resources\shareActive.png" />
     <BundleResource Include="Resources\favoriteIcon.png" />
+    <BundleResource Include="Resources\video_play.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

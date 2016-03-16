@@ -2257,7 +2257,15 @@ namespace PurposeColor.screens
                                 return;
                             }
 
-							MasterObject.AddFileToMediaArray(ms, App.DownloadsPath + videoFilename, PurposeColor.Constants.MediaType.Video);
+							if( Device.OS == TargetPlatform.Android )
+							{
+								MasterObject.AddFileToMediaArray(ms, App.DownloadsPath + videoFilename, PurposeColor.Constants.MediaType.Video);
+							}
+							else if( Device.OS == TargetPlatform.iOS )
+							{
+								MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+							}
+
                         }
 
                     }

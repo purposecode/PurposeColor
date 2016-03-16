@@ -42,35 +42,49 @@ namespace PurposeColor.Droid.Dependency
 			{
 				int streamLength = (int)ms.Length;
 				int compressionRate = 100;
+
 				#region compression ratio
-
-
 				if (streamLength < 20000) {
 					compressionRate = 100;
 				}
 				else if (streamLength < 40000) {
-					compressionRate = App.screenDensity > 2 ? 100: 80;
+					compressionRate = App.screenDensity > 2 ? 100: 95;
 				}
 				else if (streamLength < 50000) {
-					compressionRate = App.screenDensity > 2 ? 100: 70;
+					compressionRate = App.screenDensity > 2 ? 100: 91;
 				}
 				else if (streamLength < 100000) {
-					compressionRate = App.screenDensity > 2 ? 100: 60;
+					compressionRate = App.screenDensity > 2 ? 100: 90;
 				}
 				else if (streamLength < 200000) {
-					compressionRate = App.screenDensity > 2 ? 99: 30;
+					compressionRate = App.screenDensity > 2 ? 99: 89;
 				}
 				else if (streamLength <300000) {
-					compressionRate = App.screenDensity > 2 ? 98: 25;
+					compressionRate = App.screenDensity > 2 ? 98: 88;
 				}
 				else if (streamLength < 400000) {
-					compressionRate = App.screenDensity > 2 ? 97: 20;
+					compressionRate = App.screenDensity > 2 ? 97: 87;
 				}
 				else if (streamLength < 500000) {
-					compressionRate = App.screenDensity > 2 ? 96: 15;
+					compressionRate = App.screenDensity > 2 ? 96: 86;
+				}
+				else if (streamLength < 600000) {
+					compressionRate = App.screenDensity > 2 ? 95: 86;
+				}
+				else if (streamLength < 700000) {
+					compressionRate = App.screenDensity > 2 ? 94: 86;
+				}
+				else if (streamLength < 900000) {
+					compressionRate = App.screenDensity > 2 ? 92: 86;
+				}
+				else if (streamLength < 1000000) {
+					compressionRate = App.screenDensity > 2 ? 90: 86;
+				}
+				else if (streamLength < 2000000) {
+					compressionRate = App.screenDensity > 2 ? 85: 86;
 				}
 				else {
-					compressionRate = App.screenDensity > 2 ? 95: 10;
+					compressionRate = App.screenDensity > 2 ? 80: 85;
 				}
 				#endregion
 

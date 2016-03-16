@@ -80,7 +80,7 @@ namespace PurposeColor.Droid
 										}
 										if(originalImage.Height > originalImage.Width)
 										{
-											if (originalImage.Height > imgMaxHeight || originalImage.Width > imgMaxWidth) {
+											if (originalImage.Height > 300 || originalImage.Width > 300) {
 												originalImage = Bitmap.CreateScaledBitmap(originalImage,  imgMaxWidth, imgMaxHeight, true);
 											}
 										}
@@ -119,10 +119,26 @@ namespace PurposeColor.Droid
 										else if (streamLength < 500000) {
 											compressionRate = App.screenDensity > 2 ? 96: 86;
 										}
+										else if (streamLength < 600000) {
+											compressionRate = App.screenDensity > 2 ? 95: 86;
+										}
+										else if (streamLength < 700000) {
+											compressionRate = App.screenDensity > 2 ? 94: 86;
+										}
+										else if (streamLength < 900000) {
+											compressionRate = App.screenDensity > 2 ? 92: 86;
+										}
+										else if (streamLength < 1000000) {
+											compressionRate = App.screenDensity > 2 ? 90: 86;
+										}
+										else if (streamLength < 2000000) {
+											compressionRate = App.screenDensity > 2 ? 85: 86;
+										}
 										else {
-											compressionRate = App.screenDensity > 2 ? 95: 85;//65
+											compressionRate = App.screenDensity > 2 ? 80: 85;
 										}
 										#endregion
+
 										ExifInterface exif = new ExifInterface(App.DownloadsPath+fileName);
 										var orientation = exif.GetAttributeInt(ExifInterface.TagOrientation, (int)Android.Media.Orientation.Normal);
 										int orientationP = exif.GetAttributeInt (ExifInterface.TagOrientation, 0);

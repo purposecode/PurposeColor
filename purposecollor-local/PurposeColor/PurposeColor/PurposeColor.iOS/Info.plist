@@ -21,9 +21,9 @@
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>app_icon_120X120</string>
-		<string>Icon-Small@2x.png</string>
-		<string>Icon-Small.png</string>
-		<string>Icon-Small-40@2x.png</string>
+		<string>app_icon 58</string>
+		<string>app_icon 29</string>
+		<string>app_icon 80</string>
 	</array>
 	<key>CFBundleShortVersionString</key>
 	<string>1</string>

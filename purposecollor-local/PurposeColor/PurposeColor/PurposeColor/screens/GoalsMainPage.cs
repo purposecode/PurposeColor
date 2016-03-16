@@ -617,10 +617,11 @@ namespace PurposeColor.screens
                     model.description = goalInfo.resultarray.goal_details;
                     model.gemType = GemType.Goal;
                     model.gemId = goalID;
-                    progress.HideProgressbar();
+
 
 					List<SelectedGoalMedia> downloadedMediaList = new List<SelectedGoalMedia> ();
 					downloadedMediaList = await DownloadMedias ( goalInfo.resultarray.goal_media );
+					progress.HideProgressbar();
                     await Navigation.PushAsync(new GemsDetailsPage(model));
                 }
                 else

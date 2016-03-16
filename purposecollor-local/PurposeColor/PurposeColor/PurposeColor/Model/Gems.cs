@@ -261,9 +261,10 @@ namespace PurposeColor.Model
 
     public class SelectedGoalMedia
     {
-        public string goal_id { get; set; }
-        public string media_type { get; set; }
-        public string goal_media { get; set; }
+		public string goal_id { get; set; }
+		public string media_type { get; set; }
+		public string goal_media { get; set; }
+		public string video_thumb { get; set; }
     }
 
     public class SelectedGoalDetails
@@ -273,6 +274,7 @@ namespace PurposeColor.Model
         public string goal_datetime { get; set; }
         public string user_id { get; set; }
         public string share_status { get; set; }
+		public int comment_count { get; set; }
         public List<SelectedGoalMedia> goal_media { get; set; }
     }
 

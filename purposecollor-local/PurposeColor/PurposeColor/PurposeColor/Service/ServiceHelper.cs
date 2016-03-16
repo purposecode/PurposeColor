@@ -593,7 +593,7 @@ namespace PurposeColor.Service
                 client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
                 client.DefaultRequestHeaders.TryAddWithoutValidation("Content-Type", "multipart/form-data");
 
-                var url = "api.php?action=goalinsert";
+                var url = "api.php?action=goalinsert1";
 
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 if (App.MediaArray != null && App.MediaArray.Count > 0)
@@ -604,6 +604,10 @@ namespace PurposeColor.Service
                         MediaItem media = App.MediaArray[index];
                         content.Add(new StringContent(media.MediaString, Encoding.UTF8), "goal_media" + imgIndex.ToString());
                         content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+						if( media.MediaType != null && media.MediaType == Constants.MediaType.Video )
+						{
+							content.Add(new StringContent(media.MediaThumbString, Encoding.UTF8), "video_thumb" + imgIndex.ToString());
+						}
                     }
                     content.Add(new StringContent(App.MediaArray.Count.ToString(), Encoding.UTF8), "media_count");
                 }

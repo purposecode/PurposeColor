@@ -417,8 +417,8 @@ namespace PurposeColor
                 ScrollView imgScrollView = new ScrollView();
                 imgScrollView.Orientation = ScrollOrientation.Horizontal;
 
-                StackLayout horizmgConatiner = new StackLayout();
-                horizmgConatiner.Orientation = StackOrientation.Horizontal;
+                //StackLayout horizmgConatiner = new StackLayout();
+               // horizmgConatiner.Orientation = StackOrientation.Horizontal;
 
                 for (int index = 0; index < model.goal_media.Count; index++)
                 {
@@ -436,8 +436,9 @@ namespace PurposeColor
                     img.ClassId = null;
                     if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
                     {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+
+						source = Constants.SERVICE_BASE_URL +  model.goal_media[index].video_thumb;
+						img.ClassId = source;
                     }
 					else if (model.goal_media[index] != null && (model.goal_media[index].media_type == "3gpp" || model.goal_media[index].media_type == "aac"))
                     {
@@ -455,12 +456,64 @@ namespace PurposeColor
                     indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
                     indicator.BindingContext = img;
 					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
-                    horizmgConatiner.Children.Add(img);
+                   // horizmgConatiner.Children.Add(img);
+					if( isValidUrl )
+					{
+						if ( model.goal_media[index]!= null &&  model.goal_media[index].media_type == "mp4")
+						{
+							Grid grid = new Grid
+							{
+								VerticalOptions = LayoutOptions.FillAndExpand,
+								HorizontalOptions = LayoutOptions.FillAndExpand,
+								RowDefinitions = 
+								{
+									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+
+								},
+								ColumnDefinitions = 
+								{
+									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+
+								}
+								};
+
+							Image play = new Image();
+							play.Source = "video_play.png";
+							play.Aspect = Aspect.AspectFit;
+							play.WidthRequest = 75;
+							play.HeightRequest = 75;
+							play.HorizontalOptions = LayoutOptions.Center;
+							play.VerticalOptions = LayoutOptions.Center;
+							play.ClassId =   Constants.SERVICE_BASE_URL +  model.goal_media[index].goal_media ;
+							play.GestureRecognizers.Add(videoTap);
+
+							BoxView box = new BoxView();
+							box.BackgroundColor = Color.Red;
+							box.WidthRequest = 100;
+							box.HeightRequest = 100;
+
+							grid.Children.Add( img, 0, 0 );
+							Grid.SetColumnSpan(img, 3);
+							Grid.SetRowSpan( img, 3 );
+							grid.Children.Add(play, 1, 1);
+							//horizmgConatiner.Children.Add(grid);
+							bottomAndLowerControllStack.Children.Add(grid);
+						}
+						else
+						{
+							//horizmgConatiner.Children.Add(img);
+							bottomAndLowerControllStack.Children.Add(img);
+						}
+					}
 
                 }
 
-                imgScrollView.Content = horizmgConatiner;
-                bottomAndLowerControllStack.Children.Add(imgScrollView);
+               // imgScrollView.Content = horizmgConatiner;
+               // bottomAndLowerControllStack.Children.Add(imgScrollView);
             }
             
             #endregion

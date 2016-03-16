@@ -2369,7 +2369,9 @@ namespace PurposeColor.screens
 							}
 							else if( Device.OS == TargetPlatform.iOS )
 							{
-								file.GetStream().CopyTo(ms);
+								string videoFilename = Path.GetFileName( file.Path );
+								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
+								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
 							}
 
 
@@ -2383,7 +2385,18 @@ namespace PurposeColor.screens
                                 return;
                             }
 
-                            MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);
+							if( Device.OS == TargetPlatform.Android )
+							{
+								MasterObject.AddFileToMediaArray(ms, file.Path, PurposeColor.Constants.MediaType.Video);	
+							}
+							else if( Device.OS == TargetPlatform.iOS )
+							{
+								string fileName = Path.GetFileNameWithoutExtension( file.Path ) + ".mp4";
+								string downloadFilePath = Path.Combine(App.DownloadsPath, fileName );
+								MasterObject.AddFileToMediaArray(ms, downloadFilePath, PurposeColor.Constants.MediaType.Video);
+							}
+
+                            
                         }
                         else
                         {

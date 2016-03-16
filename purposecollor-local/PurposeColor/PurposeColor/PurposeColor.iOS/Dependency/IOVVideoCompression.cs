@@ -33,22 +33,19 @@ namespace PurposeColor.iOS
 
 				var asset = AVAsset.FromUrl( NSUrl.FromFilename( sourceFilePath ) );
 
-
 				AVAssetExportSession export = new AVAssetExportSession (asset, AVAssetExportSession.PresetLowQuality );
 
 				export.OutputUrl = NSUrl.FromFilename( downloadFilePath );
 				export.OutputFileType = AVFileType.Mpeg4;
 				export.ShouldOptimizeForNetworkUse = true;
 
-				export.ExportAsynchronously(  ( ) => 
-				{
-						if( export.Error != null )
-							System.Diagnostics.Debug.WriteLine( export.Error.LocalizedDescription );
-				});
+				export.ExportTaskAsync().Wait();
 
-
-
-				return null;
+				MemoryStream ms = new MemoryStream();    
+				FileStream file = new FileStream(  downloadFilePath, FileMode.Open, FileAccess.Read);
+				file.CopyTo ( ms );
+				file.Close();
+				return ms;
 
 			} 
 			catch (Exception ex) 
@@ -69,10 +66,10 @@ namespace PurposeColor.iOS
 				string downloadPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
 				string fileName = Path.GetFileNameWithoutExtension( inputVideoPath ) + ".jpg";
 				string downloadFilePath = Path.Combine(downloadPath, fileName );
-
+				 
 				UIImage thumbImage = GetVideoThumbnail( inputVideoPath );
 
-				if( thumbImage.Orientation == UIImageOrientation.Up )
+				/*if( thumbImage.Orientation == UIImageOrientation.Up )
 				{
 					UIImage rotatedImage = UIImage.FromImage(  thumbImage.CGImage, thumbImage.CurrentScale, UIImageOrientation.Right );
 					NSData videoData = rotatedImage.AsJPEG ();
@@ -82,7 +79,10 @@ namespace PurposeColor.iOS
 				{
 					NSData videoData = thumbImage.AsJPEG ();
 					videoData.Save ( downloadFilePath, false );
-				}
+				}*/
+
+				NSData videoData = thumbImage.AsJPEG ();
+				videoData.Save ( downloadFilePath, false );
 
 
 				MemoryStream ms = new MemoryStream();    
@@ -108,10 +108,14 @@ namespace PurposeColor.iOS
 				NSError outError;
 				using (var asset = AVAsset.FromUrl (NSUrl.FromFilename (path)))
 				using (var imageGen = new AVAssetImageGenerator (asset))
-				using (var imageRef = imageGen.CopyCGImageAtTime (new CMTime (1, 1), out actualTime, out outError)) 
 				{
-					return UIImage.FromImage (imageRef);
-				}   
+					imageGen.AppliesPreferredTrackTransform = true;
+					using (var imageRef = imageGen.CopyCGImageAtTime (new CMTime (1, 1), out actualTime, out outError)) 
+					{
+						return UIImage.FromImage (imageRef);
+					}
+				}
+   
 			} 
 			catch
 			{

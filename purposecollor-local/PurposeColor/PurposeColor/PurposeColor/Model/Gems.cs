@@ -102,6 +102,7 @@ namespace PurposeColor.Model
 		public string media_type { get; set; }
 		public string action_media { get; set; }
 		public string goal_id { get; set; }
+		public string video_thumb { get; set; }
 	}
 
 	public class GemsGoalsDetails
@@ -327,6 +328,7 @@ namespace PurposeColor.Model
 		public string text { get; set; }
 		public SelectedEventDetails resultarray { get; set; }
 	}
+		
 
 	public class SelectedActionDetails
 	{

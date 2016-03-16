@@ -5416,8 +5416,8 @@ namespace PurposeColor.Droid
 			// aapt resource value: 0x7f0200d8
 			public const int noimage = 2130837720;
 			
-			// aapt resource value: 0x7f0200fb
-			public const int notification_template_icon_bg = 2130837755;
+			// aapt resource value: 0x7f0200fc
+			public const int notification_template_icon_bg = 2130837756;
 			
 			// aapt resource value: 0x7f0200d9
 			public const int offline = 2130837721;
@@ -5519,7 +5519,10 @@ namespace PurposeColor.Droid
 			public const int video = 2130837753;
 			
 			// aapt resource value: 0x7f0200fa
-			public const int yellow_tip = 2130837754;
+			public const int video_play = 2130837754;
+			
+			// aapt resource value: 0x7f0200fb
+			public const int yellow_tip = 2130837755;
 			
 			static Drawable()
 			{

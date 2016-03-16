@@ -138,6 +138,11 @@
     <None Include="Resources\verified_icon%401x.png" />
     <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
     <Compile Include="Dependency\IOVVideoCompression.cs" />
+    <None Include="Resources\app_icon 29.png" />
+    <None Include="Resources\app_icon 58.png" />
+    <None Include="Resources\app_icon 80.png" />
+    <None Include="Resources\app_icon 512.png" />
+    <None Include="Resources\app_icon 1024.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

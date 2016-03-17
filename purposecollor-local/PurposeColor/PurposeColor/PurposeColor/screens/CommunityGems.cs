@@ -288,29 +288,12 @@ namespace PurposeColor
 
 			foreach (var item in communityGems.resultarray)
 			{
-				/*	string media = item.gem_media [0].gem_media;
+				if (item.gem_media != null && item.gem_media.Count > 0) 
+				{
+					GemMedia gemMedia = item.gem_media[0];
 
-				string fileExtenstion = Path.GetExtension(media);
-				if (fileExtenstion == ".mp4") 
-				{
-					media = "video.png";
-				} 
-				else if (fileExtenstion == "3gpp" || fileExtenstion == "wav") 
-				{
-					media = "audio.png";
-				} 
-				else
-				{
-					string fileName = Path.GetFileName ( media );
-					media = fileName;
-				}
-
-				mediaList.Add ( media );*/
-				foreach (var mediaItem in item.gem_media) 
-				{
-
-					if( mediaItem.media_type == "png" || mediaItem.media_type == "jpg" || mediaItem.media_type == "jpeg"  )
-						mediaListToDownload.Add( Constants.SERVICE_BASE_URL + mediaItem.gem_media );
+					if( gemMedia.media_type == "png" || gemMedia.media_type == "jpg" || gemMedia.media_type == "jpeg"  )
+						mediaListToDownload.Add( Constants.SERVICE_BASE_URL + gemMedia.gem_media );				
 				}
 			}
 

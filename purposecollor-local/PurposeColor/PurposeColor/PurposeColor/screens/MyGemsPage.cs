@@ -585,7 +585,7 @@ namespace PurposeColor
 							if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
 							{
 								img.ClassId = source;
-								source = Device.OnPlatform("video.png", "video.png", "//Assets//video.png");
+								source = Constants.SERVICE_BASE_URL + gemMedia.video_thumb;
 							}
 							else if ( gemMedia.gem_media != null && (gemMedia.media_type == "3gpp" || gemMedia.media_type == "aac"))
 							{
@@ -606,15 +606,68 @@ namespace PurposeColor
 								indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
 								masterStack.AddChildToLayout(indicator, 40, 30);
 
-								CustomLayout imgContainer = new CustomLayout();
+								/*	CustomLayout imgContainer = new CustomLayout();
 								imgContainer.WidthRequest = App.screenWidth * 90 / 100;
 								imgContainer.HeightRequest = App.screenWidth * 90 / 100;
-								img.ClassId = item.gem_id;
 								imgContainer.Children.Add(img);
 								if( item.gem_media != null && item.gem_media.Count > 1 )
-									imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);
+									imgContainer.AddChildToLayout(moreImg, 75, 75, (int)imgContainer.WidthRequest, (int)imgContainer.HeightRequest);*/
 
-								bottomAndLowerControllStack.Children.Add(imgContainer);
+								Grid grid = new Grid
+								{
+									VerticalOptions = LayoutOptions.FillAndExpand,
+									HorizontalOptions = LayoutOptions.FillAndExpand,
+									RowDefinitions = 
+									{
+										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+
+									},
+									ColumnDefinitions = 
+									{
+										new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+										new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+										new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+
+									}
+									};
+
+								if ( gemMedia != null && gemMedia.media_type == "mp4")
+								{
+
+									Image play = new Image();
+									play.Source = "video_play.png";
+									play.Aspect = Aspect.AspectFit;
+									play.WidthRequest = 75;
+									play.HeightRequest = 75;
+									play.HorizontalOptions = LayoutOptions.Center;
+									play.VerticalOptions = LayoutOptions.Center;
+									play.ClassId =  img.ClassId;
+									play.GestureRecognizers.Add(videoTap);
+
+									BoxView box = new BoxView();
+									box.BackgroundColor = Color.Red;
+									box.WidthRequest = 100;
+									box.HeightRequest = 100;
+
+									grid.Children.Add( img, 0, 0 );
+									Grid.SetColumnSpan(img, 3);
+									Grid.SetRowSpan( img, 3 );
+									grid.Children.Add(play, 1, 1);
+									if( item.gem_media.Count > 1 )
+										grid.Children.Add(moreImg, 2, 2);
+									bottomAndLowerControllStack.Children.Add(grid);
+								}
+								else
+								{	
+									grid.Children.Add( img, 0, 0 );
+									Grid.SetColumnSpan(img, 3);
+									Grid.SetRowSpan( img, 3 );
+									if( item.gem_media.Count > 1 )
+										grid.Children.Add(moreImg, 2, 2);
+									bottomAndLowerControllStack.Children.Add(grid);
+								}
 							}
 
 						}

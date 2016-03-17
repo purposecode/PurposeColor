@@ -227,9 +227,6 @@
     <BundleResource Include="Resources\bckarow%402x.png" />
     <BundleResource Include="Resources\bckarow%403x.png" />
     <BundleResource Include="Resources\bckarow.png" />
-    <BundleResource Include="delete_button.png" />
-    <BundleResource Include="image.png" />
-    <BundleResource Include="video.png" />
     <BundleResource Include="Resources\icn_seperate.png" />
     <BundleResource Include="Resources\icn_seperate%402x.png" />
     <BundleResource Include="Resources\icn_seperate%403x.png" />
@@ -286,6 +283,9 @@
     <BundleResource Include="Resources\shareActive.png" />
     <BundleResource Include="Resources\favoriteIcon.png" />
     <BundleResource Include="Resources\video_play.png" />
+    <BundleResource Include="Resources\delete_button.png" />
+    <BundleResource Include="Resources\image.png" />
+    <BundleResource Include="Resources\video.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

@@ -173,7 +173,7 @@ namespace PurposeColor.iOS.Dependency
 			using (var data = NSData.FromStream(_image))
 			{
 				float compressAmount = (float)(_compressAmount * .01);
-
+				_image = null;
 				var image = UIImage.LoadFromData(data);
 
 				var newResult = image.AsJPEG(compressAmount);

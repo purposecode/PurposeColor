@@ -774,10 +774,7 @@ namespace PurposeColor.Database
                     resultArray.goal_details = item.goal_details;
                     resultArray.goal_media = item.goal_media;
                     masterObject.code = item.code;
-                    masterObject.mediapath = item.mediapath;
-                    masterObject.mediathumbpath = item.mediathumbpath;
-                    masterObject.noimageurl = item.noimageurl;
-
+    
                     resultArray.pending_action_title = new List<PendingActionTitle>();
 
                     // Title
@@ -792,9 +789,7 @@ namespace PurposeColor.Database
 
 
                 masterObject.code = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].code : "";
-                masterObject.noimageurl = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].noimageurl : "";
-                masterObject.mediapath = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].mediapath : "";
-                masterObject.mediathumbpath = (listPendingDetailsDB != null && listPendingDetailsDB.Count > 0) ? listPendingDetailsDB[0].mediathumbpath : "";
+              
                 return masterObject;
             }
             catch (Exception)
@@ -885,9 +880,7 @@ namespace PurposeColor.Database
                         goal_media = item.goal_media,
                         user_id = item.user_id,
                         code = pendingGoals.code,
-                        mediapath = pendingGoals.mediapath,
-                        mediathumbpath = pendingGoals.mediathumbpath,
-                        noimageurl = pendingGoals.noimageurl
+                       
                     };
                     listPendingGoalsDetails.Add(goal);
 

@@ -246,9 +246,6 @@ namespace PurposeColor.Model
 	public class PendingGoalsObject
 	{
 		public string code { get; set; }
-		public string noimageurl { get; set; }
-		public string mediapath { get; set; }
-		public string mediathumbpath { get; set; }
 		public List<PendingGoalsDetails> resultarray { get; set; }
 	}
 

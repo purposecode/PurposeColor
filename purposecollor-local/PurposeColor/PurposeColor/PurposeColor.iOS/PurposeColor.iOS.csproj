@@ -142,7 +142,7 @@
     <None Include="Resources\app_icon 58.png" />
     <None Include="Resources\app_icon 80.png" />
     <None Include="Resources\app_icon 512.png" />
-    <None Include="Resources\app_icon 1024.png" />
+    <None Include="Resources\app_icon_1024.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

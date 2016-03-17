@@ -32,15 +32,14 @@ namespace PurposeColor.Droid.Dependency
         }
 
 
-        public static byte[] ResizeImageAndroid(byte[] imageData, float width, float height)
-        {
-            // Load the bitmap
-            Bitmap originalImage = BitmapFactory.DecodeByteArray(imageData, 0, imageData.Length);
+		public static byte[] ResizeImageAndroid(byte[] imageData, float width, float height)
+		{
+			// Load the bitmap
+			Bitmap originalImage = BitmapFactory.DecodeByteArray(imageData, 0, imageData.Length);
 			Bitmap originalImage2 = Bitmap.CreateScaledBitmap(originalImage, (int)width, (int)height, false);
-
+			long streamLength = (long)originalImage.ByteCount;
 			using (MemoryStream ms = new MemoryStream())
 			{
-				int streamLength = (int)ms.Length;
 				int compressionRate = 100;
 
 				#region compression ratio
@@ -81,16 +80,16 @@ namespace PurposeColor.Droid.Dependency
 					compressionRate = App.screenDensity > 2 ? 90: 86;
 				}
 				else if (streamLength < 2000000) {
-					compressionRate = App.screenDensity > 2 ? 85: 86;
+					compressionRate = App.screenDensity > 2 ? 89: 86;
 				}
 				else {
-					compressionRate = App.screenDensity > 2 ? 80: 85;
+					compressionRate = App.screenDensity > 2 ? 88: 85;
 				}
 				#endregion
 
 				originalImage2.Compress(Bitmap.CompressFormat.Jpeg, compressionRate, ms);
 				return ms.ToArray();
 			}
-        }
+		}
     }
 }

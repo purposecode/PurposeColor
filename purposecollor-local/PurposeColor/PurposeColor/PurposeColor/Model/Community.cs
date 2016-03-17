@@ -230,6 +230,7 @@ namespace PurposeColor.Model
 		public string gem_type { get; set; }
 		public string media_type { get; set; }
 		public string gem_media { get; set; }
+		public string video_thumb { get; set; }
 	}
 
 	public class CommunityGemsDetails

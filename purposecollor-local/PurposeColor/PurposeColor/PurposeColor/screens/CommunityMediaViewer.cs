@@ -113,8 +113,8 @@ namespace PurposeColor
 					videoTap.Tapped += OnActionVideoTapped;
 
 					Image img = new Image ();
-					bool isValidUrl = ( item.ImageName != null && !string.IsNullOrEmpty ( item.ImageName )) ? true : false;
-					string source = (isValidUrl) ? item.ImageName : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
+					bool isValidUrl = ( item.Url != null && !string.IsNullOrEmpty ( item.Url )) ? true : false;
+					string source = (isValidUrl) ? item.Url : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
 					string fileExtenstion = Path.GetExtension (source);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 					img.WidthRequest = App.screenWidth * 90 / 100;
@@ -124,7 +124,7 @@ namespace PurposeColor
 					if (item != null && item.MediaType == "mp4") 
 					{
 						img.ClassId = source;
-						source = Device.OnPlatform ("video.png", "video.png", "//Assets//video.png");
+						source = Constants.SERVICE_BASE_URL + item.ImageName;
 					}
 					else if ( item != null && (item.MediaType == "3gpp" || item.MediaType == "aac") )
 					{
@@ -143,7 +143,49 @@ namespace PurposeColor
 					indicator.BindingContext = img;
 					masterStack.AddChildToLayout (indicator, 40, 30);
 
-					horizmgConatiner.Children.Add (img);
+					if (item != null && item.MediaType == "mp4")
+					{
+						Grid grid = new Grid
+						{
+							VerticalOptions = LayoutOptions.FillAndExpand,
+							HorizontalOptions = LayoutOptions.FillAndExpand,
+							RowDefinitions = 
+							{
+								new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+								new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+								new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+
+							},
+							ColumnDefinitions = 
+							{
+								new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+								new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+								new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+
+							}
+						};
+
+						Image play = new Image();
+						play.Source = "video_play.png";
+						play.Aspect = Aspect.AspectFit;
+						play.WidthRequest = 75;
+						play.HeightRequest = 75;
+						play.HorizontalOptions = LayoutOptions.Center;
+						play.VerticalOptions = LayoutOptions.Center;
+						play.ClassId =  img.ClassId;
+						play.GestureRecognizers.Add(videoTap);
+
+						grid.Children.Add( img, 0, 0 );
+						Grid.SetColumnSpan(img, 3);
+						Grid.SetRowSpan( img, 3 );
+						grid.Children.Add(play, 1, 1);
+						horizmgConatiner.Children.Add(grid);
+					}
+					else
+					{
+						horizmgConatiner.Children.Add(img);
+					}
+				//	horizmgConatiner.Children.Add (img);
 
 				}
 				imgScrollView.Content = horizmgConatiner;

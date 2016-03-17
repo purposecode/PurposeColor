@@ -41,26 +41,31 @@ namespace PurposeColor.iOS.Dependency
 
                 UIKit.UIImage resizedImage = UIKit.UIImage.FromImage(context.ToImage());
 
-
 				var url = new NSUrl( path , false); 
 				CGImageSource myImageSource;
 				myImageSource = CGImageSource.FromUrl (url, null);
 				var ns = new NSDictionary();
 				NSDictionary imageProperties = myImageSource.CopyProperties(ns, 0);
-
+				ns = null;
 				Console.WriteLine(imageProperties.DescriptionInStringsFileFormat);
 				NSObject[] keys =  imageProperties.Keys;
 				NSObject[] values =  imageProperties.Values;
+				imageProperties = null;
 
-				string orientation =  values [7].ToString ();
-				if (orientation.Contains("6")) {
-					resizedImage = UIImage.FromImage (resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
-					Console.WriteLine("----img orientation------ 6 -------");
+				try {
+					if (values != null && values.Length >= 7) {
+						string orientation = values [7].ToString ();
+						if (orientation.Contains ("6")) {
+							resizedImage = UIImage.FromImage (resizedImage.CGImage, resizedImage.CurrentScale, UIImageOrientation.Right);
+							Console.WriteLine ("----img orientation------ 6 -------");
+						}
+						values = null;
+						keys = null;
+					}
+				} catch (Exception ex) {
+					var test = ex.Message;
 				}
 
-
-				
-				
                 // save the image as a jpeg
 				return resizedImage.AsJPEG().ToArray();
             }

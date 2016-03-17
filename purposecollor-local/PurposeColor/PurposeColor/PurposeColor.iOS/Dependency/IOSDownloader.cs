@@ -35,24 +35,24 @@ namespace PurposeColor.iOS
 
 			try 
 			{
+				int requiredHeight = (int)(App.screenHeight * 0.5 * App.screenDensity);
+				int requiredWidth = (int)(App.screenWidth * App.screenDensity);
+				int imageHeight = 0;
+				int imagewidth = 0;
+
 				foreach (var item in downloadUrlList)
 				{
 					string fileName = Path.GetFileName(item);
 
 					Uri uri = new Uri( App.DownloadsPath + fileName);
 
-					if( !File.Exists( App.DownloadsPath + fileName ) )
+					if( !File.Exists( App.DownloadsPath + fileName ) || fileName == "1182654059.png")
 					{
 						WebClient webClient = new WebClient();
 						await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );
 						webClient.Dispose();
 
 						#region Resize and compression
-
-						int requiredHeight = (int)(App.screenHeight * 0.5 * App.screenDensity);
-						int requiredWidth = (int)(App.screenWidth * App.screenDensity);
-						int imageHeight = 0;
-						int imagewidth = 0;
 
 						try {
 							ImageIO.CGImageSource myImageSource = null;
@@ -113,18 +113,24 @@ namespace PurposeColor.iOS
 
 									try {
 										int compress_ratio = 99;
-										if(myByteA.Length< 500000) {
+										if(myByteA.Length < 100000) {
 											compress_ratio = 99;
-										}else if(myByteA.Length< 900000) {
-											compress_ratio = 95;
+										}
+										else if(myByteA.Length < 400000) {
+											compress_ratio = 98;
+										}else if(myByteA.Length < 600000) {
+											compress_ratio = 97;
+										}
+										else if(myByteA.Length < 800000) {
+											compress_ratio = 96;
 										}else{
 											compress_ratio = 90;
 										}
-										MemoryStream compressedImage = resize.CompessImage(90, new MemoryStream(myByteA));
+										MemoryStream compressedImage = resize.CompessImage(compress_ratio, new MemoryStream(myByteA));
 										myByteA = new Byte[compressedImage.ToArray().Length];
 										myByteA = compressedImage.ToArray();
 									} catch (System.Exception ex) {
-										
+										var test = ex.Message;
 									}
 
 									imageData.Dispose();

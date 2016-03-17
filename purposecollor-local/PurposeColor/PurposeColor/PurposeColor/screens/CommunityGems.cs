@@ -269,7 +269,7 @@ namespace PurposeColor
 
 				progressBar.HideProgressbarWithCancel();
 
-				RenderGems( communityGems );
+				RenderGems( communityGems, false );
 
 
 			} 
@@ -301,7 +301,7 @@ namespace PurposeColor
 			return val;
 		}
 
-		void RenderGems( CommunityGemsObject gemsObject )
+		void RenderGems( CommunityGemsObject gemsObject, bool prevButtonNeeded )
 		{
 			try
 			{
@@ -679,6 +679,7 @@ namespace PurposeColor
 							img.WidthRequest = App.screenWidth * 90 / 100;
 							img.HeightRequest = App.screenWidth * 80 / 100;
 							img.Aspect = Aspect.Fill;
+
 							img.ClassId = null;
 							if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
 							{
@@ -782,15 +783,34 @@ namespace PurposeColor
 					//masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
 					/// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
+	
+
 					masterScroll.HeightRequest = App.screenHeight - 20;
 					masterScroll.WidthRequest = App.screenWidth * 90 / 100;
 
 
 					masterStackLayout.Children.Add(masterStack);
+
+
 				}
 
 
-
+				if( prevButtonNeeded )
+				{
+					Button backToTop = new Button();
+					backToTop.BackgroundColor = Color.Transparent;
+					backToTop.TextColor = Constants.BLUE_BG_COLOR;
+					backToTop.Text = "Go back to previous page";
+					backToTop.FontSize = 12;
+					backToTop.BorderWidth = 0;
+					backToTop.BorderColor = Color.Transparent;
+					backToTop.ClassId = "prev page";
+					backToTop.Clicked += (object sender, EventArgs e) => 
+					{
+						OnLoadPreviousGemsClicked(  masterScroll, EventArgs.Empty );
+					};
+					masterStackLayout.Children.Add ( backToTop );
+				}
 				/*	Button loadMoreGems = new Button();
 				loadMoreGems.BackgroundColor = Color.Transparent;
 				loadMoreGems.TextColor = Constants.BLUE_BG_COLOR;
@@ -862,7 +882,7 @@ namespace PurposeColor
 					masterScroll.Content = null;
 					GC.Collect();
 
-					RenderGems ( communityGems );
+					RenderGems ( communityGems, false );
 				}
 				else
 				{
@@ -912,7 +932,13 @@ namespace PurposeColor
 					masterScroll.Content = null;
 					GC.Collect();
 
-					RenderGems ( communityGems );
+
+
+
+					if( itemCountToCopy < MAX_ROWS_AT_A_TIME )
+						RenderGems ( communityGems, true );
+					else
+						RenderGems ( communityGems, false );
 				}
 				else
 				{
@@ -925,6 +951,23 @@ namespace PurposeColor
 				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
 			}
 
+		}
+
+		void DisplayBackToTopButton()
+		{
+			Button backToTop = new Button();
+			backToTop.BackgroundColor = Color.Transparent;
+			backToTop.TextColor = Constants.BLUE_BG_COLOR;
+			backToTop.Text = "Go back to previous page";
+			backToTop.FontSize = 12;
+			backToTop.BorderWidth = 0;
+			backToTop.BorderColor = Color.Transparent;
+			backToTop.ClassId = "prev page";
+			backToTop.Clicked += (object sender, EventArgs e) => 
+			{
+				OnLoadPreviousGemsClicked(  masterScroll, EventArgs.Empty );
+			};
+			masterStackLayout.Children.Add ( backToTop );
 		}
 
 		protected override bool OnBackButtonPressed()

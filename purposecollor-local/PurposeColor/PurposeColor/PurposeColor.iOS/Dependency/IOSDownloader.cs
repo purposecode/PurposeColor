@@ -111,6 +111,22 @@ namespace PurposeColor.iOS
 									myByteA = new Byte[imageData.Length];
 									myByteA = resize.Resize(myByteArray, requiredWidth, requiredHeight, App.DownloadsPath + fileName);
 
+									try {
+										int compress_ratio = 99;
+										if(myByteA.Length< 500000) {
+											compress_ratio = 99;
+										}else if(myByteA.Length< 900000) {
+											compress_ratio = 95;
+										}else{
+											compress_ratio = 90;
+										}
+										MemoryStream compressedImage = resize.CompessImage(90, new MemoryStream(myByteA));
+										myByteA = new Byte[compressedImage.ToArray().Length];
+										myByteA = compressedImage.ToArray();
+									} catch (System.Exception ex) {
+										
+									}
+
 									imageData.Dispose();
 									myByteArray = null;
 									imageData.Dispose();

@@ -37,29 +37,26 @@ namespace PurposeColor.Droid
 			} else {
 
 				// clearing temp storage of app.
-				long spaceConsumed = dir.TotalSpace;
-				if(spaceConsumed > 536870912 ) // 1073741824 : 1 GB   // 1048576 : 1 MB
-				{
-					try {
+				try {
+					DateTime threadStartTime = DateTime.UtcNow.AddDays(-2); // DateTime.UtcNow.AddMinutes(-60); 
+					System.IO.DirectoryInfo tempFileDir = new System.IO.DirectoryInfo(testFile.AbsolutePath);
+
+					System.IO.FileInfo[] tempFiles = tempFileDir.GetFiles();
+					foreach (System.IO.FileInfo tempFile in tempFiles)
+					{
 						try
 						{
-							DateTime threadStartTime = DateTime.UtcNow.AddDays(-1); // DateTime.UtcNow.AddMinutes(-60); 
-							System.IO.DirectoryInfo tempFileDir = new System.IO.DirectoryInfo(testFile.AbsolutePath);
-							System.IO.FileInfo[] tempFiles = tempFileDir.GetFiles();
-							foreach (System.IO.FileInfo tempFile in tempFiles)
+							if (tempFile.LastAccessTime < threadStartTime)
 							{
-								if (tempFile.CreationTimeUtc < threadStartTime)
-								{
-									System.IO.File.Delete(tempFile.FullName);
-								}
+								System.IO.File.Delete(tempFile.FullName);
 							}
 						}
 						catch (Exception ex) {
 							var test = ex.Message;
 						}
-					} catch (Exception ex) {
-						var test = ex.Message;
 					}
+				} catch (Exception ex) {
+					var test = ex.Message;
 				}
 			}
 

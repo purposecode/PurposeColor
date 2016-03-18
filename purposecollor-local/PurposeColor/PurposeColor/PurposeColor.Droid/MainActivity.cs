@@ -32,8 +32,37 @@ namespace PurposeColor.Droid
             File testFile = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.ExternalStorageDirectory.ToString() + "/PurposeColor/");
             App.DownloadsPath = testFile.AbsolutePath + "/";
 			var dir =  new Java.IO.File( App.DownloadsPath  );
-			if (!dir.Exists ())
+			if (!dir.Exists ()) {
 				dir.Mkdirs ();
+			} else {
+
+				// clearing temp storage of app.
+				long spaceConsumed = dir.TotalSpace;
+				if(spaceConsumed > 536870912 ) // 1073741824 : 1 GB   // 1048576 : 1 MB
+				{
+					try {
+						try
+						{
+							DateTime threadStartTime = DateTime.UtcNow.AddDays(-1); // DateTime.UtcNow.AddMinutes(-60); 
+							System.IO.DirectoryInfo tempFileDir = new System.IO.DirectoryInfo(testFile.AbsolutePath);
+							System.IO.FileInfo[] tempFiles = tempFileDir.GetFiles();
+							foreach (System.IO.FileInfo tempFile in tempFiles)
+							{
+								if (tempFile.CreationTimeUtc < threadStartTime)
+								{
+									System.IO.File.Delete(tempFile.FullName);
+								}
+							}
+						}
+						catch (Exception ex) {
+							var test = ex.Message;
+						}
+					} catch (Exception ex) {
+						var test = ex.Message;
+					}
+				}
+			}
+
             LoadApplication(new App());
         }
 

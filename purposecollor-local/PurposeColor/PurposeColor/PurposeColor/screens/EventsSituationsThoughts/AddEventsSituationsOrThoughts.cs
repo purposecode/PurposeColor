@@ -2227,12 +2227,19 @@ namespace PurposeColor.screens
 							videoOptions.Name = fileName;
 							videoOptions.Directory = "DefaultVideos";
 							videoOptions.DesiredLength = TimeSpan.FromMinutes(5);
-							videoOptions.Quality = ( Device.OS == TargetPlatform.iOS ) ? VideoQuality.Low : VideoQuality.Medium;
+							videoOptions.Quality = VideoQuality.Low;
+
+							if( Device.OS == TargetPlatform.Android )
+							{
+								IVideoCompressor compress = DependencyService.Get<IVideoCompressor>();
+								Size camSize =  compress.GetCameraSize();
+								if( camSize.Width > 5000 )
+									videoOptions.Quality = VideoQuality.Low;
+								else
+									videoOptions.Quality = VideoQuality.Medium;
+							}
 
 							var file = await CrossMedia.Current.TakeVideoAsync( videoOptions );
-
-
-						//	progres.ShowToast( "video is compressing , please wait.." );
 
 							progres.ShowProgressbar( "video is compressing..." );
                             if (file == null)

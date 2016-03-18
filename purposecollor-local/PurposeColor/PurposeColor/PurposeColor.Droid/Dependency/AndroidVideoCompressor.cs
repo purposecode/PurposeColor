@@ -154,6 +154,21 @@ namespace PurposeColor.Droid
 
 		}
 
+		public Xamarin.Forms.Size GetCameraSize()
+		{
+			Xamarin.Forms.Size camSize = new  Xamarin.Forms.Size ();
+			Android.Hardware.Camera cam = Android.Hardware.Camera.Open ();
+			Android.Hardware.Camera.Parameters cameraParams =  cam.GetParameters ();
+			camSize.Height = cameraParams.PictureSize.Height;
+			camSize.Width = cameraParams.PictureSize.Width;
+
+			cam.StopPreview ();
+			cam.Release ();
+			cam.Dispose ();
+			return camSize;
+
+		}
+
 		public MemoryStream CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
 

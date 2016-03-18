@@ -58,6 +58,12 @@ namespace PurposeColor.iOS
 		}
 
 
+		public Xamarin.Forms.Size GetCameraSize()
+		{
+			Xamarin.Forms.Size camSize = new  Xamarin.Forms.Size ();
+			return camSize;
+		}
+
 		public MemoryStream CreateVideoThumbnail ( string inputVideoPath, string outputImagePath )
 		{
 

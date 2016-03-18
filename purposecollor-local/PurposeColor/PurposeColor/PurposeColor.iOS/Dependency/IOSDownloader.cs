@@ -46,7 +46,7 @@ namespace PurposeColor.iOS
 
 					Uri uri = new Uri( App.DownloadsPath + fileName);
 
-					if( !File.Exists( App.DownloadsPath + fileName ) || fileName == "1182654059.png")
+					if( !File.Exists( App.DownloadsPath + fileName ))
 					{
 						WebClient webClient = new WebClient();
 						await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );

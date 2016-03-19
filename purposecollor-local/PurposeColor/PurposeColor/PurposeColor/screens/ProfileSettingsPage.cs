@@ -60,7 +60,7 @@ namespace PurposeColor.screens
 				}
 			};
 
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 
 			try {
 				currentUser = App.Settings.GetUser ();

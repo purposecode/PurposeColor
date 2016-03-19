@@ -66,10 +66,12 @@ namespace PurposeColor
             {
                 var test = ex.Message;
             }
-
+			if (string.IsNullOrEmpty (model.pageTitleVal)) {
+				model.pageTitleVal = "GEM Details";
+			}
             mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
-            subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Goal Enabling Materials", false);
+			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, model.pageTitleVal, false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
             {
                 try
@@ -84,7 +86,7 @@ namespace PurposeColor
             this.Appearing += GemsDetailsPage_Appearing;
 
             Label pageTitle = new Label();
-            pageTitle.Text = model.pageTitleVal;
+			pageTitle.Text = model.titleVal;//model.pageTitleVal;
             pageTitle.TextColor = Color.Black;
             pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
             pageTitle.FontAttributes = FontAttributes.Bold;
@@ -102,11 +104,13 @@ namespace PurposeColor
             #region TOOLS LAYOUT
 
             StackLayout toolsLayout = new StackLayout();
-            toolsLayout.BackgroundColor = Color.White;
+            //toolsLayout.BackgroundColor = Color.White;
 			toolsLayout.Spacing = 20;//10;
             toolsLayout.Orientation = StackOrientation.Horizontal;
-            toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
-            toolsLayout.Padding = new Thickness(10, 10, 10, 10);
+			toolsLayout.HorizontalOptions = LayoutOptions.Center;
+            //toolsLayout.WidthRequest = App.screenWidth * 80 / 100;
+			toolsLayout.HeightRequest = App.screenHeight * .05;
+            toolsLayout.Padding = new Thickness(10, 5, 10, 10);
             toolsLayout.ClassId = "ToolsLayout";
 
 			favoriteButton = new Image();
@@ -212,8 +216,8 @@ namespace PurposeColor
 			menuButton.GestureRecognizers.Add(editMenuGesture);
 
 			masterStack.AddChildToLayout(pageTitle, 1, Device.OnPlatform(0,1,1));
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 80, 79), Device.OnPlatform(0,1,1));
-			masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 90, 79), Device.OnPlatform(0,1,1));
+			//masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
 			#endregion
 
             StackLayout bottomAndLowerControllStack = new StackLayout
@@ -221,11 +225,11 @@ namespace PurposeColor
                 Orientation = StackOrientation.Vertical,
                 BackgroundColor = Color.Transparent,
                 Spacing = 1,
-                Padding = new Thickness(0, 5, 0, 5),
-                WidthRequest = App.screenWidth * .90,
+                Padding = 0,// new Thickness(0, 0, 0, 5),
+				WidthRequest = App.screenWidth,// * .90,
                 ClassId= "BottomNlowerStack"
             };
-            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(0, 0, 5, 0), Children = { description } });
+            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(3, 0, 0, 5), Children = { description } });
             
             #region MEDIA LIST
 
@@ -239,8 +243,8 @@ namespace PurposeColor
                     string source = (isValidUrl) ? model.Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 
                     Image img = new Image();
-                    img.WidthRequest = App.screenWidth * 90 / 100;
-                    img.HeightRequest = App.screenWidth * 90 / 100;
+					img.WidthRequest = App.screenWidth;// * 90 / 100;
+					img.HeightRequest = App.screenWidth;//App.screenWidth * 90 / 100;
 					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (mediaList[index] != null && mediaList[index].media_type == "mp4")
@@ -333,8 +337,8 @@ namespace PurposeColor
                     string source = (isValidUrl) ? model.Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-                    img.WidthRequest = App.screenWidth * 90 / 100;
-                    img.HeightRequest = App.screenWidth * 90 / 100;
+					img.WidthRequest = App.screenWidth;// * 90 / 100;
+					img.HeightRequest = App.screenWidth;// * 90 / 100;
 					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
@@ -430,8 +434,8 @@ namespace PurposeColor
                     string source = (isValidUrl) ?  model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
                     string fileExtenstion = Path.GetExtension(source);
                     bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-                    img.WidthRequest = App.screenWidth * 90 / 100;
-                    img.HeightRequest = App.screenWidth * 90 / 100;
+					img.WidthRequest = App.screenWidth;// * 90 / 100;
+					img.HeightRequest = App.screenWidth;// * 90 / 100;
 					img.Aspect = Aspect.AspectFill;
                     img.ClassId = null;
                     if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
@@ -522,7 +526,11 @@ namespace PurposeColor
             //masterStack.AddChildToLayout(emptyLayout,1,75);
             bottomAndLowerControllStack.Children.Add(toolsLayout);
             bottomAndLowerControllStack.Children.Add(emptyLayout);
-            masterStack.AddChildToLayout(bottomAndLowerControllStack, 1, 12);
+			if (model.titleVal.Length < 25) {
+				masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 8);
+			} else {
+				masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 11);
+			}
 
             StackLayout spaceOffsetlayout = new StackLayout();
             spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
@@ -532,19 +540,20 @@ namespace PurposeColor
             bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
             masterScroll.HeightRequest = App.screenHeight - 20;
-            masterScroll.WidthRequest = App.screenWidth * 90 / 100;
+			masterScroll.WidthRequest = App.screenWidth; //App.screenWidth * 90 / 100;
 
             masterScroll.Content = masterStack;
 
             masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout(masterScroll, 5, Device.OnPlatform(16,18,18));
+			masterLayout.AddChildToLayout(masterScroll,0, Device.OnPlatform(16,18,18));
 
             #region CUSTOM LIST MENU
 
             //new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  }
             
             #endregion
+
             Content = masterLayout;
         }
 
@@ -640,7 +649,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 53, 52), Device.OnPlatform(2, 4, 4));
+			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 63, 52), Device.OnPlatform(2, 4, 4));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)

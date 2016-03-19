@@ -19,6 +19,7 @@ namespace PurposeColor.screens
 	public class ProfileSettingsPage : ContentPage, IDisposable
 	{
 		CustomEntry statusEntry = null;
+		Label statusLabel = null;
 		int userIdForProfileInfo = -1;
 		User userInfo = null;
 		CustomLayout masterLayout = null;
@@ -142,6 +143,20 @@ namespace PurposeColor.screens
 				WidthRequest = App.screenWidth * 80 / 100,
 			};
 
+			statusLabel = new Label {
+				TextColor = Color.Black,
+				HeightRequest = Device.OnPlatform (50, 50, 75),
+				WidthRequest = App.screenWidth * 80 / 100,
+				HorizontalOptions = LayoutOptions.Center,
+				FontSize = App.screenDensity >= 2 ? 18 : 15,
+				XAlign = TextAlignment.Center
+			};
+
+			if(!string.IsNullOrEmpty(userInfo.StatusNote))
+			{
+				statusLabel.Text = userInfo.StatusNote.Trim ();
+			}
+			
 			profilePic = new Image {
 				Source = Constants.SERVICE_BASE_URL + (!string.IsNullOrEmpty(userInfo.ProfileImageUrl)? userInfo.ProfileImageUrl : "admin/uploads/default/noprofile.png"),
 				HeightRequest = 110,
@@ -239,15 +254,23 @@ namespace PurposeColor.screens
 				masterLayout.AddChildToLayout (followStatusBtn, Device.OnPlatform(55,50,50), 70);
 				#endregion
 
+				statusEntry.IsVisible = true;
+				statusLabel.IsVisible = false;
 			}
 			else 
 			{
+				statusEntry.IsVisible = false;
+				//statusEntry.BackgroundColor = Constants.PAGE_BG_COLOR_LIGHT_GRAY;
+				statusLabel.IsVisible = true;
+
 				statusEntry.IsEnabled = false;
 				if (userInfo.StatusNote != null) {
 					statusEntry.Text = userInfo.StatusNote.Trim ();
 				} else {
 					statusEntry.IsVisible = false;
 				}
+
+
 			}
 
 			profilePic.ClassId = "camera";
@@ -292,7 +315,9 @@ namespace PurposeColor.screens
 				Spacing = 3,
 				Children = {new StackLayout{ Spacing = 2,Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.Center, 
 						Children = {userDisplayName, verifiedBadge}}, 
-						emailLabel}
+						emailLabel,
+					new StackLayout{Children = {statusLabel}, Padding = 10, HorizontalOptions = LayoutOptions.Center}
+				}
 			};
 
 			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
@@ -301,9 +326,11 @@ namespace PurposeColor.screens
 				xpos = 64;
 				masterLayout.AddChildToLayout (nameEmailStack, 10, 40);
 				masterLayout.AddChildToLayout (statusEntry, 10, 50);
+				//masterLayout.AddChildToLayout (statusLabel, 10, 50);
 			} else {
 				masterLayout.AddChildToLayout(nameEmailStack,10, 42);
 				masterLayout.AddChildToLayout(statusEntry, 10, 52);
+				//masterLayout.AddChildToLayout (statusLabel, 10, 52);
 			}
 
 			Content = masterLayout;

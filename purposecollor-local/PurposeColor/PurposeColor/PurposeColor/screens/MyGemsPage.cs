@@ -520,13 +520,20 @@ namespace PurposeColor
 										listToDownload.Add(Constants.SERVICE_BASE_URL+ mediaItem.gem_media);
 										string fileName = System.IO.Path.GetFileName(mediaItem.gem_media);
 										mediaItem.gem_media = App.DownloadsPath + fileName;
+										mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type, Url = mediaItem.gem_media });
+									}
+									else if( mediaItem.media_type == "mp4" )
+									{
+										mediaItem.gem_media = Constants.SERVICE_BASE_URL + mediaItem.gem_media ;
+										mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.video_thumb, ID = item.gem_id, MediaType = mediaItem.media_type, Url = mediaItem.gem_media });
 									}
 									else
 									{
 										mediaItem.gem_media = Constants.SERVICE_BASE_URL + mediaItem.gem_media ;
+										mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type, Url = mediaItem.gem_media });
 									}
 
-									mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type });
+									//mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type });
 								}
 
 								if (listToDownload != null && listToDownload.Count > 0) {

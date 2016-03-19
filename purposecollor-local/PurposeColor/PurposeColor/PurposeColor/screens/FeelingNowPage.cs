@@ -71,7 +71,7 @@ namespace PurposeColor
 			currentUser = App.Settings.GetUser ();
 			AddEventsSituationsOrThoughts.feelingsPage = this;
 
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
 			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Emotional Awareness");
 			subTitleBar.NextButtonTapRecognizer.Tapped += OnNextButtonTapRecognizerTapped;

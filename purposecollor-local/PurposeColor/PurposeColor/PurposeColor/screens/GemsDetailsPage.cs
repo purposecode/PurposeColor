@@ -115,8 +115,8 @@ namespace PurposeColor
 
 			favoriteButton = new Image();
 			favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
-            favoriteButton.WidthRequest = Device.OnPlatform(15, 20, 15);
-            favoriteButton.HeightRequest = Device.OnPlatform(15, 20, 15);
+            favoriteButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+            favoriteButton.HeightRequest = Device.OnPlatform(15, 15, 15);
 			favoriteButton.VerticalOptions = LayoutOptions.Center;
             favoriteButtonTap = new TapGestureRecognizer();
             favoriteButtonTap.Tapped += FavoriteButtonTapped;

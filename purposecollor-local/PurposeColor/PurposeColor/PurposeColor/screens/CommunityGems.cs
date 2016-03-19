@@ -325,10 +325,12 @@ namespace PurposeColor
 
 					StackLayout toolsLayout = new StackLayout();
 					toolsLayout.BackgroundColor = Color.White;
-					toolsLayout.Spacing = 10;
+					toolsLayout.Spacing = 20;
 					toolsLayout.Orientation = StackOrientation.Horizontal;
-					toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
-					toolsLayout.Padding = new Thickness(10, 10, 10, 10);
+					//toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
+					toolsLayout.HeightRequest = App.screenHeight * .05;
+					toolsLayout.HorizontalOptions = LayoutOptions.Center;
+					toolsLayout.Padding = new Thickness(10, 0, 10, 0);
 
 					likeButtonTap = new TapGestureRecognizer();
 					Image likeButton = new Image();
@@ -360,9 +362,11 @@ namespace PurposeColor
 						FontSize = Device.OnPlatform(12, 12, 15)
 					};
 
-					toolsLayout.Children.Add(likeCount);
-					toolsLayout.Children.Add(likeButton);
-					toolsLayout.Children.Add(likeLabel);
+					toolsLayout.Children.Add( new StackLayout{Children = {likeCount, likeButton, likeLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+
+//					toolsLayout.Children.Add(likeCount);
+//					toolsLayout.Children.Add(likeButton);
+//					toolsLayout.Children.Add(likeLabel);
 
 					likeButtonTap.Tapped += async (object tapSender, EventArgs eTap) => 
 					{
@@ -444,8 +448,10 @@ namespace PurposeColor
 					shareButtonTap.Tapped += OnShareButtonTapped;
 					shareButton.GestureRecognizers.Add(shareButtonTap);
 					shareLabel.GestureRecognizers.Add(shareButtonTap);
-					toolsLayout.Children.Add(shareButton);
-					toolsLayout.Children.Add(shareLabel);
+					toolsLayout.Children.Add( new StackLayout{Children = {shareButton, shareLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+
+//					toolsLayout.Children.Add(shareButton);
+//					toolsLayout.Children.Add(shareLabel);
 
 
 
@@ -477,8 +483,11 @@ namespace PurposeColor
 					//commentButton.GestureRecognizers.Add(commentButtonTap);
 					commentsLabel.GestureRecognizers.Add(commentButtonTap);
 
-					toolsLayout.Children.Add(commentButton);
-					toolsLayout.Children.Add(commentsLabel);
+
+					toolsLayout.Children.Add( new StackLayout{Children = {commentButton, commentsLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+//
+//					toolsLayout.Children.Add(commentButton);
+//					toolsLayout.Children.Add(commentsLabel);
 
 
 					#endregion

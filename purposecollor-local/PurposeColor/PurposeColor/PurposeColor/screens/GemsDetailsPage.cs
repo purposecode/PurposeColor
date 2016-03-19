@@ -196,7 +196,7 @@ namespace PurposeColor
             title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
 			description = new Label ();
-			description.WidthRequest = App.screenWidth * .80;
+			description.WidthRequest = App.screenWidth * .75;
 			description.Text = model.description;
 			description.TextColor = Color.Black;
             description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
@@ -215,8 +215,8 @@ namespace PurposeColor
 			editMenuGesture.Tapped += GemMenuButton_Clicked;
 			menuButton.GestureRecognizers.Add(editMenuGesture);
 
-			masterStack.AddChildToLayout(pageTitle, 1, Device.OnPlatform(0,1,1));
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(77, 90, 79), Device.OnPlatform(0,1,1));
+			masterStack.AddChildToLayout(pageTitle, 2, Device.OnPlatform(0,1,1));
+			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(87, 90, 99), Device.OnPlatform(0,1,1));
 			//masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
 			#endregion
 
@@ -229,7 +229,7 @@ namespace PurposeColor
 				WidthRequest = App.screenWidth,// * .90,
                 ClassId= "BottomNlowerStack"
             };
-            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(3, 0, 0, 5), Children = { description } });
+            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(6, 0, 0, 5), Children = { description } });
             
             #region MEDIA LIST
 
@@ -649,7 +649,7 @@ namespace PurposeColor
             //GemMenu.HeightRequest = App.screenHeight * .40;
             GemMenu.ClassId = Constants.CUSTOMLISTMENU_VIEW_CLASS_ID;
             GemMenu.listView.ItemSelected += GemMenu_ItemSelected;
-			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(54, 63, 52), Device.OnPlatform(2, 4, 4));
+			masterStack.AddChildToLayout(GemMenu, Device.OnPlatform(64, 63, 62), Device.OnPlatform(2, 4, 4));
         }
 
         async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)

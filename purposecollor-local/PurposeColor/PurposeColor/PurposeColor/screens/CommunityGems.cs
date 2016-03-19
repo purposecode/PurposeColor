@@ -325,7 +325,7 @@ namespace PurposeColor
 
 					StackLayout toolsLayout = new StackLayout();
 					toolsLayout.BackgroundColor = Color.White;
-					toolsLayout.Spacing = 20;
+					toolsLayout.Spacing = App.screenWidth*.10;
 					toolsLayout.Orientation = StackOrientation.Horizontal;
 					//toolsLayout.WidthRequest = App.screenWidth * 95 / 100;
 					toolsLayout.HeightRequest = App.screenHeight * .05;

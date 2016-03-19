@@ -104,11 +104,9 @@ namespace PurposeColor
             #region TOOLS LAYOUT
 
             StackLayout toolsLayout = new StackLayout();
-            //toolsLayout.BackgroundColor = Color.White;
-			toolsLayout.Spacing = 20;//10;
+			toolsLayout.Spacing = App.screenWidth * .10;
             toolsLayout.Orientation = StackOrientation.Horizontal;
 			toolsLayout.HorizontalOptions = LayoutOptions.Center;
-            //toolsLayout.WidthRequest = App.screenWidth * 80 / 100;
 			toolsLayout.HeightRequest = App.screenHeight * .05;
             toolsLayout.Padding = new Thickness(10, 5, 10, 10);
             toolsLayout.ClassId = "ToolsLayout";

@@ -766,8 +766,11 @@ namespace PurposeColor
 				return;
 			}
 
+
+			CommunityGemsDetails seletedGem =  communityGems.resultarray.Find (item => item.gem_id == btn.ClassId);
+
 			List<CustomListViewItem> menuItems = new List<CustomListViewItem>();
-			menuItems.Add(new CustomListViewItem { Name = "Remove", EmotionID = "", EventID = btn.ClassId, SliderValue = 0 });
+			menuItems.Add(new CustomListViewItem { Name = "Remove", EmotionID = "", EventID = btn.ClassId, SliderValue = 0 , gemType = GetGemType( seletedGem.gem_type )});
 
 			PurposeColor.screens.CustomListMenu GemMenu = new screens.CustomListMenu(masterLayout, menuItems);
 			//GemMenu.WidthRequest = App.screenWidth * .50;
@@ -782,6 +785,20 @@ namespace PurposeColor
 
 			//masterStack.Children.Add (GemMenu, new Point (20, btn.Y));
 		}
+
+
+		private GemType GetGemType( string gemType )
+		{
+			if (gemType == "goal")
+				return GemType.Goal;
+			else if (gemType == "action")
+				return GemType.Action;
+			else if (gemType == "event")
+				return GemType.Event;
+			else
+				return GemType.Goal;
+		}
+
 
 		async void GemMenu_ItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
@@ -826,7 +843,7 @@ namespace PurposeColor
 				{
 					IProgressBar progress = DependencyService.Get<IProgressBar>();
 					progress.ShowProgressbar( "Removing Gem..." );
-					await ServiceHelper.RemoveGemFromCommunity( item.EventID, GemType.Goal );
+					await ServiceHelper.RemoveGemFromCommunity( item.EventID, item.gemType );
 
 					communityGems = null;
 					masterStack.Children.Clear();
@@ -919,17 +936,7 @@ namespace PurposeColor
 		}
 
 
-		private GemType GetGemType( string gemType )
-		{
-			if (gemType == "goal")
-				return GemType.Goal;
-			else if (gemType == "action")
-				return GemType.Action;
-			else if (gemType == "event")
-				return GemType.Event;
-			else
-				return GemType.Goal;
-		}
+
 
 
 		async void OnShareButtonTapped(object sender, EventArgs e)

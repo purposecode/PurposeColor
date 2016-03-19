@@ -111,8 +111,18 @@ namespace PushNotifictionListener
 
 			if (followMessege != null) 
 			{
-				ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
-				notify.ShowNotification ("follow", "", followMessege, true);
+				// if "accepted" is in the string then that means it is an acknowledgement. then should not proceed
+				if (followMessege.Contains ("accepted")) 
+				{
+					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+					notify.ShowNotification ("followed", "", followMessege, true);	
+				}
+				else 
+				{
+					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+					notify.ShowNotification ("follow", "", followMessege, true);
+				}
+
 			} 
 			else if (chat != null) 
 			{

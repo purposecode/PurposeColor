@@ -146,7 +146,7 @@ namespace PurposeColor.screens
 			statusLabel = new Label {
 				TextColor = Color.Black,
 				HeightRequest = Device.OnPlatform (50, 50, 75),
-				WidthRequest = App.screenWidth * 80 / 100,
+				//WidthRequest = App.screenWidth * 80 / 100,
 				HorizontalOptions = LayoutOptions.Center,
 				FontSize = App.screenDensity >= 2 ? 18 : 15,
 				XAlign = TextAlignment.Center
@@ -316,7 +316,7 @@ namespace PurposeColor.screens
 				Children = {new StackLayout{ Spacing = 2,Orientation = StackOrientation.Horizontal, HorizontalOptions = LayoutOptions.Center, 
 						Children = {userDisplayName, verifiedBadge}}, 
 						emailLabel,
-					new StackLayout{Children = {statusLabel}, Padding = 10, HorizontalOptions = LayoutOptions.Center}
+					new StackLayout{Children = {statusLabel}, Padding = 10, HorizontalOptions = LayoutOptions.Center, Orientation = StackOrientation.Vertical}
 				}
 			};
 

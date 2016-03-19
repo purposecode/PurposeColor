@@ -21,13 +21,13 @@ namespace PurposeColor.iOS
 		{
 			try 
 			{
-				
+				string textToShare = text + System.Environment.NewLine +  "shared with purpose color." + System.Environment.NewLine +  " http:\\www.purposecodes.com";
 				//progress.ShowProgressbar( "Preparing sharing options...." );
 
 				NSMutableArray sharingItems = new NSMutableArray ();
 
 
-				NSString testdata = new NSString(  text );
+				NSString testdata = new NSString(  textToShare );
 
 				NSObject[] shareArray = new NSObject[2];
 				shareArray [0] = testdata;

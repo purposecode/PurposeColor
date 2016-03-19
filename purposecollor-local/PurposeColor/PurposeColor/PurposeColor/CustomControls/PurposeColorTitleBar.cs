@@ -55,24 +55,28 @@ namespace PurposeColor.CustomControls
 
 			User curUser = App.Settings.GetUser ();
 
-            CircleImage userImg = new CircleImage
-            {
-                Aspect = Aspect.AspectFill,
-                HorizontalOptions = LayoutOptions.Center,
-				Source =  Constants.SERVICE_BASE_URL + curUser.ProfileImageUrl
-            };
+			if (curUser != null) 
+			{
+				Image userImg = new Image
+				{
+					Aspect = Aspect.AspectFill,
+					HorizontalOptions = LayoutOptions.Center,
+					Source =  Constants.SERVICE_BASE_URL + curUser.ProfileImageUrl
+				};
 
-            userImg.WidthRequest = spec.ScreenWidth * 10 / 100;
-			userImg.HeightRequest = spec.ScreenHeight * Device.OnPlatform( 6,8,8 ) / 100;
-
+				userImg.WidthRequest = 30;
+				userImg.HeightRequest = 30;
+				if (imageRequired)
+				{
+					masterLayout.AddChildToLayout(userImg, 85, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+				}
+			}
+   
 
             masterLayout.AddChildToLayout(logo, 5, 5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest); 
             masterLayout.AddChildToLayout(menuButton, 2, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
-            if (imageRequired)
-            {
-                masterLayout.AddChildToLayout(userImg, 80, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            }
+
 
             Content = masterLayout;
 

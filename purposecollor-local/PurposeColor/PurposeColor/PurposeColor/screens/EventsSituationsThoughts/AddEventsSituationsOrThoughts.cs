@@ -76,7 +76,8 @@ namespace PurposeColor.screens
         int Seconds = 0;
         string currentGemId;
         GemType currentGemType;
-		public FeelingNowPage feelingsPage{ get; set; }
+		public static FeelingNowPage feelingsPage{ get; set; }
+		public static FeelingsSecondPage feelingSecondPage{ get; set; }
         #endregion
 
         public AddEventsSituationsOrThoughts(string title, DetailsPageModel detailsPageModel = null)
@@ -1417,6 +1418,15 @@ namespace PurposeColor.screens
                                         }
                                     }
 
+
+									CustomListViewItem newEmotionItem = new CustomListViewItem();
+									newEmotionItem.EventID = App.actionsListSource.First().EventID;
+									newEmotionItem.Name = App.actionsListSource.First().Name;
+									newEmotionItem.SliderValue = App.actionsListSource.First().SliderValue;
+
+									SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+									feelingSecondPage.OnActionPickerItemSelected( this, newEmotionEvent );
+
                                     serviceResultOK = true;
                                 }
                                 catch (System.Exception)
@@ -1562,6 +1572,16 @@ namespace PurposeColor.screens
                                             App.goalsListSource.Add(goal);
                                         }
                                     }
+
+
+									CustomListViewItem newEmotionItem = new CustomListViewItem();
+									newEmotionItem.EventID = App.goalsListSource.First().EventID;
+									newEmotionItem.Name = App.goalsListSource.First().Name;
+									newEmotionItem.SliderValue = App.goalsListSource.First().SliderValue;
+
+									SelectedItemChangedEventArgs newGoalsEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+									feelingSecondPage.OnGoalsPickerItemSelected( this, newGoalsEvent );
+
                                     serviceResultOK = true;
                                 }
                                 catch (System.Exception)

@@ -113,6 +113,13 @@ namespace PurposeColor.CustomControls
             get;
             set;
         }
+
+		public FeelingsSecondPage feelingSecondPage
+		{
+			get;
+			set;
+		}
+
         int topYPos;
         double screenHeight;
         double screenWidth;
@@ -352,7 +359,8 @@ namespace PurposeColor.CustomControls
                 {
                     //Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
 					AddEventsSituationsOrThoughts addUtitlty = new AddEventsSituationsOrThoughts(pageTitle);
-					addUtitlty.feelingsPage = FeelingsPage;
+					/*addUtitlty.feelingsPage = FeelingsPage;
+					addUtitlty.feelingSecondPage = feelingSecondPage;*/
 					Navigation.PushModalAsync( addUtitlty );
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);

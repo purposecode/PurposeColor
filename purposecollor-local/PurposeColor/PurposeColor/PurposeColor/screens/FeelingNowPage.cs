@@ -69,6 +69,7 @@ namespace PurposeColor
 			screenWidth = App.screenWidth;
 			progressBar = DependencyService.Get<IProgressBar>();
 			currentUser = App.Settings.GetUser ();
+			AddEventsSituationsOrThoughts.feelingsPage = this;
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;

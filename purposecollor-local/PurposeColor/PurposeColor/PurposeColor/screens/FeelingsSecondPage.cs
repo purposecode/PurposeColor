@@ -44,6 +44,7 @@ namespace PurposeColor
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             //deviceSpec = DependencyService.Get<IDeviceSpec>();
+			AddEventsSituationsOrThoughts.feelingSecondPage = this;
             this.Appearing += FeelingsSecondPage_Appearing;
             actionPreviewListSource = new ObservableCollection<PreviewItem>();
 
@@ -426,7 +427,7 @@ namespace PurposeColor
 
         }
 
-        async void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
+        public async void OnGoalsPickerButtonClicked(object sender, System.EventArgs e)
         {
             try
             {
@@ -437,6 +438,7 @@ namespace PurposeColor
                 ePicker.WidthRequest = screenWidth;
                 ePicker.HeightRequest = screenHeight;
                 ePicker.ClassId = "ePicker";
+				ePicker.feelingSecondPage = this;
                 ePicker.listView.ItemSelected += OnGoalsPickerItemSelected;
 				masterLayout.AddLayout(ePicker, 0, 0);
                 //double yPos = 60 * screenHeight / 100;
@@ -471,13 +473,14 @@ namespace PurposeColor
             return base.OnBackButtonPressed();
         }
 
-        void OnActionPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        public void OnActionPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
 
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				if( pickView != null )
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
                 actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
@@ -504,7 +507,7 @@ namespace PurposeColor
             }
         }
 
-        async void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+        public async void OnGoalsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             try
             {
@@ -513,6 +516,7 @@ namespace PurposeColor
                 goalsAndDreamsPickerButton.Text = item.Name;
                 goalsAndDreamsPickerButton.TextColor = Color.Black;
                 View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				if( pickView != null )
                 masterLayout.Children.Remove(pickView);
                 pickView = null;
                 actionPickerButton.IsVisible = true;

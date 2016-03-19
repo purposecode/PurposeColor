@@ -512,27 +512,37 @@ namespace PurposeColor.screens
 						#region OXYPLOT VIEW
 
 						plotView = new OxyPlotView();
-						plotView.HeightRequest = App.screenWidth * .80;//.60;//300;
-						plotView.WidthRequest = App.screenWidth * .80; //.60; // H & W same to keep it square. //300;
+						plotView.HeightRequest = App.screenWidth * .80;
+						plotView.WidthRequest = App.screenWidth * .80; // H & W same to keep it square.
 						plotView.BackgroundColor = Color.Transparent;
 
 						graphModel = new CustomeGraphModel(emotionList);
 						plotView.Model = graphModel.plotModel;
 						plotView.VerticalOptions = LayoutOptions.Center;
 						plotView.HorizontalOptions = LayoutOptions.Center;
-
 						graphAndEmotionListContainer.Children.Add(plotView);
-
-
-
 
 						#endregion
 					}
 
-					region1WarmLabel.Text =  "Warm (" + getEmotionsResult.warm_percent+ "%)";
-					region2AssertiveLabel.Text = "Assertive (" + getEmotionsResult.assertive_percent + "%)";
-					region3PatientLabel.Text = "Patient (" + getEmotionsResult.patient_percent + "%)";
-					region4DetailedLabel.Text = "Detailed (" + getEmotionsResult.detailed_percent + "%)";
+					int warmCount = 0;
+					int assertiveCount = 0;
+					int patientCount = 0;
+					int detailedCount = 0;
+						
+
+					if(emotionList != null && emotionList.Count > 0)
+					{
+						warmCount = emotionList.Where (ee => ee.emotion_value == "-2").ToList ().Count;
+						assertiveCount = emotionList.Where (ee => ee.emotion_value == "-1").ToList ().Count;
+						patientCount = emotionList.Where (ee => ee.emotion_value == "1").ToList ().Count;
+						detailedCount = emotionList.Where (ee => ee.emotion_value == "2").ToList ().Count;
+					}
+
+					region1WarmLabel.Text =  "Warm (" + warmCount + ") "+getEmotionsResult.warm_percent + "%";
+					region2AssertiveLabel.Text = "Assertive (" + assertiveCount + ") " +getEmotionsResult.assertive_percent + "%";
+					region3PatientLabel.Text = "Patient (" + patientCount + ") " +getEmotionsResult.patient_percent + "%";
+					region4DetailedLabel.Text = "Detailed (" + detailedCount + ") " + getEmotionsResult.detailed_percent + "%";
 
 					graphAndEmotionListContainer.Children.Add(BottomStackContainer);
 					StackLayout emptySpacingAtBottom = new StackLayout

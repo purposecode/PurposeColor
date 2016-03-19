@@ -69,10 +69,11 @@ namespace PurposeColor.Droid.Dependency
 
         void ShowChooser(PurposeColor.Constants.MediaType type, string filename, string text)
         {
+			string textToShare = text + System.Environment.NewLine +  "shared with purpose color." + System.Environment.NewLine +  " http:\\www.purposecodes.com";
             progress.HideProgressbar();
             Intent shareIntent = new Intent();
             shareIntent.SetAction(Intent.ActionSend);
-            shareIntent.PutExtra(Intent.ExtraText, text);
+			shareIntent.PutExtra(Intent.ExtraText, textToShare);
 
             // shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse("android.resource://sharetowhtsapp.sharetowhtsapp/" + Resource.Drawable.Icon));
 

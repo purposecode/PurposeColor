@@ -22,7 +22,7 @@ namespace PurposeColor.screens
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             deviceSpec = DependencyService.Get<IDeviceSpec>();
 
-            PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			PurposeColorTitleBar mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += imageAreaTapGestureRecognizer_Tapped;
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "Create Reminder", false, true);
             subTitleBar.BackButtonTapRecognizer.Tapped += BackButtonTapRecognizer_Tapped;

@@ -58,7 +58,7 @@ namespace PurposeColor.screens
 
 			this.Appearing += OnAppearing;
 			this.Disappearing += GemsMainPage_Disappearing;
-			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Goal Enabling Materials", Color.White, "", false);
+			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Goal Enabling Materials", Color.White, "", true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			masterScroll = new ScrollView();
 			masterScroll.WidthRequest = App.screenWidth;

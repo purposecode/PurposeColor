@@ -104,7 +104,7 @@ namespace PurposeColor.screens
             CustomLayout masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(230, 255, 254);
 
-            PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
+			PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back", true);
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Emotional Awareness");
 
             gemsSource = new List<Gems>();

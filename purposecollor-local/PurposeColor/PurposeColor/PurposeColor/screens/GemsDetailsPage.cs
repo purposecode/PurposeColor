@@ -69,7 +69,7 @@ namespace PurposeColor
 			if (string.IsNullOrEmpty (model.pageTitleVal)) {
 				model.pageTitleVal = "GEM Details";
 			}
-            mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, model.pageTitleVal, false);
             subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>

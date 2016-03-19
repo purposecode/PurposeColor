@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
+using PurposeColor.Model;
 
 namespace PurposeColor.CustomControls
 {
@@ -52,16 +53,30 @@ namespace PurposeColor.CustomControls
             logo.HeightRequest = spec.ScreenHeight * 8 / 100;
 
         
+			User curUser = App.Settings.GetUser ();
+
+			if (curUser != null) 
+			{
+				Image userImg = new Image
+				{
+					Aspect = Aspect.AspectFill,
+					HorizontalOptions = LayoutOptions.Center,
+					Source =  Constants.SERVICE_BASE_URL + curUser.ProfileImageUrl
+				};
+
+				userImg.WidthRequest = 30;
+				userImg.HeightRequest = 30;
+				if (imageRequired)
+				{
+					masterLayout.AddChildToLayout(userImg, 88, Device.OnPlatform( 17, 25, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+				}
+			}
 
 
             masterLayout.AddChildToLayout(logo, 10, 5, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(title, 22, 30, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
             masterLayout.AddChildToLayout(menuButton, 2, 25, (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 
-            if (imageRequired)
-            {
-                // masterLayout.AddChildToLayout(userImg, 80, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
-            }
 
             Content = masterLayout;
 

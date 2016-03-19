@@ -35,7 +35,7 @@ namespace PurposeColor.screens
             masterLayout = new CustomLayout();
             //IDeviceSpec deviceSpec = DependencyService.Get<IDeviceSpec>();
 
-            PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
+			PurposeColorTitleBar titleBar = new PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back", true);
 
             canvas = new StackLayout();
             canvas.WidthRequest = screenWidth * 90 / 100;

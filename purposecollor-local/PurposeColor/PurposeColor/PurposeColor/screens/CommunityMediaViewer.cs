@@ -35,7 +35,7 @@ namespace PurposeColor
 			masterScroll.BackgroundColor = Color.Black;//Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar> ();
 
-			mainTitleBar = new PurposeColorTitleBar (Color.FromRgb (8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar (Color.FromRgb (8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			subTitleBar = new PurposeColorSubTitleBar (Constants.SUB_TITLE_BG_COLOR, "Gem Media Viewer", false);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => {
 				try {

@@ -33,7 +33,7 @@ namespace PurposeColor
 		{
 			NavigationPage.SetHasNavigationBar(this, false);
 			progressBar = DependencyService.Get< IProgressBar > ();
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
 			{
 				App.masterPage.IsPresented = true;

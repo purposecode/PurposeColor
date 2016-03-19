@@ -68,7 +68,7 @@ namespace PurposeColor.CustomControls
 				userImg.HeightRequest = 30;
 				if (imageRequired)
 				{
-					masterLayout.AddChildToLayout(userImg, 85, Device.OnPlatform( 17, 15, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+					masterLayout.AddChildToLayout(userImg, 88, Device.OnPlatform( 17, 25, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 				}
 			}
    

@@ -58,7 +58,7 @@ namespace PurposeColor
 			App.Settings.DeleteCommunityGems ();
 			App.Settings.SaveCommunityGemsDetails (gemsObject);
 
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, "My Gems", false);
 

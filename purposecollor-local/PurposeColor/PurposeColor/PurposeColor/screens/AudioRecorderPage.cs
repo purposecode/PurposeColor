@@ -19,7 +19,7 @@ namespace PurposeColor
             PurposeColorSubTitleBar subTitleBar = new PurposeColorSubTitleBar(Color.FromRgb(12, 113, 210), "Audio recorder", false);
             masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(2, 4, 4));
 
-            PurposeColor.CustomControls.PurposeColorTitleBar titleBar = new PurposeColor.CustomControls.PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back");
+			PurposeColor.CustomControls.PurposeColorTitleBar titleBar = new PurposeColor.CustomControls.PurposeColorTitleBar(Color.FromRgb(8, 137, 216), "Purpose Color", Color.Black, "back", true);
             masterLayout.AddChildToLayout(titleBar, 0, 0);
 
             Button recordBtn = new Button

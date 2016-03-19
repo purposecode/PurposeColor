@@ -49,7 +49,7 @@ namespace PurposeColor
 
 
 			progressBar = DependencyService.Get< IProgressBar > ();
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), chatTouser, Color.Black, userImageUrl, false);
+			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), chatTouser, Color.Black, userImageUrl, true);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
 			{
 				App.masterPage.IsPresented = true;

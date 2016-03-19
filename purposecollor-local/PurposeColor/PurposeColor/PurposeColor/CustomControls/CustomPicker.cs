@@ -12,12 +12,14 @@ using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
 using PurposeColor.Model;
+using System.Threading.Tasks;
 
 namespace PurposeColor.CustomControls
 {
 
     public class CustomListViewItem
     {
+		public GemType gemType { get; set; }
         string name;
 
         public string Name
@@ -320,11 +322,24 @@ namespace PurposeColor.CustomControls
 
                         await FeelingsPage.DownloadAllEmotions();
 
+
+
+
                         View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                         pageContainedLayout.Children.Remove(pickView);
                         pickView = null;
-
                         progressBar.HideProgressbar();
+
+
+						//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+
+						CustomListViewItem newEmotionItem = new CustomListViewItem();
+						newEmotionItem.EmotionID = App.emotionsListSource.First().EmotionID;
+						newEmotionItem.Name = App.emotionsListSource.First().Name;
+						newEmotionItem.SliderValue = App.emotionsListSource.First().SliderValue;
+
+						SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+						FeelingsPage.OnEmotionalPickerItemSelected( this, newEmotionEvent );
 
                     };
                     addEmotionButtonLayout.GestureRecognizers.Add(addEmotionButtonLayoutTapGestureRecognizer);
@@ -336,7 +351,9 @@ namespace PurposeColor.CustomControls
                 else
                 {
                     //Navigation.PushAsync(new AddEventsSituationsOrThoughts(pageTitle));
-                    Navigation.PushModalAsync(new AddEventsSituationsOrThoughts(pageTitle));
+					AddEventsSituationsOrThoughts addUtitlty = new AddEventsSituationsOrThoughts(pageTitle);
+					addUtitlty.feelingsPage = FeelingsPage;
+					Navigation.PushModalAsync( addUtitlty );
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);
                     pickView = null;

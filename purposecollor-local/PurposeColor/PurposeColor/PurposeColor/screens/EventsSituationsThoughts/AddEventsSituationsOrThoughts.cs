@@ -76,7 +76,7 @@ namespace PurposeColor.screens
         int Seconds = 0;
         string currentGemId;
         GemType currentGemType;
-
+		public FeelingNowPage feelingsPage{ get; set; }
         #endregion
 
         public AddEventsSituationsOrThoughts(string title, DetailsPageModel detailsPageModel = null)
@@ -1480,6 +1480,15 @@ namespace PurposeColor.screens
                             {
                                 await FeelingNowPage.DownloadAllEvents();
                                 serviceResultOK = true;
+
+
+								CustomListViewItem newEmotionItem = new CustomListViewItem();
+								newEmotionItem.EventID = App.eventsListSource.First().EventID;
+								newEmotionItem.Name = App.eventsListSource.First().Name;
+								newEmotionItem.SliderValue = App.eventsListSource.First().SliderValue;
+
+								SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+								feelingsPage.OnEventPickerItemSelected( this, newEmotionEvent );
 
 //								if(!isUpdatePage)
 //								{

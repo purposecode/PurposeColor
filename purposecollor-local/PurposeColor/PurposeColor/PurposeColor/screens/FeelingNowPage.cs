@@ -562,7 +562,7 @@ namespace PurposeColor
 			App.masterPage.IsPresented = !App.masterPage.IsPresented;
 		}
 
-		async void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
+		public async void OnEmotionalPickerButtonClicked(object sender, System.EventArgs e)
 		{
 			if (slider.CurrentValue == 0) {
 				progressBar.ShowToast("Slider is in neutral.");
@@ -610,6 +610,7 @@ namespace PurposeColor
 				await eventPickerButton.ScaleTo(1, 100, Easing.Linear);
 
 				CustomPicker ePicker = new CustomPicker(masterLayout, App.GetEventsList(), 45, Constants.ADD_EVENTS, true, true);
+				ePicker.FeelingsPage = this;
 				ePicker.WidthRequest = screenWidth;
 				ePicker.HeightRequest = screenHeight;
 				ePicker.ClassId = "ePicker";
@@ -641,6 +642,7 @@ namespace PurposeColor
 				emotionalPickerButton.TextColor = Color.Black;
 				App.SelectedEmotion = item.Name;
 				View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				if( pickView != null )
 				masterLayout.Children.Remove(pickView);
 				pickView = null;
 				GC.Collect();
@@ -717,7 +719,7 @@ namespace PurposeColor
 			//            }
 		}
 
-		void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
+		public void OnEventPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
 		{
 			try
 			{
@@ -733,6 +735,7 @@ namespace PurposeColor
 				eventPickerButton.TextColor = Color.Black;
 				selectedEventItem = item;
 				View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				if( pickView != null )
 				masterLayout.Children.Remove(pickView);
 				pickView = null;
 				GC.Collect();

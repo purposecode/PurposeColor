@@ -64,43 +64,43 @@ namespace PurposeColor
 			StackLayout horizmgConatiner = new StackLayout ();
 			horizmgConatiner.Orientation = StackOrientation.Horizontal;
 
-
-			CustomImageButton nextImg = new CustomImageButton ();
-			nextImg.ImageName = "next.png";
-			nextImg.WidthRequest = 40;
-			nextImg.HeightRequest = 40;
-				
-			nextImg.Clicked += async (object sender, EventArgs e) => 
-			{
-
-				double curX = imgScrollView.ScrollX;
-				double imgWidth = App.screenWidth * 90 / 100;
-
-				if( Device.OS == TargetPlatform.iOS )
-				{
-					if( curX + imgWidth + 15 < imgScrollView.ContentSize.Width )
-						await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
-				}
-				else
-				{
-					await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
-				}
-					
-			};
-
-
-			CustomImageButton prevImg = new CustomImageButton ();
-			prevImg.ImageName = "prev.png";
-			prevImg.WidthRequest = 40;
-			prevImg.HeightRequest = 40;
-			prevImg.Clicked += async (object sender, EventArgs e) => 
-			{
-				double curX = imgScrollView.ScrollX;
-				double imgWidth = App.screenWidth * 90 / 100;
-				if( curX > 0 )
-				await imgScrollView.ScrollToAsync( curX - App.screenWidth , 0, true );
-			};
-
+//
+//			CustomImageButton nextImg = new CustomImageButton ();
+//			nextImg.ImageName = "next.png";
+//			nextImg.WidthRequest = 40;
+//			nextImg.HeightRequest = 40;
+//				
+//			nextImg.Clicked += async (object sender, EventArgs e) => 
+//			{
+//
+//				double curX = imgScrollView.ScrollX;
+//				double imgWidth = App.screenWidth * 90 / 100;
+//
+//				if( Device.OS == TargetPlatform.iOS )
+//				{
+//					if( curX + imgWidth + 15 < imgScrollView.ContentSize.Width )
+//						await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
+//				}
+//				else
+//				{
+//					await imgScrollView.ScrollToAsync( curX + imgWidth , 0, true );
+//				}
+//					
+//			};
+//
+//
+//			CustomImageButton prevImg = new CustomImageButton ();
+//			prevImg.ImageName = "prev.png";
+//			prevImg.WidthRequest = 40;
+//			prevImg.HeightRequest = 40;
+//			prevImg.Clicked += async (object sender, EventArgs e) => 
+//			{
+//				double curX = imgScrollView.ScrollX;
+//				double imgWidth = App.screenWidth * 90 / 100;
+//				if( curX > 0 )
+//				await imgScrollView.ScrollToAsync( curX - App.screenWidth , 0, true );
+//			};
+//
 			#region MEDIA LIST
 
 			if (mediaList != null) 
@@ -214,8 +214,8 @@ namespace PurposeColor
 			masterLayout.AddChildToLayout (mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout (subTitleBar, 0, Device.OnPlatform (9, 10, 10));
 			masterLayout.AddChildToLayout (masterScroll, 5, 18);
-			masterLayout.AddChildToLayout ( nextImg, 85, 50 );
-			masterLayout.AddChildToLayout ( prevImg, 0, 50 );
+//			masterLayout.AddChildToLayout ( nextImg, 85, 50 );
+//			masterLayout.AddChildToLayout ( prevImg, 0, 50 );
 			Content = masterLayout;
 		}
 

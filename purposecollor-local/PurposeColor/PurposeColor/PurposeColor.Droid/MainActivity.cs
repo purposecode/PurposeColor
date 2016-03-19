@@ -38,7 +38,8 @@ namespace PurposeColor.Droid
 
 				// clearing temp storage of app.
 				try {
-					DateTime threadStartTime = DateTime.UtcNow.AddDays(-2); // DateTime.UtcNow.AddMinutes(-60); 
+					DateTime fileLastUse = DateTime.UtcNow.AddDays(-2); // DateTime.UtcNow.AddMinutes(-60); 
+					DateTime fileCreateDate = DateTime.UtcNow.AddDays(-7); // DateTime.UtcNow.AddMinutes(-60); 
 					System.IO.DirectoryInfo tempFileDir = new System.IO.DirectoryInfo(testFile.AbsolutePath);
 
 					System.IO.FileInfo[] tempFiles = tempFileDir.GetFiles();
@@ -46,7 +47,7 @@ namespace PurposeColor.Droid
 					{
 						try
 						{
-							if (tempFile.LastAccessTime < threadStartTime)
+							if (tempFile.LastAccessTime < fileLastUse || tempFile.CreationTime < fileCreateDate)
 							{
 								System.IO.File.Delete(tempFile.FullName);
 							}

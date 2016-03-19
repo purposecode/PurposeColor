@@ -188,7 +188,7 @@ namespace PurposeColor.screens
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new FeelingNowPage());
                 }
-                else if ("Goals Enabling Materials" == selItem.Name)
+                else if ("Goal Enabling Materials" == selItem.Name)
                 {
                     App.masterPage.IsPresented = false;
                     App.masterPage.Detail = new NavigationPage(new GemsMainPage());

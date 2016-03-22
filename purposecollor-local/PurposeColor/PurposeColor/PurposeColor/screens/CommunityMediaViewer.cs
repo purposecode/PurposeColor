@@ -19,13 +19,12 @@ namespace PurposeColor
 	public class CommunityMediaViewer : ContentPage, IDisposable
 	{
 		CustomLayout masterLayout = null;
-		IProgressBar progressBar;
-		CustomLayout masterStack;
-		ScrollView masterScroll;
-		PurposeColorTitleBar mainTitleBar;
-		PurposeColorSubTitleBar subTitleBar;
+		IProgressBar progressBar = null;
+		CustomLayout masterStack = null;
+		ScrollView masterScroll = null;
+		PurposeColorTitleBar mainTitleBar = null;
+		PurposeColorSubTitleBar subTitleBar = null;
 
-		//public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
 		public CommunityMediaViewer ( List<PurposeColor.Constants.MediaDetails> mediaList )
 		{
 			NavigationPage.SetHasNavigationBar (this, false);
@@ -54,7 +53,7 @@ namespace PurposeColor
 				BackgroundColor = Color.Transparent,
 				Spacing = 1,
 				Padding = new Thickness (0, 5, 0, 5),
-				WidthRequest = App.screenWidth * .90
+				WidthRequest = App.screenWidth,
 			};
 
 
@@ -105,8 +104,6 @@ namespace PurposeColor
 
 			if (mediaList != null) 
 			{
-
-
 				foreach (var item in mediaList) 
 				{
 					TapGestureRecognizer videoTap = new TapGestureRecognizer ();
@@ -117,8 +114,8 @@ namespace PurposeColor
 					string source = (isValidUrl) ? item.Url : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
 					string fileExtenstion = Path.GetExtension (source);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-					img.WidthRequest = App.screenWidth * 90 / 100;
-					img.HeightRequest = App.screenWidth * 80 / 100;
+					img.WidthRequest = App.screenWidth;
+					img.HeightRequest = App.screenWidth;
 					img.Aspect = Aspect.AspectFill;
 					img.ClassId = null;
 					if (item != null && item.MediaType == "mp4") 
@@ -185,8 +182,6 @@ namespace PurposeColor
 					{
 						horizmgConatiner.Children.Add(img);
 					}
-				//	horizmgConatiner.Children.Add (img);
-
 				}
 				imgScrollView.Content = horizmgConatiner;
 				bottomAndLowerControllStack.Children.Add (imgScrollView);
@@ -194,28 +189,18 @@ namespace PurposeColor
 			}
 
 			#endregion
-			masterStack.AddChildToLayout (bottomAndLowerControllStack, 1, 12);
-
-				
-
+			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 12);
 			masterScroll.HeightRequest = App.screenHeight - 20;
-			masterScroll.WidthRequest = App.screenWidth * 90 / 100;
+			masterScroll.WidthRequest = App.screenWidth;// * 90 / 100;
 
 			StackLayout masterStackLayout = new StackLayout ();
 			masterStackLayout.BackgroundColor = Color.Black;
 			masterStackLayout.Orientation = StackOrientation.Vertical;
 			masterStackLayout.Children.Add (masterStack);
-
-
-
 			masterScroll.Content = masterStackLayout;
-
-	
 			masterLayout.AddChildToLayout (mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout (subTitleBar, 0, Device.OnPlatform (9, 10, 10));
-			masterLayout.AddChildToLayout (masterScroll, 5, 18);
-//			masterLayout.AddChildToLayout ( nextImg, 85, 50 );
-//			masterLayout.AddChildToLayout ( prevImg, 0, 50 );
+			masterLayout.AddChildToLayout (masterScroll, 0, 18);
 			Content = masterLayout;
 		}
 

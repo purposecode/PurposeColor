@@ -79,7 +79,7 @@ namespace PurposeColor.screens
 				VerticalOptions = LayoutOptions.Center,
 				TextColor = Color.White,
 				WidthRequest = App.screenWidth * .5,
-				XAlign = TextAlignment.End
+				XAlign = TextAlignment.Center
 			};
 
 			emotionsButtion = new StackLayout{
@@ -88,7 +88,8 @@ namespace PurposeColor.screens
 				},
 				BackgroundColor = Color.FromRgb(8, 159, 245),
 				Orientation = StackOrientation.Horizontal,
-				WidthRequest = App.screenWidth * .5
+				WidthRequest = App.screenWidth * .5,
+				//HorizontalOptions = LayoutOptions.Center
 			};
 
 			emotionListingBtnTapgesture = new TapGestureRecognizer ();
@@ -99,7 +100,7 @@ namespace PurposeColor.screens
 				Text = "  GOALS & DREAMS", 
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 				FontSize = Device.OnPlatform (14, 18, 14),
-				HorizontalOptions = LayoutOptions.Start,
+				HorizontalOptions = LayoutOptions.Center,
 				VerticalOptions = LayoutOptions.Center,
 				TextColor = Color.Gray
 			};
@@ -597,7 +598,7 @@ namespace PurposeColor.screens
 					};
 					StackLayout titleHolder = new StackLayout{
 						Children={groupTitleLabel},
-						BackgroundColor =  Color.FromRgb(111, 199, 251),
+						BackgroundColor = Color.Navy, //Color.FromRgb(59,164,222),//Color.FromRgb(88,168,6), // Color.FromRgb(111, 199, 251),
 						Padding = 0,
 						Orientation = StackOrientation.Horizontal,
 						WidthRequest= App.screenWidth

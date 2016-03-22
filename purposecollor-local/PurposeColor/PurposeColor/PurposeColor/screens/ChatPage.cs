@@ -167,7 +167,8 @@ namespace PurposeColor
 				HeightRequest = 50,
 				HorizontalOptions = LayoutOptions.Center
 			};
-			if (Device.OS == TargetPlatform.iOS) 
+			userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
+			/*if (Device.OS == TargetPlatform.iOS) 
 			{
 				userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
 			}
@@ -175,7 +176,7 @@ namespace PurposeColor
 			{
 				userImage.SetBinding ( Image.SourceProperty, "profileImgUrl" );				
 				//userImage.SetBinding (Image.SourceProperty, "profilImageWebUrl");
-			}
+			}*/
 			userImage.TranslationX = 20;
 			/*Image userImage = new Image ();
 			userImage.WidthRequest = App.screenWidth * 10 / 100;

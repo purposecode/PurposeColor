@@ -598,7 +598,7 @@ namespace PurposeColor.screens
 					};
 					StackLayout titleHolder = new StackLayout{
 						Children={groupTitleLabel},
-						BackgroundColor = Color.Navy, //Color.FromRgb(59,164,222),//Color.FromRgb(88,168,6), // Color.FromRgb(111, 199, 251),
+						BackgroundColor = Color.FromRgb(111, 199, 251), //Color.FromRgb(59,164,222),//Color.FromRgb(88,168,6), // Color.FromRgb(111, 199, 251),
 						Padding = 0,
 						Orientation = StackOrientation.Horizontal,
 						WidthRequest= App.screenWidth

@@ -50,7 +50,13 @@ namespace PurposeColor.screens
 
             if (allComments != null)
             {
-                if (allComments.Count < 3)
+				if (allComments == null || allComments.Count < 1)
+				{ // for popup height adjustment
+					topSpacing = 95;
+					bottomSpacing = 30;
+
+				}
+				else if (allComments.Count < 3)
                 { // for popup height adjustment
                     topSpacing = 95;
                     bottomSpacing = 45;
@@ -166,17 +172,22 @@ namespace PurposeColor.screens
             {
                 listContainer.Children.Add(new StackLayout
                 {
+						BackgroundColor  = Color.FromRgb(220, 220, 220),
                     Padding = 10,
                     HeightRequest = 30,
-                    BackgroundColor = Color.White,
-                    WidthRequest = 100,
+                    //BackgroundColor = Color.White,
+                    //WidthRequest = 100,
                     ClassId = "NoCommentContainer",
-                    Children = { new Label { Text = "Add your first comment..", 
-							TextColor = Color.Gray,
+                    Children = { new Label { Text = "No comments yet..",//Add your first comment..", 
+								TextColor = Color.Black,
+								BackgroundColor = Color.Transparent,
+							FontSize = Device.OnPlatform(16, 16, 20),
 							FontFamily = Constants.HELVERTICA_NEUE_LT_STD
 						}
 					}
+							
                 });
+				listContainer.BackgroundColor  = Color.FromRgb(220, 220, 220);//Constants.PAGE_BG_COLOR_LIGHT_GRAY;
 
             }
             else
@@ -195,12 +206,11 @@ namespace PurposeColor.screens
             {
                 Placeholder = "Add new comment",
                 HeightRequest = Device.OnPlatform(50, 50, 72),
-                BackgroundColor = Color.White,
+				BackgroundColor = Color.White,
                 WidthRequest = App.screenWidth * .80,
                 HorizontalOptions = LayoutOptions.Start,
                 Text = Device.OnPlatform(string.Empty, string.Empty, "Add new Comment.."),
 				TextColor  = Color.Black
-
             };
 
 			newCommentEntry.Focused += NewCommentEntry_Focused;
@@ -245,6 +255,7 @@ namespace PurposeColor.screens
                 BackgroundColor = Color.White,
                 WidthRequest = App.screenWidth * .96, // should be same width as popup title bar.
                 Orientation = StackOrientation.Vertical
+					
             };
 
 			masterLayout.AddChildToLayout(commentsAndInputs, 2, popupHeightValue - Device.OnPlatform(1, 1, 1));
@@ -400,7 +411,7 @@ namespace PurposeColor.screens
                     // add the new comment to the comments list view.
                     try
                     {
-
+						listContainer.BackgroundColor = Color.White;
                         //add comment to view
                         Comment newComment = new Comment
                         {

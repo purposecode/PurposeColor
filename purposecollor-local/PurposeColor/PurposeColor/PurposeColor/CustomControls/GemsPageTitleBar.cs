@@ -57,7 +57,7 @@ namespace PurposeColor.CustomControls
 
 			if (curUser != null) 
 			{
-				Image userImg = new Image
+				CircleImage userImg = new CircleImage
 				{
 					Aspect = Aspect.AspectFill,
 					HorizontalOptions = LayoutOptions.Center,

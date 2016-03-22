@@ -39,7 +39,7 @@ namespace PurposeColor.screens
 
 
             this.Appearing += OnAppearing;
-			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Add Supporting Emotions", Color.White, "", true);
+			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Goals & Dreams", Color.White, "", true);
             mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 
 

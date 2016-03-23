@@ -1786,6 +1786,11 @@ namespace PurposeColor.screens
                 }
                 else if (mediaType == Constants.MediaType.Video)
                 {
+					/*string videoThumpName = Path.GetFileNameWithoutExtension( path ) + ".jpg";
+					string downloadFilePath = Path.Combine(App.DownloadsPath, videoThumpName);
+
+					App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform( downloadFilePath, downloadFilePath, "//Assets//video.png") });*/
+
                     App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
                 }
                 else

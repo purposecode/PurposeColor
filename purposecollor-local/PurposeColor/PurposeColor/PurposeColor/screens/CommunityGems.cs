@@ -584,7 +584,7 @@ namespace PurposeColor
 
 					if( (item.user_id != currentUser.UserId.ToString() ) && item.can_follow == "1")
 					{
-						masterStack.AddChildToLayout(followButton, 75, 3 );
+						masterStack.AddChildToLayout(followButton, 80, 3 );
 					}
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();

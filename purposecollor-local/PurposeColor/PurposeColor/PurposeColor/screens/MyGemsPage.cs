@@ -87,7 +87,7 @@ namespace PurposeColor
 
 			masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout(masterScroll, 5, 18);
+			masterLayout.AddChildToLayout(masterScroll, -1, 18);
 
 			if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
 			{
@@ -270,6 +270,7 @@ namespace PurposeColor
 				foreach (var item in gemsObject.resultarray )
 				{
 					masterStack = new CustomLayout();
+					masterStack.WidthRequest = App.screenWidth * 102 / 100;
 					masterStack.ClassId = "masterstack" + item.gem_id;
 					masterStack.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
 
@@ -486,10 +487,10 @@ namespace PurposeColor
 					};
 					menuButton.Clicked += GemMenuButton_Clicked;
 
-					masterStack.AddChildToLayout(menuButton, 79, 1);
-					masterStack.AddChildToLayout(profileImage, 2, 1);
-					masterStack.AddChildToLayout(userName, 23, 3);
-					masterStack.AddChildToLayout(title, 23, 7);
+					masterStack.AddChildToLayout(menuButton, 89, 1);
+					masterStack.AddChildToLayout(profileImage, 4, 1);
+					masterStack.AddChildToLayout(userName, 25, 3);
+					masterStack.AddChildToLayout(title, 25, 7);
 
 					TapGestureRecognizer moreTap = new TapGestureRecognizer();
 					moreTap.Tapped += async (object senderr, EventArgs ee) =>
@@ -563,9 +564,14 @@ namespace PurposeColor
 						BackgroundColor = Color.Transparent,
 						Spacing = 1,
 						Padding = new Thickness(0, 5, 0, 5),
-						WidthRequest = App.screenWidth * .90
+						WidthRequest = App.screenWidth * 102 / 100
 					};
-					bottomAndLowerControllStack.Children.Add(new StackLayout { WidthRequest = App.screenWidth * .80, Children = { description } });
+
+					BoxView paddingBoxView = new BoxView();
+					paddingBoxView.WidthRequest = App.screenWidth * 3 / 100;
+					paddingBoxView.BackgroundColor = Color.Transparent;
+
+					bottomAndLowerControllStack.Children.Add(new StackLayout { Orientation = StackOrientation.Horizontal , WidthRequest = App.screenWidth * 102 / 100, Children = { paddingBoxView, description } });
 
 					#region MEDIA LIST
 
@@ -585,7 +591,7 @@ namespace PurposeColor
 							string fileExtenstion = Path.GetExtension(source);
 
 							bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-							img.WidthRequest = App.screenWidth * 90 / 100;
+							img.WidthRequest = App.screenWidth * 102 / 100;
 							img.HeightRequest = App.screenWidth * 80 / 100;
 							img.Aspect = Aspect.Fill;
 							img.ClassId = null;
@@ -622,13 +628,14 @@ namespace PurposeColor
 
 								Grid grid = new Grid
 								{
+									WidthRequest = App.screenWidth * 102 / 100,
 									VerticalOptions = LayoutOptions.FillAndExpand,
 									HorizontalOptions = LayoutOptions.FillAndExpand,
 									RowDefinitions = 
 									{
-										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-										new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+										new RowDefinition { Height = new GridLength( img.HeightRequest / 3 ) },
+										new RowDefinition { Height = new GridLength( img.HeightRequest / 3 ) },
+										new RowDefinition { Height = new GridLength( img.HeightRequest / 3 ) },
 
 									},
 									ColumnDefinitions = 
@@ -692,7 +699,8 @@ namespace PurposeColor
 					/// bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
 
 					masterScroll.HeightRequest = App.screenHeight - 20;
-					masterScroll.WidthRequest = App.screenWidth * 90 / 100;
+					masterScroll.WidthRequest = App.screenWidth * 102 / 100;// * 90 / 100;
+
 
 
 					masterStackLayout.Children.Add(masterStack);
@@ -787,7 +795,7 @@ namespace PurposeColor
 
 			if (sellayout != null)
 			{
-				sellayout.AddChildToLayout(GemMenu, 52, 4);
+				sellayout.AddChildToLayout(GemMenu, 57, 4);
 			}
 
 			//masterStack.Children.Add (GemMenu, new Point (20, btn.Y));

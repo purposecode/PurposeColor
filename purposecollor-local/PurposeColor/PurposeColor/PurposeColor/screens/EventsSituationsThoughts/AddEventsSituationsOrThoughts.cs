@@ -1940,7 +1940,10 @@ namespace PurposeColor.screens
         {
             try
             {
+
+				
                 var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
+
                 if (alert)
                 {
                     MediaItem media = App.MediaArray.FirstOrDefault(med => med.Name == toDelete.Name);
@@ -2229,6 +2232,7 @@ namespace PurposeColor.screens
             try
             {
 
+
                 IProgressBar progres = DependencyService.Get<IProgressBar>();
                 if (Device.OS != TargetPlatform.iOS)
                     progres.ShowProgressbar("Preparing media..");
@@ -2270,7 +2274,13 @@ namespace PurposeColor.screens
 
 							var file = await CrossMedia.Current.TakeVideoAsync( videoOptions );
 
-							progres.ShowProgressbar( "video is compressing..." );
+						//	MasterObject.ShowAlert( "test", null );
+
+							await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+
+
+							//progres.ShowProgressbar( "video is compressing..." );
+
                             if (file == null)
                             {
                                 progres.HideProgressbar();
@@ -2283,11 +2293,9 @@ namespace PurposeColor.screens
 
 							if( Device.OS == TargetPlatform.Android )
 							{
-								
 								IVideoCompressor compressor = DependencyService.Get<IVideoCompressor>();
 								ms = compressor.CompressVideo( file.Path, App.DownloadsPath + videoFilename, false );
 								ms.Position = 0;
-
 							}
 							else if( Device.OS == TargetPlatform.iOS )
 							{
@@ -2310,6 +2318,8 @@ namespace PurposeColor.screens
                                 GC.Collect();
                                 return;
                             }
+
+
 
 							if( Device.OS == TargetPlatform.Android )
 							{

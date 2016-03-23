@@ -45,8 +45,8 @@ namespace PurposeColor
 				
 
 			masterStack = new CustomLayout ();
-			masterStack.BackgroundColor = Color.Black;
-
+			masterStack.BackgroundColor = Color.Transparent;
+			masterStack.HorizontalOptions = LayoutOptions.Center;
 
 			StackLayout bottomAndLowerControllStack = new StackLayout {
 				Orientation = StackOrientation.Vertical,
@@ -100,6 +100,7 @@ namespace PurposeColor
 //				await imgScrollView.ScrollToAsync( curX - App.screenWidth , 0, true );
 //			};
 //
+
 			#region MEDIA LIST
 
 			if (mediaList != null) 
@@ -189,11 +190,13 @@ namespace PurposeColor
 			}
 
 			#endregion
-			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 12);
+
+			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 5);//12
 			masterScroll.HeightRequest = App.screenHeight - 20;
 			masterScroll.WidthRequest = App.screenWidth;// * 90 / 100;
 
 			StackLayout masterStackLayout = new StackLayout ();
+			masterStackLayout.HorizontalOptions = LayoutOptions.Center;
 			masterStackLayout.BackgroundColor = Color.Black;
 			masterStackLayout.Orientation = StackOrientation.Vertical;
 			masterStackLayout.Children.Add (masterStack);

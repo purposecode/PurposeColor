@@ -88,8 +88,8 @@ namespace PurposeColor.screens
 				},
 				BackgroundColor = Color.FromRgb(8, 159, 245),
 				Orientation = StackOrientation.Horizontal,
-				WidthRequest = App.screenWidth * .5,
-				//HorizontalOptions = LayoutOptions.Center
+				WidthRequest = App.screenWidth * .5
+				///HorizontalOptions = LayoutOptions.Center
 			};
 
 			emotionListingBtnTapgesture = new TapGestureRecognizer ();
@@ -97,12 +97,13 @@ namespace PurposeColor.screens
 			emotionsButtion.GestureRecognizers.Add (emotionListingBtnTapgesture);
 
 			goalsAndDreamsLabel = new Label {
-				Text = "  GOALS & DREAMS", 
+				Text = "GOALS & DREAMS", 
 				FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 				FontSize = Device.OnPlatform (14, 18, 14),
-				HorizontalOptions = LayoutOptions.Center,
+				HorizontalOptions = LayoutOptions.End,
 				VerticalOptions = LayoutOptions.Center,
-				TextColor = Color.Gray
+				TextColor = Color.Gray,
+				XAlign = TextAlignment.Center
 			};
 
 			goalsButton = new StackLayout{
@@ -111,7 +112,9 @@ namespace PurposeColor.screens
 				},
 				BackgroundColor = Constants.INPUT_GRAY_LINE_COLOR,
 				Orientation = StackOrientation.Horizontal,
-				WidthRequest = App.screenWidth * .5
+				WidthRequest = App.screenWidth * .5,
+				HorizontalOptions = LayoutOptions.Center,
+				Padding = new Thickness(Device.OnPlatform(20,20,20),0,0,0)
 			};
 			goalsListingBtnTapgesture = new TapGestureRecognizer ();
 			goalsListingBtnTapgesture.Tapped += GoalsListingBtnTapgesture_Tapped;

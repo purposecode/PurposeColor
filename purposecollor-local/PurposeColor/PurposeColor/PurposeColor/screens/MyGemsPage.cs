@@ -795,7 +795,7 @@ namespace PurposeColor
 
 			if (sellayout != null)
 			{
-				sellayout.AddChildToLayout(GemMenu, 57, 4);
+				sellayout.AddChildToLayout(GemMenu, 65, 4);
 			}
 
 			//masterStack.Children.Add (GemMenu, new Point (20, btn.Y));

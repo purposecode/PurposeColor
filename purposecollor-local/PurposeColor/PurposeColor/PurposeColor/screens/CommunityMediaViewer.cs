@@ -191,7 +191,7 @@ namespace PurposeColor
 
 			#endregion
 
-			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 5);//12
+			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, Device.OnPlatform (5, 9, 12));//12
 			masterScroll.HeightRequest = App.screenHeight - 20;
 			masterScroll.WidthRequest = App.screenWidth;// * 90 / 100;
 

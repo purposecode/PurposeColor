@@ -114,7 +114,7 @@ namespace PurposeColor.screens
 				Orientation = StackOrientation.Horizontal,
 				WidthRequest = App.screenWidth * .5,
 				HorizontalOptions = LayoutOptions.Center,
-				Padding = new Thickness(Device.OnPlatform(20,20,20),0,0,0)
+				Padding = new Thickness(Device.OnPlatform(20,15,20),0,0,0)
 			};
 			goalsListingBtnTapgesture = new TapGestureRecognizer ();
 			goalsListingBtnTapgesture.Tapped += GoalsListingBtnTapgesture_Tapped;

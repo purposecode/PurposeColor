@@ -58,6 +58,8 @@ namespace PurposeColor
             CurrentGemId = model.gemId;
             CurrentGemType = model.gemType;
             User user = null;
+			App.GemDeleted = false;
+
             try
             {
                 user = App.Settings.GetUser();
@@ -673,7 +675,9 @@ namespace PurposeColor
                         		await DisplayAlert(Constants.ALERT_TITLE, "GEM deleted.", Constants.ALERT_OK);
 	                        	try
 	                        	{
+									App.GemDeleted = true;
 	                        		await Navigation.PopAsync();
+
 	                        	}
 	                        	catch (Exception)
 	                        	{

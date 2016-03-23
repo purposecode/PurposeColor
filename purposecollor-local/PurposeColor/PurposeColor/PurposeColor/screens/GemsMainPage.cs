@@ -43,6 +43,7 @@ namespace PurposeColor.screens
 		int lastGemIndexOnDisplay = 0;
 		int firstGemIndexOnDisplay = 0;
 		bool isLoadingFromDetailsPage = false;
+		string selectedGem = string.Empty;
 
 
 		public GemsMainPage()
@@ -244,13 +245,12 @@ namespace PurposeColor.screens
 
 		async void OnAppearing (object sender, EventArgs e)
 		{
-			if (!isLoadingFromDetailsPage) 
-			{
-				if(progressBar == null)
-				progressBar = DependencyService.Get<IProgressBar> ();
+			if (!isLoadingFromDetailsPage) {
+				if (progressBar == null)
+					progressBar = DependencyService.Get<IProgressBar> ();
 
-				if(Device.OS != TargetPlatform.iOS)
-				progressBar.ShowProgressbar ("Loading gems..");
+				if (Device.OS != TargetPlatform.iOS)
+					progressBar.ShowProgressbar ("Loading gems..");
 
 				try {
 					try {
@@ -298,12 +298,25 @@ namespace PurposeColor.screens
 					// call - ShowEmotionsTapGesture_Tapped //
 					progressBar.HideProgressbar ();
 					ShowEmotionsTapGesture_Tapped (emotionsButtion, null);	
-				}
-				catch (Exception ex) {
+				} catch (Exception ex) {
 					var test = ex.Message;
 					progressBar.HideProgressbar ();
 				}
 				//progressBar.HideProgressbar ();
+			} else {
+				// if gem deleted.. chk selectd gem... try to remov frm stack
+				if (App.GemDeleted) {
+
+					//remov frm stack
+					try {
+						var deletedGem = listViewContainer.Children.First(c => c.ClassId == selectedGem);
+						if (deletedGem != null) {
+							listViewContainer.Children.Remove (deletedGem);
+						}
+					} catch (Exception ex) {
+						var test = ex.Message;
+					}
+				}
 			}
 		}
 
@@ -628,6 +641,7 @@ namespace PurposeColor.screens
 					previousTitle = gemModel.GroupTitle.Trim();
 				}
 
+
 				listViewContainer.Children.Add(gemLayout);
 
 				gemModel = null; // to clear mem.
@@ -673,6 +687,7 @@ namespace PurposeColor.screens
 					progressBar.HideProgressbar();
 					return;
 				}
+				selectedGem = btnId;
 
 				if (App.isEmotionsListing) {
 					try {

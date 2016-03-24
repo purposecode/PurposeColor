@@ -196,7 +196,7 @@ namespace PurposeColor.screens
                 else if ("Goals & Dreams" == selItem.Name)
                 {
                     App.masterPage.IsPresented = false;
-                    App.masterPage.Detail = new NavigationPage(new GoalsMainPage());
+					App.masterPage.Detail = new NavigationPage(new GoalsPage());
                 }
 				else if (Constants.EMOTIONAL_INTELLIGENCE == selItem.Name)
                 {

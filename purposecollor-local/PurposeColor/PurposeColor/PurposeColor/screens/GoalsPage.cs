@@ -67,7 +67,6 @@ namespace PurposeColor.screens
             masterLayout = new CustomLayout();
             masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
             progressBar = DependencyService.Get<IProgressBar>();
-			commonGoalsObject = new CommonGoalsObject ();
 
             this.Appearing += OnAppearing;
 			mainTitleBar = new GemsPageTitleBar(Color.FromRgb(8, 135, 224), "Goals & Dreams", Color.White, "", true);
@@ -98,10 +97,12 @@ namespace PurposeColor.screens
 
         async void OnAppearing(object sender, EventArgs e)
         {
-			if (gemsGoalsObject != null && gemsGoalsObject.resultarray != null && gemsGoalsObject.resultarray.Count > 0)
+			if (commonGoalsObject != null && commonGoalsObject.GoalsDetails != null && commonGoalsObject.GoalsDetails.Count > 0)
 				return;
 
 	
+			commonGoalsObject = null;
+			commonGoalsObject = new CommonGoalsObject ();
 			commonGoalsObject.GoalsDetails = new List<CommonGoalsDetails>();
 
             IProgressBar progress = DependencyService.Get<IProgressBar>();

@@ -58,7 +58,7 @@ namespace PurposeColor.screens
 		CommonGoalsObject allCommonGoalsObject;
 		bool reachedEnd;
 		bool reachedFront;
-		int MAX_ROWS_AT_A_TIME = 30;
+		int MAX_ROWS_AT_A_TIME = 10;
 
 		public GoalsPage()
         {
@@ -159,6 +159,8 @@ namespace PurposeColor.screens
                     App.Settings.SavePendingGoalsDetails( pendingGoalsObject );
                 }
 
+				commonGoalsObject.GoalsDetails.Add( new CommonGoalsDetails{ GoalID="header"} );
+
 				gemsGoalsObject = await ServiceHelper.GetAllMyGoals();
 				if( gemsGoalsObject == null || gemsGoalsObject.resultarray == null )
 				{
@@ -236,11 +238,11 @@ namespace PurposeColor.screens
 					#endregion
 				}*/
 
-				commonGoalsObject.GoalsDetails = commonGoalsObject.GoalsDetails.Skip(0).Take( 30 ).ToList();
+				commonGoalsObject.GoalsDetails = commonGoalsObject.GoalsDetails.Skip(0).Take( MAX_ROWS_AT_A_TIME ).ToList();
 
 				await DownloadMedias();
 
-				RenderGoalsPage( true );
+				RenderGoalsPage( false );
 
 
 
@@ -660,7 +662,7 @@ namespace PurposeColor.screens
 
 
 
-		void RenderGoalsPage( bool pendingGoals )
+		void RenderGoalsPage( bool prevButtonNeeded )
 		{
 			try
 			{
@@ -672,6 +674,11 @@ namespace PurposeColor.screens
 				foreach (var item in commonGoalsObject.GoalsDetails)
 				{
 
+					if( item.GoalID == "header" )
+					{
+						CreateAllGoalsHeading();
+						continue;
+					}
 					StackLayout cellContainer = new StackLayout();
 					cellContainer.Orientation = StackOrientation.Vertical;
 					cellContainer.BackgroundColor = Color.White;// Color.FromRgb(244, 244, 244);
@@ -825,6 +832,24 @@ namespace PurposeColor.screens
 
 
 
+				}
+
+
+				if( prevButtonNeeded )
+				{
+					Button backToTop = new Button();
+					backToTop.BackgroundColor = Color.Transparent;
+					backToTop.TextColor = Constants.BLUE_BG_COLOR;
+					backToTop.Text = "Go back to previous page";
+					backToTop.FontSize = 12;
+					backToTop.BorderWidth = 0;
+					backToTop.BorderColor = Color.Transparent;
+					backToTop.ClassId = "prev page";
+					backToTop.Clicked += (object sender, EventArgs e) => 
+					{
+						OnLoadPreviousGemsClicked(  masterScroll, EventArgs.Empty );
+					};
+					masterStack.Children.Add ( backToTop );
 				}
 			}
 			catch (Exception ex)
@@ -1113,7 +1138,7 @@ namespace PurposeColor.screens
 					masterScroll.Content = null;
 					GC.Collect();
 
-					RenderGoalsPage( true );
+					RenderGoalsPage( false );
 
 					masterScroll.Content = masterStack;
 				}
@@ -1171,7 +1196,7 @@ namespace PurposeColor.screens
 					if( itemCountToCopy < MAX_ROWS_AT_A_TIME )
 						RenderGoalsPage( true );
 					else
-						RenderGoalsPage( true );
+						RenderGoalsPage( false );
 
 					masterScroll.Content = masterStack;
 				}

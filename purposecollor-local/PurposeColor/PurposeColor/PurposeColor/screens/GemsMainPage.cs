@@ -249,7 +249,7 @@ namespace PurposeColor.screens
 				if (progressBar == null)
 					progressBar = DependencyService.Get<IProgressBar> ();
 
-				if (Device.OS != TargetPlatform.iOS)
+				//if (Device.OS != TargetPlatform.iOS)
 					progressBar.ShowProgressbar ("Loading gems..");
 
 				try {

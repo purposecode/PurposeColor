@@ -679,7 +679,26 @@ namespace PurposeColor
 	                        	try
 	                        	{
 									App.GemDeleted = true;
-	                        		await Navigation.PopAsync();
+
+									// if needed.. to delete the gem from the list at emotional awareness.. do the below.
+//									switch (CurrentGemType) {
+//										case GemType.Action:
+//											App.actionsListSource = null;
+//											break;
+//										case GemType.Goal:
+//											App.goalsListSource = null;
+//											break;
+//										case GemType.Event:
+//											App.eventsListSource = null;
+//											break;
+//										case GemType.Emotion:
+//											App.emotionsListSource = null;
+//											break;
+//										default:
+//											break;
+//									}
+
+                        		await Navigation.PopAsync();
 
 	                        	}
 	                        	catch (Exception)
@@ -688,10 +707,12 @@ namespace PurposeColor
                         	}
                         	else if (responceCode == "404")
                         	{
+								progressBar.HideProgressbar();
                         		await DisplayAlert(Constants.ALERT_TITLE, "GEM alredy deleted.", Constants.ALERT_OK);
                         	}
                         	else
                         	{
+								progressBar.HideProgressbar();
                         		await DisplayAlert(Constants.ALERT_TITLE, "Please try again later.", Constants.ALERT_OK);
                         	}
                         	progressBar.HideProgressbar();

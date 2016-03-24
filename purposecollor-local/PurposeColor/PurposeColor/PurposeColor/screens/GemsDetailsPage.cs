@@ -42,522 +42,529 @@ namespace PurposeColor
 
         public GemsDetailsPage( DetailsPageModel model )
         {
-            NavigationPage.SetHasNavigationBar(this, false);
-            detailsPageModel = model;
-            masterLayout = new CustomLayout();
-            masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
-            masterScroll = new ScrollView();
-            masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
-			masterScroll.IsClippedToBounds = true;
-            progressBar = DependencyService.Get<IProgressBar>();
-            masterStack = new CustomLayout();
-            //masterStack.Orientation = StackOrientation.Vertical;
-            masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
-            mediaList = model.eventMediaArray;
-            actionMediaList = model.actionMediaArray;
-            CurrentGemId = model.gemId;
-            CurrentGemType = model.gemType;
-            User user = null;
-			App.GemDeleted = false;
+			try
+			{
+				NavigationPage.SetHasNavigationBar(this, false);
+				detailsPageModel = model;
+				masterLayout = new CustomLayout();
+				masterLayout.BackgroundColor = Color.FromRgb(244, 244, 244);
+				masterScroll = new ScrollView();
+				masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
+				masterScroll.IsClippedToBounds = true;
+				progressBar = DependencyService.Get<IProgressBar>();
+				masterStack = new CustomLayout();
+				//masterStack.Orientation = StackOrientation.Vertical;
+				masterStack.BackgroundColor = Color.FromRgb(244, 244, 244);
+				mediaList = model.eventMediaArray;
+				actionMediaList = model.actionMediaArray;
+				CurrentGemId = model.gemId;
+				CurrentGemType = model.gemType;
+				User user = null;
+				App.GemDeleted = false;
 
-            try
-            {
-                user = App.Settings.GetUser();
-            }
-            catch (Exception ex)
-            {
-                var test = ex.Message;
-            }
-			if (string.IsNullOrEmpty (model.pageTitleVal)) {
-				model.pageTitleVal = "GEM Details";
-			}
-			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
-			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
-			subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, model.pageTitleVal, false);
-            subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
-            {
-                try
+				try
 				{
-					await Navigation.PopAsync();
-                }
-				catch (Exception){
-                }
-            };
+					user = App.Settings.GetUser();
+				}
+				catch (Exception ex)
+				{
+					var test = ex.Message;
+				}
+				if (string.IsNullOrEmpty (model.pageTitleVal)) {
+					model.pageTitleVal = "GEM Details";
+				}
+				mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", true);
+				mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
+				subTitleBar = new PurposeColorSubTitleBar(Constants.SUB_TITLE_BG_COLOR, model.pageTitleVal, false);
+				subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) =>
+				{
+					try
+					{
+						await Navigation.PopAsync();
+					}
+					catch (Exception){
+					}
+				};
 
 
-            this.Appearing += GemsDetailsPage_Appearing;
+				this.Appearing += GemsDetailsPage_Appearing;
 
-            Label pageTitle = new Label();
-			pageTitle.Text = model.titleVal;//model.pageTitleVal;
-            pageTitle.TextColor = Color.Black;
-            pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            pageTitle.FontAttributes = FontAttributes.Bold;
-            pageTitle.WidthRequest = App.screenWidth * 80 / 100;
-            pageTitle.HeightRequest = 50;
-            pageTitle.XAlign = TextAlignment.Start;
-            pageTitle.YAlign = TextAlignment.Start;
-            pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
+				Label pageTitle = new Label();
+				pageTitle.Text = model.titleVal;//model.pageTitleVal;
+				pageTitle.TextColor = Color.Black;
+				pageTitle.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+				pageTitle.FontAttributes = FontAttributes.Bold;
+				pageTitle.WidthRequest = App.screenWidth * 80 / 100;
+				pageTitle.HeightRequest = 50;
+				pageTitle.XAlign = TextAlignment.Start;
+				pageTitle.YAlign = TextAlignment.Start;
+				pageTitle.FontSize = Device.OnPlatform(15, 20, 15);
 
-            StackLayout emptyLayout = new StackLayout();
-            emptyLayout.BackgroundColor = Color.Transparent;
-            emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
-            emptyLayout.HeightRequest = 30;
+				StackLayout emptyLayout = new StackLayout();
+				emptyLayout.BackgroundColor = Color.Transparent;
+				emptyLayout.WidthRequest = App.screenWidth * 90 / 100;
+				emptyLayout.HeightRequest = 30;
 
-            #region TOOLS LAYOUT
+				#region TOOLS LAYOUT
 
-            StackLayout toolsLayout = new StackLayout();
-			toolsLayout.Spacing = App.screenWidth * .10;
-            toolsLayout.Orientation = StackOrientation.Horizontal;
-			toolsLayout.HorizontalOptions = LayoutOptions.Center;
-			toolsLayout.HeightRequest = App.screenHeight * .05;
-            toolsLayout.Padding = new Thickness(10, 5, 10, 10);
-            toolsLayout.ClassId = "ToolsLayout";
+				StackLayout toolsLayout = new StackLayout();
+				toolsLayout.Spacing = App.screenWidth * .10;
+				toolsLayout.Orientation = StackOrientation.Horizontal;
+				toolsLayout.HorizontalOptions = LayoutOptions.Center;
+				toolsLayout.HeightRequest = App.screenHeight * .05;
+				toolsLayout.Padding = new Thickness(10, 5, 10, 10);
+				toolsLayout.ClassId = "ToolsLayout";
 
-			favoriteButton = new Image();
-			favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
-            favoriteButton.WidthRequest = Device.OnPlatform(15, 15, 15);
-            favoriteButton.HeightRequest = Device.OnPlatform(15, 15, 15);
-			favoriteButton.VerticalOptions = LayoutOptions.Center;
-            favoriteButtonTap = new TapGestureRecognizer();
-            favoriteButtonTap.Tapped += FavoriteButtonTapped;
-            favoriteButton.GestureRecognizers.Add(favoriteButtonTap);
+				favoriteButton = new Image();
+				favoriteButton.Source = Device.OnPlatform("favoriteIcon.png", "favoriteIcon.png", "//Assets//favoriteIcon.png");
+				favoriteButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+				favoriteButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+				favoriteButton.VerticalOptions = LayoutOptions.Center;
+				favoriteButtonTap = new TapGestureRecognizer();
+				favoriteButtonTap.Tapped += FavoriteButtonTapped;
+				favoriteButton.GestureRecognizers.Add(favoriteButtonTap);
 
-            favoriteLabel = new Label
-            {
-				Text = "Favorite",
-                FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-                TextColor = Color.Gray,
-				VerticalOptions = LayoutOptions.Center,
-				FontSize = Device.OnPlatform(12,12,15)
-            };
-            favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
-			toolsLayout.Children.Add( new StackLayout{Children = {favoriteButton,favoriteLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
-
-            //toolsLayout.Children.Add(favoriteButton);
-            //toolsLayout.Children.Add(favoriteLabel);
-
-            if (user.AllowCommunitySharing)
-            {
-                shareButton = new Image();
-                shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
-                shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
-                shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
-                shareButton.VerticalOptions = LayoutOptions.Center;
-                shareLabel = new Label
-                {
-                    Text = "Share",
-                    FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-                    TextColor = Color.Gray,
-                    VerticalOptions = LayoutOptions.Center,
+				favoriteLabel = new Label
+				{
+					Text = "Favorite",
+					FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+					TextColor = Color.Gray,
+					VerticalOptions = LayoutOptions.Center,
 					FontSize = Device.OnPlatform(12,12,15)
-                };
-                shareButtonTap = new TapGestureRecognizer();
-                shareButtonTap.Tapped += ShareButtonTapped;
-                shareButton.GestureRecognizers.Add(shareButtonTap);
-                shareLabel.GestureRecognizers.Add(shareButtonTap);
-				toolsLayout.Children.Add(new StackLayout{Children = {shareButton,shareLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
-                //toolsLayout.Children.Add(shareLabel);
-            }
-            
-            
+				};
+				favoriteLabel.GestureRecognizers.Add(favoriteButtonTap);
+				toolsLayout.Children.Add( new StackLayout{Children = {favoriteButton,favoriteLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
 
-            Image commentButton = new Image();
-            commentButton.Source = Device.OnPlatform("icon_cmnt.png", "icon_cmnt.png", "//Assets//icon_cmnt.png");
-            commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
-            commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
-			commentButton.VerticalOptions = LayoutOptions.Center;
-            commentsLabel = new Label
-            {
-				Text = "Comments",
-				VerticalOptions = LayoutOptions.Center,
-                FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
-                TextColor = Color.Gray,
-				FontSize = Device.OnPlatform(12,12,15),
-                ClassId = "CommentLabel"
-            };
+				//toolsLayout.Children.Add(favoriteButton);
+				//toolsLayout.Children.Add(favoriteLabel);
 
-            commentButtonTap = new TapGestureRecognizer();
-            commentButtonTap.Tapped += CommentButtonTapped;
-            commentButton.GestureRecognizers.Add(commentButtonTap);
-            commentsLabel.GestureRecognizers.Add(commentButtonTap);
+				if (user.AllowCommunitySharing)
+				{
+					shareButton = new Image();
+					shareButton.Source = Device.OnPlatform("share.png", "share.png", "//Assets//share.png");
+					shareButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+					shareButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+					shareButton.VerticalOptions = LayoutOptions.Center;
+					shareLabel = new Label
+					{
+						Text = "Share",
+						FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+						TextColor = Color.Gray,
+						VerticalOptions = LayoutOptions.Center,
+						FontSize = Device.OnPlatform(12,12,15)
+					};
+					shareButtonTap = new TapGestureRecognizer();
+					shareButtonTap.Tapped += ShareButtonTapped;
+					shareButton.GestureRecognizers.Add(shareButtonTap);
+					shareLabel.GestureRecognizers.Add(shareButtonTap);
+					toolsLayout.Children.Add(new StackLayout{Children = {shareButton,shareLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+					//toolsLayout.Children.Add(shareLabel);
+				}
 
-			toolsLayout.Children.Add( new StackLayout{Children = {commentButton,commentsLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
-            //toolsLayout.Children.Add(commentButton);
-            //toolsLayout.Children.Add(commentsLabel);
-            
-            #endregion
 
-			#region  title, description
-			title = new Label ();
-			title.Text = model.titleVal;
-			title.TextColor = Color.Black;
-			title.WidthRequest = App.screenWidth * 90 / 100;
-			title.FontSize = Device.OnPlatform (12, 12, 12);
-            title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
-			description = new Label ();
-			description.WidthRequest = App.screenWidth * .75;
-			description.Text = model.description;
-			description.TextColor = Color.Black;
-            description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
-            
-			Image menuButton = new Image
-            {
-				Source = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
-                HorizontalOptions = LayoutOptions.End,
-				BackgroundColor = Color.Transparent,
-                WidthRequest = Device.OnPlatform(25, 25, 60),
-                HeightRequest = Device.OnPlatform(25, 25, 40),
-				Aspect = Aspect.AspectFit
-            };
+				Image commentButton = new Image();
+				commentButton.Source = Device.OnPlatform("icon_cmnt.png", "icon_cmnt.png", "//Assets//icon_cmnt.png");
+				commentButton.WidthRequest = Device.OnPlatform(15, 15, 15);
+				commentButton.HeightRequest = Device.OnPlatform(15, 15, 15);
+				commentButton.VerticalOptions = LayoutOptions.Center;
+				commentsLabel = new Label
+				{
+					Text = "Comments",
+					VerticalOptions = LayoutOptions.Center,
+					FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+					TextColor = Color.Gray,
+					FontSize = Device.OnPlatform(12,12,15),
+					ClassId = "CommentLabel"
+				};
 
-			TapGestureRecognizer editMenuGesture = new TapGestureRecognizer();
-			editMenuGesture.Tapped += GemMenuButton_Clicked;
-			menuButton.GestureRecognizers.Add(editMenuGesture);
+				commentButtonTap = new TapGestureRecognizer();
+				commentButtonTap.Tapped += CommentButtonTapped;
+				commentButton.GestureRecognizers.Add(commentButtonTap);
+				commentsLabel.GestureRecognizers.Add(commentButtonTap);
 
-			masterStack.AddChildToLayout(pageTitle, 2, Device.OnPlatform(0,1,1));
-			masterStack.AddChildToLayout(menuButton, Device.OnPlatform(87, 90, 99), Device.OnPlatform(0,1,1));
-			//masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
-			#endregion
+				toolsLayout.Children.Add( new StackLayout{Children = {commentButton,commentsLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+				//toolsLayout.Children.Add(commentButton);
+				//toolsLayout.Children.Add(commentsLabel);
 
-            StackLayout bottomAndLowerControllStack = new StackLayout
-            {
-                Orientation = StackOrientation.Vertical,
-                BackgroundColor = Color.Transparent,
-                Spacing = 1,
-                Padding = 0,// new Thickness(0, 0, 0, 5),
-				WidthRequest = App.screenWidth,// * .90,
-                ClassId= "BottomNlowerStack"
-            };
-            bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(6, 0, 0, 5), Children = { description } });
-            
-            #region MEDIA LIST
+				#endregion
 
-            if (mediaList != null)
-            {
-                for (int index = 0; index < mediaList.Count; index++)
-                {
-                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
-                    videoTap.Tapped += OnEventVideoTapped;
-                    bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
-                    string source = (isValidUrl) ? model.Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+				#region  title, description
+				title = new Label ();
+				title.Text = model.titleVal;
+				title.TextColor = Color.Black;
+				title.WidthRequest = App.screenWidth * 90 / 100;
+				title.FontSize = Device.OnPlatform (12, 12, 12);
+				title.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
-                    Image img = new Image();
-					//img.WidthRequest = App.screenWidth * 50 / 100;
-					img.HeightRequest = App.screenWidth;
-					//img.MinimumHeightRequest = App.screenWidth;
-					//img.MinimumWidthRequest = App.screenWidth;
+				description = new Label ();
+				description.WidthRequest = App.screenWidth * .75;
+				description.Text = model.description;
+				description.TextColor = Color.Black;
+				description.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
 
-					img.Aspect = Aspect.AspectFill;
-                    img.ClassId = null;
-                    if (mediaList[index] != null && mediaList[index].media_type == "mp4")
-                    {
-                        img.ClassId = source;
-						source = Constants.SERVICE_BASE_URL + mediaList[index].video_thumb;
-                    }
-					else if (mediaList[index] != null && (mediaList[index].media_type == "3gpp" || mediaList[index].media_type == "aac") )
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    else if (mediaList[index] != null && mediaList[index].media_type == "wav")
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    img.Source = source;
-                    img.GestureRecognizers.Add(videoTap);
+				Image menuButton = new Image
+				{
+					Source = Device.OnPlatform("downarrow.png", "downarrow.png", "//Assets//downarrow.png"),
+					HorizontalOptions = LayoutOptions.End,
+					BackgroundColor = Color.Transparent,
+					WidthRequest = Device.OnPlatform(25, 25, 60),
+					HeightRequest = Device.OnPlatform(25, 25, 40),
+					Aspect = Aspect.AspectFit
+				};
 
-                    var indicator = new ActivityIndicator { Color = new Color(.5), };
-                    indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-                    indicator.BindingContext = img;
-					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
-                    if (isValidUrl)
-                    {
+				TapGestureRecognizer editMenuGesture = new TapGestureRecognizer();
+				editMenuGesture.Tapped += GemMenuButton_Clicked;
+				menuButton.GestureRecognizers.Add(editMenuGesture);
 
+				masterStack.AddChildToLayout(pageTitle, 2, Device.OnPlatform(0,1,1));
+				masterStack.AddChildToLayout(menuButton, Device.OnPlatform(87, 90, 99), Device.OnPlatform(0,1,1));
+				//masterStack.AddChildToLayout(title,1,Device.OnPlatform(3,7,7));
+				#endregion
+
+				StackLayout bottomAndLowerControllStack = new StackLayout
+				{
+					Orientation = StackOrientation.Vertical,
+					BackgroundColor = Color.Transparent,
+					Spacing = 1,
+					Padding = 0,// new Thickness(0, 0, 0, 5),
+					WidthRequest = App.screenWidth,// * .90,
+					ClassId= "BottomNlowerStack"
+				};
+				bottomAndLowerControllStack.Children.Add(new StackLayout { Padding = new Thickness(6, 0, 0, 5), Children = { description } });
+
+				#region MEDIA LIST
+
+				if (mediaList != null)
+				{
+					for (int index = 0; index < mediaList.Count; index++)
+					{
+						TapGestureRecognizer videoTap = new TapGestureRecognizer();
+						videoTap.Tapped += OnEventVideoTapped;
+						bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
+						string source = (isValidUrl) ? model.Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+
+						Image img = new Image();
+						//img.WidthRequest = App.screenWidth * 50 / 100;
+						img.HeightRequest = App.screenWidth;
+						//img.MinimumHeightRequest = App.screenWidth;
+						//img.MinimumWidthRequest = App.screenWidth;
+
+						img.Aspect = Aspect.AspectFill;
+						img.ClassId = null;
 						if (mediaList[index] != null && mediaList[index].media_type == "mp4")
 						{
-							Grid grid = new Grid
-							{
-								VerticalOptions = LayoutOptions.FillAndExpand,
-								HorizontalOptions = LayoutOptions.FillAndExpand,
-								RowDefinitions = 
-								{
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-
-								},
-								ColumnDefinitions = 
-								{
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-
-								}
-								};
-
-							Image play = new Image();
-							play.Source = "video_play.png";
-							play.Aspect = Aspect.AspectFit;
-							play.WidthRequest = 75;
-							play.HeightRequest = 75;
-							play.HorizontalOptions = LayoutOptions.Center;
-							play.VerticalOptions = LayoutOptions.Center;
-							play.ClassId =  mediaList[index].event_media ;
-							play.GestureRecognizers.Add(videoTap);
-
-							BoxView box = new BoxView();
-							box.BackgroundColor = Color.Red;
-							box.WidthRequest = 100;
-							box.HeightRequest = 100;
-
-							grid.Children.Add( img, 0, 0 );
-							Grid.SetColumnSpan(img, 3);
-							Grid.SetRowSpan( img, 3 );
-							grid.Children.Add(play, 1, 1);
-							bottomAndLowerControllStack.Children.Add(grid);
+							img.ClassId = source;
+							source = Constants.SERVICE_BASE_URL + mediaList[index].video_thumb;
 						}
-						else
+						else if (mediaList[index] != null && (mediaList[index].media_type == "3gpp" || mediaList[index].media_type == "aac") )
 						{
-							bottomAndLowerControllStack.Children.Add(img);
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
 						}
+						else if (mediaList[index] != null && mediaList[index].media_type == "wav")
+						{
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+						}
+						img.Source = source;
+						img.GestureRecognizers.Add(videoTap);
+
+						var indicator = new ActivityIndicator { Color = new Color(.5), };
+						indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+						indicator.BindingContext = img;
+						masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
+						if (isValidUrl)
+						{
+
+							if (mediaList[index] != null && mediaList[index].media_type == "mp4")
+							{
+								Grid grid = new Grid
+								{
+									VerticalOptions = LayoutOptions.FillAndExpand,
+									HorizontalOptions = LayoutOptions.FillAndExpand,
+									RowDefinitions = 
+									{
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+
+									},
+									ColumnDefinitions = 
+									{
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+
+									}
+									};
+
+								Image play = new Image();
+								play.Source = "video_play.png";
+								play.Aspect = Aspect.AspectFit;
+								play.WidthRequest = 75;
+								play.HeightRequest = 75;
+								play.HorizontalOptions = LayoutOptions.Center;
+								play.VerticalOptions = LayoutOptions.Center;
+								play.ClassId =  mediaList[index].event_media ;
+								play.GestureRecognizers.Add(videoTap);
+
+								BoxView box = new BoxView();
+								box.BackgroundColor = Color.Red;
+								box.WidthRequest = 100;
+								box.HeightRequest = 100;
+
+								grid.Children.Add( img, 0, 0 );
+								Grid.SetColumnSpan(img, 3);
+								Grid.SetRowSpan( img, 3 );
+								grid.Children.Add(play, 1, 1);
+								bottomAndLowerControllStack.Children.Add(grid);
+							}
+							else
+							{
+								bottomAndLowerControllStack.Children.Add(img);
+							}
+						}
+
+
 					}
+				}
 
-					
-                }
-            }
+				if (actionMediaList != null)
+				{
+					for (int index = 0; index < actionMediaList.Count; index++)
+					{
+						TapGestureRecognizer videoTap = new TapGestureRecognizer();
+						videoTap.Tapped += OnActionVideoTapped;
 
-            if (actionMediaList != null)
-            {
-                for (int index = 0; index < actionMediaList.Count; index++)
-                {
-                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
-                    videoTap.Tapped += OnActionVideoTapped;
-
-                    Image img = new Image();
-                    bool isValidUrl = (actionMediaList[index].action_media != null && !string.IsNullOrEmpty(actionMediaList[index].action_media)) ? true : false;
-                    string source = (isValidUrl) ? model.Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
-                    string fileExtenstion = Path.GetExtension(source);
-                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-					//img.WidthRequest = App.screenWidth * 50 / 100;
-					img.HeightRequest = App.screenWidth;
-					img.Aspect = Aspect.AspectFill;
-                    img.ClassId = null;
-                    if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
-                    {
-                        img.ClassId = source;
-						source = Constants.SERVICE_BASE_URL + actionMediaList[index].video_thumb;
-                    }
-					else if (actionMediaList[index] != null && (actionMediaList[index].media_type == "3gpp" || actionMediaList[index].media_type == "aac"))
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    else if (actionMediaList[index] != null && actionMediaList[index].media_type == "wav")
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    img.Source = source;
-                    img.GestureRecognizers.Add(videoTap);
-                    var indicator = new ActivityIndicator { Color = new Color(.5), };
-                    indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-                    indicator.BindingContext = img;
-					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
-                    if (isValidUrl)
-                    {
+						Image img = new Image();
+						bool isValidUrl = (actionMediaList[index].action_media != null && !string.IsNullOrEmpty(actionMediaList[index].action_media)) ? true : false;
+						string source = (isValidUrl) ? model.Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+						string fileExtenstion = Path.GetExtension(source);
+						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+						//img.WidthRequest = App.screenWidth * 50 / 100;
+						img.HeightRequest = App.screenWidth;
+						img.Aspect = Aspect.AspectFill;
+						img.ClassId = null;
 						if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
 						{
-							Grid grid = new Grid
+							img.ClassId = source;
+							source = Constants.SERVICE_BASE_URL + actionMediaList[index].video_thumb;
+						}
+						else if (actionMediaList[index] != null && (actionMediaList[index].media_type == "3gpp" || actionMediaList[index].media_type == "aac"))
+						{
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+						}
+						else if (actionMediaList[index] != null && actionMediaList[index].media_type == "wav")
+						{
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+						}
+						img.Source = source;
+						img.GestureRecognizers.Add(videoTap);
+						var indicator = new ActivityIndicator { Color = new Color(.5), };
+						indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+						indicator.BindingContext = img;
+						masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
+						if (isValidUrl)
+						{
+							if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
 							{
-								VerticalOptions = LayoutOptions.FillAndExpand,
-								HorizontalOptions = LayoutOptions.FillAndExpand,
-								RowDefinitions = 
+								Grid grid = new Grid
 								{
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
+									VerticalOptions = LayoutOptions.FillAndExpand,
+									HorizontalOptions = LayoutOptions.FillAndExpand,
+									RowDefinitions = 
+									{
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
 
-								},
-								ColumnDefinitions = 
-								{
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
+									},
+									ColumnDefinitions = 
+									{
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
 
-								}
-								};
+									}
+									};
 
-							Image play = new Image();
-							play.Source = "video_play.png";
-							play.Aspect = Aspect.AspectFit;
-							play.WidthRequest = 75;
-							play.HeightRequest = 75;
-							play.HorizontalOptions = LayoutOptions.Center;
-							play.VerticalOptions = LayoutOptions.Center;
-							play.ClassId =  actionMediaList[index].action_media ;
-							play.GestureRecognizers.Add(videoTap);
+								Image play = new Image();
+								play.Source = "video_play.png";
+								play.Aspect = Aspect.AspectFit;
+								play.WidthRequest = 75;
+								play.HeightRequest = 75;
+								play.HorizontalOptions = LayoutOptions.Center;
+								play.VerticalOptions = LayoutOptions.Center;
+								play.ClassId =  actionMediaList[index].action_media ;
+								play.GestureRecognizers.Add(videoTap);
 
-							BoxView box = new BoxView();
-							box.BackgroundColor = Color.Red;
-							box.WidthRequest = 100;
-							box.HeightRequest = 100;
+								BoxView box = new BoxView();
+								box.BackgroundColor = Color.Red;
+								box.WidthRequest = 100;
+								box.HeightRequest = 100;
 
-							grid.Children.Add( img, 0, 0 );
-							Grid.SetColumnSpan(img, 3);
-							Grid.SetRowSpan( img, 3 );
-							grid.Children.Add(play, 1, 1);
-							bottomAndLowerControllStack.Children.Add(grid);
-						}
-						else
-						{
-							bottomAndLowerControllStack.Children.Add(img);
-						}
-                    }
-                }
-            }
-
-
-            if (model.goal_media != null)
-            {
-                ScrollView imgScrollView = new ScrollView();
-                imgScrollView.Orientation = ScrollOrientation.Horizontal;
-
-                //StackLayout horizmgConatiner = new StackLayout();
-               // horizmgConatiner.Orientation = StackOrientation.Horizontal;
-
-                for (int index = 0; index < model.goal_media.Count; index++)
-                {
-                    TapGestureRecognizer videoTap = new TapGestureRecognizer();
-                    videoTap.Tapped += OnActionVideoTapped;
-
-                    Image img = new Image();
-                    bool isValidUrl = (model.goal_media[index].goal_media != null && !string.IsNullOrEmpty(model.goal_media[index].goal_media)) ? true : false;
-                    string source = (isValidUrl) ?  model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
-                    string fileExtenstion = Path.GetExtension(source);
-                    bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-					//img.WidthRequest = App.screenWidth * 50 / 100;
-					img.HeightRequest = App.screenWidth;
-					img.Aspect = Aspect.AspectFill;
-                    img.ClassId = null;
-                    if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
-                    {
-
-						source = Constants.SERVICE_BASE_URL +  model.goal_media[index].video_thumb;
-						img.ClassId = source;
-                    }
-					else if (model.goal_media[index] != null && (model.goal_media[index].media_type == "3gpp" || model.goal_media[index].media_type == "aac"))
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    else if (model.goal_media[index] != null && model.goal_media[index].media_type == "wav")
-                    {
-                        img.ClassId = source;
-                        source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
-                    }
-                    img.Source = source;
-                    img.GestureRecognizers.Add(videoTap);
-                    var indicator = new ActivityIndicator { Color = new Color(.5), };
-                    indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
-                    indicator.BindingContext = img;
-					masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
-                   // horizmgConatiner.Children.Add(img);
-					if( isValidUrl )
-					{
-						if ( model.goal_media[index]!= null &&  model.goal_media[index].media_type == "mp4")
-						{
-							Grid grid = new Grid
+								grid.Children.Add( img, 0, 0 );
+								Grid.SetColumnSpan(img, 3);
+								Grid.SetRowSpan( img, 3 );
+								grid.Children.Add(play, 1, 1);
+								bottomAndLowerControllStack.Children.Add(grid);
+							}
+							else
 							{
-								VerticalOptions = LayoutOptions.FillAndExpand,
-								HorizontalOptions = LayoutOptions.FillAndExpand,
-								RowDefinitions = 
-								{
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-									new RowDefinition { Height = new GridLength( img.WidthRequest / 3 ) },
-
-								},
-								ColumnDefinitions = 
-								{
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-									new ColumnDefinition { Width = new GridLength( img.WidthRequest / 3 ) },
-
-								}
-								};
-
-							Image play = new Image();
-							play.Source = "video_play.png";
-							play.Aspect = Aspect.AspectFit;
-							play.WidthRequest = 75;
-							play.HeightRequest = 75;
-							play.HorizontalOptions = LayoutOptions.Center;
-							play.VerticalOptions = LayoutOptions.Center;
-							play.ClassId =   Constants.SERVICE_BASE_URL +  model.goal_media[index].goal_media ;
-							play.GestureRecognizers.Add(videoTap);
-
-							BoxView box = new BoxView();
-							box.BackgroundColor = Color.Red;
-							box.WidthRequest = 100;
-							box.HeightRequest = 100;
-
-							grid.Children.Add( img, 0, 0 );
-							Grid.SetColumnSpan(img, 3);
-							Grid.SetRowSpan( img, 3 );
-							grid.Children.Add(play, 1, 1);
-							//horizmgConatiner.Children.Add(grid);
-							bottomAndLowerControllStack.Children.Add(grid);
-						}
-						else
-						{
-							//horizmgConatiner.Children.Add(img);
-							bottomAndLowerControllStack.Children.Add(img);
+								bottomAndLowerControllStack.Children.Add(img);
+							}
 						}
 					}
+				}
 
-                }
 
-               // imgScrollView.Content = horizmgConatiner;
-               // bottomAndLowerControllStack.Children.Add(imgScrollView);
-            }
-            
-            #endregion
+				if (model.goal_media != null)
+				{
+					ScrollView imgScrollView = new ScrollView();
+					imgScrollView.Orientation = ScrollOrientation.Horizontal;
 
-            //masterStack.AddChildToLayout(toolsLayout,1,65);
-            //masterStack.AddChildToLayout(emptyLayout,1,75);
-            bottomAndLowerControllStack.Children.Add(toolsLayout);
-            bottomAndLowerControllStack.Children.Add(emptyLayout);
-			if (model.titleVal.Length < 25) {
-				masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 8);
-			} else {
-				masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 11);
+					//StackLayout horizmgConatiner = new StackLayout();
+					// horizmgConatiner.Orientation = StackOrientation.Horizontal;
+
+					for (int index = 0; index < model.goal_media.Count; index++)
+					{
+						TapGestureRecognizer videoTap = new TapGestureRecognizer();
+						videoTap.Tapped += OnActionVideoTapped;
+
+						Image img = new Image();
+						bool isValidUrl = (model.goal_media[index].goal_media != null && !string.IsNullOrEmpty(model.goal_media[index].goal_media)) ? true : false;
+						string source = (isValidUrl) ?  model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
+						string fileExtenstion = Path.GetExtension(source);
+						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+						//img.WidthRequest = App.screenWidth * 50 / 100;
+						img.HeightRequest = App.screenWidth;
+						img.Aspect = Aspect.AspectFill;
+						img.ClassId = null;
+						if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
+						{
+
+							source = Constants.SERVICE_BASE_URL +  model.goal_media[index].video_thumb;
+							img.ClassId = source;
+						}
+						else if (model.goal_media[index] != null && (model.goal_media[index].media_type == "3gpp" || model.goal_media[index].media_type == "aac"))
+						{
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+						}
+						else if (model.goal_media[index] != null && model.goal_media[index].media_type == "wav")
+						{
+							img.ClassId = source;
+							source = Device.OnPlatform("audio.png", "audio.png", "//Assets//audio.png");
+						}
+						img.Source = source;
+						img.GestureRecognizers.Add(videoTap);
+						var indicator = new ActivityIndicator { Color = new Color(.5), };
+						indicator.SetBinding(ActivityIndicator.IsRunningProperty, "IsLoading");
+						indicator.BindingContext = img;
+						masterStack.AddChildToLayout(indicator, 40, Device.OnPlatform(50,40,40));
+						// horizmgConatiner.Children.Add(img);
+						if( isValidUrl )
+						{
+							if ( model.goal_media[index]!= null &&  model.goal_media[index].media_type == "mp4")
+							{
+								Grid grid = new Grid
+								{
+									VerticalOptions = LayoutOptions.FillAndExpand,
+									HorizontalOptions = LayoutOptions.FillAndExpand,
+									RowDefinitions = 
+									{
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+										new RowDefinition { Height = new GridLength( App.screenWidth / 3 ) },
+
+									},
+									ColumnDefinitions = 
+									{
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+										new ColumnDefinition { Width = new GridLength( App.screenWidth / 3 ) },
+
+									}
+									};
+
+								Image play = new Image();
+								play.Source = "video_play.png";
+								play.Aspect = Aspect.AspectFit;
+								play.WidthRequest = 75;
+								play.HeightRequest = 75;
+								play.HorizontalOptions = LayoutOptions.Center;
+								play.VerticalOptions = LayoutOptions.Center;
+								play.ClassId =   Constants.SERVICE_BASE_URL +  model.goal_media[index].goal_media ;
+								play.GestureRecognizers.Add(videoTap);
+
+								BoxView box = new BoxView();
+								box.BackgroundColor = Color.Red;
+								box.WidthRequest = 100;
+								box.HeightRequest = 100;
+
+								grid.Children.Add( img, 0, 0 );
+								Grid.SetColumnSpan(img, 3);
+								Grid.SetRowSpan( img, 3 );
+								grid.Children.Add(play, 1, 1);
+								//horizmgConatiner.Children.Add(grid);
+								bottomAndLowerControllStack.Children.Add(grid);
+							}
+							else
+							{
+								//horizmgConatiner.Children.Add(img);
+								bottomAndLowerControllStack.Children.Add(img);
+							}
+						}
+
+					}
+
+					// imgScrollView.Content = horizmgConatiner;
+					// bottomAndLowerControllStack.Children.Add(imgScrollView);
+				}
+
+				#endregion
+
+				//masterStack.AddChildToLayout(toolsLayout,1,65);
+				//masterStack.AddChildToLayout(emptyLayout,1,75);
+				bottomAndLowerControllStack.Children.Add(toolsLayout);
+				bottomAndLowerControllStack.Children.Add(emptyLayout);
+				if (model.titleVal.Length < 25) {
+					masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 8);
+				} else {
+					masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, 11);
+				}
+
+				StackLayout spaceOffsetlayout = new StackLayout();
+				spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
+				spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
+				spaceOffsetlayout.BackgroundColor = Color.Transparent;
+				//masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
+				bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
+
+				masterScroll.HeightRequest = App.screenHeight - 20;
+				masterScroll.WidthRequest = App.screenWidth; //App.screenWidth * 90 / 100;
+
+				masterScroll.Content = masterStack;
+
+				masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
+				masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
+				masterLayout.AddChildToLayout(masterScroll,0, Device.OnPlatform(16,18,18));
+
+				#region CUSTOM LIST MENU
+
+				//new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  }
+
+				#endregion
+
+				Content = masterLayout;
+			} 
+			catch (Exception ex)
+			{
+				Debug.WriteLine ( ex.Message );
 			}
-
-            StackLayout spaceOffsetlayout = new StackLayout();
-            spaceOffsetlayout.WidthRequest = App.screenWidth * 50 / 100;
-            spaceOffsetlayout.HeightRequest = Device.OnPlatform(100, 100, 250);
-            spaceOffsetlayout.BackgroundColor = Color.Transparent;
-            //masterStack.AddChildToLayout(spaceOffsetlayout, 1, 85);
-            bottomAndLowerControllStack.Children.Add(spaceOffsetlayout);
-
-            masterScroll.HeightRequest = App.screenHeight - 20;
-			masterScroll.WidthRequest = App.screenWidth; //App.screenWidth * 90 / 100;
-
-            masterScroll.Content = masterStack;
-
-            masterLayout.AddChildToLayout(mainTitleBar, 0, 0);
-            masterLayout.AddChildToLayout(subTitleBar, 0, Device.OnPlatform(9, 10, 10));
-			masterLayout.AddChildToLayout(masterScroll,0, Device.OnPlatform(16,18,18));
-
-            #region CUSTOM LIST MENU
-
-            //new CustomListViewItem { EmotionID = item.EmotionId.ToString(), Name = item.EmpotionName, SliderValue = item.EmotionValue  }
-            
-            #endregion
-
-            Content = masterLayout;
         }
 
 		void OnImageAreaTapGestureRecognizerTapped(object sender, EventArgs e)

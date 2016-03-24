@@ -85,6 +85,7 @@ namespace PurposeColor
 		public static bool IsTesting = false;
 		public static bool isEmotionsListing = false;
 		public static ChatObject chatList{ get; set; }
+		public static bool GemDeleted = false;
 		public static ApplicationSettings Settings
 		{
 			get

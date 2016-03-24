@@ -847,7 +847,9 @@ namespace PurposeColor.screens
 					backToTop.ClassId = "prev page";
 					backToTop.Clicked += (object sender, EventArgs e) => 
 					{
+						masterScroll.Scrolled -= OnScroll;
 						OnLoadPreviousGemsClicked(  masterScroll, EventArgs.Empty );
+						masterScroll.Scrolled += OnScroll;
 					};
 					masterStack.Children.Add ( backToTop );
 				}

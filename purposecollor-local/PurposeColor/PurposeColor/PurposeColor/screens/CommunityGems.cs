@@ -17,6 +17,7 @@ using PurposeColor.Service;
 using Cross;
 using System.Threading.Tasks;
 using PushNotifictionListener;
+using System.Threading;
 
 namespace PurposeColor
 {
@@ -46,6 +47,7 @@ namespace PurposeColor
 		bool reachedFront;
 		int myGemsCount = 0;
 		int MAX_ROWS_AT_A_TIME = 10;
+		CancellationTokenSource cancelToken;
 
 		//public GemsDetailsPage(List<EventMedia> mediaArray, List<ActionMedia> actionMediaArray, string pageTitleVal, string titleVal, string desc, string Media, string NoMedia, string gemId, GemType gemType)
 		public CommunityGems(DetailsPageModel model)
@@ -63,7 +65,7 @@ namespace PurposeColor
 			CurrentGemId = model.gemId;
 			CurrentGemType = model.gemType;
 
-
+			cancelToken = new CancellationTokenSource ();
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
 			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += OnImageAreaTapGestureRecognizerTapped;
 			subTitleBar = new CommunityGemSubTitleBar(Constants.SUB_TITLE_BG_COLOR, Constants.COMMUNITY_GEMS, true);
@@ -197,6 +199,7 @@ namespace PurposeColor
 
 		public void OnCancelProgress()
 		{
+			cancelToken.Cancel();
 			string cancelst = "cancel pressed";
 			progressBar.HideProgressbar ();
 		}
@@ -283,22 +286,37 @@ namespace PurposeColor
 
 		async Task<bool>  DownloadMedias()
 		{
-			IDownload downloader =  DependencyService.Get<IDownload> ();
-			List<string> mediaListToDownload = new List<string> ();
-
-			foreach (var item in communityGems.resultarray)
+			try 
 			{
-				if (item.gem_media != null && item.gem_media.Count > 0) 
+				IDownload downloader =  DependencyService.Get<IDownload> ();
+				List<string> mediaListToDownload = new List<string> ();
+
+				foreach (var item in communityGems.resultarray)
 				{
-					GemMedia gemMedia = item.gem_media[0];
+					if (item.gem_media != null && item.gem_media.Count > 0) 
+					{
+						GemMedia gemMedia = item.gem_media[0];
 
-					if( gemMedia.media_type == "png" || gemMedia.media_type == "jpg" || gemMedia.media_type == "jpeg"  )
-						mediaListToDownload.Add( Constants.SERVICE_BASE_URL + gemMedia.gem_media );				
+						if( gemMedia.media_type == "png" || gemMedia.media_type == "jpg" || gemMedia.media_type == "jpeg"  )
+							mediaListToDownload.Add( Constants.SERVICE_BASE_URL + gemMedia.gem_media );				
+					}
 				}
+					
+				var val = await downloader.DownloadFiles ( mediaListToDownload, cancelToken.Token );
+				return val;
+			} 
+			catch (OperationCanceledException)
+			{
+				Debug.WriteLine (  "-----cancelled-----" );
+				return false;
 			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine ( ex.Message );
+				return false;
+			}
+			
 
-			var val = await downloader.DownloadFiles ( mediaListToDownload );
-			return val;
 		}
 
 		void RenderGems( CommunityGemsObject gemsObject, bool prevButtonNeeded )

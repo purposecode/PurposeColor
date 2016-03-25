@@ -1106,7 +1106,7 @@ namespace PurposeColor.screens
         }
 
 
-		void OnLoadPreviousGemsClicked (object sender, EventArgs e)
+		bool OnLoadPreviousGemsClicked (object sender, EventArgs e)
 		{
 			try
 			{
@@ -1144,21 +1144,23 @@ namespace PurposeColor.screens
 					RenderGoalsPage( false );
 
 					masterScroll.Content = masterStack;
+					return true;
 				}
 				else
 				{
 					reachedFront = true;
+					return false;
 				}
-
 			} 
 			catch (Exception ex) 
 			{
 				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+				return false;
 			}
 		}
 
 
-		async void OnLoadMoreGemsClicked (object sender, EventArgs e)
+		bool  OnLoadMoreGemsClicked (object sender, EventArgs e)
 		{
 			try 
 			{
@@ -1172,7 +1174,7 @@ namespace PurposeColor.screens
 
 				int lastRendererItemIndex = gemsObj.GoalsDetails.FindIndex (itm => itm.GoalID == lastItem.GoalID);
 
-				Debug.WriteLine( "------- last rendered item : " + lastRendererItemIndex + "  lastitem.GoalId : " + lastItem.GoalID );
+
 				if (lastRendererItemIndex > 0 && ( lastRendererItemIndex + 1 ) < gemsObj.GoalsDetails.Count )
 				{
 					reachedEnd = false;
@@ -1202,16 +1204,19 @@ namespace PurposeColor.screens
 						RenderGoalsPage( false );
 
 					masterScroll.Content = masterStack;
+					return true;
 				}
 				else
 				{
 					reachedEnd = true;
+					return false;
 				}
 
 			} 
 			catch (Exception ex)
 			{
 				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+				return false;
 			}
 
 		}
@@ -1240,17 +1245,18 @@ namespace PurposeColor.screens
 					masterScroll.Scrolled -= OnScroll;
 					progressBar.ShowProgressbar( "loading gems..." );
 
+					if (OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty ))
+					{
+						await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+						await masterScroll.ScrollToAsync( 0, 10, false );
+					}
 
-					Debug.WriteLine( "---------------  new page ----------------" );
-					OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
 
-					//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
-					await masterScroll.ScrollToAsync( 0, 10, false );
 
 					progressBar.HideProgressbar();
 
 
-					await Task.Delay( TimeSpan.FromSeconds( 2 ) );
+					//await Task.Delay( TimeSpan.FromSeconds( 2 ) );
 					masterScroll.Scrolled += OnScroll;
 
 
@@ -1260,16 +1266,14 @@ namespace PurposeColor.screens
 					masterScroll.Scrolled -= OnScroll;
 					progressBar.ShowProgressbar( "loading gems..." );
 
-					Debug.WriteLine( "---------------  prev. page ----------------" );
-					OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
-
-					//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
-					await masterScroll.ScrollToAsync( 0,  masterStack.Height - 750, false );
-
-
+					if (OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty ))
+					{
+						await Task.Delay( TimeSpan.FromSeconds( 1 ) );
+						await masterScroll.ScrollToAsync( 0,  masterStack.Height - 750, false );
+					}
+						
 					progressBar.HideProgressbar();
 
-					await Task.Delay( TimeSpan.FromSeconds( 2 ) );
 					masterScroll.Scrolled += OnScroll;
 
 				}

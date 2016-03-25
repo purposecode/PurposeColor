@@ -58,7 +58,7 @@ namespace PurposeColor.screens
 		CommonGoalsObject allCommonGoalsObject;
 		bool reachedEnd;
 		bool reachedFront;
-		int MAX_ROWS_AT_A_TIME = 10;
+		int MAX_ROWS_AT_A_TIME = 20;
 
 		public GoalsPage()
         {

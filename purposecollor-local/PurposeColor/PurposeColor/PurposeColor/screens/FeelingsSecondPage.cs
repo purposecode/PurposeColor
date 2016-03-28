@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using Xamarin.Forms;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PurposeColor.screens;
@@ -36,6 +35,8 @@ namespace PurposeColor
         IProgressBar progressBar;
         double screenHeight;
         double screenWidth;
+		CustomPicker aePicker = null;
+		List<CustomListViewItem> actionlist = null;
 
         public FeelingsSecondPage()
         {
@@ -56,6 +57,8 @@ namespace PurposeColor
             subTitleBar.NextButtonTapRecognizer.Tapped += NextButtonTapRecognizer_Tapped;
             screenHeight = App.screenHeight;
             screenWidth = App.screenWidth;
+			aePicker = null;
+			actionlist = null;
 
             Label firstLine = new Label();
             firstLine.Text = "Does being";
@@ -318,6 +321,7 @@ namespace PurposeColor
                     App.actionsListSource = new List<CustomListViewItem>();
                     foreach (var item in actions)
                     {
+						item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
                         App.actionsListSource.Add(item);
                     }
                 }
@@ -359,21 +363,17 @@ namespace PurposeColor
                     }
                 }
 
-                if (App.actionsListSource == null || App.actionsListSource.Count < 1)
-                {
-                    bool isActionsAvailable = await DownloadAllSupportingActions();
+				bool isActionsAvailable = await DownloadAllSupportingActions();
 
-                    if (!isActionsAvailable)
-                    {
-                        await DisplayAlert(Constants.ALERT_TITLE, "Could not retrive the acions.", Constants.ALERT_OK);
-                        return;
-                    }
-                    else
-                    {
-                        // save goals to local db
-                    }
-
-                }
+				if (!isActionsAvailable)
+				{
+					await DisplayAlert(Constants.ALERT_TITLE, "Could not retrive the acions.", Constants.ALERT_OK);
+					return;
+				}
+				else
+				{
+					// save goals to local db
+				}
                 progressBar.HideProgressbar();
 
             }
@@ -404,20 +404,24 @@ namespace PurposeColor
         {
             try
             {
+				actionlist = App.actionsListSource;
+
+//				foreach (var item in actionlist) {
+//					item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+//				}
+
                 await actionPickerButton.ScaleTo(1.5, 100, Easing.Linear);
                 await actionPickerButton.ScaleTo(1, 100, Easing.Linear);
+				if(aePicker == null)
+				{
+					aePicker = new CustomPicker(masterLayout, actionlist, 35, Constants.ADD_ACTIONS, true, true, true);
+	                aePicker.WidthRequest = screenWidth;
+	                aePicker.HeightRequest = screenHeight;
+	                aePicker.ClassId = "ePicker";
+	                aePicker.listView.ItemSelected += OnActionPickerItemSelected;
+				}
 
-                CustomPicker ePicker = new CustomPicker(masterLayout, App.actionsListSource, 35, Constants.ADD_ACTIONS, true, true);
-                ePicker.WidthRequest = screenWidth;
-                ePicker.HeightRequest = screenHeight;
-                ePicker.ClassId = "ePicker";
-                ePicker.listView.ItemSelected += OnActionPickerItemSelected;
-				masterLayout.AddLayout(ePicker, 0, 0);
-
-                //double yPos = 60 * screenHeight / 100;
-                // ePicker.TranslateTo(0, -yPos, 250, Easing.BounceIn);
-                // ePicker.FadeTo(1, 750, Easing.Linear); 
-
+				masterLayout.AddLayout(aePicker, 0, 0);
             }
             catch (System.Exception ex)
             {
@@ -477,19 +481,55 @@ namespace PurposeColor
         {
             try
             {
-
                 CustomListViewItem item = e.SelectedItem as CustomListViewItem;
-                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
-				if( pickView != null )
-                masterLayout.Children.Remove(pickView);
-                pickView = null;
-                actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
+				if(item == null)
+				{
+					return;
+				}
+
+				aePicker.listView.BeginRefresh();
+
+//                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+//				if( pickView != null )
+//                masterLayout.Children.Remove(pickView);
+//                pickView = null;
+                
                 if (selectedActions == null)
                 {
                     selectedActions = new List<CustomListViewItem>();
                 }
-                selectedActions.Add(item);
 
+				actionlist.Remove(item);
+				Device.BeginInvokeOnMainThread(  async () => 
+				{
+						if(item.Source.Contains("tick_box"))
+						{
+							item.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+							selectedActions.Add(item);
+							actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
+						}
+						else
+						{
+							selectedActions.Remove(item);
+							item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+
+//							PreviewItem itemToDel = FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(del => del.Name == item.Name);
+//							FeelingsSecondPage.actionPreviewListSource.Remove(itemToDel);
+//							actionPreviewListView.ItemsSource = null;
+//							actionPreviewListView.ItemsSource = actionPreviewListSource;
+
+							FeelingsSecondPage.actionPreviewListSource.Remove(FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(p => p.Name == item.Name));
+						}
+					
+						actionlist.Add(item);
+						aePicker.listView.ItemsSource = null;
+						aePicker.listView.ItemsSource = actionlist;
+						aePicker.listView.EndRefresh();
+						if(aePicker.listView.SelectedItem != null)
+						{
+							aePicker.listView.SelectedItem = null;
+						}
+				});
             }
             catch (System.Exception ex)
             {
@@ -503,7 +543,18 @@ namespace PurposeColor
             var alert = await DisplayAlert(Constants.ALERT_TITLE, messege, Constants.ALERT_OK, "Cancel");
             if (alert)
             {
-                FeelingsSecondPage.actionPreviewListSource.Remove(toDelete);
+				try {
+					FeelingsSecondPage.actionPreviewListSource.Remove (toDelete);
+                	
+					var selectedItem = actionlist.FirstOrDefault (ac => ac.Name == toDelete.Name);
+					actionlist.Remove (selectedItem);
+					selectedItem.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					actionlist.Add (selectedItem);
+					aePicker.listView.ItemsSource = null;
+					aePicker.listView.ItemsSource = actionlist;
+				} catch (Exception ex) {
+                	
+				}
             }
         }
 

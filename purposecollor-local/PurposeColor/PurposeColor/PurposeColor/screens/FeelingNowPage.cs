@@ -587,12 +587,9 @@ namespace PurposeColor
 				ePicker.FeelingsPage = this;
 				ePicker.listView.ItemSelected += OnEmotionalPickerItemSelected;
 				masterLayout.AddLayout(ePicker, 0, Device.OnPlatform(0, 0, 0));
-				ePicker.ChildRemoved += async (s, ee) =>
-				{
-					var test = "test";
-				};
+
 			}
-			catch (System.Exception ex)
+			catch (System.Exception)
 			{
 				DisplayAlert(Constants.ALERT_TITLE, "Please try again", Constants.ALERT_OK);
 			}
@@ -831,10 +828,6 @@ namespace PurposeColor
 			}
 
 			GC.Collect ();
-		}
-
-		void emotionPicker_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
 		}
 
 		async void OnFeelingNowPageAppearing(object sender, System.EventArgs e)

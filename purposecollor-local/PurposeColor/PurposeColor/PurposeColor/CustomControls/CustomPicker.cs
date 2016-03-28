@@ -42,9 +42,15 @@ namespace PurposeColor.CustomControls
             }
         }
 
-        public string EmotionID { get; set; }
+		public string EmotionID { get; set;}
         public string EventID { get; set; }
         public int SliderValue { get; set; }
+		private string source;
+		public string Source { 
+			get { 
+				return source;} 
+			set { 
+				source = value;} }
         public CustomListViewItem()
         {
         }
@@ -99,6 +105,101 @@ namespace PurposeColor.CustomControls
         }
     }
 
+
+	public class CustomMultySelectListViewCellItem : ViewCell
+	{
+		Image tickImage = null;
+
+		public CustomMultySelectListViewCellItem()
+		{
+			CustomLayout masterLayout = new CustomLayout();
+			masterLayout.BackgroundColor = Color.White;//Constants.LIST_BG_COLOR;
+			double screenWidth = App.screenWidth;
+			double screenHeight = App.screenHeight;
+			Label name = new Label();
+			name.SetBinding(Label.TextProperty, "Name");
+			name.TextColor = Color.Black;
+			name.FontFamily = Constants.HELVERTICA_NEUE_LT_STD;
+			int fontSize = 15;
+			if (App.screenDensity > 1.5)
+			{
+				fontSize = 17;
+			}
+			else
+			{
+				fontSize = 15;
+			}
+			name.FontSize = Device.OnPlatform( fontSize, fontSize, 22 );
+
+
+			tickImage = new Image();
+			//tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+			tickImage.SetBinding(Image.SourceProperty,"Source");
+
+			tickImage.Aspect = Aspect.Fill;
+			tickImage.ClassId = "to_select";
+			tickImage.WidthRequest = 15;
+			tickImage.HeightRequest = 15;
+
+			tickImage.HorizontalOptions = LayoutOptions.Center;
+			tickImage.VerticalOptions = LayoutOptions.Center;
+			TapGestureRecognizer selectBoxTapRecognizer = new TapGestureRecognizer ();
+			selectBoxTapRecognizer.Tapped += SelectBoxTap_Tapped;
+			//tickImage.GestureRecognizers.Add (selectBoxTapRecognizer);
+
+			StackLayout divider = new StackLayout();
+			divider.WidthRequest = screenWidth;
+			divider.HeightRequest = 1;
+			divider.BackgroundColor = Color.FromRgb(220, 220, 220);
+
+			masterLayout.WidthRequest = screenWidth * 60 / 100;
+			masterLayout.HeightRequest = screenHeight * Device.OnPlatform(30, 30, 7) / 100;
+			//masterLayout.AddChildToLayout(tickImage, (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			//masterLayout.AddChildToLayout(name, (float)20, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+
+			StackLayout hStck = new StackLayout {
+				Children = {tickImage, name},
+				//BackgroundColor = Color.Yellow,
+				WidthRequest = App.screenWidth * .9,
+				Orientation = StackOrientation.Horizontal,
+				Spacing = 5,
+				HorizontalOptions = LayoutOptions.Start,
+				VerticalOptions = LayoutOptions.Center
+			};
+
+			//hStck.GestureRecognizers.Add (selectBoxTapRecognizer);
+			masterLayout.AddChildToLayout( hStck  , (float)5, (float)Device.OnPlatform(5, 5, 50), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+			masterLayout.AddChildToLayout(divider, 0, (float)Device.OnPlatform(20, 20, 5), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
+
+			this.View = masterLayout;
+		}
+
+		void SelectBoxTap_Tapped (object sender, EventArgs e)
+		{
+			try {
+				string currentSource = tickImage.ClassId;
+				if(currentSource.Contains("to_select"))
+				{
+					tickImage.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+					tickImage.ClassId = "selected";
+				}else{
+					tickImage.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					tickImage.ClassId = "to_select";
+				}
+			} catch (Exception ex) {
+				
+			}
+		}
+
+		public void Dispose()
+		{
+			GC.Collect();
+		}
+	}
+
+
+
+
     public class CustomPicker : ContentView, IDisposable
     {
         public ListView listView;
@@ -123,7 +224,7 @@ namespace PurposeColor.CustomControls
         int topYPos;
         double screenHeight;
         double screenWidth;
-        public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired)
+		public CustomPicker(CustomLayout containerLayout, List<CustomListViewItem> itemSource, int topY, string title, bool titelBarRequired, bool addButtonRequired, bool MultySelectList = false)
         {
             pageContainedLayout = containerLayout;
             masterLayout = new CustomLayout();
@@ -160,11 +261,9 @@ namespace PurposeColor.CustomControls
             };
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
-
             StackLayout listContainer = new StackLayout();
             listContainer.WidthRequest = screenWidth * 96 / 100;
             listContainer.HeightRequest =  (screenHeight * topY / 100) - Device.OnPlatform( 20, 20, 100 );
-
 
             StackLayout listHeader = new StackLayout();
             listHeader.WidthRequest = screenWidth * 96 / 100;
@@ -189,19 +288,10 @@ namespace PurposeColor.CustomControls
             listTitle.FontSize = Device.OnPlatform( fontSize, fontSize, 24 );
 
             addButton = new Image();
-            if (Device.OS == TargetPlatform.WinPhone)
-            {
-              //  addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", @"/Assets/icn_plus.png");
-                addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
-            }
-            else
-            {
-                addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
-            }
+			addButton.Source = Device.OnPlatform("icn_plus.png", "icn_plus.png", "//Assets//icn_plus.png");
             
             addButton.WidthRequest = Device.OnPlatform( 15, 15, 20 );
             addButton.HeightRequest = Device.OnPlatform( 15, 15, 20 );
-
 
             StackLayout addButtonLayout = new StackLayout();
             addButtonLayout.HeightRequest = 50;
@@ -214,7 +304,11 @@ namespace PurposeColor.CustomControls
 
             listView = new ListView();
             listView.ItemsSource = itemSource;
-            listView.ItemTemplate = new DataTemplate(typeof(CustomListViewCellItem));
+			if (!MultySelectList) {
+				listView.ItemTemplate = new DataTemplate (typeof(CustomListViewCellItem));
+			} else {
+				listView.ItemTemplate = new DataTemplate (typeof(CustomMultySelectListViewCellItem));
+			}
            // listView.HeightRequest = screenHeight * 42 / 100;
 			listView.SeparatorVisibility = SeparatorVisibility.None;
             listView.Opacity = 1;
@@ -336,7 +430,10 @@ namespace PurposeColor.CustomControls
                         pageContainedLayout.Children.Remove(pickView);
                         pickView = null;
                         progressBar.HideProgressbar();
-
+						if(listView.SelectedItem != null)
+						{
+							listView.SelectedItem = null;
+						}
 
 						//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
 
@@ -381,7 +478,6 @@ namespace PurposeColor.CustomControls
 				entry.Text = e.OldTextValue;
 			}
         }
-
 
         public void Dispose()
         {

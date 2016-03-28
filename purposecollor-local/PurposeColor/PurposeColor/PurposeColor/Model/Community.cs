@@ -8,6 +8,23 @@ using System.IO;
 
 namespace PurposeColor.Model
 {
+	public class PedingFollowRequestDetails
+	{
+		public string follow_id { get; set; }
+		public string follow_status { get; set; }
+		public string follow_datetime { get; set; }
+		public string firstname { get; set; }
+		public string profileimage { get; set; }
+	}
+
+	public class PendingFollowRequestObject
+	{
+		public string code { get; set; }
+		public string text { get; set; }
+		public List<PedingFollowRequestDetails> resultarray { get; set; }
+	}
+
+
 	public class ChatHistoryDetails
 	{
 		public string from_id { get; set; }

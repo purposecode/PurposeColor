@@ -63,12 +63,14 @@ namespace PurposeColor.Droid
 
 				alert.SetPositiveButton ("Accept", async  (senderAlert, args) => 
 					{
+						this.Finish();
 						await App.UpdateNotificationStatus(  App.NotificationReqID , "2") ;
 					} );
 
 				alert.SetNegativeButton ("Reject", async (senderAlert, args) => 
 					{
-						await App.UpdateNotificationStatus( "0", App.NotificationReqID ) ;
+						this.Finish();
+						await App.UpdateNotificationStatus(  App.NotificationReqID , "0") ;
 					} );
 				//run the alert in UI thread to display in the screen
 				RunOnUiThread (() => {

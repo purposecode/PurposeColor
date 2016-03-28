@@ -888,6 +888,19 @@ namespace PurposeColor
 				}
 
 
+				// get pending follow requests
+				PendingFollowRequestObject pendingDetails = await ServiceHelper.GetPendingFollowRequests( currentUser.UserId );
+				if( pendingDetails != null )
+				{
+					foreach (var item in pendingDetails.resultarray) 
+					{
+						App.NotificationReqID = item.follow_id;
+						ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+						notify.ShowNotification ("follow", "", item.firstname + " send a follow request ", true);
+					}
+				}
+
+
 			}
 			catch (System.Exception ex)
 			{

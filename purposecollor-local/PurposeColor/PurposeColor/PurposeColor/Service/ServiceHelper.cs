@@ -3061,6 +3061,45 @@ namespace PurposeColor.Service
 			}
 		}
 
+
+		public static async Task<PendingFollowRequestObject> GetPendingFollowRequests( string userId )
+		{
+			try
+			{
+				if (!CrossConnectivity.Current.IsConnected)
+				{
+					return null;
+				}
+
+				var client = new System.Net.Http.HttpClient();
+				client.BaseAddress = new Uri(Constants.SERVICE_BASE_URL);
+				string uriString =  "api.php?action=followrequestlist&user_id=" + userId;
+				var response = await client.GetAsync(uriString);
+				if( response != null && response.Content != null )
+				{
+					var actionsJson = response.Content.ReadAsStringAsync().Result;
+					var rootobject = JsonConvert.DeserializeObject<PendingFollowRequestObject>(actionsJson);
+					if (rootobject != null && rootobject.resultarray != null)
+					{
+						client.Dispose();
+						return rootobject; 
+					}
+					client.Dispose();
+					return null;
+				}
+				else
+				{
+					client.Dispose();
+					return null;
+				}
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+
+
 		public static async Task<string> UpdateShreAndFollowStatus( string userId, string communityStatus, string followStatus )
 		{
 			try

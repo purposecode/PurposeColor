@@ -230,7 +230,7 @@ namespace PurposeColor
 		public static async Task<bool> UpdateNotificationStatus( string reqID, string status )
 		{
 			return await ServiceHelper.UpdateNotificationRequest ( status, reqID );
-			await Navigator.PopAsync ();
+
 		}
 
 		public static List<CustomListViewItem> GetEmotionsList()

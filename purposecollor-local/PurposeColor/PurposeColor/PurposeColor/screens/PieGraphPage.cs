@@ -573,6 +573,27 @@ namespace PurposeColor.screens
 		public void Dispose()
 		{
 			GC.Collect ();
+			plotView = null;
+			masterLayout = null;
+			subTitleBar = null;
+		    mainTitleBar = null;
+
+			region1DownArrow = null;
+			region2DownArrow = null;;
+			region3DownArrow = null;;
+			region4DownArrow = null;;
+			region1ButtonStack = null;;
+			region2ButtonStack = null;;
+			region3ButtonStack = null;;
+			region4ButtonStack = null;;
+
+			region1WarmLabel = null;
+			region2AssertiveLabel = null;
+			region3PatientLabel = null;
+			region4DetailedLabel = null;
+			emotionList = null;
+			graphAndEmotionListContainer = null;
+			BottomStackContainer = null;
 		}
 	}
 }

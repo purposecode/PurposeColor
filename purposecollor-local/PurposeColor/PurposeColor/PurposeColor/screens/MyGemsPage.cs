@@ -868,6 +868,9 @@ namespace PurposeColor
 
 					communityGems =   await ServiceHelper.GetMyGemsDetails();
 
+					App.Settings.DeleteCommunityGems ();
+					App.Settings.SaveCommunityGemsDetails (communityGems);
+
 					RenderGems( communityGems );
 					progress.HideProgressbar();
 				}

@@ -548,8 +548,9 @@ namespace PurposeColor
 					FeelingsSecondPage.actionPreviewListSource.Remove (toDelete);
                 	
 					var selectedItem = actionlist.FirstOrDefault (ac => ac.Name == toDelete.Name);
-					actionlist.Remove (selectedItem);
 					actionIndex = actionlist.IndexOf(selectedItem);
+					actionlist.Remove (selectedItem);
+
 
 					selectedItem.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
 					actionlist.Insert(actionIndex, selectedItem);

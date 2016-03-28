@@ -296,7 +296,7 @@ namespace PurposeColor.CustomControls
             StackLayout addButtonLayout = new StackLayout();
             addButtonLayout.HeightRequest = 50;
             addButtonLayout.WidthRequest = 50;
-            addButtonLayout.BackgroundColor = Color.Transparent;
+			addButtonLayout.BackgroundColor = Color.Transparent;
 
             TapGestureRecognizer addButtonLayoutTapGestureRecognizer = new TapGestureRecognizer();
             addButtonLayoutTapGestureRecognizer.Tapped += OnAddButtonClicked;
@@ -333,16 +333,46 @@ namespace PurposeColor.CustomControls
             this.WidthRequest = screenWidth;
             this.HeightRequest = screenHeight;
 
+			Button closeButton;
+
             masterLayout.AddChildToLayout(layout, 0, 0);
             if (titelBarRequired)
             {
                 masterLayout.AddChildToLayout(listHeader, 2, (100 - topY - 1) - Device.OnPlatform( 10, 10, 11 ));
                 masterLayout.AddChildToLayout(listTitle, 7, (100 - topY - 1) - 7);
-                if (addButtonRequired)
+				if (addButtonRequired)
                 {
+					if(MultySelectList)
+					{
+						masterLayout.AddChildToLayout(addButton, 75, (100 - topY - 1) - 6);
+						masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(68, 68, 70), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
+						closeButton = new Button
+						{
+							Text = Device.OnPlatform("  X", "  X", "  X"),
+							BackgroundColor = Color.Transparent,
+							FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
+							TextColor = Color.White,
+							WidthRequest = App.screenWidth * Device.OnPlatform(.15, .15, .16),
+							HeightRequest = App.screenHeight * Device.OnPlatform(.06, .07, .07),
+							FontSize = Device.OnPlatform(17, 16, 21),
+							BorderColor = Color.Transparent,
+							BorderWidth = 0
 
-                    masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
-                    masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
+						};
+
+						closeButton.Clicked += (s, e) =>
+						{
+							HideCommentsPopup();
+						};
+
+						masterLayout.AddChildToLayout(closeButton, 83 , (100 - topY - 2) - 6); //x and y percentage.. // hv to correct pixel by TranslationY.
+						closeButton.TranslationY = Device.OnPlatform(-3, -3, -3);
+						// add close button
+					}
+					else{
+                    	masterLayout.AddChildToLayout(addButton, 85, (100 - topY - 1) - 6);
+                    	masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(80, 80, 83), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
+					}
                 }
 
             }
@@ -478,6 +508,20 @@ namespace PurposeColor.CustomControls
 				entry.Text = e.OldTextValue;
 			}
         }
+
+		void HideCommentsPopup()
+		{
+			try
+			{
+				View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				pageContainedLayout.Children.Remove(pickView);
+				pickView = null;
+			}
+			catch (Exception)
+			{
+			}
+		}
+
 
         public void Dispose()
         {

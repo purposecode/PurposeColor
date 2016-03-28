@@ -160,14 +160,12 @@ namespace PurposeColor
 			if(  masterScroll.ScrollY + masterScroll.Height > ( masterStackLayout.Height - masterStackLayout.Y ) && !reachedEnd )
 			{
 				masterScroll.Scrolled -= OnMasterScrollScrolled;
-				progressBar.ShowProgressbar( "loading gems..." );
 
 				OnLoadMoreGemsClicked( masterScroll, EventArgs.Empty );
 
 				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
 				await masterScroll.ScrollToAsync( 0, 10, false );
 
-				progressBar.HideProgressbar();
 
 
 				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
@@ -178,7 +176,6 @@ namespace PurposeColor
 			else if( masterScroll.ScrollY < Device.OnPlatform( -50, 1, 0 ) && !reachedFront  )
 			{
 				masterScroll.Scrolled -= OnMasterScrollScrolled;
-				progressBar.ShowProgressbar( "loading gems..." );
 
 
 				OnLoadPreviousGemsClicked( masterScroll, EventArgs.Empty );
@@ -186,8 +183,6 @@ namespace PurposeColor
 				//await Task.Delay( TimeSpan.FromSeconds( 1 ) );
 				await masterScroll.ScrollToAsync( 0,  masterStackLayout.Height - 750, false );
 
-
-				progressBar.HideProgressbar();
 
 				await Task.Delay( TimeSpan.FromSeconds( 2 ) );
 				masterScroll.Scrolled += OnMasterScrollScrolled;
@@ -263,12 +258,13 @@ namespace PurposeColor
 					return;
 				}*/
 
-				await DownloadMedias();
 
 				if( communityGems.resultarray.Count > MAX_ROWS_AT_A_TIME )
 				{
 					communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
 				}
+
+				await DownloadMedias();
 
 				progressBar.HideProgressbarWithCancel();
 
@@ -288,6 +284,8 @@ namespace PurposeColor
 		{
 			try 
 			{
+				progressBar.ShowProgressbar( "Downloading media..." );
+
 				IDownload downloader =  DependencyService.Get<IDownload> ();
 				List<string> mediaListToDownload = new List<string> ();
 
@@ -303,16 +301,19 @@ namespace PurposeColor
 				}
 					
 				var val = await downloader.DownloadFiles ( mediaListToDownload, cancelToken.Token );
+				progressBar.HideProgressbar();
 				return val;
 			} 
 			catch (OperationCanceledException)
 			{
 				Debug.WriteLine (  "-----cancelled-----" );
+				progressBar.HideProgressbar();
 				return false;
 			}
 			catch (Exception ex)
 			{
 				Debug.WriteLine ( ex.Message );
+				progressBar.HideProgressbar();
 				return false;
 			}
 			
@@ -887,7 +888,7 @@ namespace PurposeColor
 			}
 		}
 
-		void OnLoadPreviousGemsClicked (object sender, EventArgs e)
+		async void OnLoadPreviousGemsClicked (object sender, EventArgs e)
 		{
 			try
 			{
@@ -915,6 +916,8 @@ namespace PurposeColor
 
 					masterScroll.Content = null;
 					GC.Collect();
+
+					await DownloadMedias();
 
 					RenderGems ( communityGems, false );
 				}
@@ -967,7 +970,7 @@ namespace PurposeColor
 					GC.Collect();
 
 
-
+					await DownloadMedias();
 
 					if( itemCountToCopy < MAX_ROWS_AT_A_TIME )
 						RenderGems ( communityGems, true );

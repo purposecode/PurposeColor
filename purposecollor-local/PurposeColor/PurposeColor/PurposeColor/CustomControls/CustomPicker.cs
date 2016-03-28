@@ -366,7 +366,7 @@ namespace PurposeColor.CustomControls
 						};
 
 						masterLayout.AddChildToLayout(closeButton, 83 , (100 - topY - 2) - 6); //x and y percentage.. // hv to correct pixel by TranslationY.
-						closeButton.TranslationY = Device.OnPlatform(-3, -3, -3);
+						closeButton.TranslationY = Device.OnPlatform(-3, -9, -3);
 						// add close button
 					}
 					else{

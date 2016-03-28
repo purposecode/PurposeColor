@@ -37,6 +37,7 @@ namespace PurposeColor
         double screenWidth;
 		CustomPicker aePicker = null;
 		List<CustomListViewItem> actionlist = null;
+		int actionIndex = 0;
 
         public FeelingsSecondPage()
         {
@@ -487,8 +488,6 @@ namespace PurposeColor
 					return;
 				}
 
-				aePicker.listView.BeginRefresh();
-
 //                View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
 //				if( pickView != null )
 //                masterLayout.Children.Remove(pickView);
@@ -498,6 +497,8 @@ namespace PurposeColor
                 {
                     selectedActions = new List<CustomListViewItem>();
                 }
+
+				actionIndex = actionlist.IndexOf(item);
 
 				actionlist.Remove(item);
 				Device.BeginInvokeOnMainThread(  async () => 
@@ -520,11 +521,11 @@ namespace PurposeColor
 
 							FeelingsSecondPage.actionPreviewListSource.Remove(FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(p => p.Name == item.Name));
 						}
-					
-						actionlist.Add(item);
+						actionlist.Insert(actionIndex, item);
+						//actionlist.Add(item);
 						aePicker.listView.ItemsSource = null;
 						aePicker.listView.ItemsSource = actionlist;
-						aePicker.listView.EndRefresh();
+
 						if(aePicker.listView.SelectedItem != null)
 						{
 							aePicker.listView.SelectedItem = null;
@@ -548,8 +549,11 @@ namespace PurposeColor
                 	
 					var selectedItem = actionlist.FirstOrDefault (ac => ac.Name == toDelete.Name);
 					actionlist.Remove (selectedItem);
+					actionIndex = actionlist.IndexOf(selectedItem);
+
 					selectedItem.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
-					actionlist.Add (selectedItem);
+					actionlist.Insert(actionIndex, selectedItem);
+					//actionlist.Add (selectedItem);
 					aePicker.listView.ItemsSource = null;
 					aePicker.listView.ItemsSource = actionlist;
 				} catch (Exception ex) {

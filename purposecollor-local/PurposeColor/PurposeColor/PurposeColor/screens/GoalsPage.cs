@@ -1041,7 +1041,21 @@ namespace PurposeColor.screens
 						} 
 						else
 						{
-                            await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
+							await DisplayAlert (Constants.ALERT_OK, "Action is completed", Constants.ALERT_OK);
+							/*App.masterPage.IsPresented = false;
+							App.masterPage.Detail = new NavigationPage(new GoalsPage());
+                            await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);*/
+							masterScroll.Scrolled -= OnScroll;
+							commonGoalsObject = null;
+							pendingGoalsObject = null;
+							gemsGoalsObject = null;
+							masterStack.Children.Clear();
+
+							masterScroll.Content = null;
+
+							OnAppearing ( this, EventArgs.Empty );
+							masterScroll.Scrolled += OnScroll;
+
 						}
 						progress.HideProgressbar ();
 					}
@@ -1215,7 +1229,7 @@ namespace PurposeColor.screens
 			} 
 			catch (Exception ex)
 			{
-				DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
+				//DisplayAlert ( Constants.ALERT_TITLE, "Low memory error.", Constants.ALERT_OK );
 				return false;
 			}
 

@@ -18,7 +18,7 @@
     <MandroidI18n />
     <JavaMaximumHeapSize>
     </JavaMaximumHeapSize>
-    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>e27ef410</NuGetPackageImportStamp>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -201,6 +201,12 @@
     </Reference>
     <Reference Include="XamarinAndroidFFmpeg">
       <HintPath>..\..\packages\AndroidFFMpeg\XamarinAndroidFFmpeg.dll</HintPath>
+    </Reference>
+    <Reference Include="AdvancedTimer.Forms.Plugin.Abstractions">
+      <HintPath>..\..\packages\Mobilist.AdvancedTimer.Forms.Plugin.1.0.1.0\lib\MonoAndroid10\AdvancedTimer.Forms.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="AdvancedTimer.Forms.Plugin.Android">
+      <HintPath>..\..\packages\Mobilist.AdvancedTimer.Forms.Plugin.1.0.1.0\lib\MonoAndroid10\AdvancedTimer.Forms.Plugin.Android.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

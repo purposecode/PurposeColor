@@ -11,6 +11,9 @@ using PurposeColor.interfaces;
 using System.Collections.ObjectModel;
 using PushNotifictionListener;
 using XLabs.Forms.Controls;
+using System.Threading.Tasks;
+using System.Linq;
+using AdvancedTimer.Forms.Plugin.Abstractions;
 
 namespace PurposeColor
 {
@@ -28,9 +31,11 @@ namespace PurposeColor
 		ObservableCollection<ChatDetails> chatList = null;
 		User currentuser;
 		string touserID;
+		IAdvancedTimer timer;
 
 		public ChatDetailsPage ( ObservableCollection<ChatDetails> chats,string tosusrID, string userImageUrl, string toUserName )
 		{
+
 
 			App.CurrentChatUserID = tosusrID;
 			NavigationPage.SetHasNavigationBar(this, false);
@@ -38,6 +43,12 @@ namespace PurposeColor
 			chatList = chats;
 			touserID = tosusrID;
 			currentuser = App.Settings.GetUser ();
+
+		    timer = DependencyService.Get<IAdvancedTimer>();
+			timer.initTimer (30000, SyncChatHistoryFromServer, true);
+			timer.startTimer ();
+			//Xamarin.Forms.Device.StartTimer ( TimeSpan.FromSeconds( 1 ), SyncChatHistoryFromServer );
+
 
 			string chatTouser = toUserName;
 
@@ -57,6 +68,7 @@ namespace PurposeColor
 			subTitleBar = new CommunityGemChatTitleBar(Constants.SUB_TITLE_BG_COLOR, chatTouser, userImageUrl, false);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => 
 			{
+				timer.stopTimer ();
 				App.CurrentChatUserID = null;
 				await Navigation.PopAsync();
 			};
@@ -187,6 +199,53 @@ namespace PurposeColor
 
 		}
 
+
+		public  void timerElapsed(object o, EventArgs e)
+		{
+			System.Diagnostics.Debug.WriteLine ( "-----------------i am CCCC timer------------" );
+		}
+
+
+		public void SyncChatHistoryFromServer( object o, EventArgs e )
+		{
+
+			ChatHistoryObject history = new ChatHistoryObject ();
+			Task.Run( async () =>
+			{ 
+					 history = await ServiceHelper.GetChatHistory ( touserID, currentuser.UserId );
+				} ).Wait();
+
+
+			if (history != null && history.resultarray.Count > 0) 
+			{
+				
+				List<string> serverChat = history.resultarray.Select (itm => itm.msg).ToList ();
+
+				List<string> localChat = chatList.Select ( itm => itm.Message ).ToList();
+
+
+				bool updateChatList = (serverChat != null && chatList != null && serverChat.Count != chatList.Count) ? true : false;
+
+				if ( updateChatList ) 
+				{
+					chatList.Clear ();
+					foreach (var item in history.resultarray) 
+					{
+						chatList.Add ( new ChatDetails{ CurrentUserid = currentuser.UserId, FromUserID = item.from_id, Message = item.msg } );
+
+					}
+					if (chatList != null && chatList.Count > 1)
+					{
+						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+						ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
+						notify.ShowNotification ( "notify", "chat", chatList[ chatList.Count -1 ].Message, false );
+					}
+
+				}
+
+			}
+		}
+
 		void ChatEntry_TextChanged (object sender, TextChangedEventArgs e)
 		{
 			ExtendedEntry cEntry = sender as ExtendedEntry;
@@ -197,6 +256,7 @@ namespace PurposeColor
 
 		protected override bool OnBackButtonPressed ()
 		{
+			timer.stopTimer ();
 			App.CurrentChatUserID = null;
 			Dispose ();
 			return base.OnBackButtonPressed ();
@@ -204,6 +264,8 @@ namespace PurposeColor
 
 		public void Dispose ()
 		{
+			timer.stopTimer ();
+			timer = null;
 			App.CurrentChatUserID = null;
 		}
 

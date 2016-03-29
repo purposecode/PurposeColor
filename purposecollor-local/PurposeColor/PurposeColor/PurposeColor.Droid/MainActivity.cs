@@ -28,6 +28,7 @@ namespace PurposeColor.Droid
             curentActivity = this;
 			CrossPushNotification.Initialize<CrossPushNotificationListener>("572461137328");
             ImageCircleRenderer.Init();
+			AdvancedTimer.Forms.Plugin.Droid.AdvancedTimerImplementation.Init ();
 
             File testFile = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.ExternalStorageDirectory.ToString() + "/PurposeColor/");
             App.DownloadsPath = testFile.AbsolutePath + "/";

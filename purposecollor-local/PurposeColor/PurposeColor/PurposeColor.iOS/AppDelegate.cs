@@ -39,7 +39,8 @@ namespace PurposeColor.iOS
 			var settings = UIUserNotificationSettings.GetSettingsForTypes(
 				UIUserNotificationType.Alert |  UIUserNotificationType.Sound
 				, null);
-			
+
+			AdvancedTimer.Forms.Plugin.iOS.AdvancedTimerImplementation.Init ();
 			UIApplication.SharedApplication.RegisterUserNotificationSettings (settings);
             return base.FinishedLaunching(app, options);
         }

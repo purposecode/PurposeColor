@@ -85,6 +85,9 @@ namespace PurposeColor
 			chatHistoryListView.HasUnevenRows = true;
 			chatHistoryListView.BackgroundColor =  Color.FromRgb(54, 79, 120);
 			chatHistoryListView.ItemsSource = chatList;
+			if( chatList != null && chatList.Count > 1 )
+				chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+			
 			chatHistoryListView.ItemTapped += (object sender, ItemTappedEventArgs e) => 
 			{
 				chatHistoryListView.SelectedItem = null;
@@ -236,9 +239,14 @@ namespace PurposeColor
 					}
 					if (chatList != null && chatList.Count > 1)
 					{
-						chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
 						ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
 						notify.ShowNotification ( "notify", "chat", chatList[ chatList.Count -1 ].Message, false );
+
+						Device.BeginInvokeOnMainThread(  async () => 
+						{
+								chatHistoryListView.ScrollTo( chatList[ chatList.Count -1 ], ScrollToPosition.End, true );
+						});
+						
 					}
 
 				}

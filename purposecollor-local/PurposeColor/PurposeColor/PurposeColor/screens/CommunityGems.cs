@@ -264,9 +264,11 @@ namespace PurposeColor
 					communityGems.resultarray.RemoveRange( MAX_ROWS_AT_A_TIME, communityGems.resultarray.Count - MAX_ROWS_AT_A_TIME );
 				}
 
+				progressBar.HideProgressbarWithCancel();
+
 				await DownloadMedias();
 
-				progressBar.HideProgressbarWithCancel();
+
 
 				RenderGems( communityGems, false );
 

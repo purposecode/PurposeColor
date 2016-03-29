@@ -383,8 +383,10 @@ namespace PurposeColor
 						VerticalOptions = LayoutOptions.Center,
 						FontSize = Device.OnPlatform(12, 12, 15)
 					};
+					StackLayout likeLayout = new StackLayout{Children = {likeCount, likeButton, likeLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5};
 
-					toolsLayout.Children.Add( new StackLayout{Children = {likeCount, likeButton, likeLabel}, Orientation = StackOrientation.Horizontal, Spacing = 5});
+
+					toolsLayout.Children.Add( likeLayout  );
 
 //					toolsLayout.Children.Add(likeCount);
 //					toolsLayout.Children.Add(likeButton);
@@ -400,10 +402,10 @@ namespace PurposeColor
 							Label likeCountLabel = new Label();
 							if (likeImg != null)
 							{
-								int likeImgIndex = toolsLayout.Children.IndexOf( likeImg );
+								int likeImgIndex = likeLayout.Children.IndexOf( likeImg );
 								if( likeImgIndex > 0 )
 								{
-									likeCountLabel =(Label) toolsLayout.Children[ likeImgIndex - 1 ];
+									likeCountLabel =(Label) likeLayout.Children[ likeImgIndex - 1 ];
 								}
 								if (likeImg.ClassId != null)
 									gemID = likeImg.ClassId;
@@ -411,11 +413,11 @@ namespace PurposeColor
 
 							if (like != null)
 							{
-								int labelIndex = toolsLayout.Children.IndexOf( like );
+								int labelIndex = likeLayout.Children.IndexOf( like );
 								if( labelIndex > 0 )
 								{
-									likeImg =(Image) toolsLayout.Children[ labelIndex - 1 ];
-									likeCountLabel =(Label) toolsLayout.Children[ labelIndex - 2 ];
+									likeImg =(Image) likeLayout.Children[ labelIndex - 1 ];
+									likeCountLabel =(Label) likeLayout.Children[ labelIndex - 2 ];
 								}
 								if (like.ClassId != null)
 									gemID = like.ClassId;

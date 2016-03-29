@@ -119,6 +119,9 @@ namespace PushNotifictionListener
 				}
 				else 
 				{
+					if (fromID == user.ID.ToString ())
+						return;
+					
 					ILocalNotification notify = DependencyService.Get<ILocalNotification> ();
 					notify.ShowNotification ("follow", "", followMessege, true);
 				}

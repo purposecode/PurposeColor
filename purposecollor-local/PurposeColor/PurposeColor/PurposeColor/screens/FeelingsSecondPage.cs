@@ -499,38 +499,40 @@ namespace PurposeColor
                 }
 
 				actionIndex = actionlist.IndexOf(item);
-
-				actionlist.Remove(item);
-				Device.BeginInvokeOnMainThread(  async () => 
+				if(actionIndex > 0)
 				{
-						if(item.Source.Contains("tick_box"))
-						{
-							item.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
-							selectedActions.Add(item);
-							actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
-						}
-						else
-						{
-							selectedActions.Remove(item);
-							item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					actionlist.Remove(item);
+				}
 
-//							PreviewItem itemToDel = FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(del => del.Name == item.Name);
-//							FeelingsSecondPage.actionPreviewListSource.Remove(itemToDel);
-//							actionPreviewListView.ItemsSource = null;
-//							actionPreviewListView.ItemsSource = actionPreviewListSource;
+				if(!string.IsNullOrEmpty(item.Source) && item.Source.Contains("tick_box"))
+				{
+					item.Source = Device.OnPlatform("tic_active.png", "tic_active.png", "//Assets//tic_active.png");
+					selectedActions.Add(item);
+					actionPreviewListSource.Add(new PreviewItem { Name = item.Name, Image = null });
+				}
+				else
+				{
+					if(selectedActions.IndexOf(item) > 0)
+					{
+						selectedActions.Remove(item);
+					}
 
-							FeelingsSecondPage.actionPreviewListSource.Remove(FeelingsSecondPage.actionPreviewListSource.FirstOrDefault(p => p.Name == item.Name));
-						}
-						actionlist.Insert(actionIndex, item);
-						//actionlist.Add(item);
-						aePicker.listView.ItemsSource = null;
-						aePicker.listView.ItemsSource = actionlist;
+					item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+					actionPreviewListSource.Remove(actionPreviewListSource.FirstOrDefault(p => p.Name == item.Name));
+				}
+				if(actionIndex > 0)
+				{
+					actionlist.Insert(actionIndex, item);
+				}else {
+					actionlist.Insert(0, item);
+				}
+				aePicker.listView.ItemsSource = null;
+				aePicker.listView.ItemsSource = actionlist;
 
-						if(aePicker.listView.SelectedItem != null)
-						{
-							aePicker.listView.SelectedItem = null;
-						}
-				});
+				if(aePicker.listView.SelectedItem != null)
+				{
+					aePicker.listView.SelectedItem = null;
+				}
             }
             catch (System.Exception ex)
             {
@@ -549,12 +551,19 @@ namespace PurposeColor
                 	
 					var selectedItem = actionlist.FirstOrDefault (ac => ac.Name == toDelete.Name);
 					actionIndex = actionlist.IndexOf(selectedItem);
-					actionlist.Remove (selectedItem);
-
+					if(actionIndex > 0)
+					{
+						actionlist.Remove (selectedItem);
+					}
 
 					selectedItem.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
-					actionlist.Insert(actionIndex, selectedItem);
-					//actionlist.Add (selectedItem);
+
+					if(actionIndex > 0)
+					{
+						actionlist.Insert(actionIndex, selectedItem);
+					}else {
+						actionlist.Insert(0, selectedItem);
+					}
 					aePicker.listView.ItemsSource = null;
 					aePicker.listView.ItemsSource = actionlist;
 				} catch (Exception ex) {

@@ -348,13 +348,13 @@ namespace PurposeColor.CustomControls
 						masterLayout.AddChildToLayout(addButtonLayout, Device.OnPlatform(68, 68, 70), Device.OnPlatform((100 - topY - 1) - 9, (100 - topY - 1) - 9, (100 - topY - 1) - 8)); 
 						closeButton = new Button
 						{
-							Text = Device.OnPlatform("  X", "  X", "  X"),
+							Text = "Close", //Device.OnPlatform("  X", "  X", "  X"),
 							BackgroundColor = Color.Transparent,
 							FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 							TextColor = Color.White,
 							WidthRequest = App.screenWidth * Device.OnPlatform(.15, .15, .16),
 							HeightRequest = App.screenHeight * Device.OnPlatform(.06, .07, .07),
-							FontSize = Device.OnPlatform(17, 16, 21),
+							FontSize = Device.OnPlatform(12, 11, 16), //Device.OnPlatform(17, 16, 21),
 							BorderColor = Color.Transparent,
 							BorderWidth = 0
 

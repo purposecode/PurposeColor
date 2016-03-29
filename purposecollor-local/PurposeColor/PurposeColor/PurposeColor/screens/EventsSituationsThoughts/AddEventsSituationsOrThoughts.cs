@@ -1423,7 +1423,7 @@ namespace PurposeColor.screens
 									newEmotionItem.EventID = App.actionsListSource.First().EventID;
 									newEmotionItem.Name = App.actionsListSource.First().Name;
 									newEmotionItem.SliderValue = App.actionsListSource.First().SliderValue;
-
+									newEmotionItem.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
 									SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
 									feelingSecondPage.OnActionPickerItemSelected( this, newEmotionEvent );
 

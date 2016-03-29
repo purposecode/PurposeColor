@@ -860,19 +860,26 @@ namespace PurposeColor
 					progress.ShowProgressbar( "Removing Gem..." );
 					await ServiceHelper.RemoveGemFromCommunity( item.EventID, item.gemType );
 
+					masterScroll.Scrolled -= OnMasterScrollScrolled;
+
 					communityGems = null;
 					masterStack.Children.Clear();
 					masterStackLayout.Children.Clear();
 					masterScroll.Content = null;
 					GC.Collect();
 
-					communityGems =   await ServiceHelper.GetMyGemsDetails();
+				/*	communityGems =   await ServiceHelper.GetMyGemsDetails();
 
 					App.Settings.DeleteCommunityGems ();
 					App.Settings.SaveCommunityGemsDetails (communityGems);
 
 					RenderGems( communityGems );
-					progress.HideProgressbar();
+					progress.HideProgressbar();*/
+
+					masterScroll.Scrolled += OnMasterScrollScrolled;
+					App.masterPage.IsPresented = false;
+					DetailsPageModel model = new DetailsPageModel();
+					App.masterPage.Detail = new NavigationPage(new CommunityGems( model ));
 				}
 
 				HideCommentsPopup();

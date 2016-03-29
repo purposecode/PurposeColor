@@ -499,7 +499,7 @@ namespace PurposeColor
                 }
 
 				actionIndex = actionlist.IndexOf(item);
-				if(actionIndex > 0)
+				if(actionIndex >= 0)
 				{
 					actionlist.Remove(item);
 				}
@@ -512,7 +512,7 @@ namespace PurposeColor
 				}
 				else
 				{
-					if(selectedActions.IndexOf(item) > 0)
+					if(selectedActions.IndexOf(item) >= 0)
 					{
 						selectedActions.Remove(item);
 					}
@@ -520,7 +520,7 @@ namespace PurposeColor
 					item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
 					actionPreviewListSource.Remove(actionPreviewListSource.FirstOrDefault(p => p.Name == item.Name));
 				}
-				if(actionIndex > 0)
+				if(actionIndex >= 0)
 				{
 					actionlist.Insert(actionIndex, item);
 				}else {
@@ -551,14 +551,14 @@ namespace PurposeColor
                 	
 					var selectedItem = actionlist.FirstOrDefault (ac => ac.Name == toDelete.Name);
 					actionIndex = actionlist.IndexOf(selectedItem);
-					if(actionIndex > 0)
+					if(actionIndex >= 0)
 					{
 						actionlist.Remove (selectedItem);
 					}
 
 					selectedItem.Source = Device.OnPlatform ("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
 
-					if(actionIndex > 0)
+					if(actionIndex >= 0)
 					{
 						actionlist.Insert(actionIndex, selectedItem);
 					}else {

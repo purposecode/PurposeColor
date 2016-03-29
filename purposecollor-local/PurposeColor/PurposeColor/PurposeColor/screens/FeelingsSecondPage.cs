@@ -276,7 +276,7 @@ namespace PurposeColor
             try
             {
                 var goalsList = await DownloadAllGoals();
-				await Task.Delay(100);
+				//await Task.Delay(100);
                 OnGoalsPickerButtonClicked(goalsAndDreamsPickerButton, EventArgs.Empty);
 
             }
@@ -337,7 +337,7 @@ namespace PurposeColor
 
         void OnBackButtonTapRecognizerTapped(object sender, System.EventArgs e)
         {
-            Navigation.PopModalAsync();
+			Navigation.PopAsync();
         }
 
         async void FeelingsSecondPage_Appearing(object sender, System.EventArgs e)
@@ -405,12 +405,6 @@ namespace PurposeColor
         {
             try
             {
-				actionlist = App.actionsListSource;
-
-//				foreach (var item in actionlist) {
-//					item.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
-//				}
-
                 await actionPickerButton.ScaleTo(1.5, 100, Easing.Linear);
                 await actionPickerButton.ScaleTo(1, 100, Easing.Linear);
 				if(aePicker == null)
@@ -599,7 +593,19 @@ namespace PurposeColor
                 {
                     actionPreviewListSource.Clear();
                 }
-				await Task.Delay(100);
+				actionlist = App.actionsListSource;
+
+				foreach (var action in actionlist) {
+					action.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+				}
+
+				if(aePicker != null)
+				{
+					aePicker.listView.ItemsSource = null;
+					aePicker.listView.ItemsSource = actionlist;
+				}
+				//await Task.Delay(100);
+
                 OnActionPickerButtonClicked(actionPickerButton, EventArgs.Empty);
 
             }

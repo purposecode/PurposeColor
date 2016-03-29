@@ -528,7 +528,9 @@ namespace PurposeColor
 				}
 				aePicker.listView.ItemsSource = null;
 				aePicker.listView.ItemsSource = actionlist;
-
+				if(Device.OS == TargetPlatform.iOS)
+					aePicker.listView.ScrollTo(item,ScrollToPosition.Center,false);
+				
 				if(aePicker.listView.SelectedItem != null)
 				{
 					aePicker.listView.SelectedItem = null;
@@ -566,6 +568,9 @@ namespace PurposeColor
 					}
 					aePicker.listView.ItemsSource = null;
 					aePicker.listView.ItemsSource = actionlist;
+					if(Device.OS == TargetPlatform.iOS)
+						aePicker.listView.ScrollTo(selectedItem,ScrollToPosition.Center,false);
+					
 				} catch (Exception ex) {
                 	
 				}

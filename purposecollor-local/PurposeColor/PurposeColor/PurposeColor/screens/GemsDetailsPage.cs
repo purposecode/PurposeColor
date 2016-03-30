@@ -243,10 +243,18 @@ namespace PurposeColor
 						videoTap.Tapped += OnEventVideoTapped;
 						bool isValidUrl = (mediaList[index].event_media != null && !string.IsNullOrEmpty(mediaList[index].event_media)) ? true : false;
 						string source = (isValidUrl) ? model.Media + mediaList[index].event_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
-
+						string fileExtenstion = Path.GetExtension(source);
+						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+						//img.WidthRequest = App.screenWidth;// * 50 / 100;
 						Image img = new Image();
-						//img.WidthRequest = App.screenWidth * 50 / 100;
-						img.HeightRequest = App.screenWidth;
+
+						if(isImage)
+							img.HeightRequest = App.screenWidth * 1.1;
+						else
+						{
+							img.HeightRequest = App.screenWidth;
+						}
+						
 						//img.MinimumHeightRequest = App.screenWidth;
 						//img.MinimumWidthRequest = App.screenWidth;
 
@@ -342,8 +350,14 @@ namespace PurposeColor
 						string source = (isValidUrl) ? model.Media + actionMediaList[index].action_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 						string fileExtenstion = Path.GetExtension(source);
 						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-						//img.WidthRequest = App.screenWidth * 50 / 100;
-						img.HeightRequest = App.screenWidth;
+						//img.WidthRequest = App.screenWidth;// * 50 / 100;
+						if(isImage)
+							img.HeightRequest = App.screenWidth * 1.1;
+						else
+						{
+							img.HeightRequest = App.screenWidth;
+						}
+						
 						img.Aspect = Aspect.AspectFill;
 						img.ClassId = null;
 						if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
@@ -439,8 +453,14 @@ namespace PurposeColor
 						string source = (isValidUrl) ?  model.goal_media[index].goal_media : Device.OnPlatform("noimage.png", "noimage.png", "//Assets//noimage.png");
 						string fileExtenstion = Path.GetExtension(source);
 						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-						//img.WidthRequest = App.screenWidth * 50 / 100;
-						img.HeightRequest = App.screenWidth;
+						//img.WidthRequest = App.screenWidth;// * 50 / 100;
+						if(isImage)
+							img.HeightRequest = App.screenWidth * 1.1;
+						else
+						{
+							img.HeightRequest = App.screenWidth;
+						}
+						
 						img.Aspect = Aspect.AspectFill;
 						img.ClassId = null;
 						if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")

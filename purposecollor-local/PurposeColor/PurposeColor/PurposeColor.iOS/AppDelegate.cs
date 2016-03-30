@@ -44,7 +44,7 @@ namespace PurposeColor.iOS
 					var createdTime = System.IO.Directory.GetCreationTime(directoryname);
 					var files = System.IO.Directory.EnumerateFiles(directoryname);
 					foreach (var file in files) {
-						if (System.IO.File.GetLastAccessTime(file) < DateTime.Now.AddMinutes(-2)) {
+						if (System.IO.File.GetLastAccessTime(file) < DateTime.Now.AddDays(-2)) {
 							System.IO.File.Delete(file);
 						}
 					}

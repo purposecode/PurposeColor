@@ -30,29 +30,21 @@ namespace PurposeColor.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             ImageCircleRenderer.Init();
-			//App.DownloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/" ;
+			App.DownloadsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal) + "/" ;
 
 
 			try {
 				var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-				var libraryPath = System.IO.Path.Combine(documentsPath, "..", "Documents");
-				var directoryname = System.IO.Path.Combine (libraryPath, "MediaDownloads");
 
-
-				if(System.IO.Directory.Exists(directoryname))
+				if(System.IO.Directory.Exists(documentsPath))
 				{
-					var createdTime = System.IO.Directory.GetCreationTime(directoryname);
-					var files = System.IO.Directory.EnumerateFiles(directoryname);
+					var files = System.IO.Directory.EnumerateFiles(documentsPath);
 					foreach (var file in files) {
 						if (System.IO.File.GetLastAccessTime(file) < DateTime.Now.AddDays(-2)) {
 							System.IO.File.Delete(file);
 						}
 					}
-				}else {
-					System.IO.Directory.CreateDirectory(directoryname);
 				}
-
-				App.DownloadsPath = directoryname + "/";
 
 			} catch (Exception ex) {
 				var test = ex.Message;

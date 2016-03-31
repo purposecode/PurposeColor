@@ -42,6 +42,11 @@ namespace PurposeColor
 				} catch (Exception) {
 				}
 			};
+
+			mainTitleBar.imageAreaTapGestureRecognizer.Tapped += (object sender, EventArgs e) => 
+			{
+				App.masterPage.IsPresented = !App.masterPage.IsPresented;
+			};
 				
 
 			masterStack = new CustomLayout ();

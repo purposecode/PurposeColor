@@ -35,9 +35,9 @@ namespace PurposeColor.Droid.Dependency
             {
                 downloadedFolder = App.DownloadsPath + "/";
             }
-            if (System.IO.File.Exists(downloadedFolder + filename))
+         /*   if (System.IO.File.Exists(downloadedFolder + filename))
             {
-                ShowChooser(type, downloadedFolder + filename, text);
+				ShowChooser(type, downloadedFolder + filename, text, path);
             }
             else
             {
@@ -53,46 +53,56 @@ namespace PurposeColor.Droid.Dependency
 
                 App.ShareDownloadID = dm.Enqueue(r);
 
-            }
+            }*/
+
+			ShowChooser(type, downloadedFolder + filename, text, path);
 
 
 
 
-             MessagingCenter.Subscribe<MyTestReceiver, string>(this, "boom", (page, downpath) =>
+          /*   MessagingCenter.Subscribe<MyTestReceiver, string>(this, "boom", (page, downpath) =>
              {
                  ShowChooser(type, downpath, text);
-             });
+             });*/
 
 
 
         }
 
-        void ShowChooser(PurposeColor.Constants.MediaType type, string filename, string text)
+		void ShowChooser(PurposeColor.Constants.MediaType type, string filename, string text, string Uri )
         {
-			string textToShare = text + System.Environment.NewLine +  "shared with purpose color." + System.Environment.NewLine +  " http:\\www.purposecodes.com";
+
             progress.HideProgressbar();
             Intent shareIntent = new Intent();
             shareIntent.SetAction(Intent.ActionSend);
-			shareIntent.PutExtra(Intent.ExtraText, textToShare);
+
 
             // shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse("android.resource://sharetowhtsapp.sharetowhtsapp/" + Resource.Drawable.Icon));
 
             // file:///storage/emulated/0/Download/ + filename
+			string textToShare = "";
 
-            shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse( "file://" + filename));
+			text = text + System.Environment.NewLine + System.Environment.NewLine;
+           
             if (type == Constants.MediaType.Video)
             {
                 shareIntent.SetType("video/*");
+				text = System.Environment.NewLine + text + "   " + Uri + System.Environment.NewLine;
             }
             else if (type == Constants.MediaType.Image)
             {
                 shareIntent.SetType("image/*");
+				shareIntent.PutExtra(Intent.ExtraStream, Android.Net.Uri.Parse( "file://" + filename));
+				//text = System.Environment.NewLine + text + "   " + Uri + System.Environment.NewLine;
             }
             else if (type == Constants.MediaType.Audio)
             {
                 shareIntent.SetType("audio/*");
+				text = System.Environment.NewLine + text + "   " + Uri + System.Environment.NewLine;
             }
 
+		     textToShare = text + System.Environment.NewLine +  "shared with purpose color." + System.Environment.NewLine +  " http:\\www.purposecodes.com";
+			shareIntent.PutExtra(Intent.ExtraText, textToShare);
             MessagingCenter.Unsubscribe<MyTestReceiver, string>(this, "boom");
             MainActivity.GetMainActivity().StartActivity(Intent.CreateChooser(shareIntent, "Share image via:"));
         }

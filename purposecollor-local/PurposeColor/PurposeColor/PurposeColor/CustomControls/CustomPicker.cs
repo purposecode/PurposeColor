@@ -488,7 +488,7 @@ namespace PurposeColor.CustomControls
 					AddEventsSituationsOrThoughts addUtitlty = new AddEventsSituationsOrThoughts(pageTitle);
 					/*addUtitlty.feelingsPage = FeelingsPage;
 					addUtitlty.feelingSecondPage = feelingSecondPage;*/
-					Navigation.PushModalAsync( addUtitlty );
+					Navigation.PushAsync( addUtitlty );
                     View pickView = pageContainedLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
                     pageContainedLayout.Children.Remove(pickView);
                     pickView = null;

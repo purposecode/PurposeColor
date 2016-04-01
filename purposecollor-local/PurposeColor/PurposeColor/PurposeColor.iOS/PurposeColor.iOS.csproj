@@ -143,6 +143,7 @@
     <None Include="Resources\app_icon 512.png" />
     <None Include="Resources\app_icon_1024.png" />
     <None Include="Resources\photoCamera_icon.png" />
+    <Compile Include="Dependency\IOSContactPicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">

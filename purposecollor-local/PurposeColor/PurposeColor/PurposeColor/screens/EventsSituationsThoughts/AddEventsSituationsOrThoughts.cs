@@ -620,140 +620,19 @@ namespace PurposeColor.screens
             {
 				await ApplyAnimation( contactInputStack );
 
-				if( Device.OS == TargetPlatform.Android )
+				try
 				{
-					IContactPicker testicker = DependencyService.Get< IContactPicker >();
-					testicker.ShowContactPicker();
-					return;
+					if( Device.OS == TargetPlatform.Android  || Device.OS == TargetPlatform.iOS )
+					{
+						IContactPicker testicker = DependencyService.Get< IContactPicker >();
+						testicker.ShowContactPicker();
+					}	
 				}
-
-
-
-                IProgressBar progress = DependencyService.Get<IProgressBar>();
-                try
-                {
-                    progress.ShowProgressbar("Fetching contacts..");
-                    List<string> conatctList = new List<string>();
-                    List<Contact> plugInContacts = new List<Contact>();
-
-                    if( Device.OS == TargetPlatform.Android )
-                    {
-                        PurposeColor.interfaces.IDeviceContacts contacts = DependencyService.Get<PurposeColor.interfaces.IDeviceContacts>();
-                        conatctList = await contacts.GetContacts();
-                    }
-                    else
-                    {
-						if(await CrossContacts.Current.RequestPermission())
-						{
-							await Task.Run(() =>
-								{
-									CrossContacts.Current.PreferContactAggregation = false;
-
-									if (CrossContacts.Current.Contacts == null)
-										return;
-
-
-									plugInContacts = CrossContacts.Current.Contacts
-										.Where(c => !string.IsNullOrWhiteSpace(c.FirstName) && c.Phones.Count > 0)
-										.ToList();
-
-									conatctList = plugInContacts.Select(item => item.FirstName).ToList();
-								});
-						}
-                      
-                    }
-
-
-                    ////////////////////////// for testing only// test //////////////////////////
-                    if (conatctList == null) // for testing only// test
-                    {
-                        conatctList = new List<string>();
-                        conatctList.Add("Sam");
-                        conatctList.Add("Tom");
-                    }
-                    ////////////////////////// for testing only// test //////////////////////////
-
-                    if (conatctList != null && conatctList.Count > 0)
-                    {
-                        List<CustomListViewItem> contactsListViewSource = new List<CustomListViewItem>();
-                        foreach (var item in conatctList)
-                        {
-                            if (item != null)
-                                contactsListViewSource.Add(new CustomListViewItem { Name = item });
-                        }
-
-                        System.Collections.Generic.List<CustomListViewItem> pickerSource = contactsListViewSource;
-                        CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Contact", true, false);
-                        ePicker.WidthRequest = screenWidth;
-                        ePicker.HeightRequest = screenHeight;
-                        ePicker.ClassId = "ePicker";
-                        ePicker.listView.ItemSelected += OnContactsPickerItemSelected;
-                        masterLayout.AddChildToLayout(ePicker, 0, 0);
-                    }
-                    else
-                    {
-                        DisplayAlert("Purpose Color", "Could not read contacts.", "Ok");
-                    }
-
-
-                    progress.HideProgressbar();
-
-                    #region CONTACTS BK UP
-
-                    /*	if (await CrossContacts.Current.RequestPermission())
-                        {
-                            try 
-                            {	        
-                                CrossContacts.Current.PreferContactAggregation = false;
-
-                                if (CrossContacts.Current.Contacts == null)
-                                {
-                                    return;
-                                }
-
-                                List<Contact> contactSource = new List<Contact>();
-
-                                contactSource = CrossContacts.Current.Contacts.Where( name => name.DisplayName != null ).ToList();
-                                contacts = new List<CustomListViewItem>();
-                                foreach (var item in contactSource)
-                                {
-								
-                                    try {
-                                        if( item != null && item.DisplayName != null)
-                                            contacts.Add(new CustomListViewItem { Name = item.DisplayName});
-                                    } catch (Exception ex) {
-									
-                                    }
-								
-                                }
-
-                                contacts = contacts.OrderBy(c => c.Name).ToList();
-
-                                System.Collections.Generic.List<CustomListViewItem> pickerSource = contacts;
-                                CustomPicker ePicker = new CustomPicker(masterLayout, pickerSource, 65, "Select Contact", true, false);
-                                ePicker.WidthRequest = deviceSpec.ScreenWidth;
-                                ePicker.HeightRequest = deviceSpec.ScreenHeight;
-                                ePicker.ClassId = "ePicker";
-                                ePicker.listView.ItemSelected += OnContactsPickerItemSelected;
-                                masterLayout.AddChildToLayout(ePicker, 0, 0);
-                            }
-                            catch (Exception ex)
-                            {
-                                DisplayAlert( "",ex.Message, "ok" );
-                            }
-                        }
-                        else
-                        {
-                            DisplayAlert("contacts access permission ", "Please add permission to access contacts", "ok");
-                        }*/
-
-                    #endregion
-                }
-                catch (Exception ex)
+				catch (Exception ex)
                 {
                     DisplayAlert("contactsInputTapRecognizer: ", ex.Message, "ok");
                 }
-                progress.HideProgressbar();
+                 
             };
 
             #endregion
@@ -1697,7 +1576,7 @@ namespace PurposeColor.screens
                     {
                         if (!isUpdatePage)
                         {
-                            await Navigation.PopModalAsync();
+							await Navigation.PopAsync();
                         }
                         else
                         {
@@ -1707,7 +1586,7 @@ namespace PurposeColor.screens
 							}
 							else
 							{
-								await Navigation.PopModalAsync();
+								await Navigation.PopToRootAsync();
 							}
 							#region MyRegionNavigate back to GEM details page
 							//progress.ShowProgressbar("Loading");

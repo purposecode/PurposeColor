@@ -61,6 +61,8 @@ namespace PurposeColor.screens
 			};
 
 			mainTitleBar = new PurposeColorTitleBar(Color.FromRgb(8, 135, 224), "Purpose Color", Color.Black, "back", false);
+			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+			progressBar.ShowProgressbar ("Retriving user details..");
 
 			try {
 				currentUser = App.Settings.GetUser ();
@@ -84,11 +86,13 @@ namespace PurposeColor.screens
 			}
 
 			this.Appearing += ProfileSettingsPage_Appearing;
-
+			progressBar.HideProgressbar ();
 		}
 
 		async void  ProfileSettingsPage_Appearing (object sender, EventArgs e)
 		{
+			progressBar.ShowProgressbar ("Retriving user details..");
+
 			if(userIdForProfileInfo > 0)
 			{
 				await GetProfileInfo ();
@@ -320,7 +324,7 @@ namespace PurposeColor.screens
 				}
 			};
 
-			progressBar = DependencyService.Get<PurposeColor.interfaces.IProgressBar>();
+
 			int xpos = 62;
 			if (App.screenDensity > 2) {
 				xpos = 64;
@@ -334,6 +338,7 @@ namespace PurposeColor.screens
 			}
 
 			Content = masterLayout;
+			progressBar.HideProgressbar ();
 		}
 
 		async void UpdateFollowStatus (object sender, EventArgs e)

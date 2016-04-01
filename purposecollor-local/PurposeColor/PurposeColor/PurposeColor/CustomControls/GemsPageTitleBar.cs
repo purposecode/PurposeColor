@@ -70,6 +70,9 @@ namespace PurposeColor.CustomControls
 				{
 					masterLayout.AddChildToLayout(userImg, 88, Device.OnPlatform( 17, 25, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 				}
+				TapGestureRecognizer profileImgTap = new TapGestureRecognizer ();
+				profileImgTap.Tapped += ProfileImgTap_Tapped;
+				userImg.GestureRecognizers.Add (profileImgTap);
 			}
 
 
@@ -80,6 +83,14 @@ namespace PurposeColor.CustomControls
 
             Content = masterLayout;
 
+        }
+
+        void ProfileImgTap_Tapped (object sender, EventArgs e)
+        {
+			try {
+				Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage ());
+			} catch (Exception ex) {
+			}
         }
     }
 }

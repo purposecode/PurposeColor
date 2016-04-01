@@ -89,15 +89,8 @@ namespace PurposeColor.CustomControls
 
         void ProfileImgTap_Tapped (object sender, EventArgs e)
         {
-			// nav to profile with user id.
 			try {
-				
-				User user = App.Settings.GetUser();
-				string userId = user.UserId;
-				if (!string.IsNullOrEmpty (userId)) {
-					int id = Convert.ToInt32 (userId);
-					Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage (id));
-				}
+				Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage ());
 			} catch (Exception ex) {
 			}
         }

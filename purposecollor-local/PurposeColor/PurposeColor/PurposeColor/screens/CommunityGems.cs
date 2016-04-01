@@ -884,9 +884,14 @@ namespace PurposeColor
 				
 				string userId = (sender as Image).ClassId;
 				if (!string.IsNullOrEmpty (userId)) {
+					
 					int id = Convert.ToInt32 (userId);
-					//Navigation.PushModalAsync (new PurposeColor.screens.ProfileSettingsPage (id));
-					Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+					if(userId == currentUser.UserId)
+					{
+						Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage ());
+					}else {
+						Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+					}
 				}
 			} catch (Exception ex) {
 			}

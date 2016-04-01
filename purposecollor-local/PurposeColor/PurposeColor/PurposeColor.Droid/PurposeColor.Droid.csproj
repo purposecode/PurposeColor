@@ -244,6 +244,7 @@
     <Compile Include="NotificationClick.cs" />
     <Compile Include="FormsActivity.cs" />
     <Compile Include="Dependency\AndroidVideoCompressor.cs" />
+    <Compile Include="Dependency\ContactPicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -141,6 +141,7 @@
     <Compile Include="screens\ProfileSettingsPage.cs" />
     <Compile Include="interfaces\IVideoCompressor.cs" />
     <Compile Include="screens\GoalsPage.cs" />
+    <Compile Include="interfaces\IContactPicker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="OxyPlot">

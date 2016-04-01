@@ -76,6 +76,7 @@ namespace PurposeColor.screens
         int Seconds = 0;
         string currentGemId;
         GemType currentGemType;
+		public static Action<string> contactSelectAction; 
 		public static FeelingNowPage feelingsPage{ get; set; }
 		public static FeelingsSecondPage feelingSecondPage{ get; set; }
         #endregion
@@ -99,6 +100,7 @@ namespace PurposeColor.screens
             App.ContactsArray = new List<string>();
             App.PreviewListSource.Clear();
             int textInputWidth = (int)(devWidth * .80);
+			contactSelectAction = OnContactSelected;
 
             #region TITLE BARS
             TopTitleBar = new StackLayout
@@ -613,9 +615,20 @@ namespace PurposeColor.screens
 
             TapGestureRecognizer contactsInputTapRecognizer = new TapGestureRecognizer();
             contactInputStack.GestureRecognizers.Add(contactsInputTapRecognizer);
+
             contactsInputTapRecognizer.Tapped += async (s, e) =>
             {
 				await ApplyAnimation( contactInputStack );
+
+				if( Device.OS == TargetPlatform.Android )
+				{
+					IContactPicker testicker = DependencyService.Get< IContactPicker >();
+					testicker.ShowContactPicker();
+					return;
+				}
+
+
+
                 IProgressBar progress = DependencyService.Get<IProgressBar>();
                 try
                 {
@@ -1240,6 +1253,87 @@ namespace PurposeColor.screens
                 var test = ex.Message;
             }
         }
+
+
+
+		private void OnContactSelected( string contactName )
+		{
+			try
+			{
+				string name = contactName;
+				if (!string.IsNullOrEmpty(name))
+				{
+					string preText = "   - with ";
+					selectedContact = name;
+
+					var s = new FormattedString();
+
+					if (contactInfo.FormattedText == null)
+					{
+						contactInfo.Text = preText;
+						s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
+					}
+
+					if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+					{
+						string spanContact = "";
+						if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+						{
+							spanContact = contactInfo.FormattedText.Spans[1].Text + " , " + selectedContact; ;
+						}
+						s.Spans.Add(new Span { Text = preText, ForegroundColor = Color.Black });
+						s.Spans.Add(new Span { Text = spanContact });
+					}
+					else
+					{
+
+						string spanContact = "";
+						if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+						{
+							spanContact = contactInfo.FormattedText.Spans[1].Text;
+						}
+						else
+						{
+							spanContact = selectedContact;
+							s.Spans.Add(new Span { Text = selectedContact });
+						}
+
+					}
+
+
+					contactInfo.FormattedText = s;
+
+					if (contactInfo.FormattedText != null && contactInfo.FormattedText.Spans.Count > 1)
+					{
+						if (contactInfo.FormattedText.Spans[1].Text.Length > 40)
+						{
+							string trimmedContacts = contactInfo.FormattedText.Spans[1].Text;
+							trimmedContacts = trimmedContacts.Substring(0, 40);
+							trimmedContacts += "...";
+
+							contactInfo.FormattedText.Spans[1].Text = trimmedContacts;
+						}
+
+					}
+
+
+
+					contactInfo.IsVisible = true;
+					App.ContactsArray.Add(name);
+
+				}
+
+				View pickView = masterLayout.Children.FirstOrDefault(pick => pick.ClassId == "ePicker");
+				masterLayout.Children.Remove(pickView);
+				pickView = null;
+
+			}
+			catch (Exception ex)
+			{
+				var test = ex.Message;
+			}
+		}
+
 
         private void OnContactsPickerItemSelected(object sender, SelectedItemChangedEventArgs e)
         {

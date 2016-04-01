@@ -79,6 +79,7 @@ namespace PurposeColor.screens
 			    pendingGoalsObject = await ServiceHelper.GetAllPendingGoalsAndActions ();
 				if( pendingGoalsObject == null || pendingGoalsObject.resultarray == null )
 				{
+					progress.HideProgressbar();
 					var success = await DisplayAlert (Constants.ALERT_TITLE, "Error in fetching Pending goals", Constants.ALERT_OK, Constants.ALERT_RETRY);
 					if (!success) 
 					{

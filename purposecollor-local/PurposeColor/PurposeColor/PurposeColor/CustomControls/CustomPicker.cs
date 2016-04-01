@@ -352,7 +352,7 @@ namespace PurposeColor.CustomControls
 							BackgroundColor = Color.Transparent,
 							FontFamily = Constants.HELVERTICA_NEUE_LT_STD,
 							TextColor = Color.White,
-							WidthRequest = App.screenWidth * Device.OnPlatform(.15, .15, .16),
+							WidthRequest = App.screenWidth * Device.OnPlatform(.16, .16, .16),
 							HeightRequest = App.screenHeight * Device.OnPlatform(.06, .07, .07),
 							FontSize = Device.OnPlatform(12, 11, 16), //Device.OnPlatform(17, 16, 21),
 							BorderColor = Color.Transparent,
@@ -365,7 +365,7 @@ namespace PurposeColor.CustomControls
 							HideCommentsPopup();
 						};
 
-						masterLayout.AddChildToLayout(closeButton, 83 , (100 - topY - 2) - 6); //x and y percentage.. // hv to correct pixel by TranslationY.
+						masterLayout.AddChildToLayout(closeButton, 82 , (100 - topY - 2) - 6); //x and y percentage.. // hv to correct pixel by TranslationY.
 						closeButton.TranslationY = Device.OnPlatform(-3, -9, -3);
 						// add close button
 					}

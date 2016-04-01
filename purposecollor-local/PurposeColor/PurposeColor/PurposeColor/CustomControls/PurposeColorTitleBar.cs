@@ -70,6 +70,11 @@ namespace PurposeColor.CustomControls
 				{
 					masterLayout.AddChildToLayout(userImg, 88, Device.OnPlatform( 17, 25, 17 ), (int)masterLayout.WidthRequest, (int)masterLayout.HeightRequest);
 				}
+
+				TapGestureRecognizer profileImgTap = new TapGestureRecognizer ();
+				profileImgTap.Tapped += ProfileImgTap_Tapped;
+				userImg.GestureRecognizers.Add (profileImgTap);
+
 			}
    
 
@@ -80,6 +85,21 @@ namespace PurposeColor.CustomControls
 
             Content = masterLayout;
 
+        }
+
+        void ProfileImgTap_Tapped (object sender, EventArgs e)
+        {
+			// nav to profile with user id.
+			try {
+				
+				User user = App.Settings.GetUser();
+				string userId = user.UserId;
+				if (!string.IsNullOrEmpty (userId)) {
+					int id = Convert.ToInt32 (userId);
+					Navigation.PushAsync (new PurposeColor.screens.ProfileSettingsPage (id));
+				}
+			} catch (Exception ex) {
+			}
         }
     }
 }

@@ -209,7 +209,7 @@ namespace PurposeColor
 			masterLayout.AddChildToLayout (mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout (subTitleBar, 0, Device.OnPlatform (9, 10, 10));
 			masterLayout.AddChildToLayout (masterScroll, 0, 18);
-			masterLayout.AddChildToLayout (prevImg, Device.OnPlatform( 0, -2, 0 ), 50);
+			masterLayout.AddChildToLayout (prevImg, Device.OnPlatform( -2, -2, 0 ), 50);
 			masterLayout.AddChildToLayout (nextImg, 90, 50);
 			Content = masterLayout;
 		}

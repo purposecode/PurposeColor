@@ -129,10 +129,15 @@ namespace PurposeColor
 						img.ClassId = source;
 						source = Constants.SERVICE_BASE_URL + item.ImageName;
 					}
-					else if ( item != null && (item.MediaType == "3gpp" || item.MediaType == "aac") )
+					else if ( item != null &&  item.MediaType == "aac")
 					{
 						img.ClassId = source;
 						source = Device.OnPlatform ("audio.png", "audio.png", "//Assets//audio.png");
+					}
+					else if ( item != null &&  item.MediaType == "3gpp")
+					{
+						img.ClassId = source;
+						source = Constants.SERVICE_BASE_URL + item.ImageName;
 					}
 					else if ( item != null && item.MediaType == "wav")
 					{
@@ -146,7 +151,7 @@ namespace PurposeColor
 					indicator.BindingContext = img;
 					masterStack.AddChildToLayout (indicator, 40, 30);
 
-					if (item != null && item.MediaType == "mp4")
+					if (item != null && ( item.MediaType == "mp4" || item.MediaType == "3gpp" ) )
 					{
 						Grid grid = new Grid
 						{

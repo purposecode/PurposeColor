@@ -523,7 +523,7 @@ namespace PurposeColor
 										mediaItem.gem_media = App.DownloadsPath + fileName;
 										mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.gem_media, ID = item.gem_id, MediaType = mediaItem.media_type, Url = mediaItem.gem_media });
 									}
-									else if( mediaItem.media_type == "mp4" )
+									else if( mediaItem.media_type == "mp4" || mediaItem.media_type == "3gpp" )
 									{
 										mediaItem.gem_media = Constants.SERVICE_BASE_URL + mediaItem.gem_media ;
 										mediaPlayerList.Add(new PurposeColor.Constants.MediaDetails() { ImageName = mediaItem.video_thumb, ID = item.gem_id, MediaType = mediaItem.media_type, Url = mediaItem.gem_media });

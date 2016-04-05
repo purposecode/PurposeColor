@@ -125,8 +125,9 @@ namespace PurposeColor.screens
 				try {
 					StackLayout send = se as StackLayout;
 					SourceChooser chooser = new SourceChooser(masterLayout, send.ClassId, this);
+					chooser.HeightRequest = App.screenHeight;
 					chooser.ClassId = "mediachooser";
-					masterLayout.AddChildToLayout(chooser, 0, 0);
+					masterLayout.AddChildToLayout(chooser, 0, -10);
 
 				} catch (Exception ex) {
 					var test = ex.Message;
@@ -461,7 +462,8 @@ namespace PurposeColor.screens
 				string id = (sender as Image).ClassId;
 				SourceChooser chooser = new SourceChooser(masterLayout, id, this);
 				chooser.ClassId = "mediachooser";
-				masterLayout.AddChildToLayout(chooser, 0, 0);
+				chooser.HeightRequest = App.screenHeight;
+				masterLayout.AddChildToLayout(chooser, 0, -10);
 			} catch (Exception ex) {
 				DisplayAlert("Camera", ex.Message + " Please try again later", "ok");
 			}
@@ -544,7 +546,8 @@ namespace PurposeColor.screens
 			layout.BackgroundColor = Color.Black;
 			layout.Opacity = .6;
 			layout.WidthRequest = screenWidth;
-			layout.HeightRequest = screenHeight;
+			layout.HeightRequest = App.screenHeight * 1.15;
+			layout.VerticalOptions = LayoutOptions.Start;
 
 			TapGestureRecognizer emptyAreaTapGestureRecognizer = new TapGestureRecognizer();
 			emptyAreaTapGestureRecognizer.Tapped += (s, e) =>
@@ -571,7 +574,7 @@ namespace PurposeColor.screens
 			selectFromGalleryButton.ClassId = type;
 			selectFromGalleryButton.Clicked += SelectFromGalleryButtonClicked;
 
-			masterLayout.AddChildToLayout(layout, 0, 0);
+			masterLayout.AddChildToLayout(layout, 0,0);    
 			masterLayout.AddChildToLayout(imageButton, 40, 40);
 			masterLayout.AddChildToLayout(selectFromGalleryButton, 40, 60);
 

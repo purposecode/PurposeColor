@@ -133,7 +133,6 @@
     <Compile Include="Dependency\IOSVideoDownloader.cs" />
     <Compile Include="Dependency\IOSShareVia.cs" />
     <Compile Include="Dependency\IOSDownloader.cs" />
-    <None Include="Resources\photoCamera_icon%401x.png" />
     <None Include="Resources\verified_icon%401x.png" />
     <Compile Include="Dependency\IOSLocalNotificationsImpl.cs" />
     <Compile Include="Dependency\IOVVideoCompression.cs" />
@@ -142,7 +141,6 @@
     <None Include="Resources\app_icon 80.png" />
     <None Include="Resources\app_icon 512.png" />
     <None Include="Resources\app_icon_1024.png" />
-    <None Include="Resources\photoCamera_icon.png" />
     <Compile Include="Dependency\IOSContactPicker.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +285,7 @@
     <BundleResource Include="Resources\delete_button.png" />
     <BundleResource Include="Resources\image.png" />
     <BundleResource Include="Resources\video.png" />
+    <BundleResource Include="Resources\photoCamera_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

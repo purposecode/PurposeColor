@@ -1391,15 +1391,18 @@ namespace PurposeColor.screens
                                         }
                                     }
 
-
-									CustomListViewItem newEmotionItem = new CustomListViewItem();
-									newEmotionItem.EventID = App.actionsListSource.First().EventID;
-									newEmotionItem.Name = App.actionsListSource.First().Name;
-									newEmotionItem.SliderValue = App.actionsListSource.First().SliderValue;
-									newEmotionItem.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
-									SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
-									feelingSecondPage.OnActionPickerItemSelected( this, newEmotionEvent );
-
+									// No need to update action list view since we are not showing action listview anywhere in gems
+									if( input != Constants.EDIT_ACTIONS )
+									{
+										CustomListViewItem newEmotionItem = new CustomListViewItem();
+										newEmotionItem.EventID = App.actionsListSource.First().EventID;
+										newEmotionItem.Name = App.actionsListSource.First().Name;
+										newEmotionItem.SliderValue = App.actionsListSource.First().SliderValue;
+										newEmotionItem.Source = Device.OnPlatform("tick_box.png", "tick_box.png", "//Assets//tick_box.png");
+										SelectedItemChangedEventArgs newEmotionEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+										feelingSecondPage.OnActionPickerItemSelected( this, newEmotionEvent );
+									}
+										
                                     serviceResultOK = true;
                                 }
                                 catch (System.Exception)
@@ -1538,7 +1541,6 @@ namespace PurposeColor.screens
 									var goals = await ServiceHelper.GetAllGoals( user.UserId );
                                     if (goals != null)
                                     {
-                                        App.goalsListSource = null;
                                         App.goalsListSource = new List<CustomListViewItem>();
                                         foreach (var goal in goals)
                                         {
@@ -1546,15 +1548,17 @@ namespace PurposeColor.screens
                                         }
                                     }
 
+									// When editing goals no need to update goals lost view since we are now in gems module not in emotional awareness
+									if( input != Constants.EDIT_GOALS )
+									{
+										CustomListViewItem newEmotionItem = new CustomListViewItem();
+										newEmotionItem.EventID = App.goalsListSource.First().EventID;
+										newEmotionItem.Name = App.goalsListSource.First().Name;
+										newEmotionItem.SliderValue = App.goalsListSource.First().SliderValue;
 
-									CustomListViewItem newEmotionItem = new CustomListViewItem();
-									newEmotionItem.EventID = App.goalsListSource.First().EventID;
-									newEmotionItem.Name = App.goalsListSource.First().Name;
-									newEmotionItem.SliderValue = App.goalsListSource.First().SliderValue;
-
-									SelectedItemChangedEventArgs newGoalsEvent = new SelectedItemChangedEventArgs( newEmotionItem );
-									feelingSecondPage.OnGoalsPickerItemSelected( this, newGoalsEvent );
-
+										SelectedItemChangedEventArgs newGoalsEvent = new SelectedItemChangedEventArgs( newEmotionItem );
+										feelingSecondPage.OnGoalsPickerItemSelected( this, newGoalsEvent );
+									}
                                     serviceResultOK = true;
                                 }
                                 catch (System.Exception)

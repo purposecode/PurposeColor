@@ -1548,7 +1548,8 @@ namespace PurposeColor.screens
                                         }
                                     }
 
-									// When editing goals no need to update goals lost view since we are now in gems module not in emotional awareness
+									// When editing goals no need to update goals list view since we are now in gems module not in emotional awareness
+									// we are not showing goals list view any where in gems module
 									if( input != Constants.EDIT_GOALS )
 									{
 										CustomListViewItem newEmotionItem = new CustomListViewItem();

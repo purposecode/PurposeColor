@@ -926,7 +926,7 @@ namespace PurposeColor.screens
 
 
 					List<SelectedGoalMedia> downloadedMediaList = new List<SelectedGoalMedia> ();
-					downloadedMediaList = await DownloadMedias ( goalInfo.resultarray.goal_media );
+					downloadedMediaList = await DownloadMedias ( goalInfo.resultarray.goal_media , true);
 					progress.HideProgressbar();
                     await Navigation.PushAsync(new GemsDetailsPage(model));
                 }
@@ -945,7 +945,7 @@ namespace PurposeColor.screens
         }
 
 
-		async Task<List<SelectedGoalMedia>>  DownloadMedias( List<SelectedGoalMedia> mediaList )
+		async Task<List<SelectedGoalMedia>>  DownloadMedias( List<SelectedGoalMedia> mediaList, bool toDetaildPage )
 		{
 			IDownload downloader =  DependencyService.Get<IDownload> ();
 			List<string> mediaListToDownload = new List<string> ();
@@ -965,7 +965,7 @@ namespace PurposeColor.screens
 					
 			}
 
-			var val = await downloader.DownloadFiles ( mediaListToDownload );
+			var val = await downloader.DownloadFilesWithoutResize ( mediaListToDownload );
 			return newList;
 		}
 

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace PurposeColor.interfaces
 {
@@ -12,5 +13,7 @@ namespace PurposeColor.interfaces
 		byte[] Resize(byte[] imageData, float width, float height, string path);
 
         MemoryStream CompessImage(int ratio, MemoryStream ms);
+
+	    Size GetImageSize (string path);
     }
 }

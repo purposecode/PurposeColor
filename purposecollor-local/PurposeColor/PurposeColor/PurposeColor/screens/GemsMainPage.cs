@@ -720,7 +720,7 @@ namespace PurposeColor.screens
 							if (listToDownload != null && listToDownload.Count > 0) {
 								IDownload downloader = DependencyService.Get<IDownload>();
 								//progressBar.ShowProgressbar("loading details..");
-								await downloader.DownloadFiles(listToDownload);
+								await downloader.DownloadFilesWithoutResize(listToDownload);
 
 							}
 
@@ -779,7 +779,7 @@ namespace PurposeColor.screens
 						if (listToDownload != null && listToDownload.Count > 0) {
 							IDownload downloader = DependencyService.Get<IDownload>();
 							//progressBar.ShowProgressbar("loading details..");
-							await downloader.DownloadFiles(listToDownload);
+							await downloader.DownloadFilesWithoutResize(listToDownload);
 							//progressBar.HideProgressbar();
 						}
 

@@ -12,6 +12,7 @@ namespace PurposeColor
 	{
 		Task<bool> DownloadFiles (List<string> downloadUrlList, CancellationToken cancelToken);
 		Task<bool> DownloadFiles ( List<string> downloadUrlList );
+		Task<bool> DownloadFilesWithoutResize (List<string> downloadUrlList);
 		string GetLocalFileName (string path);
 	}
 }

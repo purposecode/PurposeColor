@@ -61,6 +61,7 @@ namespace PurposeColor
 				CurrentGemType = model.gemType;
 				User user = null;
 				App.GemDeleted = false;
+				IResize resize = DependencyService.Get<IResize>();
 
 				try
 				{
@@ -249,16 +250,32 @@ namespace PurposeColor
 						Image img = new Image();
 
 						if(isImage)
-							img.HeightRequest = App.screenWidth * 1.1;
+						{
+							img.WidthRequest = App.screenWidth * 1.1;
+							Size imgSize = resize.GetImageSize( source );
+							double aspect = 0;
+							if( imgSize.Height > imgSize.Width )
+							{
+								aspect = imgSize.Height / imgSize.Width;
+								img.HeightRequest = App.screenWidth * aspect;
+								if( aspect > 1.5 )
+									img.HeightRequest = App.screenWidth * 1.25;
+							}
+							else
+							{
+								aspect = imgSize.Width / imgSize.Height;
+								img.HeightRequest = App.screenWidth / aspect;
+							}
+
+
+						}
 						else
 						{
-							img.HeightRequest = App.screenWidth;
+							img.WidthRequest = App.screenWidth;
 						}
-						
-						//img.MinimumHeightRequest = App.screenWidth;
-						//img.MinimumWidthRequest = App.screenWidth;
 
-						img.Aspect = Aspect.AspectFill;
+						img.Aspect = Aspect.Fill;
+
 						img.ClassId = null;
 						if (mediaList[index] != null && mediaList[index].media_type == "mp4")
 						{
@@ -352,13 +369,31 @@ namespace PurposeColor
 						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 						//img.WidthRequest = App.screenWidth;// * 50 / 100;
 						if(isImage)
-							img.HeightRequest = App.screenWidth * 1.1;
+						{
+							img.WidthRequest = App.screenWidth * 1.1;
+							Size imgSize = resize.GetImageSize( source );
+							double aspect = 0;
+							if( imgSize.Height > imgSize.Width )
+							{
+								aspect = imgSize.Height / imgSize.Width;
+								img.HeightRequest = App.screenWidth * aspect;
+								if( aspect > 1.5 )
+									img.HeightRequest = App.screenWidth * 1.25;
+							}
+							else
+							{
+								aspect = imgSize.Width / imgSize.Height;
+								img.HeightRequest = App.screenWidth / aspect;
+							}
+
+
+						}
 						else
 						{
-							img.HeightRequest = App.screenWidth;
+							img.WidthRequest = App.screenWidth;
 						}
-						
-						img.Aspect = Aspect.AspectFill;
+
+						img.Aspect = Aspect.Fill;
 						img.ClassId = null;
 						if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
 						{
@@ -455,13 +490,31 @@ namespace PurposeColor
 						bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
 						//img.WidthRequest = App.screenWidth;// * 50 / 100;
 						if(isImage)
-							img.HeightRequest = App.screenWidth * 1.1;
+						{
+							img.WidthRequest = App.screenWidth * 1.1;
+							Size imgSize = resize.GetImageSize( source );
+							double aspect = 0;
+							if( imgSize.Height > imgSize.Width )
+							{
+								aspect = imgSize.Height / imgSize.Width;
+								img.HeightRequest = App.screenWidth * aspect;
+								if( aspect > 1.5 )
+									img.HeightRequest = App.screenWidth * 1.25;
+							}
+							else
+							{
+								aspect = imgSize.Width / imgSize.Height;
+								img.HeightRequest = App.screenWidth / aspect;
+							}
+
+
+						}
 						else
 						{
-							img.HeightRequest = App.screenWidth;
+							img.WidthRequest = App.screenWidth;
 						}
-						
-						img.Aspect = Aspect.AspectFill;
+
+						img.Aspect = Aspect.Fill;
 						img.ClassId = null;
 						if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
 						{

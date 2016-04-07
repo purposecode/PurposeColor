@@ -13,6 +13,7 @@ using PurposeColor.interfaces;
 using PurposeColor.Droid.Dependency;
 using Android.Graphics;
 using System.IO;
+using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidResize))]
 namespace PurposeColor.Droid.Dependency
@@ -23,6 +24,21 @@ namespace PurposeColor.Droid.Dependency
         {
             return ResizeImageAndroid(imageData, width, height);
         }
+
+
+
+		public  Size GetImageSize(string path)
+		{
+			var uri = Android.Net.Uri.Parse(path);
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.InJustDecodeBounds = true;
+			BitmapFactory.DecodeFile( uri.Path , options);
+			int imageHeight = options.OutHeight;
+			int imageWidth = options.OutWidth;
+			Size imgSize = new Size (imageWidth, imageHeight);
+			return imgSize;	
+		}
+
 
         public MemoryStream CompessImage(int ratio, MemoryStream ms)
         {

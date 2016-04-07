@@ -401,6 +401,47 @@ namespace PurposeColor.Droid
 
 
 
+		public async  Task<bool> DownloadFilesWithoutResize ( List<string> downloadUrlList )
+		{
+			int imgMaxWidth = (int)(App.screenWidth * App.screenDensity);
+			int imgMaxHeight = (int)(App.screenHeight * .50 * App.screenDensity);
+			int streamLength = 0;
+			try 
+			{
+				foreach (var item in downloadUrlList)
+				{
+					string fileName = System.IO.Path.GetFileName(item);
+					WebClient webClient = new WebClient();
+					if(  !File.Exists( App.DownloadsPath + fileName ))
+					{	
+						await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );
+						webClient.Dispose();
+
+						/*BitmapFactory.Options imgOptions = new BitmapFactory.Options();
+						imgOptions.InJustDecodeBounds = true;
+						MemoryStream memStream = null;
+						await BitmapFactory.DecodeFileAsync(App.DownloadsPath + fileName,imgOptions);
+						if( imgOptions.OutWidth > 5000 || imgOptions.OutHeight > 5000 )
+						{
+							
+						}*/
+				
+					}// if file exists
+
+				} //foreach
+				return true;
+			} 
+			catch (Exception ex) 
+			{
+				Debug.WriteLine ( ex.Message );
+				return false;
+			}
+
+		}
+
+
+
+
 		Bitmap changeOrientation (string filePath, Bitmap bitmap, int orientation)
 		{
 			var matrix = new Matrix ();

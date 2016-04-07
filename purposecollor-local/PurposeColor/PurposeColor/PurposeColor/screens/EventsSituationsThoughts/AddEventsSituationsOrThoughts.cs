@@ -1783,78 +1783,49 @@ namespace PurposeColor.screens
                     imgType = imgType.Replace(".", "");
                     if (mediaType == Constants.MediaType.Image)
                     {
-                        MemoryStream compressedStream = new MemoryStream();
-                        IResize resize = DependencyService.Get<IResize>();
-						Byte[] resizedOutput = resize.Resize(ms.ToArray(), (float)(App.screenWidth * App.screenDensity), (float)(App.screenHeight *0.50* App.screenDensity), path);
-                        MemoryStream resizedStream = new MemoryStream(resizedOutput);
+						IResize resize = DependencyService.Get<IResize>();
+						Size imgSize =  resize.GetImageSize( path );
+						Byte[] resizedOutput = null;
+						if( imgSize.Height > imgSize.Width )
+						{
+							float screenWidthPixels =  ( float )( App.screenWidth * App.screenDensity );
+							double widthRatio =   (double) (imgSize.Width / screenWidthPixels);
+							resizedOutput = resize.Resize(ms.ToArray(), (float) screenWidthPixels , (float)(imgSize.Height / widthRatio), path);
+						}
+						else
+						{
+
+							float screenWidthPixels =  ( float )( App.screenWidth * App.screenDensity );
+							double widthRatio =   (double) (imgSize.Width / screenWidthPixels);
+							resizedOutput = resize.Resize(ms.ToArray(), (float) screenWidthPixels , (float)(imgSize.Height / widthRatio), path);
+						}
+
+
+						MemoryStream resizedStream = new MemoryStream(resizedOutput);
 						int streamLength = (int)resizedStream.Length;
 
 						int compressionRate  = 100;
 
-						#region compression ratio
-						if (streamLength < 20000) {
-							compressionRate = 100;
-						}
-						else if (streamLength < 40000) {
-							compressionRate = App.screenDensity > 2 ? 100: 95;
-						}
-						else if (streamLength < 50000) {
-							compressionRate = App.screenDensity > 2 ? 100: 91;
-						}
-						else if (streamLength < 100000) {
-							compressionRate = App.screenDensity > 2 ? 100: 90;
-						}
-						else if (streamLength < 200000) {
-							compressionRate = App.screenDensity > 2 ? 99: 89;
-						}
-						else if (streamLength <300000) {
-							compressionRate = App.screenDensity > 2 ? 98: 88;
-						}
-						else if (streamLength < 400000) {
-							compressionRate = App.screenDensity > 2 ? 97: 87;
-						}
-						else if (streamLength < 500000) {
-							compressionRate = App.screenDensity > 2 ? 96: 86;
-						}
-						else if (streamLength < 600000) {
-							compressionRate = App.screenDensity > 2 ? 95: 86;
-						}
-						else if (streamLength < 700000) {
-							compressionRate = App.screenDensity > 2 ? 94: 86;
-						}
-						else if (streamLength < 900000) {
-							compressionRate = App.screenDensity > 2 ? 93: 86;
-						}
-						else if (streamLength < 1000000) {
-							compressionRate = App.screenDensity > 2 ? 92: 86;
-						}
-						else if (streamLength < 2000000) {
-							compressionRate = App.screenDensity > 2 ? 91: 86;
-						}
-						else {
-							compressionRate = App.screenDensity > 2 ? 90: 85;
-						}
-						#endregion
 
 
-						compressedStream = resize.CompessImage(compressionRate, resizedStream);
+						//compressedStream = resize.CompessImage(compressionRate, resizedStream);
 
 						Byte[] inArray = resizedStream.ToArray();
 						Char[] outArray = new Char[(int)(resizedStream.ToArray().Length * 1.34)];
-                        Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
-                        string test2 = new string(outArray);
-                        App.ExtentionArray.Add(imgType);
-                        MediaItem item = new MediaItem();
-                        item.MediaString = test2;
-                        item.Name = fileName;
-                        App.MediaArray.Add(item);
+						Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
+						string test2 = new string(outArray);
+						App.ExtentionArray.Add(imgType);
+						MediaItem item = new MediaItem();
+						item.MediaString = test2;
+						item.Name = fileName;
+						App.MediaArray.Add(item);
 
-                        inArray = null;
-                        outArray = null;
-                        test2 = null;
-                        item = null;
-                        resizedOutput = null;
-                        GC.Collect();
+						inArray = null;
+						outArray = null;
+						test2 = null;
+						item = null;
+						resizedOutput = null;
+						GC.Collect();
                     }
                     else
                     {

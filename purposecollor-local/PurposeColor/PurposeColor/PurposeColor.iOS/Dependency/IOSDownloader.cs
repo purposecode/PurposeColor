@@ -33,6 +33,38 @@ namespace PurposeColor.iOS
 
 
 
+		public async Task<bool> DownloadFilesWithoutResize (List<string> downloadUrlList)
+		{
+			try 
+			{
+				int requiredHeight = (int)(App.screenHeight * 0.5 * App.screenDensity);
+				int requiredWidth = (int)(App.screenWidth * App.screenDensity);
+				int imageHeight = 0;
+				int imagewidth = 0;
+
+				foreach (var item in downloadUrlList)
+				{
+					string fileName = Path.GetFileName(item);
+
+					Uri uri = new Uri( App.DownloadsPath + fileName);
+
+					if( !File.Exists( App.DownloadsPath + fileName ))
+					{
+						WebClient webClient = new WebClient();
+						await webClient.DownloadFileTaskAsync ( item,  App.DownloadsPath + fileName );
+						webClient.Dispose();
+
+					}
+				}
+				return true;
+			} 
+			catch (Exception ex) 
+			{
+				Debug.WriteLine ( ex.Message );
+				return false;
+			}
+		}
+
 		public async  Task<bool> DownloadFiles ( List<string> downloadUrlList, CancellationToken cancelToken  )
 		{
 

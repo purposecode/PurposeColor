@@ -20,10 +20,19 @@ namespace PurposeColor.iOS.Dependency
     {
 		public byte[] Resize(byte[] imageData, float width, float height, string path)
         {
-			return ResizeImageIOS(imageData, width, height, path);
+			return ResizeImageIOS(imageData, width, height );
         }
 
-		public static byte[] ResizeImageIOS(byte[] imageData, float width, float height, string path)
+
+		public  Xamarin.Forms.Size GetImageSize (string path)
+		{ 
+			UIImage img = new UIImage ( path );
+			Xamarin.Forms.Size imgSize = new Xamarin.Forms.Size ( img.Size.Width, img.Size.Height );
+			return imgSize;
+		}
+
+
+		/*public static byte[] ResizeImageIOS(byte[] imageData, float width, float height, string path)
         {
             UIImage originalImage = ImageFromByteArray(imageData);
 
@@ -69,7 +78,46 @@ namespace PurposeColor.iOS.Dependency
                 // save the image as a jpeg
 				return resizedImage.AsJPEG().ToArray();
             }
-        }
+        }*/
+
+		public static byte[] ResizeImageIOS(byte[] imageData, float width, float height)
+		{
+			// Load the bitmap
+			UIImage originalImage = ImageFromByteArray(imageData);
+			//
+			var Hoehe = originalImage.Size.Height;
+			var Breite = originalImage.Size.Width;
+			//
+			nfloat ZielHoehe = 0;
+			nfloat ZielBreite = 0;
+			//
+
+			if (Hoehe > Breite) // Höhe (71 für Avatar) ist Master
+			{
+				ZielHoehe = height;
+				nfloat teiler = Hoehe / height;
+				ZielBreite = Breite / teiler;
+			}
+			else // Breite (61 for Avatar) ist Master
+			{
+				ZielBreite = width;
+				nfloat teiler = Breite / width;
+				ZielHoehe = Hoehe / teiler;
+			}
+			//
+			width = (float)ZielBreite;
+			height = (float)ZielHoehe;
+			//
+			UIGraphics.BeginImageContext(new SizeF(width, height));
+			originalImage.Draw(new RectangleF(0, 0, width, height));
+			var resizedImage = UIGraphics.GetImageFromCurrentImageContext();
+			UIGraphics.EndImageContext();
+			//
+			var bytesImagen = resizedImage.AsJPEG().ToArray();
+			resizedImage.Dispose();
+			return bytesImagen;
+		}
+
 
 
 		public UIImage RotateImage( UIImage imageToRotate, bool isCCW)

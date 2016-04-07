@@ -259,7 +259,7 @@ namespace PurposeColor
 								aspect = imgSize.Height / imgSize.Width;
 								img.HeightRequest = App.screenWidth * aspect;
 								if( aspect > 1.5 )
-									img.HeightRequest = App.screenWidth * 1.25;
+									img.HeightRequest = App.screenWidth * 1.50;
 							}
 							else
 							{
@@ -378,7 +378,7 @@ namespace PurposeColor
 								aspect = imgSize.Height / imgSize.Width;
 								img.HeightRequest = App.screenWidth * aspect;
 								if( aspect > 1.5 )
-									img.HeightRequest = App.screenWidth * 1.25;
+									img.HeightRequest = App.screenWidth * 1.50;
 							}
 							else
 							{
@@ -499,7 +499,7 @@ namespace PurposeColor
 								aspect = imgSize.Height / imgSize.Width;
 								img.HeightRequest = App.screenWidth * aspect;
 								if( aspect > 1.5 )
-									img.HeightRequest = App.screenWidth * 1.25;
+									img.HeightRequest = App.screenWidth * 1.50;
 							}
 							else
 							{

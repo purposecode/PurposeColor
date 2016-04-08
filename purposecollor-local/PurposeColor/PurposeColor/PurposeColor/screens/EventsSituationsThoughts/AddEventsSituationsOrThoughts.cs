@@ -1758,23 +1758,19 @@ namespace PurposeColor.screens
                 string imgType = System.IO.Path.GetExtension(path);
                 string fileName = System.IO.Path.GetFileName(path);
 
-                if (mediaType == Constants.MediaType.Image)
-                {
-                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("image.png", "image.png", "//Assets//image.png") });//Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
-                }
-                else if (mediaType == Constants.MediaType.Video)
-                {
-					/*string videoThumpName = Path.GetFileNameWithoutExtension( path ) + ".jpg";
-					string downloadFilePath = Path.Combine(App.DownloadsPath, videoThumpName);
-
-					App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform( downloadFilePath, downloadFilePath, "//Assets//video.png") });*/
-
-                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
-                }
-                else
-                {
-                    App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
-                }
+    
+				if (mediaType == Constants.MediaType.Image)
+				{
+					App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("image.png", "image.png", "//Assets//image.png") });//Device.OnPlatform("delete_button.png", "delete_button.png", "//Assets//delete_button.png");
+				}
+				else if (mediaType == Constants.MediaType.Video)
+				{
+					App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("video.png", "video.png", "//Assets//video.png") });
+				}
+				else
+				{
+					App.PreviewListSource.Add(new PreviewItem { Path = path, Name = fileName, Image = Device.OnPlatform("mic.png", "mic.png", "//Assets//mic.png") });
+				}
 
                 #region MEDIA COMPRESSION AND SERIALISING
 
@@ -1820,11 +1816,16 @@ namespace PurposeColor.screens
 						item.Name = fileName;
 						App.MediaArray.Add(item);
 
+						ms.Dispose();
+						resizedStream.Dispose();
+						ms = null;
+						resizedStream = null;
 						inArray = null;
 						outArray = null;
 						test2 = null;
 						item = null;
 						resizedOutput = null;
+
 						GC.Collect();
                     }
                     else
@@ -1864,8 +1865,13 @@ namespace PurposeColor.screens
                         item = null;
                         GC.Collect();
                     }
+
+	
+
                     imgType = string.Empty;
                     fileName = string.Empty;
+
+
 
                 }
                 

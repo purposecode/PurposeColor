@@ -29,9 +29,9 @@ namespace PurposeColor
 		{
 			NavigationPage.SetHasNavigationBar (this, false);
 			masterLayout = new CustomLayout ();
-			masterLayout.BackgroundColor = Color.Black;// Color.FromRgb(244, 244, 244);
+			masterLayout.BackgroundColor =  Color.FromRgb(244, 244, 244);
 			masterScroll = new ScrollView ();
-			masterScroll.BackgroundColor = Color.Black;//Color.FromRgb(244, 244, 244);
+			masterScroll.BackgroundColor = Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar> ();
 
 			IResize resize = DependencyService.Get<IResize>();
@@ -218,6 +218,8 @@ namespace PurposeColor
 					{
 						bottomAndLowerControllStack.Children.Add (img);
 					}
+
+					bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 5, BackgroundColor = Color.FromRgb( 244, 244,244 ) } );
 				}
 				/*imgScrollView.Content = horizmgConatiner;
 				bottomAndLowerControllStack.Children.Add (imgScrollView);*/
@@ -229,7 +231,7 @@ namespace PurposeColor
 			//bottomAndLowerControllStack.BackgroundColor = Color.Gray;
 			bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 200, BackgroundColor = Color.Transparent } );
 
-			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, Device.OnPlatform (5, 9, 12));//12
+			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, Device.OnPlatform (5, 2, 12));//12
 			masterScroll.HeightRequest = App.screenHeight - 20;
 			masterScroll.WidthRequest = App.screenWidth;// * 90 / 100;
 

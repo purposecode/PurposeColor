@@ -1579,6 +1579,7 @@ namespace PurposeColor.screens
 
                     if (serviceResultOK)
                     {
+
                         if (!isUpdatePage)
                         {
 							await Navigation.PopAsync();
@@ -1591,7 +1592,7 @@ namespace PurposeColor.screens
 							}
 							else
 							{
-								await Navigation.PopToRootAsync();
+								await Navigation.PopAsync();
 							}
 							#region MyRegionNavigate back to GEM details page
 							//progress.ShowProgressbar("Loading");
@@ -1717,6 +1718,7 @@ namespace PurposeColor.screens
 							#endregion
 
                         }
+
                     }
                 }
             }

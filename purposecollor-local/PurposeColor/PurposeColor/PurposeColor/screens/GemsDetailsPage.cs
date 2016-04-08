@@ -349,6 +349,8 @@ namespace PurposeColor
 							{
 								bottomAndLowerControllStack.Children.Add(img);
 							}
+
+							bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 5, BackgroundColor = Color.Transparent } );
 						}
 
 
@@ -465,6 +467,8 @@ namespace PurposeColor
 							{
 								bottomAndLowerControllStack.Children.Add(img);
 							}
+
+							bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 5, BackgroundColor = Color.Transparent } );
 						}
 					}
 				}
@@ -590,6 +594,8 @@ namespace PurposeColor
 								//horizmgConatiner.Children.Add(img);
 								bottomAndLowerControllStack.Children.Add(img);
 							}
+
+							bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 5, BackgroundColor = Color.Transparent } );
 						}
 
 					}

@@ -34,6 +34,7 @@ namespace PurposeColor
 			masterScroll.BackgroundColor = Color.Black;//Color.FromRgb(244, 244, 244);
 			progressBar = DependencyService.Get<IProgressBar> ();
 
+			IResize resize = DependencyService.Get<IResize>();
 			mainTitleBar = new PurposeColorTitleBar (Color.FromRgb (8, 135, 224), "Purpose Color", Color.Black, "back", true);
 			subTitleBar = new PurposeColorSubTitleBar (Constants.SUB_TITLE_BG_COLOR, "Gem Media Viewer", false);
 			subTitleBar.BackButtonTapRecognizer.Tapped += async (object sender, EventArgs e) => {
@@ -120,9 +121,33 @@ namespace PurposeColor
 					string source = (isValidUrl) ? item.Url : Device.OnPlatform ("noimage.png", "noimage.png", "//Assets//noimage.png");
 					string fileExtenstion = Path.GetExtension (source);
 					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
-					img.WidthRequest = App.screenWidth;
-					img.HeightRequest = App.screenWidth;
-					img.Aspect = Aspect.AspectFill;
+
+
+					if(isImage)
+					{
+						img.WidthRequest = App.screenWidth * 1.1;
+						Size imgSize = resize.GetImageSize( source );
+						double aspect = 0;
+						if( imgSize.Height > imgSize.Width )
+						{
+							aspect = imgSize.Height / imgSize.Width;
+							img.HeightRequest = App.screenWidth * aspect;
+						}
+						else
+						{
+							aspect = imgSize.Width / imgSize.Height;
+							img.HeightRequest = App.screenWidth / aspect;
+						}
+
+
+					}
+					else
+					{
+						img.WidthRequest = App.screenWidth;
+					}
+
+					img.Aspect = Aspect.Fill;
+
 					img.ClassId = null;
 					if (item != null && item.MediaType == "mp4") 
 					{
@@ -187,19 +212,22 @@ namespace PurposeColor
 						Grid.SetColumnSpan(img, 3);
 						Grid.SetRowSpan( img, 3 );
 						grid.Children.Add(play, 1, 1);
-						horizmgConatiner.Children.Add(grid);
+						bottomAndLowerControllStack.Children.Add (grid);
 					}
 					else
 					{
-						horizmgConatiner.Children.Add(img);
+						bottomAndLowerControllStack.Children.Add (img);
 					}
 				}
-				imgScrollView.Content = horizmgConatiner;
-				bottomAndLowerControllStack.Children.Add (imgScrollView);
+				/*imgScrollView.Content = horizmgConatiner;
+				bottomAndLowerControllStack.Children.Add (imgScrollView);*/
 
 			}
 
 			#endregion
+
+			//bottomAndLowerControllStack.BackgroundColor = Color.Gray;
+			bottomAndLowerControllStack.Children.Add ( new BoxView(){ WidthRequest = App.screenWidth, HeightRequest = 200, BackgroundColor = Color.Transparent } );
 
 			masterStack.AddChildToLayout (bottomAndLowerControllStack, 0, Device.OnPlatform (5, 9, 12));//12
 			masterScroll.HeightRequest = App.screenHeight - 20;
@@ -207,15 +235,15 @@ namespace PurposeColor
 
 			StackLayout masterStackLayout = new StackLayout ();
 			masterStackLayout.HorizontalOptions = LayoutOptions.Center;
-			masterStackLayout.BackgroundColor = Color.Black;
+			//masterStackLayout.BackgroundColor = Color.Black;
 			masterStackLayout.Orientation = StackOrientation.Vertical;
 			masterStackLayout.Children.Add (masterStack);
 			masterScroll.Content = masterStackLayout;
 			masterLayout.AddChildToLayout (mainTitleBar, 0, 0);
 			masterLayout.AddChildToLayout (subTitleBar, 0, Device.OnPlatform (9, 10, 10));
 			masterLayout.AddChildToLayout (masterScroll, 0, 18);
-			masterLayout.AddChildToLayout (prevImg, Device.OnPlatform( -2, -2, 0 ), 50);
-			masterLayout.AddChildToLayout (nextImg, 90, 50);
+			//masterLayout.AddChildToLayout (prevImg, Device.OnPlatform( -2, -2, 0 ), 50);
+			//masterLayout.AddChildToLayout (nextImg, 90, 50);
 			Content = masterLayout;
 		}
 

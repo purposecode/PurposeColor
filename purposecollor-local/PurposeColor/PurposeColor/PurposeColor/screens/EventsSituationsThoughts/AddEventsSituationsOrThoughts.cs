@@ -1732,8 +1732,9 @@ namespace PurposeColor.screens
         {
             try
             {
-				if(!isUpdatePage) {
-					await Navigation.PopModalAsync();
+				if(!isUpdatePage) 
+				{
+					await Navigation.PopAsync();
 				}
 				else {
 					// Navigation.PopToRootAsync(); // this will take to GEMS page.

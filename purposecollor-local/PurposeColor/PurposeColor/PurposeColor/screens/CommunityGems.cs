@@ -659,7 +659,7 @@ namespace PurposeColor
 								// down load files //
 								if (listToDownload != null && listToDownload.Count > 0) {
 									IDownload downloader = DependencyService.Get<IDownload>();
-									await downloader.DownloadFiles(listToDownload);
+									await downloader.DownloadFilesWithoutResize(listToDownload);
 								}
 
 								await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));

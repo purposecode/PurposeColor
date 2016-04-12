@@ -1042,10 +1042,10 @@ namespace PurposeColor.screens
 						else
 						{
 							await DisplayAlert (Constants.ALERT_OK, "Action is completed", Constants.ALERT_OK);
-							/*App.masterPage.IsPresented = false;
-							App.masterPage.Detail = new NavigationPage(new GoalsPage());
-                            await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);*/
-							masterScroll.Scrolled -= OnScroll;
+							//App.masterPage.IsPresented = false;
+							//App.masterPage.Detail = new NavigationPage(new GoalsPage());
+                            await DeletePendingActionRowFromStack(selectedGoalID, selectedSavedGoalID);
+							/*masterScroll.Scrolled -= OnScroll;
 							commonGoalsObject = null;
 							pendingGoalsObject = null;
 							gemsGoalsObject = null;
@@ -1054,7 +1054,7 @@ namespace PurposeColor.screens
 							masterScroll.Content = null;
 
 							OnAppearing ( this, EventArgs.Empty );
-							masterScroll.Scrolled += OnScroll;
+							masterScroll.Scrolled += OnScroll;*/
 
 						}
 						progress.HideProgressbar ();

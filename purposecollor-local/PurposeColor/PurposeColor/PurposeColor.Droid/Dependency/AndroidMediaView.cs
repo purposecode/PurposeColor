@@ -31,8 +31,11 @@ namespace PurposeColor.Droid
 			Intent intent = new Intent();
 			intent.AddFlags (ActivityFlags.NewTask);
 			intent.SetAction(Intent.ActionView);
-			intent.SetDataAndType(Android.Net.Uri.Parse(imageURL), "image/*");
-			Application.Context.StartActivity(intent);
+			intent.SetDataAndType(Android.Net.Uri.Parse("file://" + imageURL), "image/*");
+			string fullPath = System.IO.Path.GetDirectoryName( imageURL );
+			//intent.SetDataAndType(Android.Net.Uri.Parse("content://" + fullPath), "image/*");
+			Application.Context.StartActivity ( intent );
+			//Application.Context.StartActivity( new Intent( Intent.ActionView, Android.Net.Uri.Parse("content://" + fullPath + "/" )));
 		}
 
 

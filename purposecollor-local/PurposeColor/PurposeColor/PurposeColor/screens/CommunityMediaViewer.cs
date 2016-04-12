@@ -114,7 +114,7 @@ namespace PurposeColor
 				foreach (var item in mediaList) 
 				{
 					TapGestureRecognizer videoTap = new TapGestureRecognizer ();
-					videoTap.Tapped += OnActionVideoTapped;
+					videoTap.Tapped += OnMediaTapped;
 
 					Image img = new Image ();
 					bool isValidUrl = ( item.Url != null && !string.IsNullOrEmpty ( item.Url )) ? true : false;
@@ -148,7 +148,7 @@ namespace PurposeColor
 
 					img.Aspect = Aspect.Fill;
 
-					img.ClassId = null;
+					img.ClassId = source;
 					if (item != null && item.MediaType == "mp4") 
 					{
 						img.ClassId = source;
@@ -250,15 +250,28 @@ namespace PurposeColor
 		}
 
 
-		void OnActionVideoTapped (object sender, EventArgs e)
+		void OnMediaTapped (object sender, EventArgs e)
 		{
 			Image img = sender as Image;
-			if (img != null) {
+			if (img != null) 
+			{
 				string fileName = Path.GetFileName (img.ClassId);
 				if (fileName != null)
 				{
-					IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
-					videoDownload.Download (img.ClassId, fileName);
+					string fileExtenstion = Path.GetExtension (fileName);
+					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+
+					if (isImage) 
+					{
+						IMediaVIew mediaView = DependencyService.Get<IMediaVIew> ();
+						mediaView.ShowImage ( App.DownloadsPath + fileName );
+					} 
+					else
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download (img.ClassId, fileName);
+					}
+
 
 				}
 

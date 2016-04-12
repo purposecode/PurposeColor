@@ -77,7 +77,7 @@ namespace PurposeColor
 		public static List<CustomListViewItem> emotionsListSource;
 		public static List<CustomListViewItem> nearByLocationsSource;
 		public static List<MediaItem> MediaArray { get; set; }
-		public static List<string> ExtentionArray { get; set; }
+		public static List<ExtentionItem> ExtentionArray { get; set; }
 		public static List<string> ContactsArray { get; set; }
 		public static ObservableCollection<PreviewItem> PreviewListSource = new ObservableCollection<PreviewItem>();
 		public static ObservableCollection<MenuItems> burgerMenuItems = null;
@@ -113,7 +113,7 @@ namespace PurposeColor
 			screenDensity = deviceSpec.ScreenDensity;
 			MediaArray = new List<MediaItem>();
 			ContactsArray = new List<string>();
-			ExtentionArray = new List<string>();
+			ExtentionArray = new List<ExtentionItem>();
 			NavigationPage.SetHasNavigationBar(this, false);
 			nearByLocationsSource = new List<CustomListViewItem>();
 			if (applicationSettings == null)

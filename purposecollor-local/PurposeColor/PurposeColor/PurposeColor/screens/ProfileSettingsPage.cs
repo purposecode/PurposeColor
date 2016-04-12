@@ -730,7 +730,7 @@ namespace PurposeColor.screens
 						Char[] outArray = new Char[(int)(compressedStream.ToArray().Length * 1.34)];
 						Convert.ToBase64CharArray(inArray, 0, inArray.Length, outArray, 0);
 						string test2 = new string(outArray);
-						App.ExtentionArray.Add(imgType);
+						App.ExtentionArray.Add( new ExtentionItem{ FileName = fileName, Extention = imgType });
 
 						mediaItem.MediaString = test2;
 						mediaItem.Name = fileName;

@@ -515,7 +515,7 @@ namespace PurposeColor.Service
                     int imgIndex = index + 1;
                     MediaItem media = App.MediaArray[index];
                     content.Add(new StringContent(media.MediaString, Encoding.UTF8), "event_media" + imgIndex.ToString());
-                    content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+					content.Add(new StringContent(App.ExtentionArray[index].Extention, Encoding.UTF8), "file_type" + imgIndex.ToString());
 					if( media.MediaType != null && media.MediaType == Constants.MediaType.Video )
 					{
 						content.Add(new StringContent(media.MediaThumbString, Encoding.UTF8), "video_thumb" + imgIndex.ToString());
@@ -603,7 +603,7 @@ namespace PurposeColor.Service
                         int imgIndex = index + 1;
                         MediaItem media = App.MediaArray[index];
                         content.Add(new StringContent(media.MediaString, Encoding.UTF8), "goal_media" + imgIndex.ToString());
-                        content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+						content.Add(new StringContent(App.ExtentionArray[index].Extention, Encoding.UTF8), "file_type" + imgIndex.ToString());
 						if( media.MediaType != null && media.MediaType == Constants.MediaType.Video )
 						{
 							content.Add(new StringContent(media.MediaThumbString, Encoding.UTF8), "video_thumb" + imgIndex.ToString());
@@ -700,7 +700,7 @@ namespace PurposeColor.Service
                         int imgIndex = index + 1;
                         MediaItem media = App.MediaArray[index];
                         content.Add(new StringContent(media.MediaString, Encoding.UTF8), "action_media" + imgIndex.ToString());
-                        content.Add(new StringContent(App.ExtentionArray[index], Encoding.UTF8), "file_type" + imgIndex.ToString());
+						content.Add(new StringContent(App.ExtentionArray[index].Extention, Encoding.UTF8), "file_type" + imgIndex.ToString());
 						if( media.MediaType != null && media.MediaType == Constants.MediaType.Video )
 						{
 							content.Add(new StringContent(media.MediaThumbString, Encoding.UTF8), "video_thumb" + imgIndex.ToString());

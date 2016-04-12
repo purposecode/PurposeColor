@@ -142,6 +142,7 @@
     <None Include="Resources\app_icon 512.png" />
     <None Include="Resources\app_icon_1024.png" />
     <Compile Include="Dependency\IOSContactPicker.cs" />
+    <Compile Include="Dependency\IOSMediaView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -406,6 +407,9 @@
     </Reference>
     <Reference Include="AdvancedTimer.Forms.Plugin.Abstractions">
       <HintPath>..\..\packages\Mobilist.AdvancedTimer.Forms.Plugin.1.0.1.0\lib\Xamarin.iOS10\AdvancedTimer.Forms.Plugin.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Media.Plugin.Abstractions">
+      <HintPath>..\..\packages\MediaPlugin-1.0.1\lib\Xamarin.iOS10\Media.Plugin.Abstractions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

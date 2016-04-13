@@ -718,7 +718,7 @@ namespace PurposeColor
 							img.HeightRequest = App.screenWidth * 80 / 100;
 							img.Aspect = Aspect.Fill;
 
-							img.ClassId = null;
+							img.ClassId = source;
 							if ( gemMedia.gem_media != null && gemMedia.media_type == "mp4")
 							{
 								img.ClassId = Constants.SERVICE_BASE_URL + gemMedia.gem_media ;
@@ -1342,8 +1342,13 @@ namespace PurposeColor
 
 					if (!isImage) 
 					{
-						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-						videoDownload.Download(img.ClassId, fileName);
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download (img.ClassId, fileName);
+					}
+					else
+					{
+						IMediaVIew mediaView = DependencyService.Get<IMediaVIew> ();
+						mediaView.ShowImage ( App.DownloadsPath + fileName );
 					}
 
 

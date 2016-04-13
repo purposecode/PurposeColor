@@ -276,7 +276,7 @@ namespace PurposeColor
 
 						img.Aspect = Aspect.Fill;
 
-						img.ClassId = null;
+						img.ClassId = source;
 						if (mediaList[index] != null && mediaList[index].media_type == "mp4")
 						{
 							img.ClassId = source;
@@ -396,7 +396,7 @@ namespace PurposeColor
 						}
 
 						img.Aspect = Aspect.Fill;
-						img.ClassId = null;
+						img.ClassId = source;
 						if (actionMediaList[index] != null && actionMediaList[index].media_type == "mp4")
 						{
 							img.ClassId = source;
@@ -519,7 +519,7 @@ namespace PurposeColor
 						}
 
 						img.Aspect = Aspect.Fill;
-						img.ClassId = null;
+						img.ClassId = source;
 						if (model.goal_media[index] != null && model.goal_media[index].media_type == "mp4")
 						{
 
@@ -1017,8 +1017,20 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
+
+					string fileExtenstion = Path.GetExtension (fileName);
+					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+
+					if (isImage) 
+					{
+						IMediaVIew mediaView = DependencyService.Get<IMediaVIew> ();
+						mediaView.ShowImage ( App.DownloadsPath + fileName );
+					} 
+					else
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download (img.ClassId, fileName);
+					}
 
                 }
 
@@ -1033,8 +1045,19 @@ namespace PurposeColor
                 string fileName = Path.GetFileName(img.ClassId);
                 if (fileName != null)
                 {
-                    IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader>();
-                    videoDownload.Download(img.ClassId, fileName);
+					string fileExtenstion = Path.GetExtension (fileName);
+					bool isImage = (fileExtenstion == ".png" || fileExtenstion == ".jpg" || fileExtenstion == ".jpeg") ? true : false;
+
+					if (isImage) 
+					{
+						IMediaVIew mediaView = DependencyService.Get<IMediaVIew> ();
+						mediaView.ShowImage ( App.DownloadsPath + fileName );
+					} 
+					else
+					{
+						IVideoDownloader videoDownload = DependencyService.Get<IVideoDownloader> ();
+						videoDownload.Download (img.ClassId, fileName);
+					}
                 }
 
             }

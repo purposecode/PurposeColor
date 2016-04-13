@@ -542,7 +542,8 @@ namespace PurposeColor
 									await downloader.DownloadFiles(listToDownload);
 								}
 
-								await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));
+								await Navigation.PushModalAsync( new ImageTileViewer( mediaPlayerList ) );
+								//await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));
 							}
 
 							progress.HideProgressbar();

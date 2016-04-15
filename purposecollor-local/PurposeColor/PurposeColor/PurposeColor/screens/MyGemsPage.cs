@@ -542,7 +542,14 @@ namespace PurposeColor
 									await downloader.DownloadFiles(listToDownload);
 								}
 
-								await Navigation.PushModalAsync( new ImageTileViewer( mediaPlayerList ) );
+								if( Device.OS == TargetPlatform.Android )
+								{
+									await Navigation.PushModalAsync( new ImageTileViewer( mediaPlayerList ) );
+								}
+								else
+								{
+									await Navigation.PushAsync( new ImageTileViewer( mediaPlayerList ) );
+								}
 								//await Navigation.PushAsync(new CommunityMediaViewer(mediaPlayerList));
 							}
 

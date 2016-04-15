@@ -30,21 +30,32 @@ namespace PurposeColor
 				TapGestureRecognizer previewImgeTap = new TapGestureRecognizer ();
 				previewImgeTap.Tapped += OnPreviewImgeTapped;
 				string source = "";
-				if (mediaList [0] != null && mediaList [0].MediaType == "mp4") {
+				if (mediaList [0] != null && mediaList [0].MediaType == "mp4") 
+				{
 					source = Device.OnPlatform ("video.png", "video.png", "//Assets//video.png");
-				} else if (mediaList [0] != null && mediaList [0].MediaType == "aac") {
+					previewImage.ClassId = mediaList[0].Url;
+				} 
+				else if (mediaList [0] != null && mediaList [0].MediaType == "aac") 
+				{
 					source = Device.OnPlatform ("audio.png", "audio.png", "//Assets//audio.png");
-				} else if (mediaList [0] != null && mediaList [0].MediaType == "3gpp") {
+					previewImage.ClassId = mediaList[0].Url;
+				}
+				else if (mediaList [0] != null && mediaList [0].MediaType == "3gpp") 
+				{
 					source = Device.OnPlatform ("video.png", "video.png", "//Assets//video.png");
-				} else if (mediaList [0] != null && mediaList [0].MediaType == "wav") {
+					previewImage.ClassId = mediaList[0].Url;
+				} 
+				else if (mediaList [0] != null && mediaList [0].MediaType == "wav") 
+				{
 					source = Device.OnPlatform ("audio.png", "audio.png", "//Assets//audio.png");
+					previewImage.ClassId = mediaList[0].Url;
 				} 
 				else 
 				{
 					source = mediaList [0].Url;
+					previewImage.ClassId = source;
 				}
 				previewImage.Source = source;
-				previewImage.ClassId = source;
 				previewImage.GestureRecognizers.Add ( previewImgeTap );
 			}
 

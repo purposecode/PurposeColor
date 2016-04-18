@@ -2073,23 +2073,49 @@ namespace PurposeColor.screens
             };
             layout.GestureRecognizers.Add(emptyAreaTapGestureRecognizer);
 
-            CustomImageButton imageButton = new CustomImageButton();
-            imageButton.ImageName = Device.OnPlatform("image.png", "image.png", @"/Assets/image.png");
-            imageButton.WidthRequest = screenWidth * 20 / 100;
-            imageButton.HeightRequest = screenHeight * 10 / 100;
-            imageButton.ClassId = type;
-            imageButton.Clicked += OnImageButtonClicked;
 
-            CustomImageButton videoButton = new CustomImageButton();
-            videoButton.ImageName = Device.OnPlatform("video.png", "video.png", @"/Assets/video.png");
-            videoButton.WidthRequest = screenWidth * 20 / 100;
-            videoButton.HeightRequest = screenHeight * 10 / 100;
+			StackLayout popupTitleBar = new StackLayout ();
+			popupTitleBar.BackgroundColor = Color.FromRgb (8, 135, 224);
+			popupTitleBar.WidthRequest = App.screenWidth * 98 / 100;
+			popupTitleBar.HeightRequest = App.screenHeight * 8 / 100;
+
+
+			Label popupTitle = new Label ();
+			popupTitle.Text = "Upload";
+			popupTitle.FontSize = 20;
+			popupTitle.TextColor = Color.White;
+			popupTitle.XAlign = TextAlignment.Center;
+			popupTitle.YAlign = TextAlignment.Center;
+			popupTitle.WidthRequest = App.screenWidth * 98 / 100;
+
+			StackLayout whiteContainer = new StackLayout ();
+			whiteContainer.WidthRequest = App.screenWidth * 98 / 100;
+			whiteContainer.HeightRequest = App.screenHeight * 22 / 100;
+			whiteContainer.BackgroundColor = Color.White;
+
+
+			TapGestureRecognizer imageTap = new TapGestureRecognizer ();
+			imageTap.Tapped += OnImageButtonClicked;
+			Image imageButton = new Image();
+			imageButton.Source = Device.OnPlatform("image.png", "image_icon.png", @"/Assets/image.png");
+            imageButton.ClassId = type;
+			imageButton.GestureRecognizers.Add ( imageTap );
+            //imageButton.Clicked += OnImageButtonClicked;
+
+			TapGestureRecognizer videoTap = new TapGestureRecognizer ();
+			videoTap.Tapped += OnVideoButtonClicked;
+			Image videoButton = new Image();
+			videoButton.Source = Device.OnPlatform("video.png", "video_icon.png", @"/Assets/video.png");
             videoButton.ClassId = type;
-            videoButton.Clicked += OnVideoButtonClicked;
+			videoButton.GestureRecognizers.Add ( videoTap );
+           // videoButton.Clicked += OnVideoButtonClicked;
 
             masterLayout.AddChildToLayout(layout, 0, 0);
-            masterLayout.AddChildToLayout(imageButton, 40, 40);
-            masterLayout.AddChildToLayout(videoButton, 40, 60);
+			masterLayout.AddChildToLayout(popupTitleBar, 1, 8);
+			masterLayout.AddChildToLayout(popupTitle, 1, 10);
+			masterLayout.AddChildToLayout(whiteContainer, 1, 15);
+            masterLayout.AddChildToLayout(imageButton, 25, 18);
+            masterLayout.AddChildToLayout(videoButton, 60, 18);
 
             this.BackgroundColor = Color.Transparent;
 
@@ -2107,7 +2133,7 @@ namespace PurposeColor.screens
 
                 if (Device.OS != TargetPlatform.iOS)
                     progres.ShowProgressbar("Preparing media..");
-                if ((sender as CustomImageButton).ClassId == "camera")
+				if ((sender as Image).ClassId == "camera")
                 {
                     try
                     {
@@ -2151,7 +2177,7 @@ namespace PurposeColor.screens
                     }
 
                 }
-                else if ((sender as CustomImageButton).ClassId == "gallery")
+				else if ((sender as Image).ClassId == "gallery")
                 {
                     try
                     {
@@ -2210,7 +2236,7 @@ namespace PurposeColor.screens
                 IProgressBar progres = DependencyService.Get<IProgressBar>();
                 if (Device.OS != TargetPlatform.iOS)
                     progres.ShowProgressbar("Preparing media..");
-                if ((sender as CustomImageButton).ClassId == "camera")
+				if ((sender as Image).ClassId == "camera")
                 {
                     try
                     {
@@ -2313,7 +2339,7 @@ namespace PurposeColor.screens
                     }
                     progres.HideProgressbar();
                 }
-                else if ((sender as CustomImageButton).ClassId == "gallery")
+				else if ((sender as Image).ClassId == "gallery")
                 {
                     try
                     {

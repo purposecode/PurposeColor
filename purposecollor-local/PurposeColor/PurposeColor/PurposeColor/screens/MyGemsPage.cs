@@ -563,6 +563,7 @@ namespace PurposeColor
 					moreImg.VerticalOptions = LayoutOptions.End;
 					moreImg.GestureRecognizers.Add(moreTap);
 					moreImg.ClassId = item.gem_id;
+					moreImg.TranslationX = Device.OnPlatform( 0, -20, 0 );
 
 					#endregion
 

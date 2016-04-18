@@ -328,6 +328,8 @@
     <AndroidResource Include="Resources\drawable\next.png" />
     <AndroidResource Include="Resources\drawable\prev.png" />
     <AndroidResource Include="Resources\drawable\video_play.png" />
+    <AndroidResource Include="Resources\drawable\image_icon.png" />
+    <AndroidResource Include="Resources\drawable\video_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginsHelp\ConnectivityReadme.txt" />

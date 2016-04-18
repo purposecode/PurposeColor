@@ -684,6 +684,7 @@ namespace PurposeColor
 					moreImg.VerticalOptions = LayoutOptions.End;
 					moreImg.GestureRecognizers.Add(moreTap);
 					moreImg.ClassId = item.gem_id;
+					moreImg.TranslationX = Device.OnPlatform( 0, -20, 0 );
 
 					#endregion
 
@@ -803,6 +804,7 @@ namespace PurposeColor
 									Grid.SetColumnSpan(img, 3);
 									Grid.SetRowSpan( img, 3 );
 									grid.Children.Add(play, 1, 1);
+
 									if( item.gem_media.Count > 1 )
 									grid.Children.Add(moreImg, 2, 2);
 									bottomAndLowerControllStack.Children.Add(grid);

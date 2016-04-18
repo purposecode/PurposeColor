@@ -2097,7 +2097,7 @@ namespace PurposeColor.screens
 			TapGestureRecognizer imageTap = new TapGestureRecognizer ();
 			imageTap.Tapped += OnImageButtonClicked;
 			Image imageButton = new Image();
-			imageButton.Source = Device.OnPlatform("image.png", "image_icon.png", @"/Assets/image.png");
+			imageButton.Source = Device.OnPlatform("image_icon.png", "image_icon.png", @"/Assets/image.png");
             imageButton.ClassId = type;
 			imageButton.GestureRecognizers.Add ( imageTap );
             //imageButton.Clicked += OnImageButtonClicked;
@@ -2105,7 +2105,7 @@ namespace PurposeColor.screens
 			TapGestureRecognizer videoTap = new TapGestureRecognizer ();
 			videoTap.Tapped += OnVideoButtonClicked;
 			Image videoButton = new Image();
-			videoButton.Source = Device.OnPlatform("video.png", "video_icon.png", @"/Assets/video.png");
+			videoButton.Source = Device.OnPlatform("video_icon.png", "video_icon.png", @"/Assets/video.png");
             videoButton.ClassId = type;
 			videoButton.GestureRecognizers.Add ( videoTap );
            // videoButton.Clicked += OnVideoButtonClicked;
@@ -2114,7 +2114,7 @@ namespace PurposeColor.screens
 			masterLayout.AddChildToLayout(popupTitleBar, 1, 8);
 			masterLayout.AddChildToLayout(popupTitle, 1, 9 );
 			masterLayout.AddChildToLayout(whiteContainer, 1, 15);
-            masterLayout.AddChildToLayout(imageButton, 25, 18);
+            masterLayout.AddChildToLayout(imageButton, 22, 18);
             masterLayout.AddChildToLayout(videoButton, 60, 18);
 
             this.BackgroundColor = Color.Transparent;

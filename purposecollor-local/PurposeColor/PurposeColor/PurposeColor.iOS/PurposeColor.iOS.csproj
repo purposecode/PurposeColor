@@ -143,8 +143,6 @@
     <None Include="Resources\app_icon_1024.png" />
     <Compile Include="Dependency\IOSContactPicker.cs" />
     <Compile Include="Dependency\IOSMediaView.cs" />
-    <None Include="Resources\image_icon.png" />
-    <None Include="Resources\video_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PurposeColor\PurposeColor.csproj">
@@ -289,6 +287,8 @@
     <BundleResource Include="Resources\image.png" />
     <BundleResource Include="Resources\video.png" />
     <BundleResource Include="Resources\photoCamera_icon.png" />
+    <BundleResource Include="Resources\image_icon.png" />
+    <BundleResource Include="Resources\video_icon.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoTouch.Dialog-1" />

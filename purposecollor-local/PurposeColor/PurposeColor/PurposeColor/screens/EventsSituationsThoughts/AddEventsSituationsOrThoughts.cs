@@ -2084,7 +2084,7 @@ namespace PurposeColor.screens
 			popupTitle.Text = "Upload";
 			popupTitle.FontSize = 20;
 			popupTitle.TextColor = Color.White;
-			popupTitle.XAlign = TextAlignment.Center;
+			popupTitle.XAlign = TextAlignment.Start;
 			popupTitle.YAlign = TextAlignment.Center;
 			popupTitle.WidthRequest = App.screenWidth * 98 / 100;
 
@@ -2112,7 +2112,7 @@ namespace PurposeColor.screens
 
             masterLayout.AddChildToLayout(layout, 0, 0);
 			masterLayout.AddChildToLayout(popupTitleBar, 1, 8);
-			masterLayout.AddChildToLayout(popupTitle, 1, 9 );
+			masterLayout.AddChildToLayout(popupTitle, 41, 9 );
 			masterLayout.AddChildToLayout(whiteContainer, 1, 15);
             masterLayout.AddChildToLayout(imageButton, 22, 18);
             masterLayout.AddChildToLayout(videoButton, 60, 18);
